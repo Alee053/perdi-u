@@ -1,6 +1,6 @@
 # Preparación para colaboración
 
-Validación del 15 de octubre de 2026 para [issue #11](https://github.com/Alee053/PerdiU/issues/11), desde `a41d39e`.
+Validación del 15 de octubre de 2026 para la antigua issue #11, transferida como [issue #9](https://github.com/Alee053/perdi-u/issues/9), desde `a41d39e`.
 
 ## Resultado y alcance
 

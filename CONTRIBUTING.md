@@ -1,6 +1,6 @@
 # Contribuir a PerdiU
 
-Esta guía define el formato compartido de issues, ramas, commits y pull requests. El repositorio actual es `Alee053/perdi-u`. Las issues y PRs anteriores permanecen en `Alee053/PerdiU`; usar referencias completas al enlazarlas y no asumir que su numeración existe en este repositorio nuevo. El trabajo se coordina en [PerdiU Backlog](https://github.com/users/Alee053/projects/5); `main` es la rama de integración actual.
+Esta guía define el formato compartido de issues, ramas, commits y pull requests. El repositorio actual es `Alee053/perdi-u`. Las 9 issues anteriores se transfirieron aquí: las historias mantienen los números #1–#8 y la preparación de colaboración pasó de #11 a #9. Las PRs anteriores se conservan en un respaldo privado; consultar la [consolidación de GitHub](docs/validation/github-consolidation.md). El trabajo se coordina en [PerdiU Backlog](https://github.com/users/Alee053/projects/5); `main` es la rama de integración actual.
 
 ## Antes de empezar
 
@@ -142,7 +142,7 @@ Actualizar documentación y ejemplos si cambia una interfaz, configuración, mig
 
 ## Política de integración y calidad
 
-Trabajar mediante PR hacia `main`, con los checks `quality` y `acceptance` aprobados y revisión humana de otra persona. Las protecciones de rama y los permisos del repositorio anterior no se transfieren al crear este repositorio desde una plantilla; su configuración se acuerda por separado. Conservar los commits progresivos y los JSON de TDDLab: evitar squash, rebase y amend manual sobre evidencia registrada. El único amend automático es el del hook original al terminar cada commit local. Después de un merge, usar `git pull --ff-only` desde un `main` limpio y crear la siguiente rama desde la base actualizada.
+Trabajar mediante PR hacia `main`, con los checks `quality` y `acceptance` aprobados y una aprobación humana de otra persona. La protección exige la rama actualizada, descarta aprobaciones al recibir cambios y requiere resolver conversaciones; también se aplica a administradores y prohíbe force-push y borrado de `main`. Los tres colaboradores del repositorio anterior reciben invitaciones con permiso de escritura y deben aceptarlas para activar el acceso. Conservar los commits progresivos y los JSON de TDDLab: evitar squash, rebase y amend manual sobre evidencia registrada. El único amend automático es el del hook original al terminar cada commit local. Después de un merge, usar `git pull --ff-only` desde un `main` limpio y crear la siguiente rama desde la base actualizada.
 
 Para lógica nueva, ejecutar `pnpm test` en rojo y verde; consultar [la guía de TDDLab](docs/testing.md#registro-original-de-tddlab). `pnpm verify` comprueba calidad sin añadir ciclos al registro. Esperar al hook de commit antes de publicar; no editar los JSON generados ni inventar ciclos para trabajo previo.
 

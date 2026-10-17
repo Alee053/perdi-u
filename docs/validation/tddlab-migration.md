@@ -5,10 +5,10 @@ La migración del 17 de octubre de 2026 incorpora el proyecto existente a la bas
 ## Procedencia y destino
 
 - Plantilla: [UCB-TallerDeDesarrollo/TDDLabBaseProject](https://github.com/UCB-TallerDeDesarrollo/TDDLabBaseProject), revisión `9b7ab49bbee2ecc4824eb179993efcbf80796808`.
-- Aplicación: [Alee053/PerdiU](https://github.com/Alee053/PerdiU), revisión `38adf3435c035186125de6b6c4682bed7c41a385`, que incluye la preparación de colaboración y CI.
+- Aplicación: `Alee053/PerdiU`, revisión [38adf3435c035186125de6b6c4682bed7c41a385](https://github.com/Alee053/perdi-u/commit/38adf3435c035186125de6b6c4682bed7c41a385), que incluye la preparación de colaboración y CI y se conserva en el destino.
 - Destino: [Alee053/perdi-u](https://github.com/Alee053/perdi-u), creado mediante la función de plantilla de GitHub; rama de integración `main`.
 
-Los historiales originales se conservan por merge, sin reescribir los commits compartidos. La carpeta local de TDDLab pasa a llamarse `perdi-u`; `origin` apunta al repositorio nuevo. Los remotos `tddlab` y `perdiu-legacy` permiten consultar los orígenes y tienen los pushes deshabilitados localmente. El repositorio anterior de PerdiU conserva sus issues, PRs y configuración remota; no se transfieren automáticamente al nuevo.
+Los historiales originales se conservan por merge, sin reescribir los commits compartidos. La carpeta local de TDDLab pasa a llamarse `perdi-u`; `origin` apunta al repositorio nuevo y `tddlab` permite consultar la plantilla con pushes deshabilitados. La [consolidación posterior de GitHub](github-consolidation.md) transfiere las issues, conserva las ramas históricas y respalda las PRs antes de retirar el origen y su remoto local `perdiu-legacy`.
 
 ## Integración
 
@@ -18,7 +18,7 @@ Las pruebas HTTP usan la API compilada por TypeScript, conservando los decorador
 
 `pnpm install --frozen-lockfile` instala Husky mediante `prepare`. `.npmrc` habilita ESM para Jest tanto en pnpm como en el `npx jest` utilizado por el hook original. `scripts/run-tdd.mjs` invoca el recorder original sin editarlo, descarta reportes temporales anteriores y conserva el fallo del comando cuando las pruebas fallan o no se ejecutan.
 
-La documentación activa usa el nombre nuevo y `main`. Los enlaces a issues y evidencias históricas siguen apuntando al repositorio que las contiene. Las protecciones de rama, colaboradores e integraciones de despliegue del repositorio anterior no se configuran automáticamente como parte de esta migración.
+La documentación activa usa el nombre nuevo y `main`. Las protecciones de rama y colaboradores no se heredan de la plantilla: su réplica autorizada y los enlaces actuales se documentan en la consolidación de GitHub. La reconexión de Vercel queda pendiente por decisión del propietario.
 
 ## Verificación
 

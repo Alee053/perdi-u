@@ -19,17 +19,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "05c1c2fd33c5915d36caf84e0292009c0031481f",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-10-17T04:20:06.000Z",
       "message": "chore(repo): vincular la creación desde la plantilla de GitHub",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/05c1c2fd33c5915d36caf84e0292009c0031481f"
     },
     "stats": {
       "total": 75,
       "additions": 63,
       "deletions": 12,
+      "date": "2026-10-17"
+    },
+    "coverage": 88.89,
+    "test_count": 28,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-17T05:24:11.000Z",
+      "message": "docs(repo): consolidar issues y colaboración en perdi-u",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 124,
+      "additions": 100,
+      "deletions": 24,
       "date": "2026-10-17"
     },
     "coverage": 88.89,
