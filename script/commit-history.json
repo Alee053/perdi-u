@@ -1,16 +1,35 @@
 [
   {
-    "sha": "HEAD",
+    "sha": "9f5c71538d78338cc4000cf376d2ad2302e1b3c8",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-10-17T04:16:51.000Z",
       "message": "chore(repo): integrar PerdiU sobre TDDLab",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/9f5c71538d78338cc4000cf376d2ad2302e1b3c8"
     },
     "stats": {
       "total": 44326,
       "additions": 14928,
       "deletions": 29398,
+      "date": "2026-10-17"
+    },
+    "coverage": 88.89,
+    "test_count": 28,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-17T04:19:53.000Z",
+      "message": "chore(repo): vincular la creación desde la plantilla de GitHub",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 18,
+      "additions": 10,
+      "deletions": 8,
       "date": "2026-10-17"
     },
     "coverage": 88.89,
