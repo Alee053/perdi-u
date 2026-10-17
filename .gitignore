@@ -1,9 +1,18 @@
-node_modules
-.cache
-dist
-.parcel-cache
-/coverage
+node_modules/
+.pnpm-store/
+dist/
+.env
+.env.*
+!.env.example
 .DS_Store
+*.log
+.turbo/
+test-results/
+# Product requirements are maintained in docs/product/*.md; keep the source PDF local.
+/docs/PERDI U.pdf
+
+# TDDLab: version the evidence, ignore only intermediate reports and hook launchers.
+coverage/
 report.json
-./.husky/_
+.husky/_/
 .husky/.commit-state

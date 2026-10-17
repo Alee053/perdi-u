@@ -1,0 +1,55 @@
+[
+  {
+    "area": "Arquitectura y contratos",
+    "prefixes": [
+      "apps/",
+      "packages/",
+      "compose.yaml",
+      "pnpm-workspace.yaml",
+      "scripts/check-boundaries.mjs"
+    ],
+    "review": [
+      "docs/architecture.md",
+      "apps/api/README.md",
+      ".agents/skills/perdiu-architecture/SKILL.md"
+    ]
+  },
+  {
+    "area": "Pruebas y herramientas",
+    "prefixes": [
+      "package.json",
+      "turbo.json",
+      ".node-version",
+      ".prettier",
+      ".github/workflows/",
+      "scripts/",
+      "jest.",
+      ".npmrc",
+      "script/",
+      ".husky/",
+      "semantic-commits.js"
+    ],
+    "contains": ["/test/", "/package.json"],
+    "review": ["docs/testing.md", "README.md", ".agents/skills/perdiu-testing/SKILL.md"]
+  },
+  {
+    "area": "Contribución y entrega",
+    "prefixes": ["CONTRIBUTING.md", ".github/", "docs/agents/issue-tracker.md"],
+    "review": [
+      "CONTRIBUTING.md",
+      ".github/pull_request_template.md",
+      ".agents/skills/perdiu-workflow/SKILL.md"
+    ]
+  },
+  {
+    "area": "Servicios y configuración",
+    "prefixes": ["compose.yaml", ".env.example", "docs/services.md"],
+    "contains": ["/.env.example", "/config.ts", "/vite.config.ts"],
+    "review": ["docs/services.md", "README.md", ".env.example", "apps/web/.env.example"]
+  },
+  {
+    "area": "Instrucciones y skills",
+    "prefixes": ["AGENTS.md", ".agents/", "docs/agent-workflow.md", "docs/maintenance-map.json"],
+    "review": ["AGENTS.md", "docs/agent-workflow.md", ".agents/skills/perdiu-docs-sync/SKILL.md"]
+  }
+]

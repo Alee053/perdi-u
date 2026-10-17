@@ -1,0 +1,12 @@
+# Immutable migrations and source documents retain their historical bytes.
+packages/database/migrations/
+docs/product/informe.md
+docs/product/demo-historica.md
+docs/product/mapa-de-historias.md
+pnpm-lock.yaml
+
+# Keep the original TDDLab instrumentation byte-for-byte.
+script/
+.husky/
+semantic-commits.js
+.gitattributes

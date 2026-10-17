@@ -1,0 +1,25 @@
+name: Mantenimiento o documentación
+description: Preparar un cambio técnico con propósito y validación proporcionales.
+title: 'chore: '
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: Problema y resultado
+      description: Qué falta o está desactualizado y qué permitirá hacer el cambio.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Alcance y criterios de aceptación
+      description: Resultado comprobable, límites, compatibilidad y dependencias. Incluir responsable propuesto.
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validación y documentación afectada
+      description: Checks o prueba de comportamiento, guías/skills que revisar y riesgos. Para docs no hacen falta tests de aplicación.
+    validations:
+      required: true

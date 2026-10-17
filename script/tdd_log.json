@@ -1,0 +1,32 @@
+[
+  {
+    "numPassedTests": 27,
+    "failedTests": 1,
+    "numTotalTests": 28,
+    "timestamp": 1792210524735,
+    "success": false,
+    "testId": 0
+  },
+  {
+    "numPassedTests": 27,
+    "failedTests": 1,
+    "numTotalTests": 28,
+    "timestamp": 1792210554735,
+    "success": false,
+    "testId": 0
+  },
+  {
+    "numPassedTests": 28,
+    "failedTests": 0,
+    "numTotalTests": 28,
+    "timestamp": 1792210584735,
+    "success": true,
+    "testId": 0
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "chore(repo): integrar PerdiU sobre TDDLab",
+    "commitTimestamp": 1792210624000,
+    "testId": 0
+  }
+]
