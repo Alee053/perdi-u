@@ -24,9 +24,39 @@
     "testId": 0
   },
   {
-    "commitId": "HEAD",
+    "commitId": "fbad3844bca2c809d77ea173a34f909e166fbf3c",
     "commitName": "chore(repo): integrar PerdiU sobre TDDLab",
     "commitTimestamp": 1792210624000,
     "testId": 0
+  },
+  {
+    "numPassedTests": 27,
+    "failedTests": 1,
+    "numTotalTests": 28,
+    "timestamp": 1792210699593,
+    "success": false,
+    "testId": 1
+  },
+  {
+    "numPassedTests": 27,
+    "failedTests": 1,
+    "numTotalTests": 28,
+    "timestamp": 1792210729593,
+    "success": false,
+    "testId": 1
+  },
+  {
+    "numPassedTests": 28,
+    "failedTests": 0,
+    "numTotalTests": 28,
+    "timestamp": 1792210759593,
+    "success": true,
+    "testId": 1
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "chore(repo): vincular la creación desde la plantilla de GitHub",
+    "commitTimestamp": 1792210806000,
+    "testId": 1
   }
 ]

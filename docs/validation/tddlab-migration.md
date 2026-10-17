@@ -24,12 +24,14 @@ La documentación activa usa el nombre nuevo y `main`. Los enlaces a issues y ev
 
 Los casos de `scripts/test/tdd-command.test.mjs` crean repositorios temporales con los scripts y hooks originales, Jest real y dependencias ya instaladas. Comprueban un rojo por una respuesta incorrecta, el verde después de corregirla, sus JSON, códigos de salida, cobertura, inclusión automática de evidencia y resolución de `HEAD` en dos commits consecutivos. También comprueban que un reporte verde anterior no convierte una ejecución sin pruebas en éxito. Esos ejemplos quedan en entornos temporales, separados de la evidencia de desarrollo real.
 
-| Comprobación                                                              | Resultado                                                            |
-| ------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| Pruebas unitarias y del repositorio con Jest                              | 28 pruebas aprobadas.                                                |
-| `pnpm verify` (formato, documentación, límites, tipos, unitarias y build) | Aprobado.                                                            |
-| PostgreSQL, HTTP y navegador con `pnpm test:e2e`                          | 4 escenarios de integración y aceptación móvil/escritorio aprobados. |
-| Typecheck de todos los workspaces                                         | Aprobado.                                                            |
-| Comparación de instrumentación con la plantilla                           | Archivos originales idénticos.                                       |
+| Comprobación                                                              | Resultado                                                                                                |
+| ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Pruebas unitarias y del repositorio con Jest                              | 28 pruebas aprobadas.                                                                                    |
+| `pnpm verify` (formato, documentación, límites, tipos, unitarias y build) | Aprobado.                                                                                                |
+| PostgreSQL, HTTP y navegador con `pnpm test:e2e`                          | 4 escenarios de integración y aceptación móvil/escritorio aprobados.                                     |
+| Clon limpio: `pnpm install --frozen-lockfile` y `pnpm verify`             | Aprobados; Husky se instala automáticamente y el árbol queda limpio.                                     |
+| Procedencia GitHub                                                        | `template_repository` confirma TDDLabBaseProject; el árbol inicial coincide con la plantilla verificada. |
+| Typecheck de todos los workspaces                                         | Aprobado.                                                                                                |
+| Comparación de instrumentación con la plantilla                           | Archivos originales idénticos.                                                                           |
 
-Las comprobaciones de instalación limpia y publicación se registran después de ejecutarse. El funcionamiento académico del evaluador externo se confirma al conectar este repositorio con el mecanismo utilizado por la materia; esta migración verifica los archivos y el flujo local de la plantilla.
+El funcionamiento académico del evaluador externo se confirma al conectar este repositorio con el mecanismo utilizado por la materia; esta migración verifica los archivos y el flujo local de la plantilla.
