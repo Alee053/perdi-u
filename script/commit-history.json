@@ -1,0 +1,21 @@
+[
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-17T04:16:51.000Z",
+      "message": "chore(repo): integrar PerdiU sobre TDDLab",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 44326,
+      "additions": 14928,
+      "deletions": 29398,
+      "date": "2026-10-17"
+    },
+    "coverage": 88.89,
+    "test_count": 28,
+    "failed_tests": 0,
+    "conclusion": "success"
+  }
+]

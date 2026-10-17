@@ -1,0 +1,22 @@
+,,,,,,,,
+,Plataforma LostFoundBolivia (Lost & Found: mascotas y objetos),"Usr: usuario que perdió, usuario que encontró, administrador",,,,,,
+,,,,,,,,
+,Usuario (dueño / hallador),,,,,,,Administrador
+,Registrarse,Publicar reporte,Buscar reportes,Ver reporte,Contactar y coordinar,Recibir alertas,Cerrar caso,Moderar plataforma
+1er Entregable / Release,Hacer login por Google,Publicar mascota perdida,Buscar por nombre/descripción,"Mostrar vista básica del reporte (foto, título, zona, estado)",Mostrar contacto del publicante por botón de WhatsApp,,Marcar reporte como resuelto,Hacer login de administrador
+,Registrarse/crear cuenta por Google,Publicar objeto perdido,Filtrar por tipo (perdido / encontrado),,,,,Eliminar publicaciones inapropiadas
+,Cerrar sesión (logout),Publicar mascota/objeto encontrado,Filtrar por categoría (mascota / objeto),,,,,
+,Ver perfil,Subir foto del reporte,Ver reportes en mapa,,,,,
+,,Marcar ubicación en el mapa,,,,,,
+,,,,,,,,
+2do Entregable,Registrarse/crear cuenta por email,"Seleccionar categoría y subcategoría (raza, tipo de objeto)",Filtrar por departamento/ciudad/zona,"Mostrar vista completa del reporte (descripción, fecha, mapa, rasgos)",Chat interno entre usuarios,Notificar por email sobre reportes coincidentes,Renovar publicación vigente,Revisar denuncias de abuso
+,Hacer login por email,Subir múltiples fotos,Filtrar por rango de fechas,Ver perfil público del publicante,Denunciar publicación sospechosa,Notificaciones push en la app,Archivar reportes antiguos automáticamente,Bloquear/suspender usuarios
+,Cambiar contraseña,Editar reporte,Filtrar por radio de distancia,Ver reportes similares cercanos,,,,Panel de gestión de publicaciones
+,Modificar datos de usuario,Eliminar reporte,Buscar por raza/color/tamaño,,,,,
+,Verificar número de teléfono,Ofrecer recompensa (opcional),,,,,,
+,Eliminar cuenta,,,,,,,
+,,,,,,,,
+3er Entregable,Hacer login por Facebook,Compartir reporte en WhatsApp/Facebook,Sugerencia automática de coincidencias perdido ↔ encontrado,Ver línea de tiempo de actualizaciones del caso,Preguntas de verificación de propiedad,Alertas geolocalizadas por zona,Historias de reencuentro (testimonios),Dashboard de métricas
+,Hacer login por Apple account,Generar afiche imprimible (PDF),Buscar por imagen similar,Compartir enlace público del reporte,Sugerir punto de encuentro seguro,Alertas por WhatsApp,Estadísticas de casos resueltos,Gestionar categorías
+,Ver historial de mis reportes,Reportar mascota/objeto avistado,Guardar búsquedas favoritas,,Calificar al otro usuario,,,Moderación automática de contenido
+,Insignia de usuario verificado,,,,,,,

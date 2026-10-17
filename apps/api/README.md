@@ -1,0 +1,34 @@
+# API de PerdiU
+
+NestJS con PostgreSQL independiente y consultas parametrizadas mediante `pg`. El arranque carga el `.env` ignorado de la raíz; variables ya definidas en el entorno tienen prioridad. No imprime URLs ni errores crudos de PostgreSQL.
+
+## Catálogo público
+
+`GET /reports` devuelve un array de `ReportSummary` de `@perdiu/contracts`: solo activos, ordenados por `createdAt` descendente e ID ascendente en empates. `type` distingue pérdida/hallazgo y `state` distingue activo/resuelto. `incidentDate` usa `YYYY-MM-DD`; `createdAt` usa ISO UTC con seis decimales, conserva los microsegundos y se genera en PostgreSQL.
+
+El autor público tiene ID (sujeto de Auth), nombre y foto opcional. Los contactos están en tablas privadas; ni esos datos ni claves de almacenamiento se consultan para el catálogo. Una lista vacía devuelve `200 []`; fallos de consulta devuelven `503` con mensaje seguro en español. No hay autenticación ni endpoints de escritura en esta historia.
+
+La API se ocupa de HTTP, validación y composición. `ListReports`, en `@perdiu/catalog`, garantiza activos, orden, límite y proyección pública. El puerto exige que su adapter aplique los predicados de búsqueda antes de limitar resultados; normalización y filtros pertenecen a `PostgresReportRepository`, en `@perdiu/database`. La API abre la base mediante `openDatabase` y registra su cierre al apagar. Consulta las [responsabilidades por workspace](../../docs/architecture.md) y [pruebas por interfaz](../../docs/testing.md).
+
+### Buscar y filtrar
+
+`GET /reports?q=camara&type=lost&category=object&city=La%20Paz` combina todos los filtros con AND. Los parámetros son opcionales; se recortan espacios exteriores y los valores vacíos equivalen a omitir el filtro.
+
+| Parámetro  | Valores y límites                                                                                                                                                                             |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `q`        | Hasta 200 unidades UTF-16. Frase literal contenida en título **o** descripción; ignora mayúsculas y marcas diacríticas Unicode U+0300–U+036F mediante NFD. No busca en ciudad, zona ni autor. |
+| `type`     | `lost` o `found`.                                                                                                                                                                             |
+| `category` | `pet`, `object` o `document`.                                                                                                                                                                 |
+| `city`     | Hasta 100 unidades UTF-16. Coincidencia exacta con la ciudad almacenada, por ejemplo `La Paz`.                                                                                                |
+
+Parámetros desconocidos, repetidos, estructurados, demasiado largos, caracteres de control o enumeraciones inválidas devuelven `400` con mensaje seguro. Las longitudes se comprueban antes de recortar espacios. Las comillas, `%`, `_` y barras en `q` se buscan literalmente; todos los valores SQL se parametrizan.
+
+Cada consulta devuelve **como máximo 50 reportes**, después de filtrar y ordenar. La respuesta sigue siendo un array compatible con S1-01; no incluye total ni paginación. Al llegar a 50, la web indica el límite y sugiere ajustar los filtros. Este límite acota la respuesta, no el número de filas que PostgreSQL debe inspeccionar: para volúmenes mayores habrá que evaluar índices/búsqueda y paginación.
+
+Requiere PostgreSQL con codificación UTF8 (incluida en el contenedor del proyecto) para `normalize`; no añade extensiones, migraciones ni cambios de esquema. [Normalización Unicode en PostgreSQL 17](https://www.postgresql.org/docs/17/functions-string.html).
+
+## Desarrollo y validación
+
+Sigue el README de la raíz para preparar PostgreSQL y ejecutar `pnpm dev`. `pnpm --filter @perdiu/api start` ejecuta el build existente; `pnpm --filter @perdiu/api test` prueba configuración HTTP. Las reglas de catálogo se prueban en `@perdiu/catalog`, y configuración/migraciones en `@perdiu/database`. Usa los comandos raíz para que Turbo compile las dependencias antes de pruebas y desarrollo.
+
+`pnpm test:integration` crea un contenedor PostgreSQL desechable con puerto y contraseña efímeros, verifica migraciones y catálogo y elimina únicamente ese contenedor. No requiere una cuenta externa ni modifica la BD de desarrollo. Los comandos raíz de migraciones/seed pertenecen a `@perdiu/database`; sus restricciones y evolución se documentan en [su guía](../../packages/database/README.md).

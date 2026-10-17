@@ -1,0 +1,41 @@
+{
+  "name": "@perdiu/database",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./maintenance": {
+      "types": "./dist/maintenance.d.ts",
+      "import": "./dist/maintenance.js"
+    },
+    "./config": {
+      "types": "./dist/config.d.ts",
+      "import": "./dist/config.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.check.json",
+    "test": "pnpm --workspace-root exec jest --testPathPattern=packages/database/test/",
+    "db:migrate": "node dist/cli.js migrate",
+    "db:seed": "node dist/cli.js seed",
+    "test:integration": "pnpm --workspace-root exec jest --config jest.integration.config.cjs --runInBand --runTestsByPath packages/database/test/migrations.integration.ts",
+    "dev": "tsc -p tsconfig.json --watch --preserveWatchOutput"
+  },
+  "dependencies": {
+    "@perdiu/catalog": "workspace:*",
+    "@perdiu/contracts": "workspace:*",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "tsx": "^4.23.15",
+    "typescript": "7.0.2",
+    "@types/pg": "^8.23.1",
+    "@jest/globals": "29.7.0"
+  }
+}

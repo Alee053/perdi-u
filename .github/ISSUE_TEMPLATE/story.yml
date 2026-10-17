@@ -1,0 +1,36 @@
+name: Historia de usuario
+description: Definir comportamiento observable y alcance antes de desarrollar.
+title: '[S?-??] '
+body:
+  - type: markdown
+    attributes:
+      value: Completar el identificador de sprint si aplica y seguir CONTRIBUTING.md. No incluir credenciales ni datos reales.
+  - type: textarea
+    id: story
+    attributes:
+      label: Historia y objetivo
+      placeholder: Como visitante, quiero..., para...
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Criterios de aceptación
+      description: Ejemplos observables; incluir error, vacío y permisos cuando correspondan.
+      placeholder: '- [ ] Al..., veo...'
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Alcance y dependencias
+      description: Límites, issues relacionadas, decisiones pendientes y responsable propuesto.
+    validations:
+      required: true
+  - type: textarea
+    id: testing
+    attributes:
+      label: Enfoque de pruebas
+      description: Interfaces y ejemplos para TDD; integración/servicios necesarios. No hace falta una especificación extensa.
+    validations:
+      required: true

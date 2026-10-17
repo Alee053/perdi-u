@@ -1,0 +1,30 @@
+name: Error reproducible
+description: Registrar comportamiento incorrecto, resultado esperado y regresión.
+title: 'bug: '
+body:
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproducción
+      description: Pasos mínimos, estado inicial, entorno y resultado actual. Usar datos ficticios y logs sin secretos.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Resultado esperado
+      description: Qué debería ocurrir y cuál es el impacto.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Aceptación y prueba de regresión
+      description: Ejemplo que falla hoy y criterio que demostrará la corrección; anotar hipótesis como hipótesis.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Alcance, dependencias y responsable
+      description: Issues relacionadas, límites y decisiones necesarias.
