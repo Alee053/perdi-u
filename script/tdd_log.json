@@ -22,9 +22,15 @@
     "testId": 1
   },
   {
-    "commitId": "HEAD",
+    "commitId": "b1a38ef63d223a36050cb9fda3602c03ed8e4027",
     "commitName": "chore(repo): vincular la creación desde la plantilla de GitHub",
     "commitTimestamp": 1792210794002,
     "testId": 1
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(repo): consolidar issues y colaboración en perdi-u",
+    "commitTimestamp": 1792214636340,
+    "testId": 2
   }
 ]

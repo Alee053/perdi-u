@@ -1,6 +1,6 @@
 # PerdiU
 
-Repositorio: [Alee053/perdi-u](https://github.com/Alee053/perdi-u), creado desde la plantilla [TDDLabBaseProject](https://github.com/UCB-TallerDeDesarrollo/TDDLabBaseProject). El contenido e historial anterior de PerdiU están incorporados; las issues y PRs previas siguen en [el repositorio anterior](https://github.com/Alee053/PerdiU).
+Repositorio: [Alee053/perdi-u](https://github.com/Alee053/perdi-u), creado desde la plantilla [TDDLabBaseProject](https://github.com/UCB-TallerDeDesarrollo/TDDLabBaseProject). El contenido, historial y las 9 issues anteriores están incorporados. La [consolidación de GitHub](docs/validation/github-consolidation.md) documenta la numeración y el respaldo de las PRs históricas.
 
 PerdiU conecta a personas que perdieron algo con quienes lo encontraron. Este monorepo usa pnpm workspaces y Turborepo para coordinar la web, la API y los contratos compartidos.
 
