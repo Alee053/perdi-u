@@ -15,7 +15,11 @@ const identity: AccountIdentity = {
   email: 'persona@example.test',
 }
 
-function doubles(overrides: Partial<AuthGateway> = {}, account?: AccountClient['me']) {
+function doubles(
+  overrides: Partial<AuthGateway> = {},
+  account?: AccountClient['me'],
+  revoke?: AccountClient['revokeSession'],
+) {
   const calls: string[] = []
   let signedOut: (() => void) | undefined
   const gateway: AuthGateway = {
@@ -36,7 +40,14 @@ function doubles(overrides: Partial<AuthGateway> = {}, account?: AccountClient['
     },
     ...overrides,
   }
-  const presenter = new AuthPresenter(gateway, { me: account ?? (async () => identity) })
+  const presenter = new AuthPresenter(gateway, {
+    me: account ?? (async () => identity),
+    revokeSession:
+      revoke ??
+      (async () => {
+        calls.push('revoke')
+      }),
+  })
   return { presenter, calls, expire: () => signedOut?.() }
 }
 
@@ -208,7 +219,21 @@ test('cerrar sesión elimina la identidad; si falla, la sesión sigue y se infor
     status: 'anonymous',
     notice: 'Cerraste sesión correctamente.',
   })
-  assert.deepEqual(calls, ['signOut', 'signOut'])
+  assert.deepEqual(calls, ['revoke', 'signOut', 'revoke', 'signOut'], 'primero la API, luego Auth')
+})
+
+test('si la API no revoca la sesión, Auth no se cierra y no se anuncia el cierre', async () => {
+  const { presenter, calls } = doubles(
+    { restore: async () => ({ session: true }) },
+    undefined,
+    async () => {
+      throw new Error('No se pudo cerrar la sesión.')
+    },
+  )
+  await presenter.start()
+  assert.equal(await presenter.signOut(), 'No se pudo cerrar la sesión. Intenta nuevamente.')
+  assert.deepEqual(presenter.getSnapshot(), { status: 'authenticated', user: identity })
+  assert.deepEqual(calls, [], 'la sesión de Auth sigue abierta mientras la API la acepte')
 })
 
 test('el cliente de cuenta envía el access token y traduce un 401 en sesión rechazada', async () => {
@@ -313,4 +338,28 @@ test('el cliente conserva nombre y foto del perfil propio sin campos ajenos ni c
   body = { ...identity, displayName: '', photoUrl: 42 }
   assert.deepEqual(await client.me(), identity)
   assert.deepEqual(caches, ['no-store', 'no-store'])
+})
+
+test('«Mi perfil» exige sesión y al cambiar de cuenta solo queda la identidad actual', async () => {
+  let current: AccountIdentity = { ...identity, displayName: 'Persona Ficticia' }
+  const other: AccountIdentity = {
+    id: '9b1f3c2e-5d4a-4e8b-a7c6-0f1e2d3c4b5a',
+    email: 'otra@example.test',
+    displayName: 'Otra Cuenta',
+  }
+  const { presenter } = doubles({}, async () => current)
+  const credentials = { email: 'persona@example.test', password: 'Correcta-123' }
+  assert.equal(presenter.access('profile'), 'wait')
+  await presenter.start()
+  assert.equal(presenter.access('profile'), 'login', 'sin sesión se pide ingresar')
+
+  await presenter.signIn(credentials)
+  assert.equal(presenter.access('profile'), 'allow')
+  assert.deepEqual(presenter.getSnapshot(), { status: 'authenticated', user: current })
+  assert.equal(await presenter.signOut(), undefined)
+  assert.equal(presenter.access('profile'), 'login', 'tras cerrar sesión ya no se muestra')
+
+  current = other
+  await presenter.signIn({ ...credentials, email: other.email })
+  assert.deepEqual(presenter.getSnapshot(), { status: 'authenticated', user: other })
 })

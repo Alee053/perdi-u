@@ -247,12 +247,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "48b4a90ac31592767a6643064ed8c1e77214ae4e",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-19T22:30:04.000Z",
       "message": "feat(web): revocar la sesión en la API y leer el perfil propio sin caché (#4)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/48b4a90ac31592767a6643064ed8c1e77214ae4e"
     },
     "stats": {
       "total": 143,
@@ -262,6 +262,25 @@
     },
     "coverage": 89.6,
     "test_count": 44,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T22:32:40.000Z",
+      "message": "feat(web): cerrar primero la sesión en la API y proteger «Mi perfil» (#4)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 112,
+      "additions": 104,
+      "deletions": 8,
+      "date": "2026-10-19"
+    },
+    "coverage": 89.63,
+    "test_count": 46,
     "failed_tests": 0,
     "conclusion": "success"
   }

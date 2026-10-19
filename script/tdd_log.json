@@ -398,9 +398,31 @@
     "testId": 13
   },
   {
-    "commitId": "HEAD",
+    "commitId": "48b4a90ac31592767a6643064ed8c1e77214ae4e",
     "commitName": "feat(web): revocar la sesión en la API y leer el perfil propio sin caché (#4)",
     "commitTimestamp": 1792449004000,
     "testId": 13
+  },
+  {
+    "numPassedTests": 45,
+    "failedTests": 1,
+    "numTotalTests": 46,
+    "timestamp": 1792449129000,
+    "success": false,
+    "testId": 14
+  },
+  {
+    "numPassedTests": 46,
+    "failedTests": 0,
+    "numTotalTests": 46,
+    "timestamp": 1792449159000,
+    "success": true,
+    "testId": 14
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): cerrar primero la sesión en la API y proteger «Mi perfil» (#4)",
+    "commitTimestamp": 1792449160000,
+    "testId": 14
   }
 ]
