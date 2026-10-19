@@ -304,17 +304,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "7291cb6c1988fe8f43698bfee340a0b4d8a2e77c",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-19T22:38:35.000Z",
       "message": "test(repo): aceptar perfil privado y revocación en la API, también desde Windows (#4)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/7291cb6c1988fe8f43698bfee340a0b4d8a2e77c"
     },
     "stats": {
       "total": 26,
       "additions": 25,
       "deletions": 1,
+      "date": "2026-10-19"
+    },
+    "coverage": 89.63,
+    "test_count": 46,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T22:39:20.000Z",
+      "message": "docs(repo): documentar perfil, revocación de sesión y sus pruebas (#4)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 77,
+      "additions": 40,
+      "deletions": 37,
       "date": "2026-10-19"
     },
     "coverage": 89.63,

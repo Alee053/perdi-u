@@ -320,9 +320,15 @@
     "testId": 15
   },
   {
-    "commitId": "HEAD",
+    "commitId": "7291cb6c1988fe8f43698bfee340a0b4d8a2e77c",
     "commitName": "test(repo): aceptar perfil privado y revocación en la API, también desde Windows (#4)",
     "commitTimestamp": 1792449517074,
     "testId": 16
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(repo): documentar perfil, revocación de sesión y sus pruebas (#4)",
+    "commitTimestamp": 1792449562992,
+    "testId": 17
   }
 ]
