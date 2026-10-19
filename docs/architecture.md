@@ -2,15 +2,15 @@
 
 Cada workspace es responsable de una capacidad y se consume por sus exports públicos. Los cambios de una capa se prueban en su propia interfaz; las pruebas HTTP y de navegador verifican la composición completa.
 
-| Workspace            | Responsabilidad                                                                                                                           | Dependencias internas permitidas   |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| `apps/web`           | React, cliente HTTP, presenter y estado de presentación. Adapter de Supabase Auth (`@supabase/auth-js`) detrás del puerto `AuthGateway`.  | `contracts`                        |
-| `apps/api`           | NestJS, entrada HTTP, validación de parámetros, traducción de errores, verificación de access tokens/guard y composición de dependencias. | `catalog`, `database`, `contracts` |
-| `packages/catalog`   | Modelo y puerto de repositorio del catálogo, caso de uso, orden, activos y proyección pública. Independiente de HTTP, PostgreSQL y React. | `contracts`                        |
-| `packages/database`  | Conexión PostgreSQL, adapter SQL del puerto de catálogo, esquema, migraciones, seed, configuración de BD y CLI de mantenimiento.          | `catalog`, `contracts`             |
-| `packages/contracts` | DTOs, tipos y constantes compartidos. Independiente de los demás workspaces y de frameworks.                                              | Ninguna                            |
+| Workspace            | Responsabilidad                                                                                                                                                     | Dependencias internas permitidas   |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `apps/web`           | React, cliente HTTP, presenter y estado de presentación. Adapter de Supabase Auth (`@supabase/auth-js`) detrás del puerto `AuthGateway`.                            | `contracts`                        |
+| `apps/api`           | NestJS, entrada HTTP, validación de parámetros, traducción de errores, verificación de access tokens/guard y composición de dependencias.                           | `catalog`, `database`, `contracts` |
+| `packages/catalog`   | Modelo y puerto de repositorio del catálogo, caso de uso, orden, activos y proyección pública. Independiente de HTTP, PostgreSQL y React.                           | `contracts`                        |
+| `packages/database`  | Conexión PostgreSQL, adapter SQL del puerto de catálogo, perfiles y revocaciones de sesión, esquema, migraciones, seed, configuración de BD y CLI de mantenimiento. | `catalog`, `contracts`             |
+| `packages/contracts` | DTOs, tipos y constantes compartidos. Independiente de los demás workspaces y de frameworks.                                                                        | Ninguna                            |
 
-La API combina `ListReports` con `openDatabase().reports` y llama `close` al apagar. También recibe un `AccessTokenVerifier` que valida tokens de Supabase Auth con su JWKS público; Auth es un servicio externo de Compose con base propia (`perdiu_auth`), no un workspace. Consultar la [guía de Auth](auth.md). El paquete de base de datos administra el pool, comprueba la conexión e implementa el repositorio. El caso de uso conserva las reglas del catálogo y entrega la proyección pública explícita.
+La API combina `ListReports` con `openDatabase().reports` y llama `close` al apagar. También recibe un `AccessTokenVerifier` que valida tokens de Supabase Auth con su JWKS público; la API lo combina con las revocaciones de `openDatabase().sessions`, de modo que el guard rechaza sesiones cerradas en toda ruta privada; Auth es un servicio externo de Compose con base propia (`perdiu_auth`), no un workspace. Consultar la [guía de Auth](auth.md). El paquete de base de datos administra el pool, comprueba la conexión e implementa el repositorio. El caso de uso conserva las reglas del catálogo y entrega la proyección pública explícita.
 
 ## Reglas para cambios
 
