@@ -15,7 +15,11 @@ const identity: AccountIdentity = {
   email: 'persona@example.test',
 }
 
-function doubles(overrides: Partial<AuthGateway> = {}, account?: AccountClient['me']) {
+function doubles(
+  overrides: Partial<AuthGateway> = {},
+  account?: AccountClient['me'],
+  revoke?: AccountClient['revokeSession'],
+) {
   const calls: string[] = []
   let signedOut: (() => void) | undefined
   const gateway: AuthGateway = {
@@ -36,7 +40,14 @@ function doubles(overrides: Partial<AuthGateway> = {}, account?: AccountClient['
     },
     ...overrides,
   }
-  const presenter = new AuthPresenter(gateway, { me: account ?? (async () => identity) })
+  const presenter = new AuthPresenter(gateway, {
+    me: account ?? (async () => identity),
+    revokeSession:
+      revoke ??
+      (async () => {
+        calls.push('revoke')
+      }),
+  })
   return { presenter, calls, expire: () => signedOut?.() }
 }
 
@@ -208,7 +219,21 @@ test('cerrar sesión elimina la identidad; si falla, la sesión sigue y se infor
     status: 'anonymous',
     notice: 'Cerraste sesión correctamente.',
   })
-  assert.deepEqual(calls, ['signOut', 'signOut'])
+  assert.deepEqual(calls, ['revoke', 'signOut', 'revoke', 'signOut'], 'primero la API, luego Auth')
+})
+
+test('si la API no revoca la sesión, Auth no se cierra y no se anuncia el cierre', async () => {
+  const { presenter, calls } = doubles(
+    { restore: async () => ({ session: true }) },
+    undefined,
+    async () => {
+      throw new Error('No se pudo cerrar la sesión.')
+    },
+  )
+  await presenter.start()
+  assert.equal(await presenter.signOut(), 'No se pudo cerrar la sesión. Intenta nuevamente.')
+  assert.deepEqual(presenter.getSnapshot(), { status: 'authenticated', user: identity })
+  assert.deepEqual(calls, [], 'la sesión de Auth sigue abierta mientras la API la acepte')
 })
 
 test('el cliente de cuenta envía el access token y traduce un 401 en sesión rechazada', async () => {
@@ -256,4 +281,85 @@ test('al volver del enlace de confirmación se informa el resultado sin crear un
   const signedIn = doubles({ restore: async () => ({ session: true, link: 'confirmed' }) })
   await signedIn.presenter.start()
   assert.deepEqual(signedIn.presenter.getSnapshot(), { status: 'authenticated', user: identity })
+})
+
+test('el cliente revoca la sesión en la API; un 401 ya no tiene nada que revocar', async () => {
+  const requests: { url: string; method?: string; authorization: string | null }[] = []
+  let status = 204
+  let network = true
+  const fetcher = (async (url: string, init: RequestInit) => {
+    if (!network) throw new TypeError('fetch failed')
+    requests.push({
+      url,
+      method: init.method,
+      authorization: new Headers(init.headers).get('authorization'),
+    })
+    return new Response(null, { status })
+  }) as typeof fetch
+  let token: string | undefined = 'access-token'
+  const client = createAccountClient('/api', async () => token, fetcher)
+
+  await client.revokeSession()
+  assert.deepEqual(requests, [
+    { url: '/api/me/logout', method: 'POST', authorization: 'Bearer access-token' },
+  ])
+  status = 401
+  await client.revokeSession()
+  status = 503
+  await assert.rejects(client.revokeSession())
+  network = false
+  await assert.rejects(client.revokeSession())
+  network = true
+  token = undefined
+  await client.revokeSession()
+  assert.equal(requests.length, 3, 'sin token no hay sesión que revocar')
+})
+
+test('el cliente conserva nombre y foto del perfil propio sin campos ajenos ni caché', async () => {
+  const caches: (RequestCache | undefined)[] = []
+  let body: unknown
+  const fetcher = (async (_url: string, init: RequestInit) => {
+    caches.push(init.cache)
+    return new Response(JSON.stringify(body), { status: 200 })
+  }) as typeof fetch
+  const client = createAccountClient('/api', async () => 'access-token', fetcher)
+
+  body = {
+    ...identity,
+    displayName: 'Persona Ficticia',
+    photoUrl: 'https://images.example.test/persona.png',
+    phone: 'private-sentinel',
+  }
+  assert.deepEqual(await client.me(), {
+    ...identity,
+    displayName: 'Persona Ficticia',
+    photoUrl: 'https://images.example.test/persona.png',
+  })
+  body = { ...identity, displayName: '', photoUrl: 42 }
+  assert.deepEqual(await client.me(), identity)
+  assert.deepEqual(caches, ['no-store', 'no-store'])
+})
+
+test('«Mi perfil» exige sesión y al cambiar de cuenta solo queda la identidad actual', async () => {
+  let current: AccountIdentity = { ...identity, displayName: 'Persona Ficticia' }
+  const other: AccountIdentity = {
+    id: '9b1f3c2e-5d4a-4e8b-a7c6-0f1e2d3c4b5a',
+    email: 'otra@example.test',
+    displayName: 'Otra Cuenta',
+  }
+  const { presenter } = doubles({}, async () => current)
+  const credentials = { email: 'persona@example.test', password: 'Correcta-123' }
+  assert.equal(presenter.access('profile'), 'wait')
+  await presenter.start()
+  assert.equal(presenter.access('profile'), 'login', 'sin sesión se pide ingresar')
+
+  await presenter.signIn(credentials)
+  assert.equal(presenter.access('profile'), 'allow')
+  assert.deepEqual(presenter.getSnapshot(), { status: 'authenticated', user: current })
+  assert.equal(await presenter.signOut(), undefined)
+  assert.equal(presenter.access('profile'), 'login', 'tras cerrar sesión ya no se muestra')
+
+  current = other
+  await presenter.signIn({ ...credentials, email: other.email })
+  assert.deepEqual(presenter.getSnapshot(), { status: 'authenticated', user: other })
 })

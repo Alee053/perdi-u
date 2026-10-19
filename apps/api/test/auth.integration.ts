@@ -28,7 +28,7 @@ async function signingKey(kid: string) {
       .setProtectedHeader({ alg: 'ES256', kid })
       .setIssuer(issuer)
       .setAudience(audience)
-      .setSubject(subject)
+      .setSubject(typeof claims.sub === 'string' ? claims.sub : subject)
       .setIssuedAt()
       .setExpirationTime(expiresAt)
       .sign(privateKey)
@@ -133,4 +133,91 @@ test('si Auth no publica claves, GET /me responde 503 sin aceptar la credencial'
       'No se pudo verificar la sesión. Intenta nuevamente.',
     )
   })
+})
+
+test('cerrar sesión en la API revoca ese token, también después de reiniciar NestJS', async () => {
+  const key = await signingKey('logout')
+  const jwks = await jwksServer([key.jwk])
+  const closing = await key.sign({ session_id: crypto.randomUUID() })
+  const other = await key.sign({ session_id: crypto.randomUUID() })
+  const verifier = createRemoteAccessTokenVerifier(jwks.url, { issuer, audience })
+  const request = (url: string, path: string, token?: string, method = 'GET') =>
+    fetch(`${url}${path}`, {
+      method,
+      headers: token ? { authorization: `Bearer ${token}` } : {},
+    })
+  try {
+    await withApi(verifier, async (url) => {
+      assert.equal((await request(url, '/me', closing)).status, 200)
+      assert.equal((await request(url, '/me/logout', undefined, 'POST')).status, 401)
+
+      const logout = await request(url, '/me/logout', closing, 'POST')
+      assert.equal(logout.status, 204)
+      assert.equal(logout.headers.get('cache-control'), 'no-store')
+
+      const reused = await request(url, '/me', closing)
+      assert.equal(reused.status, 401, 'el mismo token no vuelve a consultar datos privados')
+      assert.equal((await reused.json()).message, 'Inicia sesión para continuar.')
+      assert.equal((await request(url, '/me/logout', closing, 'POST')).status, 401)
+      assert.equal((await request(url, '/me', other)).status, 200, 'otra sesión sigue activa')
+    })
+    await withApi(verifier, async (url) => {
+      assert.equal((await request(url, '/me', closing)).status, 401, 'tras reiniciar la API')
+      assert.equal((await request(url, '/me', other)).status, 200)
+    })
+  } finally {
+    await jwks.close()
+  }
+})
+
+test('GET /me agrega nombre y foto del perfil propio, sin contacto privado ni otras cuentas', async () => {
+  const key = await signingKey('profile')
+  const jwks = await jwksServer([key.jwk])
+  const [owner, withoutPhoto, other] = [
+    crypto.randomUUID(),
+    crypto.randomUUID(),
+    crypto.randomUUID(),
+  ]
+  try {
+    await withApi(createRemoteAccessTokenVerifier(jwks.url, { issuer, audience }), async (url) => {
+      const pool = createPool(process.env.TEST_DATABASE_URL!)
+      try {
+        await pool.query(
+          `INSERT INTO profiles (id, display_name, photo_url) VALUES
+             ($1, 'Persona Ficticia', 'https://images.example.test/persona.png'),
+             ($2, 'Sin Foto', NULL),
+             ($3, 'Otra Cuenta', 'https://images.example.test/otra.png')`,
+          [owner, withoutPhoto, other],
+        )
+        await pool.query(
+          "INSERT INTO profile_contacts (profile_id, email) VALUES ($1, 'contacto-privado@example.test')",
+          [owner],
+        )
+      } finally {
+        await pool.end()
+      }
+      const me = async (sub: string) => {
+        const response = await fetch(`${url}/me?id=${other}`, {
+          headers: { authorization: `Bearer ${await key.sign({ sub })}` },
+        })
+        assert.equal(response.status, 200)
+        assert.equal(response.headers.get('cache-control'), 'no-store')
+        return JSON.parse(await response.text())
+      }
+
+      assert.deepEqual(await me(owner), {
+        id: owner,
+        email: 'persona@example.test',
+        displayName: 'Persona Ficticia',
+        photoUrl: 'https://images.example.test/persona.png',
+      })
+      assert.deepEqual(await me(withoutPhoto), {
+        id: withoutPhoto,
+        email: 'persona@example.test',
+        displayName: 'Sin Foto',
+      })
+    })
+  } finally {
+    await jwks.close()
+  }
 })

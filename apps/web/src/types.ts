@@ -1,7 +1,8 @@
 export type Category = 'Mascota' | 'Objeto' | 'Documentos'
 export type ReportStatus = 'Perdido' | 'Encontrado'
 export type FilterStatus = 'Todos' | ReportStatus
-export type Section = 'overview' | 'explore' | 'map' | 'publish' | 'my-reports' | 'saved' | 'safety'
+export type Section =
+  'overview' | 'explore' | 'map' | 'publish' | 'my-reports' | 'saved' | 'safety' | 'profile'
 
 export type ReportDisplay = {
   id: string

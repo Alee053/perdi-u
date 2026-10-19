@@ -30,6 +30,8 @@ export interface AuthGateway {
 
 export interface AccountClient {
   me(): Promise<AccountIdentity>
+  /** Revokes the current session in the API; resolves if it is already invalid there. */
+  revokeSession(): Promise<void>
 }
 
 export type AuthState =
@@ -58,7 +60,7 @@ const linkNotices = {
   invalid: 'El enlace no es válido o ya venció. Inicia sesión o vuelve a registrarte.',
 }
 // Account-owned sections; saved reports remain a per-device list.
-const privateSections = new Set<Section>(['publish', 'my-reports'])
+const privateSections = new Set<Section>(['publish', 'my-reports', 'profile'])
 
 const normalizeEmail = (email: string) => email.trim().toLocaleLowerCase('en')
 const validEmail = (email: string) =>
@@ -128,8 +130,13 @@ export class AuthPresenter {
     return this.state.status === 'restoring' ? 'wait' : 'login'
   }
 
+  /**
+   * Revokes the session in the API before closing it in Auth: discarding the JWT in the browser
+   * does not invalidate it. A retry after a partial failure succeeds because the API answers 401.
+   */
   async signOut(): Promise<string | undefined> {
     try {
+      await this.account.revokeSession()
       await this.gateway.signOut()
     } catch {
       return 'No se pudo cerrar la sesión. Intenta nuevamente.'

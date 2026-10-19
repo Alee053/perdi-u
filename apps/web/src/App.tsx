@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import type { ChangeEvent, FormEvent } from 'react'
-import { CheckCircle2, LoaderCircle, X } from 'lucide-react'
+import { CircleAlert, CheckCircle2, LoaderCircle, X } from 'lucide-react'
 import { createAccountClient } from './auth/client'
 import { createAuthGateway } from './auth/gateway'
 import { AuthPresenter, signedOutNotice } from './auth/presenter'
@@ -15,6 +15,7 @@ import { ExplorePage } from './pages/ExplorePage'
 import { MapPage } from './pages/MapPage'
 import { MyReportsPage } from './pages/MyReportsPage'
 import { OverviewPage } from './pages/OverviewPage'
+import { ProfilePage } from './pages/ProfilePage'
 import { PublishPage } from './pages/PublishPage'
 import { SafetyPage } from './pages/SafetyPage'
 import { SavedPage } from './pages/SavedPage'
@@ -47,13 +48,22 @@ function App() {
   const [saved, setSaved] = useState<string[]>(['demo-3'])
   const [savedCatalogReports, setSavedCatalogReports] = useState<CatalogReport[]>([])
   const [mobileMenu, setMobileMenu] = useState(false)
-  const [notice, setNotice] = useState('')
+  const [notice, setNotice] = useState<{ message: string; error?: boolean } | null>(null)
   const [imagePreview, setImagePreview] = useState('')
   const [postStatus, setPostStatus] = useState<ReportStatus>('Perdido')
 
   useEffect(() => {
     void auth.start()
   }, [auth])
+
+  // Back/forward cache restores a frozen page; reload it so private data is verified again.
+  useEffect(() => {
+    const reload = (event: PageTransitionEvent) => {
+      if (event.persisted) window.location.reload()
+    }
+    window.addEventListener('pageshow', reload)
+    return () => window.removeEventListener('pageshow', reload)
+  }, [])
 
   // Private sections need a verified session; remember the destination for after login.
   useEffect(() => {
@@ -110,9 +120,9 @@ function App() {
   const foundCount = activeReports.filter((report) => report.status === 'Encontrado').length
   const resolvedCount = reports.filter((report) => report.resolved).length
 
-  const notify = (message: string) => {
-    setNotice(message)
-    window.setTimeout(() => setNotice(''), 3800)
+  const notify = (message: string, error = false) => {
+    setNotice({ message, error })
+    window.setTimeout(() => setNotice(null), 3800)
   }
 
   const navigate = (next: Section) => {
@@ -135,11 +145,12 @@ function App() {
 
   const signOut = async () => {
     const failure = await auth.signOut()
-    if (failure) return notify(failure)
+    if (failure) return notify(failure, true)
     // Private, per-account state must not survive the session.
     setSaved([])
     setSavedCatalogReports([])
     setSelectedReport(null)
+    setImagePreview('')
     setSection('explore')
     setMobileMenu(false)
     notify(signedOutNotice)
@@ -276,7 +287,6 @@ function App() {
         onClose={() => setMobileMenu(false)}
         account={account}
         onSignIn={() => openAuth('login')}
-        onSignOut={signOut}
       />
 
       <div className="main-column">
@@ -288,6 +298,7 @@ function App() {
           restoring={authState.status === 'restoring'}
           onSignIn={() => openAuth('login')}
           onRegister={() => openAuth('register')}
+          onOpenProfile={() => navigate('profile')}
           onSignOut={signOut}
         />
         <main className="content-area">
@@ -371,6 +382,9 @@ function App() {
             />
           )}
           {section === 'safety' && <SafetyPage />}
+          {section === 'profile' && sectionAccess === 'allow' && account && (
+            <ProfilePage account={account} onNavigate={navigate} onSignOut={signOut} />
+          )}
         </main>
         <footer className="app-footer">
           <span>PerdiU · Bolivia</span>
@@ -382,9 +396,12 @@ function App() {
       </div>
 
       {notice && (
-        <div className="toast">
-          <CheckCircle2 size={17} /> {notice}
-          <button onClick={() => setNotice('')} aria-label="Cerrar aviso">
+        <div
+          className={'toast' + (notice.error ? ' toast-error' : '')}
+          role={notice.error ? 'alert' : 'status'}
+        >
+          {notice.error ? <CircleAlert size={17} /> : <CheckCircle2 size={17} />} {notice.message}
+          <button onClick={() => setNotice(null)} aria-label="Cerrar aviso">
             <X size={14} />
           </button>
         </div>

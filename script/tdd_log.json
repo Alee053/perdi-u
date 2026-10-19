@@ -192,9 +192,143 @@
     "testId": 7
   },
   {
-    "commitId": "HEAD",
+    "commitId": "b1fca454df720975714a564384d0a36e9dd5ddd0",
     "commitName": "docs(repo): documentar autenticación, configuración y pruebas de Auth (#3)",
     "commitTimestamp": 1792386404637,
     "testId": 8
+  },
+  {
+    "commitId": "74e799ac18f1db9fab9b0866c4f382715d9bb284",
+    "commitName": "test(repo): ejecutar las pruebas de TDDLab y documentos también en Windows (#4)",
+    "commitTimestamp": 1792448405844,
+    "testId": 9
+  },
+  {
+    "numPassedTests": 41,
+    "failedTests": 1,
+    "numTotalTests": 42,
+    "timestamp": 1792448478466,
+    "success": false,
+    "testId": 10
+  },
+  {
+    "numPassedTests": 42,
+    "failedTests": 0,
+    "numTotalTests": 42,
+    "timestamp": 1792448507393,
+    "success": true,
+    "testId": 10
+  },
+  {
+    "commitId": "e8bf54ce7bfb1fcecb1bdbca8d3dafa38b2cdd0c",
+    "commitName": "test(repo): filtrar escenarios HTTP de Auth y lanzar pnpm en Windows (#4)",
+    "commitTimestamp": 1792448695906,
+    "testId": 10
+  },
+  {
+    "commitId": "0f0db447e6248f186a5f60d69ff2bf478f681f53",
+    "commitName": "feat(api): revocar la sesión actual y rechazar sus tokens tras reiniciar (#4)",
+    "commitTimestamp": 1792448720113,
+    "testId": 11
+  },
+  {
+    "commitId": "0fcfabd51352c1f7760e28aa7b07c65d9c8a10d0",
+    "commitName": "feat(api): incluir nombre y foto del perfil propio en GET /me (#4)",
+    "commitTimestamp": 1792448824514,
+    "testId": 12
+  },
+  {
+    "numPassedTests": 42,
+    "failedTests": 1,
+    "numTotalTests": 43,
+    "timestamp": 1792448867375,
+    "success": false,
+    "testId": 13
+  },
+  {
+    "numPassedTests": 43,
+    "failedTests": 0,
+    "numTotalTests": 43,
+    "timestamp": 1792448899352,
+    "success": true,
+    "testId": 13
+  },
+  {
+    "numPassedTests": 43,
+    "failedTests": 1,
+    "numTotalTests": 44,
+    "timestamp": 1792448926088,
+    "success": false,
+    "testId": 13
+  },
+  {
+    "numPassedTests": 44,
+    "failedTests": 0,
+    "numTotalTests": 44,
+    "timestamp": 1792448952105,
+    "success": true,
+    "testId": 13
+  },
+  {
+    "commitId": "dcf9c1597ed8fda4665a1ba24508d0d193aaa002",
+    "commitName": "feat(web): revocar la sesión en la API y leer el perfil propio sin caché (#4)",
+    "commitTimestamp": 1792448984629,
+    "testId": 13
+  },
+  {
+    "numPassedTests": 43,
+    "failedTests": 2,
+    "numTotalTests": 45,
+    "timestamp": 1792449020046,
+    "success": false,
+    "testId": 14
+  },
+  {
+    "numPassedTests": 45,
+    "failedTests": 0,
+    "numTotalTests": 45,
+    "timestamp": 1792449046730,
+    "success": true,
+    "testId": 14
+  },
+  {
+    "numPassedTests": 45,
+    "failedTests": 1,
+    "numTotalTests": 46,
+    "timestamp": 1792449080492,
+    "success": false,
+    "testId": 14
+  },
+  {
+    "numPassedTests": 46,
+    "failedTests": 0,
+    "numTotalTests": 46,
+    "timestamp": 1792449104188,
+    "success": true,
+    "testId": 14
+  },
+  {
+    "commitId": "913c0beade300b21fcba5ec16051346dcbe5047e",
+    "commitName": "feat(web): cerrar primero la sesión en la API y proteger «Mi perfil» (#4)",
+    "commitTimestamp": 1792449134451,
+    "testId": 14
+  },
+  {
+    "commitId": "3f394b1e315f1d887a6ad7ccb6027dfaec2cb3df",
+    "commitName": "feat(web): mostrar «Mi perfil» con avatar genérico, acceso a mis reportes y cierre seguro (#4)",
+    "commitTimestamp": 1792449450628,
+    "testId": 15
+  },
+  {
+    "commitId": "7291cb6c1988fe8f43698bfee340a0b4d8a2e77c",
+    "commitName": "test(repo): aceptar perfil privado y revocación en la API, también desde Windows (#4)",
+    "commitTimestamp": 1792449517074,
+    "testId": 16
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(repo): documentar perfil, revocación de sesión y sus pruebas (#4)",
+    "commitTimestamp": 1792449562992,
+    "testId": 17
   }
 ]

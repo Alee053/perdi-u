@@ -4,17 +4,18 @@ import {
   ClipboardList,
   House,
   LogIn,
-  LogOut,
   Map,
   PawPrint,
   Plus,
   Search,
   ShieldCheck,
+  UserRound,
   X,
 } from 'lucide-react'
 import type { ReactNode } from 'react'
 import type { AccountIdentity } from '@perdiu/contracts'
 import type { Section } from '../../types'
+import { UserAvatar, accountName } from '../common/UserAvatar'
 
 type SidebarProps = {
   section: Section
@@ -26,7 +27,6 @@ type SidebarProps = {
   onClose: () => void
   account: AccountIdentity | null
   onSignIn: () => void
-  onSignOut: () => Promise<void>
 }
 
 export function Sidebar({
@@ -39,7 +39,6 @@ export function Sidebar({
   onClose,
   account,
   onSignIn,
-  onSignOut,
 }: SidebarProps) {
   const go = (next: Section) => {
     onNavigate(next)
@@ -114,6 +113,12 @@ export function Sidebar({
         />
         <div className="nav-label nav-label-spaced">CUENTA</div>
         <NavItem
+          active={section === 'profile'}
+          icon={<UserRound size={17} />}
+          label="Mi perfil"
+          onClick={() => go('profile')}
+        />
+        <NavItem
           active={section === 'safety'}
           icon={<ShieldCheck size={17} />}
           label="Seguridad y privacidad"
@@ -135,13 +140,13 @@ export function Sidebar({
         </button>
       </div>
       {account ? (
-        <button className="sidebar-user" onClick={() => void onSignOut()}>
-          <span className="user-avatar">{account.email[0]!.toLocaleUpperCase('es')}</span>
+        <button className="sidebar-user" onClick={() => go('profile')}>
+          <UserAvatar account={account} />
           <span className="user-info">
-            <b>{account.email}</b>
-            <small>Cerrar sesión</small>
+            <b>{accountName(account)}</b>
+            <small>Ver mi perfil</small>
           </span>
-          <LogOut size={15} />
+          <ArrowUpRight size={15} />
         </button>
       ) : (
         <button className="sidebar-user" onClick={onSignIn}>
