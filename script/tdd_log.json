@@ -198,9 +198,31 @@
     "testId": 8
   },
   {
-    "commitId": "HEAD",
+    "commitId": "74e799ac18f1db9fab9b0866c4f382715d9bb284",
     "commitName": "test(repo): ejecutar las pruebas de TDDLab y documentos también en Windows (#4)",
     "commitTimestamp": 1792448405844,
     "testId": 9
+  },
+  {
+    "numPassedTests": 41,
+    "failedTests": 1,
+    "numTotalTests": 42,
+    "timestamp": 1792448478466,
+    "success": false,
+    "testId": 10
+  },
+  {
+    "numPassedTests": 42,
+    "failedTests": 0,
+    "numTotalTests": 42,
+    "timestamp": 1792448507393,
+    "success": true,
+    "testId": 10
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(repo): filtrar escenarios HTTP de Auth y lanzar pnpm en Windows (#4)",
+    "commitTimestamp": 1792448695906,
+    "testId": 10
   }
 ]
