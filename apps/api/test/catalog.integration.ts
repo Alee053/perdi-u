@@ -37,6 +37,8 @@ async function runDatabaseCommand(command: 'migrate' | 'seed', databaseUrl: stri
         PORT: 'invalid-http-port',
       },
       stdio: 'ignore',
+      // Windows resolves pnpm to a .cmd shim, which Node only runs through a shell.
+      shell: process.platform === 'win32',
     })
     child.on('error', reject)
     child.on('exit', resolve)

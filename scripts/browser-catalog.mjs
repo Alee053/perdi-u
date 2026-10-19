@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict'
-import { spawn } from 'node:child_process'
+import { execFileSync } from 'node:child_process'
+// cross-spawn resolves pnpm's .cmd shim on Windows without passing arguments through a shell.
+import { spawn } from 'cross-spawn'
 import { existsSync } from 'node:fs'
 import { mkdir, readFile } from 'node:fs/promises'
 import { createServer } from 'node:net'
@@ -40,6 +42,13 @@ async function stop(child) {
   )
     return
   const exited = new Promise((resolve) => child.once('exit', resolve))
+  // Windows has no POSIX process groups: end the whole tree with taskkill instead.
+  if (process.platform === 'win32') {
+    try {
+      execFileSync('taskkill', ['/pid', String(child.pid), '/T', '/F'], { stdio: 'ignore' })
+    } catch {}
+    return void (await exited)
+  }
   try {
     process.kill(-child.pid, 'SIGTERM')
   } catch (error) {
@@ -165,6 +174,11 @@ async function verifySearch(page, size) {
     .getByRole('button', { name: 'Publicar reporte', exact: true })
     .click()
   // Publishing requires an account: anonymous visitors are sent to the login screen.
+  await page.getByRole('heading', { name: 'Iniciar sesión', exact: true }).waitFor()
+  await page.getByRole('button', { name: 'Volver al catálogo', exact: true }).click()
+  // The profile shows private account data, so it asks for a session as well.
+  if (size === 'mobile') await page.getByRole('button', { name: 'Abrir menú' }).click()
+  await page.getByRole('navigation').getByRole('button', { name: 'Mi perfil' }).click()
   await page.getByRole('heading', { name: 'Iniciar sesión', exact: true }).waitFor()
   await page.getByRole('button', { name: 'Volver al catálogo', exact: true }).click()
   if (size === 'mobile') await page.getByRole('button', { name: 'Abrir menú' }).click()

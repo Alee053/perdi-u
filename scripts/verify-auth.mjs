@@ -226,6 +226,14 @@ try {
   const renewed = await (await refresh(session.refresh_token)).json()
   assert.ok(renewed.access_token && renewed.refresh_token !== session.refresh_token)
   assert.equal((await me(renewed.access_token)).status, 200)
+  // The web revokes the session in the API first: the still-signed token stops working at once.
+  const revoked = await fetch(`${apiUrl}/me/logout`, {
+    method: 'POST',
+    headers: { authorization: `Bearer ${renewed.access_token}` },
+  })
+  assert.equal(revoked.status, 204)
+  assert.equal((await me(renewed.access_token)).status, 401)
+  console.log('✓ API: tras POST /me/logout el mismo access token ya no consulta /me')
   const logout = await fetch(`${auth}/logout?scope=local`, {
     method: 'POST',
     headers: { authorization: `Bearer ${renewed.access_token}` },

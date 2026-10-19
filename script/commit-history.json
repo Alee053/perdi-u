@@ -285,17 +285,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "d0c6c57842a79bc8ce110fd217f5db0a18940c42",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-19T22:38:08.000Z",
       "message": "feat(web): mostrar «Mi perfil» con avatar genérico, acceso a mis reportes y cierre seguro (#4)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/d0c6c57842a79bc8ce110fd217f5db0a18940c42"
     },
     "stats": {
       "total": 331,
       "additions": 305,
       "deletions": 26,
+      "date": "2026-10-19"
+    },
+    "coverage": 89.63,
+    "test_count": 46,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T22:39:18.000Z",
+      "message": "test(repo): aceptar perfil privado y revocación en la API, también desde Windows (#4)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 73,
+      "additions": 69,
+      "deletions": 4,
       "date": "2026-10-19"
     },
     "coverage": 89.63,
