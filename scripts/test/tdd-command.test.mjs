@@ -20,7 +20,14 @@ delete fixtureEnv.HUSKY_SKIP_TRACK
 
 async function command(root, executable, args) {
   try {
-    const result = await exec(executable, args, { cwd: root, env: fixtureEnv, timeout: 30000 })
+    // Windows resolves pnpm to a .cmd shim, which Node only runs through a shell.
+    const shell = process.platform === 'win32' && executable === 'pnpm'
+    const result = await exec(executable, args, {
+      cwd: root,
+      env: fixtureEnv,
+      timeout: 30000,
+      shell,
+    })
     return { code: 0, ...result }
   } catch (error) {
     if (typeof error.code !== 'number') throw error
@@ -44,7 +51,7 @@ async function fixture() {
     '.npmrc',
   ])
     await copyFile(join(source, path), join(root, path))
-  await symlink(join(source, 'node_modules'), join(root, 'node_modules'), 'dir')
+  await symlink(join(source, 'node_modules'), join(root, 'node_modules'), 'junction')
   await writeFile(
     join(root, '.gitignore'),
     'node_modules/\n.husky/_/\ncoverage/\nscript/report.json\n',
