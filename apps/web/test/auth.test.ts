@@ -257,3 +257,60 @@ test('al volver del enlace de confirmación se informa el resultado sin crear un
   await signedIn.presenter.start()
   assert.deepEqual(signedIn.presenter.getSnapshot(), { status: 'authenticated', user: identity })
 })
+
+test('el cliente revoca la sesión en la API; un 401 ya no tiene nada que revocar', async () => {
+  const requests: { url: string; method?: string; authorization: string | null }[] = []
+  let status = 204
+  let network = true
+  const fetcher = (async (url: string, init: RequestInit) => {
+    if (!network) throw new TypeError('fetch failed')
+    requests.push({
+      url,
+      method: init.method,
+      authorization: new Headers(init.headers).get('authorization'),
+    })
+    return new Response(null, { status })
+  }) as typeof fetch
+  let token: string | undefined = 'access-token'
+  const client = createAccountClient('/api', async () => token, fetcher)
+
+  await client.revokeSession()
+  assert.deepEqual(requests, [
+    { url: '/api/me/logout', method: 'POST', authorization: 'Bearer access-token' },
+  ])
+  status = 401
+  await client.revokeSession()
+  status = 503
+  await assert.rejects(client.revokeSession())
+  network = false
+  await assert.rejects(client.revokeSession())
+  network = true
+  token = undefined
+  await client.revokeSession()
+  assert.equal(requests.length, 3, 'sin token no hay sesión que revocar')
+})
+
+test('el cliente conserva nombre y foto del perfil propio sin campos ajenos ni caché', async () => {
+  const caches: (RequestCache | undefined)[] = []
+  let body: unknown
+  const fetcher = (async (_url: string, init: RequestInit) => {
+    caches.push(init.cache)
+    return new Response(JSON.stringify(body), { status: 200 })
+  }) as typeof fetch
+  const client = createAccountClient('/api', async () => 'access-token', fetcher)
+
+  body = {
+    ...identity,
+    displayName: 'Persona Ficticia',
+    photoUrl: 'https://images.example.test/persona.png',
+    phone: 'private-sentinel',
+  }
+  assert.deepEqual(await client.me(), {
+    ...identity,
+    displayName: 'Persona Ficticia',
+    photoUrl: 'https://images.example.test/persona.png',
+  })
+  body = { ...identity, displayName: '', photoUrl: 42 }
+  assert.deepEqual(await client.me(), identity)
+  assert.deepEqual(caches, ['no-store', 'no-store'])
+})

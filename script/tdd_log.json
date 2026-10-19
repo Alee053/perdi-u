@@ -360,9 +360,47 @@
     "testId": 12
   },
   {
-    "commitId": "HEAD",
+    "commitId": "5f394632635fc9ab98200fb993c0ec1bd54c8e36",
     "commitName": "feat(api): incluir nombre y foto del perfil propio en GET /me (#4)",
     "commitTimestamp": 1792448848000,
     "testId": 12
+  },
+  {
+    "numPassedTests": 43,
+    "failedTests": 1,
+    "numTotalTests": 44,
+    "timestamp": 1792448913000,
+    "success": false,
+    "testId": 13
+  },
+  {
+    "numPassedTests": 43,
+    "failedTests": 1,
+    "numTotalTests": 44,
+    "timestamp": 1792448943000,
+    "success": false,
+    "testId": 13
+  },
+  {
+    "numPassedTests": 43,
+    "failedTests": 1,
+    "numTotalTests": 44,
+    "timestamp": 1792448973000,
+    "success": false,
+    "testId": 13
+  },
+  {
+    "numPassedTests": 44,
+    "failedTests": 0,
+    "numTotalTests": 44,
+    "timestamp": 1792449003000,
+    "success": true,
+    "testId": 13
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): revocar la sesión en la API y leer el perfil propio sin caché (#4)",
+    "commitTimestamp": 1792449004000,
+    "testId": 13
   }
 ]
