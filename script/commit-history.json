@@ -95,12 +95,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "d72a790bb42014bf1b8056b1de9d98a4cfab007e",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-19T05:06:10.000Z",
       "message": "feat(api): verificar JWT de Supabase Auth y proteger GET /me (#3)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/d72a790bb42014bf1b8056b1de9d98a4cfab007e"
     },
     "stats": {
       "total": 555,
@@ -110,6 +110,25 @@
     },
     "coverage": 89.5,
     "test_count": 32,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T05:06:26.000Z",
+      "message": "feat(web): registrar, iniciar y cerrar sesión con correo en la web (#3)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 1421,
+      "additions": 1369,
+      "deletions": 52,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.93,
+    "test_count": 41,
     "failed_tests": 0,
     "conclusion": "success"
   }

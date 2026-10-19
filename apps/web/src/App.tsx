@@ -1,12 +1,16 @@
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import type { ChangeEvent, FormEvent } from 'react'
-import { CheckCircle2, X } from 'lucide-react'
+import { CheckCircle2, LoaderCircle, X } from 'lucide-react'
+import { createAccountClient } from './auth/client'
+import { createAuthGateway } from './auth/gateway'
+import { AuthPresenter, signedOutNotice } from './auth/presenter'
 import { AppHeader } from './components/layout/AppHeader'
 import { Sidebar } from './components/layout/Sidebar'
 import { createReportsClient } from './catalog/client'
 import { CatalogPresenter, defaultCatalogFilters } from './catalog/presenter'
 import { ReportDetail } from './components/reports/ReportDetail'
 import { fallbackReportImage, initialReports } from './data/reports'
+import { AuthPage, type AuthMode } from './pages/AuthPage'
 import { ExplorePage } from './pages/ExplorePage'
 import { MapPage } from './pages/MapPage'
 import { MyReportsPage } from './pages/MyReportsPage'
@@ -17,11 +21,22 @@ import { SavedPage } from './pages/SavedPage'
 import type { CatalogReport, Category, FilterStatus, Report, ReportStatus, Section } from './types'
 import { normalizeText, sectionLabels } from './utils/text'
 
+// One Auth client per page: a second instance would race to exchange the same PKCE code.
+const authPresenter = (() => {
+  const { gateway, accessToken } = createAuthGateway(import.meta.env.VITE_AUTH_URL || '/auth')
+  const account = createAccountClient(import.meta.env.VITE_API_BASE_URL || '/api', accessToken)
+  return new AuthPresenter(gateway, account)
+})()
+
 function App() {
   const [catalog] = useState(
     () => new CatalogPresenter(createReportsClient(import.meta.env.VITE_API_BASE_URL || '/api')),
   )
   const catalogState = useSyncExternalStore(catalog.subscribe, catalog.getSnapshot)
+  const auth = authPresenter
+  const authState = useSyncExternalStore(auth.subscribe, auth.getSnapshot)
+  const [authView, setAuthView] = useState<AuthMode | null>(null)
+  const [pendingSection, setPendingSection] = useState<Section | null>(null)
   const [section, setSection] = useState<Section>('overview')
   const [reports, setReports] = useState<Report[]>(initialReports)
   const [search, setSearch] = useState('')
@@ -35,6 +50,33 @@ function App() {
   const [notice, setNotice] = useState('')
   const [imagePreview, setImagePreview] = useState('')
   const [postStatus, setPostStatus] = useState<ReportStatus>('Perdido')
+
+  useEffect(() => {
+    void auth.start()
+  }, [auth])
+
+  // Private sections need a verified session; remember the destination for after login.
+  useEffect(() => {
+    if (auth.access(section) !== 'login') return
+    setPendingSection(section)
+    setSection('overview')
+    setAuthView('login')
+  }, [auth, authState, section])
+
+  useEffect(() => {
+    if (authState.status === 'authenticated' && authView) {
+      setAuthView(null)
+      setSection(pendingSection ?? 'overview')
+      setPendingSection(null)
+    } else if (
+      authState.status === 'anonymous' &&
+      authState.notice &&
+      authState.notice !== signedOutNotice &&
+      !authView
+    )
+      setAuthView('login')
+    // Only state transitions open the login view; leaving it must not reopen it.
+  }, [authState])
 
   useEffect(() => {
     void catalog.load({ search, city, category, status })
@@ -74,9 +116,33 @@ function App() {
   }
 
   const navigate = (next: Section) => {
+    if (auth.access(next) === 'login') {
+      setPendingSection(next)
+      setAuthView('login')
+      setMobileMenu(false)
+      return
+    }
     setSection(next)
     setMobileMenu(false)
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const openAuth = (mode: AuthMode) => {
+    setPendingSection(null)
+    setAuthView(mode)
+    setMobileMenu(false)
+  }
+
+  const signOut = async () => {
+    const failure = await auth.signOut()
+    if (failure) return notify(failure)
+    // Private, per-account state must not survive the session.
+    setSaved([])
+    setSavedCatalogReports([])
+    setSelectedReport(null)
+    setSection('explore')
+    setMobileMenu(false)
+    notify(signedOutNotice)
   }
 
   const contact = (report: Report) => {
@@ -172,6 +238,25 @@ function App() {
     notify('El reporte se quitó de la lista.')
   }
 
+  const account = authState.status === 'authenticated' ? authState.user : null
+  const sectionAccess = auth.access(section)
+
+  if (authView)
+    return (
+      <AuthPage
+        key={authView}
+        mode={authView}
+        presenter={auth}
+        notice={authState.status === 'anonymous' ? authState.notice : undefined}
+        onModeChange={setAuthView}
+        onBack={() => {
+          setAuthView(null)
+          setPendingSection(null)
+          setSection('explore')
+        }}
+      />
+    )
+
   return (
     <div className="app-shell">
       {mobileMenu && (
@@ -189,7 +274,9 @@ function App() {
         savedCount={saved.length}
         onNavigate={navigate}
         onClose={() => setMobileMenu(false)}
-        onNotify={notify}
+        account={account}
+        onSignIn={() => openAuth('login')}
+        onSignOut={signOut}
       />
 
       <div className="main-column">
@@ -197,8 +284,18 @@ function App() {
           sectionTitle={sectionLabels[section]}
           onOpenMenu={() => setMobileMenu(true)}
           onNotify={notify}
+          account={account}
+          restoring={authState.status === 'restoring'}
+          onSignIn={() => openAuth('login')}
+          onRegister={() => openAuth('register')}
+          onSignOut={signOut}
         />
         <main className="content-area">
+          {sectionAccess === 'wait' && (
+            <div className="session-wait" role="status">
+              <LoaderCircle size={16} className="spin" /> Verificando tu sesión…
+            </div>
+          )}
           {section === 'overview' && (
             <OverviewPage
               reports={activeReports}
@@ -245,7 +342,7 @@ function App() {
               onNavigate={navigate}
             />
           )}
-          {section === 'publish' && (
+          {section === 'publish' && sectionAccess === 'allow' && (
             <PublishPage
               postStatus={postStatus}
               setPostStatus={setPostStatus}
@@ -255,7 +352,7 @@ function App() {
               onSubmit={submitReport}
             />
           )}
-          {section === 'my-reports' && (
+          {section === 'my-reports' && sectionAccess === 'allow' && (
             <MyReportsPage
               reports={ownReports}
               onResolve={resolveReport}
