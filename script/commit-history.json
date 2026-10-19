@@ -38,12 +38,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "0325c2bd6a2000c8e5c875add87c5c4551ad6acd",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-10-17T05:23:56.000Z",
       "message": "docs(repo): consolidar issues y colaboración en perdi-u",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/0325c2bd6a2000c8e5c875add87c5c4551ad6acd"
     },
     "stats": {
       "total": 93,
@@ -55,5 +55,24 @@
     "test_count": 28,
     "failed_tests": 0,
     "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T05:04:09.000Z",
+      "message": "chore(repo): añadir jose y @supabase/auth-js para Auth (#3)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 37,
+      "additions": 29,
+      "deletions": 8,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.27,
+    "test_count": 28,
+    "failed_tests": 3,
+    "conclusion": "failure"
   }
 ]
