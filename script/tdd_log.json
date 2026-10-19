@@ -28,9 +28,173 @@
     "testId": 1
   },
   {
-    "commitId": "HEAD",
+    "commitId": "0325c2bd6a2000c8e5c875add87c5c4551ad6acd",
     "commitName": "docs(repo): consolidar issues y colaboración en perdi-u",
     "commitTimestamp": 1792214636340,
     "testId": 2
+  },
+  {
+    "numPassedTests": 25,
+    "failedTests": 4,
+    "numTotalTests": 29,
+    "timestamp": 1792382137689,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 26,
+    "failedTests": 3,
+    "numTotalTests": 29,
+    "timestamp": 1792382190634,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 27,
+    "failedTests": 5,
+    "numTotalTests": 32,
+    "timestamp": 1792382235981,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 29,
+    "failedTests": 3,
+    "numTotalTests": 32,
+    "timestamp": 1792382253035,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 29,
+    "failedTests": 5,
+    "numTotalTests": 34,
+    "timestamp": 1792382870848,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 31,
+    "failedTests": 3,
+    "numTotalTests": 34,
+    "timestamp": 1792382895858,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 31,
+    "failedTests": 5,
+    "numTotalTests": 36,
+    "timestamp": 1792382914704,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 33,
+    "failedTests": 3,
+    "numTotalTests": 36,
+    "timestamp": 1792382934808,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 33,
+    "failedTests": 6,
+    "numTotalTests": 39,
+    "timestamp": 1792382955435,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 36,
+    "failedTests": 3,
+    "numTotalTests": 39,
+    "timestamp": 1792382988363,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 36,
+    "failedTests": 4,
+    "numTotalTests": 40,
+    "timestamp": 1792383008987,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 37,
+    "failedTests": 3,
+    "numTotalTests": 40,
+    "timestamp": 1792383027137,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 37,
+    "failedTests": 4,
+    "numTotalTests": 41,
+    "timestamp": 1792383073830,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 38,
+    "failedTests": 3,
+    "numTotalTests": 41,
+    "timestamp": 1792383088233,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 37,
+    "failedTests": 4,
+    "numTotalTests": 41,
+    "timestamp": 1792384019655,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 38,
+    "failedTests": 3,
+    "numTotalTests": 41,
+    "timestamp": 1792384059755,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "commitId": "b1c1eb795a11a963939ceb87309bb7c369890e62",
+    "commitName": "chore(repo): añadir jose y @supabase/auth-js para Auth (#3)",
+    "commitTimestamp": 1792386252426,
+    "testId": 3
+  },
+  {
+    "commitId": "3df0dc2876ce3139dbc0d3f824112d5794e8da87",
+    "commitName": "feat(database): ejecutar Supabase Auth self-hosted sobre PostgreSQL con Compose (#3)",
+    "commitTimestamp": 1792386333444,
+    "testId": 4
+  },
+  {
+    "commitId": "1609494a80564bf34ac8d4727628c30ddc037d28",
+    "commitName": "feat(api): verificar JWT de Supabase Auth y proteger GET /me (#3)",
+    "commitTimestamp": 1792386357930,
+    "testId": 5
+  },
+  {
+    "commitId": "c82e35c376135a087544e7eddb8651f1a14e89e9",
+    "commitName": "feat(web): registrar, iniciar y cerrar sesión con correo en la web (#3)",
+    "commitTimestamp": 1792386379665,
+    "testId": 6
+  },
+  {
+    "commitId": "c7b3e84f012c5f2ae5450315b873455fb2b43ff2",
+    "commitName": "test(repo): aceptar Auth real con Compose desechable y ajustar e2e (#3)",
+    "commitTimestamp": 1792386394926,
+    "testId": 7
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(repo): documentar autenticación, configuración y pruebas de Auth (#3)",
+    "commitTimestamp": 1792386404637,
+    "testId": 8
   }
 ]

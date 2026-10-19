@@ -1,11 +1,15 @@
 import { DatabaseConfigurationError } from '@perdiu/database/config'
 import { createApplication } from './app.js'
+import { createRemoteAccessTokenVerifier } from './auth/access-token.js'
 import { ConfigurationError, loadEnvironment, readConfig } from './config.js'
 
 try {
   loadEnvironment()
   const config = readConfig(process.env)
-  const app = await createApplication(config.databaseUrl)
+  const app = await createApplication(
+    config.databaseUrl,
+    createRemoteAccessTokenVerifier(config.auth.jwksUrl, config.auth),
+  )
   try {
     await app.listen(config.port, config.host)
     console.log('API de PerdiU lista.')

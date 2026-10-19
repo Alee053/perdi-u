@@ -3,9 +3,18 @@ import { spawn } from 'node:child_process'
 import { readFile } from 'node:fs/promises'
 import { expect, test } from '@jest/globals'
 import { createApplication } from '../src/app.js'
+import { createAccessTokenVerifier } from '../src/auth/access-token.js'
 import { createPool, PostgresReportRepository } from '@perdiu/database'
 import { migrate, seed } from '@perdiu/database/maintenance'
 import { assertLocalDatabase } from '@perdiu/database/config'
+
+// The public catalog never consults Auth; no key can verify a session here.
+const noSessions = createAccessTokenVerifier(
+  async () => {
+    throw new Error('El catálogo no debe verificar sesiones.')
+  },
+  { issuer: 'http://localhost/auth', audience: 'authenticated' },
+)
 
 async function resetCatalog(pool: ReturnType<typeof createPool>) {
   assert.equal(
@@ -65,7 +74,7 @@ test('catálogo HTTP y repositorio conservan datos reales tras reiniciar, sin in
     await seed(pool)
 
     const start = async () => {
-      app = await createApplication(databaseUrl)
+      app = await createApplication(databaseUrl, noSessions)
       await app.listen(0, '127.0.0.1')
       return `${await app.getUrl()}/reports`
     }
@@ -153,7 +162,12 @@ test('el proceso falla con diagnóstico seguro ante configuración ausente o con
     const result = await new Promise<{ code: number | null; output: string }>((resolve, reject) => {
       const child = spawn(process.execPath, ['dist/main.js'], {
         cwd: new URL('../', import.meta.url),
-        env: { ...process.env, DATABASE_URL: databaseUrl },
+        env: {
+          ...process.env,
+          DATABASE_URL: databaseUrl,
+          AUTH_JWKS_URL: 'http://127.0.0.1:1/.well-known/jwks.json',
+          AUTH_JWT_ISSUER: 'http://localhost/auth',
+        },
         stdio: ['ignore', 'pipe', 'pipe'],
       })
       let output = ''
@@ -191,7 +205,7 @@ test('la búsqueda HTTP normaliza texto, combina filtros y valida entradas sobre
         'utf8',
       ),
     )
-    app = await createApplication(databaseUrl)
+    app = await createApplication(databaseUrl, noSessions)
     await app.listen(0, '127.0.0.1')
     const endpoint = `${await app.getUrl()}/reports`
     for (const q of ['camara', 'CÁMARA', 'ca\u0301mara', '  camara  ']) {

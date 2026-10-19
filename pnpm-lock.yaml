@@ -62,6 +62,9 @@ importers:
       '@perdiu/database':
         specifier: workspace:*
         version: link:../../packages/database
+      jose:
+        specifier: ^6.2.12
+        version: 6.2.12
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
@@ -87,6 +90,9 @@ importers:
       '@perdiu/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
+      '@supabase/auth-js':
+        specifier: ^2.117.2
+        version: 2.117.2
       lucide-react:
         specifier: ^1.52.0
         version: 1.52.0(@types/react@19.3.0)(react@19.3.0)
@@ -791,6 +797,10 @@ packages:
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
+
+  '@supabase/auth-js@2.117.2':
+    resolution: {integrity: sha512-Z3WnGwrphYZubrLbxp5Iv0tLA9A5GhvKzJ/ZXglxqwd2QEH2R4dXRltjVJ8sIn4xEW2BSFIGT0yALVJIgZeDYw==}
+    engines: {node: '>=22.0.0'}
 
   '@tokenizer/inflate@0.4.1':
     resolution: {integrity: sha512-2mAv+8pkG6GIZiF1kNg1jAjh27IDxEPKwdGul3snfztFerfPGI1LjDezZp3i7BElXompqEtPmoPx6c2wgtWsOA==}
@@ -1645,6 +1655,9 @@ packages:
     peerDependenciesMeta:
       node-notifier:
         optional: true
+
+  jose@6.2.12:
+    resolution: {integrity: sha512-9NiFmJEex0sy2Dk58j2UGBSHgUs2ypF9eZSu4L6vjOX3Dp96Sw1F3uL+H+D1sx02jZZdzUT0HgvCy59CuvXcWw==}
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -3019,6 +3032,10 @@ snapshots:
 
   '@standard-schema/spec@1.1.0': {}
 
+  '@supabase/auth-js@2.117.2':
+    dependencies:
+      tslib: 2.8.1
+
   '@tokenizer/inflate@0.4.1':
     dependencies:
       debug: 4.4.3
@@ -4030,6 +4047,8 @@ snapshots:
       - babel-plugin-macros
       - supports-color
       - ts-node
+
+  jose@6.2.12: {}
 
   js-tokens@4.0.0: {}
 

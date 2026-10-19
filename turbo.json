@@ -4,7 +4,7 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**"],
-      "env": ["VITE_API_BASE_URL"]
+      "env": ["VITE_API_BASE_URL", "VITE_AUTH_URL"]
     },
     "typecheck": {
       "dependsOn": ["^build", "^typecheck"],
@@ -19,7 +19,18 @@
       "dependsOn": ["^build"],
       "persistent": true,
       "cache": false,
-      "passThroughEnv": ["DATABASE_URL", "PORT", "HOST", "API_PROXY_TARGET", "VITE_API_BASE_URL"]
+      "passThroughEnv": [
+        "DATABASE_URL",
+        "PORT",
+        "HOST",
+        "API_PROXY_TARGET",
+        "VITE_API_BASE_URL",
+        "AUTH_PROXY_TARGET",
+        "VITE_AUTH_URL",
+        "AUTH_JWKS_URL",
+        "AUTH_JWT_ISSUER",
+        "AUTH_JWT_AUDIENCE"
+      ]
     },
     "test:integration": {
       "dependsOn": ["build", "^test:integration"],

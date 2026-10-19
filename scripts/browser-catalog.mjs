@@ -88,7 +88,14 @@ const apiPort = await freePort()
 const webPort = await freePort()
 const apiUrl = `http://127.0.0.1:${apiPort}`
 const webUrl = `http://127.0.0.1:${webPort}`
-const apiEnv = { DATABASE_URL: databaseUrl, PORT: String(apiPort), HOST: '127.0.0.1' }
+// The public catalog never consults Auth; these values only satisfy the API's configuration.
+const apiEnv = {
+  DATABASE_URL: databaseUrl,
+  PORT: String(apiPort),
+  HOST: '127.0.0.1',
+  AUTH_JWKS_URL: 'http://127.0.0.1:9/.well-known/jwks.json',
+  AUTH_JWT_ISSUER: 'http://127.0.0.1/auth',
+}
 const startApi = () =>
   start(process.execPath, ['dist/main.js'], new URL('../apps/api/', import.meta.url), apiEnv)
 let api
@@ -157,7 +164,9 @@ async function verifySearch(page, size) {
     .locator('.empty-state')
     .getByRole('button', { name: 'Publicar reporte', exact: true })
     .click()
-  await page.getByRole('heading', { name: 'Publicar reporte', exact: true }).waitFor()
+  // Publishing requires an account: anonymous visitors are sent to the login screen.
+  await page.getByRole('heading', { name: 'Iniciar sesión', exact: true }).waitFor()
+  await page.getByRole('button', { name: 'Volver al catálogo', exact: true }).click()
   if (size === 'mobile') await page.getByRole('button', { name: 'Abrir menú' }).click()
   await page
     .getByRole('navigation')

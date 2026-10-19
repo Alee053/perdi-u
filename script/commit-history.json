@@ -38,12 +38,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "0325c2bd6a2000c8e5c875add87c5c4551ad6acd",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-10-17T05:23:56.000Z",
       "message": "docs(repo): consolidar issues y colaboración en perdi-u",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/0325c2bd6a2000c8e5c875add87c5c4551ad6acd"
     },
     "stats": {
       "total": 93,
@@ -55,5 +55,119 @@
     "test_count": 28,
     "failed_tests": 0,
     "conclusion": "success"
+  },
+  {
+    "sha": "b1c1eb795a11a963939ceb87309bb7c369890e62",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T05:04:09.000Z",
+      "message": "chore(repo): añadir jose y @supabase/auth-js para Auth (#3)",
+      "url": "https://github.com/Alee053/perdi-u/commit/b1c1eb795a11a963939ceb87309bb7c369890e62"
+    },
+    "stats": {
+      "total": 37,
+      "additions": 29,
+      "deletions": 8,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.27,
+    "test_count": 28,
+    "failed_tests": 3,
+    "conclusion": "failure"
+  },
+  {
+    "sha": "3df0dc2876ce3139dbc0d3f824112d5794e8da87",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T05:05:30.000Z",
+      "message": "feat(database): ejecutar Supabase Auth self-hosted sobre PostgreSQL con Compose (#3)",
+      "url": "https://github.com/Alee053/perdi-u/commit/3df0dc2876ce3139dbc0d3f824112d5794e8da87"
+    },
+    "stats": {
+      "total": 137,
+      "additions": 136,
+      "deletions": 1,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.27,
+    "test_count": 28,
+    "failed_tests": 3,
+    "conclusion": "failure"
+  },
+  {
+    "sha": "1609494a80564bf34ac8d4727628c30ddc037d28",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T05:05:53.000Z",
+      "message": "feat(api): verificar JWT de Supabase Auth y proteger GET /me (#3)",
+      "url": "https://github.com/Alee053/perdi-u/commit/1609494a80564bf34ac8d4727628c30ddc037d28"
+    },
+    "stats": {
+      "total": 500,
+      "additions": 487,
+      "deletions": 13,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.95,
+    "test_count": 32,
+    "failed_tests": 3,
+    "conclusion": "failure"
+  },
+  {
+    "sha": "c82e35c376135a087544e7eddb8651f1a14e89e9",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T05:06:17.000Z",
+      "message": "feat(web): registrar, iniciar y cerrar sesión con correo en la web (#3)",
+      "url": "https://github.com/Alee053/perdi-u/commit/c82e35c376135a087544e7eddb8651f1a14e89e9"
+    },
+    "stats": {
+      "total": 1366,
+      "additions": 1317,
+      "deletions": 49,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.57,
+    "test_count": 41,
+    "failed_tests": 3,
+    "conclusion": "failure"
+  },
+  {
+    "sha": "c7b3e84f012c5f2ae5450315b873455fb2b43ff2",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T05:06:33.000Z",
+      "message": "test(repo): aceptar Auth real con Compose desechable y ajustar e2e (#3)",
+      "url": "https://github.com/Alee053/perdi-u/commit/c7b3e84f012c5f2ae5450315b873455fb2b43ff2"
+    },
+    "stats": {
+      "total": 258,
+      "additions": 256,
+      "deletions": 2,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.57,
+    "test_count": 41,
+    "failed_tests": 3,
+    "conclusion": "failure"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T05:06:43.000Z",
+      "message": "docs(repo): documentar autenticación, configuración y pruebas de Auth (#3)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 187,
+      "additions": 147,
+      "deletions": 40,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.57,
+    "test_count": 41,
+    "failed_tests": 3,
+    "conclusion": "failure"
   }
 ]

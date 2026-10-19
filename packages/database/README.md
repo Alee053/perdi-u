@@ -20,6 +20,10 @@ pnpm db:seed
 
 Turbo compila las dependencias antes del mantenimiento, propaga `DATABASE_URL`/`NODE_ENV` y nunca cachea mutaciones. Compose sigue en la raíz: PostgreSQL 17, puerto local 5433 y volumen persistente. `pnpm db:down` conserva el volumen.
 
+## Base de Auth
+
+[`auth/bootstrap.sql`](auth/bootstrap.sql) prepara el mismo cluster para Supabase Auth: rol `perdiu_auth` sin privilegios administrativos, base `perdiu_auth` con su esquema `auth` y el rol `postgres` `NOLOGIN` que exigen las migraciones de GoTrue. Lo ejecuta el servicio Compose `auth-db-init` en cada `pnpm db:up`; es idempotente y no toca `perdiu_dev`. El esquema `auth` pertenece a GoTrue: sus migraciones corren al iniciar Auth y no se versionan aquí. Ver la [guía de Auth](../../docs/auth.md).
+
 ## Migraciones y seed
 
 Los archivos viven en `migrations/`, con nombres como `001_catalog.sql` y `002_nueva_capacidad.sql`. La versión es un entero positivo único de al menos tres dígitos, seguido de un nombre ASCII en minúsculas y guiones bajos. Se ordenan por versión numérica.
