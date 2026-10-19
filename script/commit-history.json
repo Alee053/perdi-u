@@ -57,17 +57,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "b1c1eb795a11a963939ceb87309bb7c369890e62",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-19T05:04:09.000Z",
       "message": "chore(repo): añadir jose y @supabase/auth-js para Auth (#3)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/b1c1eb795a11a963939ceb87309bb7c369890e62"
     },
     "stats": {
       "total": 37,
       "additions": 29,
       "deletions": 8,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.27,
+    "test_count": 28,
+    "failed_tests": 3,
+    "conclusion": "failure"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T05:05:30.000Z",
+      "message": "feat(database): ejecutar Supabase Auth self-hosted sobre PostgreSQL con Compose (#3)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 137,
+      "additions": 136,
+      "deletions": 1,
       "date": "2026-10-19"
     },
     "coverage": 88.27,

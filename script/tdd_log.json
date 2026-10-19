@@ -162,9 +162,15 @@
     "testId": 3
   },
   {
-    "commitId": "HEAD",
+    "commitId": "b1c1eb795a11a963939ceb87309bb7c369890e62",
     "commitName": "chore(repo): añadir jose y @supabase/auth-js para Auth (#3)",
     "commitTimestamp": 1792386252426,
     "testId": 3
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(database): ejecutar Supabase Auth self-hosted sobre PostgreSQL con Compose (#3)",
+    "commitTimestamp": 1792386333444,
+    "testId": 4
   }
 ]
