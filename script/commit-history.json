@@ -38,18 +38,37 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "b578de6238b1cd4f4be543cef21650c1ad319c5a",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-10-17T05:24:11.000Z",
       "message": "docs(repo): consolidar issues y colaboración en perdi-u",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/b578de6238b1cd4f4be543cef21650c1ad319c5a"
     },
     "stats": {
       "total": 124,
       "additions": 100,
       "deletions": 24,
       "date": "2026-10-17"
+    },
+    "coverage": 88.89,
+    "test_count": 28,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T05:04:50.000Z",
+      "message": "chore(repo): añadir dependencias de Auth y verificar la línea base (#3)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 108,
+      "additions": 97,
+      "deletions": 11,
+      "date": "2026-10-19"
     },
     "coverage": 88.89,
     "test_count": 28,

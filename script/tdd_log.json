@@ -60,9 +60,55 @@
     "testId": 1
   },
   {
-    "commitId": "HEAD",
+    "commitId": "b578de6238b1cd4f4be543cef21650c1ad319c5a",
     "commitName": "docs(repo): consolidar issues y colaboración en perdi-u",
     "commitTimestamp": 1792214651000,
     "testId": 2
+  },
+  {
+    "numPassedTests": 27,
+    "failedTests": 1,
+    "numTotalTests": 28,
+    "timestamp": 1792386169000,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 27,
+    "failedTests": 1,
+    "numTotalTests": 28,
+    "timestamp": 1792386199000,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 28,
+    "failedTests": 0,
+    "numTotalTests": 28,
+    "timestamp": 1792386229000,
+    "success": true,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 27,
+    "failedTests": 1,
+    "numTotalTests": 28,
+    "timestamp": 1792386259000,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 28,
+    "failedTests": 0,
+    "numTotalTests": 28,
+    "timestamp": 1792386289000,
+    "success": true,
+    "testId": 3
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "chore(repo): añadir dependencias de Auth y verificar la línea base (#3)",
+    "commitTimestamp": 1792386290000,
+    "testId": 3
   }
 ]
