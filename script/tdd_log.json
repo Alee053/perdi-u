@@ -420,9 +420,39 @@
     "testId": 14
   },
   {
-    "commitId": "HEAD",
+    "commitId": "5d5cc4cbf45645b61d91964a05b8fd7829b3f969",
     "commitName": "feat(web): cerrar primero la sesión en la API y proteger «Mi perfil» (#4)",
     "commitTimestamp": 1792449160000,
     "testId": 14
+  },
+  {
+    "numPassedTests": 45,
+    "failedTests": 1,
+    "numTotalTests": 46,
+    "timestamp": 1792449427000,
+    "success": false,
+    "testId": 15
+  },
+  {
+    "numPassedTests": 45,
+    "failedTests": 1,
+    "numTotalTests": 46,
+    "timestamp": 1792449457000,
+    "success": false,
+    "testId": 15
+  },
+  {
+    "numPassedTests": 46,
+    "failedTests": 0,
+    "numTotalTests": 46,
+    "timestamp": 1792449487000,
+    "success": true,
+    "testId": 15
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): mostrar «Mi perfil» con avatar genérico, acceso a mis reportes y cierre seguro (#4)",
+    "commitTimestamp": 1792449488000,
+    "testId": 15
   }
 ]

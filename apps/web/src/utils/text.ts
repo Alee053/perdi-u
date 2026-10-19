@@ -12,6 +12,7 @@ export const sectionLabels: Record<import('../types').Section, string> = {
   'my-reports': 'Mis reportes',
   saved: 'Guardados',
   safety: 'Seguridad y privacidad',
+  profile: 'Mi perfil',
 }
 
 export const statusColors: Record<import('../types').ReportStatus, string> = {

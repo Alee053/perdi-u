@@ -1,6 +1,16 @@
 import { useState } from 'react'
-import { Bell, ChevronDown, ChevronRight, LogIn, LogOut, MapPin, Menu } from 'lucide-react'
+import {
+  Bell,
+  ChevronDown,
+  ChevronRight,
+  LogIn,
+  LogOut,
+  MapPin,
+  Menu,
+  UserRound,
+} from 'lucide-react'
 import type { AccountIdentity } from '@perdiu/contracts'
+import { UserAvatar, accountName } from '../common/UserAvatar'
 
 type AppHeaderProps = {
   sectionTitle: string
@@ -10,6 +20,7 @@ type AppHeaderProps = {
   restoring: boolean
   onSignIn: () => void
   onRegister: () => void
+  onOpenProfile: () => void
   onSignOut: () => Promise<void>
 }
 
@@ -21,6 +32,7 @@ export function AppHeader({
   restoring,
   onSignIn,
   onRegister,
+  onOpenProfile,
   onSignOut,
 }: AppHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -59,15 +71,23 @@ export function AppHeader({
               aria-expanded={menuOpen}
               onClick={() => setMenuOpen((open) => !open)}
             >
-              <span className="user-avatar user-avatar-small">
-                {account.email[0]!.toLocaleUpperCase('es')}
-              </span>
-              <span className="header-profile-name">{account.email}</span>
+              <UserAvatar account={account} size="small" />
+              <span className="header-profile-name">{accountName(account)}</span>
               <ChevronDown size={13} />
             </button>
             {menuOpen && (
               <div className="account-menu-popover" role="menu">
                 <p>{account.email}</p>
+                <button
+                  className="secondary-button"
+                  role="menuitem"
+                  onClick={() => {
+                    setMenuOpen(false)
+                    onOpenProfile()
+                  }}
+                >
+                  <UserRound size={14} /> Mi perfil
+                </button>
                 <button
                   className="secondary-button"
                   role="menuitem"
