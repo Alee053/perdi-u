@@ -3,6 +3,8 @@ import {
   Bookmark,
   ClipboardList,
   House,
+  LogIn,
+  LogOut,
   Map,
   PawPrint,
   Plus,
@@ -11,6 +13,7 @@ import {
   X,
 } from 'lucide-react'
 import type { ReactNode } from 'react'
+import type { AccountIdentity } from '@perdiu/contracts'
 import type { Section } from '../../types'
 
 type SidebarProps = {
@@ -21,7 +24,9 @@ type SidebarProps = {
   savedCount: number
   onNavigate: (section: Section) => void
   onClose: () => void
-  onNotify: (message: string) => void
+  account: AccountIdentity | null
+  onSignIn: () => void
+  onSignOut: () => Promise<void>
 }
 
 export function Sidebar({
@@ -32,7 +37,9 @@ export function Sidebar({
   savedCount,
   onNavigate,
   onClose,
-  onNotify,
+  account,
+  onSignIn,
+  onSignOut,
 }: SidebarProps) {
   const go = (next: Section) => {
     onNavigate(next)
@@ -127,17 +134,26 @@ export function Sidebar({
           <ArrowUpRight size={15} />
         </button>
       </div>
-      <button
-        className="sidebar-user"
-        onClick={() => onNotify('Estás usando el perfil de demostración de PerdiU.')}
-      >
-        <span className="user-avatar">S</span>
-        <span className="user-info">
-          <b>Santiago Demo</b>
-          <small>Cuenta de demostración</small>
-        </span>
-        <span className="user-more">•••</span>
-      </button>
+      {account ? (
+        <button className="sidebar-user" onClick={() => void onSignOut()}>
+          <span className="user-avatar">{account.email[0]!.toLocaleUpperCase('es')}</span>
+          <span className="user-info">
+            <b>{account.email}</b>
+            <small>Cerrar sesión</small>
+          </span>
+          <LogOut size={15} />
+        </button>
+      ) : (
+        <button className="sidebar-user" onClick={onSignIn}>
+          <span className="user-avatar">
+            <LogIn size={15} />
+          </span>
+          <span className="user-info">
+            <b>Invitado</b>
+            <small>Iniciar sesión o crear cuenta</small>
+          </span>
+        </button>
+      )}
       <div className="sidebar-version">
         PERDIU · VERSIÓN DEMO <span>●</span>
       </div>

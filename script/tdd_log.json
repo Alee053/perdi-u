@@ -174,9 +174,15 @@
     "testId": 4
   },
   {
-    "commitId": "HEAD",
+    "commitId": "1609494a80564bf34ac8d4727628c30ddc037d28",
     "commitName": "feat(api): verificar JWT de Supabase Auth y proteger GET /me (#3)",
     "commitTimestamp": 1792386357930,
     "testId": 5
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): registrar, iniciar y cerrar sesión con correo en la web (#3)",
+    "commitTimestamp": 1792386379665,
+    "testId": 6
   }
 ]
