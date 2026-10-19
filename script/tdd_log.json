@@ -186,9 +186,15 @@
     "testId": 6
   },
   {
-    "commitId": "HEAD",
+    "commitId": "c7b3e84f012c5f2ae5450315b873455fb2b43ff2",
     "commitName": "test(repo): aceptar Auth real con Compose desechable y ajustar e2e (#3)",
     "commitTimestamp": 1792386394926,
     "testId": 7
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(repo): documentar autenticación, configuración y pruebas de Auth (#3)",
+    "commitTimestamp": 1792386404637,
+    "testId": 8
   }
 ]

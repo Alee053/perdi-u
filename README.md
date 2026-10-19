@@ -22,7 +22,7 @@ pnpm install --frozen-lockfile
 cp .env.example .env
 ```
 
-En `.env`, define una contraseña local en `POSTGRES_PASSWORD` y una `DATABASE_URL` con el formato `postgresql://perdiu:<contraseña-codificada>@127.0.0.1:5433/perdiu_dev`. Codifica los caracteres especiales de la contraseña para la URL. El archivo está ignorado por Git; las credenciales de BD pertenecen a procesos de servidor y mantenimiento. La [guía de servicios](docs/services.md) detalla configuración actual y proveedores pendientes; no necesitas Auth ni R2 para el catálogo.
+En `.env`, define una contraseña local en `POSTGRES_PASSWORD` y una `DATABASE_URL` con el formato `postgresql://perdiu:<contraseña-codificada>@127.0.0.1:5433/perdiu_dev`. Codifica los caracteres especiales de la contraseña para la URL. Ejecuta `pnpm auth:keys` y copia sus tres líneas (`AUTH_DB_PASSWORD`, `AUTH_JWT_SECRET`, `AUTH_JWT_KEYS`) al mismo archivo. El archivo está ignorado por Git; las credenciales de BD y las claves de Auth pertenecen a procesos de servidor. La [guía de servicios](docs/services.md) detalla configuración actual y proveedores pendientes; no necesitas R2 para el catálogo.
 
 ```bash
 pnpm db:up
@@ -31,7 +31,11 @@ pnpm db:seed
 pnpm dev
 ```
 
-La web corre en `http://localhost:5173` y la API en `http://127.0.0.1:3000`. También puedes usar `pnpm dev:web` con la API iniciada por separado. `pnpm db:down` detiene PostgreSQL conservando su volumen.
+La web corre en `http://localhost:5173` y la API en `http://127.0.0.1:3000`. `pnpm db:up` también inicia Supabase Auth (`127.0.0.1:9999`) y Mailpit (`http://127.0.0.1:8025`), donde se leen los correos de confirmación locales. También puedes usar `pnpm dev:web` con la API iniciada por separado. `pnpm db:down` detiene los servicios conservando el volumen.
+
+## Autenticación
+
+Registro, inicio y cierre de sesión con correo y contraseña mediante Supabase Auth (GoTrue) self-hosted sobre el mismo PostgreSQL, en la base separada `perdiu_auth`. La API valida los JWT ES256 con las claves públicas de Auth y expone `GET /me`; «Publicar reporte» y «Mis reportes» requieren sesión. Consulta la [guía de Auth](docs/auth.md) para el flujo, la configuración, la seguridad y cómo probarlo.
 
 `pnpm build` y `pnpm typecheck` recorren los workspaces con Turbo, compilando primero sus dependencias. `pnpm test` ejecuta las pruebas con Jest y registra cada ejecución mediante TDDLab. Los hooks se instalan automáticamente con `pnpm install --frozen-lockfile`. `pnpm verify` reúne formato, documentación/skills, arquitectura, tipos, unitarias y build. La caché de builds es local; las pruebas se ejecutan realmente en cada invocación, sin reutilizar resultados de Turbo.
 
@@ -59,7 +63,7 @@ La [guía de arquitectura](docs/architecture.md) define responsabilidades y depe
 
 «Explorar reportes» consulta `GET /reports` de PostgreSQL a través del proxy `/api` de Vite. La búsqueda por título/descripción ignora mayúsculas y tildes y se combina en el servidor con tipo, categoría y ciudad. Cada consulta devuelve hasta 50 reportes activos, del más reciente al más antiguo; al alcanzar el límite, la interfaz sugiere ajustar los filtros. «Limpiar filtros» restablece el catálogo y los controles; las consultas anteriores se cancelan y sus respuestas se descartan. Distingue carga, error con reintento de la misma búsqueda, catálogo vacío y búsqueda sin coincidencias con acceso a publicación. No usa datos demo como fallback. El detalle abierto desde este catálogo muestra únicamente datos públicos, sin contacto ni controles de propietario. Las imágenes ausentes usan SVG locales por categoría; el mapa ilustrativo pertenece a la demo.
 
-Resumen, Publicar, Mis reportes, Guardados y perfil conservan sus flujos de demostración: no hay Auth ni escrituras persistentes desde la web. Los guardados solo viven en memoria. Los reportes/telefonía demo y el seed son ficticios; el seed incluye un autor «Santiago Demo» para comprobar que su nombre no concede permisos. Las fotos y tipografías demo usan Unsplash y Google Fonts.
+Resumen, Publicar, Mis reportes y Guardados conservan sus flujos de demostración: el encabezado muestra la cuenta autenticada, pero aún no hay escrituras persistentes desde la web. Los guardados solo viven en memoria. Los reportes/telefonía demo y el seed son ficticios; el seed incluye un autor «Santiago Demo» para comprobar que su nombre no concede permisos. Las fotos y tipografías demo usan Unsplash y Google Fonts.
 
 ## Seguimiento TDD
 
@@ -81,7 +85,7 @@ pnpm test:integration
 pnpm test:e2e
 ```
 
-La [guía de TDD y pruebas](docs/testing.md) explica selección de interfaces, ciclos red/green y comandos focalizados. `test:e2e` ya incluye integración/build: no hace falta ejecutar ambos íntegros en cada entrega. `pnpm format` aplica el estilo; `pnpm format:check` lo verifica. Jest 29.7 es el ejecutor compartido con la instrumentación original de TDDLab.
+La [guía de TDD y pruebas](docs/testing.md) explica selección de interfaces, ciclos red/green y comandos focalizados. `test:e2e` ya incluye integración/build: no hace falta ejecutar ambos íntegros en cada entrega. `pnpm test:auth` comprueba registro, confirmación, sesión y `GET /me` contra Supabase Auth real en un proyecto Compose desechable. `pnpm format` aplica el estilo; `pnpm format:check` lo verifica. Jest 29.7 es el ejecutor compartido con la instrumentación original de TDDLab.
 
 Las dos últimas órdenes crean y eliminan un PostgreSQL aislado con credenciales efímeras, sin requerir `.env` ni modificar la base de desarrollo. `test:e2e` también inicia API/web en puertos libres y usa Chromium para comprobar carga, búsqueda sin tildes, filtros combinados, limpieza, límite, privacidad, error/reintento, vacío, reinicio y recorridos de móvil/escritorio. Usa Chromium del sistema (`/usr/bin/chromium`) o define `CHROMIUM_PATH`; si no tienes uno, instala el navegador local de Playwright con `pnpm exec playwright install chromium`. Las capturas quedan en `test-results/`, ignorado por Git.
 
