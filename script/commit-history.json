@@ -228,12 +228,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "0fcfabd51352c1f7760e28aa7b07c65d9c8a10d0",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-19T22:27:03.000Z",
       "message": "feat(api): incluir nombre y foto del perfil propio en GET /me (#4)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/0fcfabd51352c1f7760e28aa7b07c65d9c8a10d0"
     },
     "stats": {
       "total": 111,
@@ -243,6 +243,25 @@
     },
     "coverage": 89.24,
     "test_count": 42,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T22:29:43.000Z",
+      "message": "feat(web): revocar la sesión en la API y leer el perfil propio sin caché (#4)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 80,
+      "additions": 78,
+      "deletions": 2,
+      "date": "2026-10-19"
+    },
+    "coverage": 89.6,
+    "test_count": 44,
     "failed_tests": 0,
     "conclusion": "success"
   }

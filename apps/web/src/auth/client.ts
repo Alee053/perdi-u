@@ -7,12 +7,14 @@ export function createAccountClient(
   accessToken: () => Promise<string | undefined>,
   fetcher: typeof fetch = fetch,
 ): AccountClient {
+  const base = baseUrl.replace(/\/$/, '')
   return {
     async me(): Promise<AccountIdentity> {
       const token = await accessToken()
       if (!token) throw new SessionRejected()
-      const response = await fetcher(`${baseUrl.replace(/\/$/, '')}/me`, {
+      const response = await fetcher(`${base}/me`, {
         credentials: 'omit',
+        cache: 'no-store',
         headers: { Accept: 'application/json', Authorization: `Bearer ${token}` },
       })
       if (response.status === 401) throw new SessionRejected()
@@ -29,7 +31,22 @@ export function createAccountClient(
         !data.email
       )
         throw new Error('La respuesta de la cuenta no es válida.')
-      return { id: data.id, email: data.email }
+      const text = (key: 'displayName' | 'photoUrl') => {
+        const value = (data as Record<string, unknown>)[key]
+        return typeof value === 'string' && value ? { [key]: value } : {}
+      }
+      return { id: data.id, email: data.email, ...text('displayName'), ...text('photoUrl') }
+    },
+    async revokeSession() {
+      const token = await accessToken()
+      if (!token) return
+      const response = await fetcher(`${base}/me/logout`, {
+        method: 'POST',
+        credentials: 'omit',
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      // 401: the API already rejects this token (revoked or expired), so nothing remains open.
+      if (!response.ok && response.status !== 401) throw new Error('No se pudo cerrar la sesión.')
     },
   }
 }

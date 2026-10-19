@@ -30,6 +30,8 @@ export interface AuthGateway {
 
 export interface AccountClient {
   me(): Promise<AccountIdentity>
+  /** Revokes the current session in the API; resolves if it is already invalid there. */
+  revokeSession(): Promise<void>
 }
 
 export type AuthState =
