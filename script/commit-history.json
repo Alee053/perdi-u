@@ -152,12 +152,12 @@
     "conclusion": "failure"
   },
   {
-    "sha": "HEAD",
+    "sha": "b1fca454df720975714a564384d0a36e9dd5ddd0",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-19T05:06:43.000Z",
       "message": "docs(repo): documentar autenticación, configuración y pruebas de Auth (#3)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/b1fca454df720975714a564384d0a36e9dd5ddd0"
     },
     "stats": {
       "total": 187,
@@ -169,5 +169,24 @@
     "test_count": 41,
     "failed_tests": 3,
     "conclusion": "failure"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T22:20:04.000Z",
+      "message": "test(repo): ejecutar las pruebas de TDDLab y documentos también en Windows (#4)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 13,
+      "additions": 10,
+      "deletions": 3,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.93,
+    "test_count": 41,
+    "failed_tests": 0,
+    "conclusion": "success"
   }
 ]

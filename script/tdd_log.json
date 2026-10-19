@@ -192,9 +192,15 @@
     "testId": 7
   },
   {
-    "commitId": "HEAD",
+    "commitId": "b1fca454df720975714a564384d0a36e9dd5ddd0",
     "commitName": "docs(repo): documentar autenticación, configuración y pruebas de Auth (#3)",
     "commitTimestamp": 1792386404637,
     "testId": 8
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(repo): ejecutar las pruebas de TDDLab y documentos también en Windows (#4)",
+    "commitTimestamp": 1792448405844,
+    "testId": 9
   }
 ]

@@ -96,7 +96,7 @@ test('documentos y skills válidos admiten enlaces anclados y ejemplos sin conta
 test('un enlace no puede escapar del repositorio mediante ruta o symlink', async () => {
   const root = await mkdtemp(join(tmpdir(), 'perdiu-docs-'))
   try {
-    await symlink(tmpdir(), join(root, 'outside'))
+    await symlink(tmpdir(), join(root, 'outside'), 'junction')
     await writeFile(join(root, 'README.md'), '[Ruta](../)\n[Symlink](outside/)\n')
     const errors = await checkDocuments(root, ['README.md'])
     assert.equal(errors.length, 2)
