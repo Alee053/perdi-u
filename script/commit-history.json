@@ -266,17 +266,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "913c0beade300b21fcba5ec16051346dcbe5047e",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-19T22:32:13.000Z",
       "message": "feat(web): cerrar primero la sesión en la API y proteger «Mi perfil» (#4)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/913c0beade300b21fcba5ec16051346dcbe5047e"
     },
     "stats": {
       "total": 65,
       "additions": 60,
       "deletions": 5,
+      "date": "2026-10-19"
+    },
+    "coverage": 89.63,
+    "test_count": 46,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T22:37:29.000Z",
+      "message": "feat(web): mostrar «Mi perfil» con avatar genérico, acceso a mis reportes y cierre seguro (#4)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 276,
+      "additions": 253,
+      "deletions": 23,
       "date": "2026-10-19"
     },
     "coverage": 89.63,
