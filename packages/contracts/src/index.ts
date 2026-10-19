@@ -38,8 +38,13 @@ export interface PublicProfile {
   photoUrl?: string
 }
 
-/** Private response of GET /me: the verified Auth subject and its own e-mail. */
+/**
+ * Private response of GET /me: the verified Auth subject, its own e-mail and, when a local profile
+ * exists, its display name and photo. The e-mail never appears in public DTOs.
+ */
 export interface AccountIdentity {
   id: string
   email: string
+  displayName?: string
+  photoUrl?: string
 }

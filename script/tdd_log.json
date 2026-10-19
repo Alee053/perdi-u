@@ -226,9 +226,15 @@
     "testId": 10
   },
   {
-    "commitId": "HEAD",
+    "commitId": "0f0db447e6248f186a5f60d69ff2bf478f681f53",
     "commitName": "feat(api): revocar la sesión actual y rechazar sus tokens tras reiniciar (#4)",
     "commitTimestamp": 1792448720113,
     "testId": 11
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(api): incluir nombre y foto del perfil propio en GET /me (#4)",
+    "commitTimestamp": 1792448824514,
+    "testId": 12
   }
 ]

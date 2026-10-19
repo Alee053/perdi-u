@@ -12,7 +12,7 @@ import {
   UseGuards,
 } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
-import { openDatabase, type Database } from '@perdiu/database'
+import { openDatabase, type Database, type PostgresProfileRepository } from '@perdiu/database'
 import { ListReports } from '@perdiu/catalog'
 import type { AccountIdentity } from '@perdiu/contracts'
 import {
@@ -40,16 +40,33 @@ class ReportsController {
 }
 
 const SESSION_REVOCATIONS = 'SESSION_REVOCATIONS'
+const PROFILES = 'PROFILES'
 
 @Controller('me')
 @UseGuards(AuthGuard)
 class AccountController {
-  constructor(@Inject(SESSION_REVOCATIONS) private readonly sessions: SessionRevocations) {}
+  constructor(
+    @Inject(SESSION_REVOCATIONS) private readonly sessions: SessionRevocations,
+    @Inject(PROFILES) private readonly profiles: Pick<PostgresProfileRepository, 'find'>,
+  ) {}
 
+  /** Private data never cached by the browser, so Back or reload cannot replay it. */
   @Get()
   @Header('Cache-Control', 'no-store')
-  me(@CurrentUser() user: AuthenticatedUser): AccountIdentity {
-    return { id: user.id, email: user.email }
+  async me(@CurrentUser() user: AuthenticatedUser): Promise<AccountIdentity> {
+    let profile
+    try {
+      profile = await this.profiles.find(user.id)
+    } catch {
+      throw new ServiceUnavailableException('No se pudo cargar tu perfil. Intenta nuevamente.')
+    }
+    // Explicit allowlist: the profile of the verified subject, never its private contacts.
+    return {
+      id: user.id,
+      email: user.email,
+      ...(profile && { displayName: profile.displayName }),
+      ...(profile?.photoUrl && { photoUrl: profile.photoUrl }),
+    }
   }
 
   /** Revokes only the verified session of this token; other devices stay signed in. */
@@ -79,6 +96,7 @@ export async function createApplication(databaseUrl: string, verifier: AccessTok
         providers: [
           { provide: ListReports, useValue: new ListReports(database.reports) },
           { provide: SESSION_REVOCATIONS, useValue: database.sessions },
+          { provide: PROFILES, useValue: database.profiles },
           // Every private route passes the guard, so every one rejects revoked sessions.
           {
             provide: ACCESS_TOKEN_VERIFIER,
