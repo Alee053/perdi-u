@@ -6,7 +6,7 @@ services:
       POSTGRES_DB: perdiu_dev
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in the ignored root .env}
     ports:
-      - '127.0.0.1:5433:5432'
+      - '127.0.0.1:${POSTGRES_PORT:-5433}:5432'
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
@@ -14,5 +14,88 @@ services:
       interval: 2s
       timeout: 3s
       retries: 15
+
+  # One-shot, idempotent: creates the perdiu_auth role/database on the existing volume.
+  auth-db-init:
+    image: postgres:17-alpine
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGHOST: postgres
+      PGUSER: perdiu
+      PGDATABASE: perdiu_dev
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      AUTH_DB_PASSWORD: ${AUTH_DB_PASSWORD:?Set AUTH_DB_PASSWORD in the ignored root .env}
+    volumes:
+      - ./packages/database/auth/bootstrap.sql:/bootstrap.sql:ro
+    # Retries briefly: the service name may not resolve yet on a freshly created network.
+    command:
+      - sh
+      - -c
+      - for i in 1 2 3 4 5 6 7 8 9 10; do pg_isready -q && break; sleep 1; done; psql -q -v auth_password="$AUTH_DB_PASSWORD" -f /bootstrap.sql
+    restart: 'no'
+
+  auth:
+    image: supabase/gotrue:v2.197.0
+    depends_on:
+      auth-db-init:
+        condition: service_completed_successfully
+      mail:
+        condition: service_started
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      PORT: 9999
+      # Browser-facing URL (the Vite proxy forwards /auth to this service).
+      API_EXTERNAL_URL: ${AUTH_PUBLIC_URL:-http://localhost:5173/auth}
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://perdiu_auth:${AUTH_DB_PASSWORD}@postgres:5432/perdiu_auth?sslmode=disable
+      GOTRUE_SITE_URL: ${AUTH_SITE_URL:-http://localhost:5173}
+      GOTRUE_URI_ALLOW_LIST: ${AUTH_REDIRECT_ALLOW_LIST:-http://localhost:5173/**,http://127.0.0.1:5173/**}
+      GOTRUE_DISABLE_SIGNUP: 'false'
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: 'true'
+      GOTRUE_EXTERNAL_PHONE_ENABLED: 'false'
+      GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED: 'false'
+      GOTRUE_PASSWORD_MIN_LENGTH: 8
+      # Tokens are signed with the ES256 private key; services verify them through the JWKS.
+      GOTRUE_JWT_SECRET: ${AUTH_JWT_SECRET:?Run pnpm auth:keys and copy its values to .env}
+      GOTRUE_JWT_KEYS: ${AUTH_JWT_KEYS:?Run pnpm auth:keys and copy its values to .env}
+      GOTRUE_JWT_ISSUER: ${AUTH_PUBLIC_URL:-http://localhost:5173/auth}
+      GOTRUE_JWT_AUD: authenticated
+      # Role claim of signed-in users, as in the official self-hosted setup; the API requires it.
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_JWT_EXP: 900
+      GOTRUE_SECURITY_REFRESH_TOKEN_ROTATION_ENABLED: 'true'
+      GOTRUE_SECURITY_REFRESH_TOKEN_REUSE_INTERVAL: 10
+      GOTRUE_MAILER_AUTOCONFIRM: ${AUTH_MAILER_AUTOCONFIRM:-false}
+      # E-mail links resolve these absolute paths against AUTH_PUBLIC_URL: keep its /auth prefix.
+      GOTRUE_MAILER_URLPATHS_CONFIRMATION: /auth/verify
+      GOTRUE_MAILER_URLPATHS_RECOVERY: /auth/verify
+      GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE: /auth/verify
+      GOTRUE_SMTP_HOST: ${AUTH_SMTP_HOST:-mail}
+      GOTRUE_SMTP_PORT: ${AUTH_SMTP_PORT:-1025}
+      GOTRUE_SMTP_USER: ${AUTH_SMTP_USER:-}
+      GOTRUE_SMTP_PASS: ${AUTH_SMTP_PASS:-}
+      GOTRUE_SMTP_ADMIN_EMAIL: ${AUTH_SMTP_ADMIN_EMAIL:-no-reply@perdiu.localhost}
+      GOTRUE_SMTP_SENDER_NAME: PerdiU
+    ports:
+      - '127.0.0.1:9999:9999'
+    healthcheck:
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:9999/health']
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  # Local SMTP capture: confirmation e-mails are readable at http://127.0.0.1:8025, never sent.
+  mail:
+    image: axllent/mailpit:v1.31.3
+    ports:
+      - '127.0.0.1:8025:8025'
+    healthcheck:
+      test: ['CMD', '/mailpit', 'readyz']
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
 volumes:
   postgres-data:

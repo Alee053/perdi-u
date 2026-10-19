@@ -57,17 +57,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "9f3b5e55d58356118addbeaa1a2bd12d02cb28cb",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-19T05:04:50.000Z",
       "message": "chore(repo): añadir dependencias de Auth y verificar la línea base (#3)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/9f3b5e55d58356118addbeaa1a2bd12d02cb28cb"
     },
     "stats": {
       "total": 108,
       "additions": 97,
       "deletions": 11,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.89,
+    "test_count": 28,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T05:05:43.000Z",
+      "message": "feat(database): ejecutar Supabase Auth self-hosted sobre PostgreSQL con Compose (#3)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 184,
+      "additions": 180,
+      "deletions": 4,
       "date": "2026-10-19"
     },
     "coverage": 88.89,

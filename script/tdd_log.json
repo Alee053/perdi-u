@@ -106,9 +106,31 @@
     "testId": 3
   },
   {
-    "commitId": "HEAD",
+    "commitId": "9f3b5e55d58356118addbeaa1a2bd12d02cb28cb",
     "commitName": "chore(repo): añadir dependencias de Auth y verificar la línea base (#3)",
     "commitTimestamp": 1792386290000,
     "testId": 3
+  },
+  {
+    "numPassedTests": 27,
+    "failedTests": 1,
+    "numTotalTests": 28,
+    "timestamp": 1792386316000,
+    "success": false,
+    "testId": 4
+  },
+  {
+    "numPassedTests": 28,
+    "failedTests": 0,
+    "numTotalTests": 28,
+    "timestamp": 1792386342000,
+    "success": true,
+    "testId": 4
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(database): ejecutar Supabase Auth self-hosted sobre PostgreSQL con Compose (#3)",
+    "commitTimestamp": 1792386343000,
+    "testId": 4
   }
 ]
