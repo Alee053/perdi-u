@@ -168,9 +168,15 @@
     "testId": 3
   },
   {
-    "commitId": "HEAD",
+    "commitId": "3df0dc2876ce3139dbc0d3f824112d5794e8da87",
     "commitName": "feat(database): ejecutar Supabase Auth self-hosted sobre PostgreSQL con Compose (#3)",
     "commitTimestamp": 1792386333444,
     "testId": 4
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(api): verificar JWT de Supabase Auth y proteger GET /me (#3)",
+    "commitTimestamp": 1792386357930,
+    "testId": 5
   }
 ]

@@ -1,8 +1,19 @@
 import 'reflect-metadata'
-import { Controller, Get, Inject, Module, Query, ServiceUnavailableException } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Inject,
+  Module,
+  Query,
+  ServiceUnavailableException,
+  UseGuards,
+} from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { openDatabase, type Database } from '@perdiu/database'
 import { ListReports } from '@perdiu/catalog'
+import type { AccountIdentity } from '@perdiu/contracts'
+import type { AccessTokenVerifier, AuthenticatedUser } from './auth/access-token.js'
+import { ACCESS_TOKEN_VERIFIER, AuthGuard, CurrentUser } from './auth/guard.js'
 import { parseReportQuery } from './reports/query.js'
 
 @Controller('reports')
@@ -20,19 +31,30 @@ class ReportsController {
   }
 }
 
+@Controller('me')
+@UseGuards(AuthGuard)
+class AccountController {
+  @Get()
+  me(@CurrentUser() user: AuthenticatedUser): AccountIdentity {
+    return { id: user.id, email: user.email }
+  }
+}
+
 @Module({})
 class AppModule {}
 
-export async function createApplication(databaseUrl: string) {
+export async function createApplication(databaseUrl: string, verifier: AccessTokenVerifier) {
   let database: Database | undefined
   try {
     database = await openDatabase(databaseUrl)
     const app = await NestFactory.create(
       {
         module: AppModule,
-        controllers: [ReportsController],
+        controllers: [ReportsController, AccountController],
         providers: [
           { provide: ListReports, useValue: new ListReports(database.reports) },
+          { provide: ACCESS_TOKEN_VERIFIER, useValue: verifier },
+          AuthGuard,
           { provide: 'DATABASE_LIFECYCLE', useValue: { onModuleDestroy: database.close } },
         ],
       },
