@@ -188,9 +188,47 @@
     "testId": 6
   },
   {
-    "commitId": "HEAD",
+    "commitId": "be8bb208b49b1866afbf3fa1c2346e31d19accdd",
     "commitName": "feat(web): registrar, iniciar y cerrar sesión con correo en la web (#3)",
     "commitTimestamp": 1792386386000,
     "testId": 6
+  },
+  {
+    "numPassedTests": 40,
+    "failedTests": 1,
+    "numTotalTests": 41,
+    "timestamp": 1792386389500,
+    "success": false,
+    "testId": 7
+  },
+  {
+    "numPassedTests": 40,
+    "failedTests": 1,
+    "numTotalTests": 41,
+    "timestamp": 1792386393000,
+    "success": false,
+    "testId": 7
+  },
+  {
+    "numPassedTests": 40,
+    "failedTests": 1,
+    "numTotalTests": 41,
+    "timestamp": 1792386396500,
+    "success": false,
+    "testId": 7
+  },
+  {
+    "numPassedTests": 41,
+    "failedTests": 0,
+    "numTotalTests": 41,
+    "timestamp": 1792386400000,
+    "success": true,
+    "testId": 7
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(repo): aceptar Auth real con Compose desechable y ajustar e2e (#3)",
+    "commitTimestamp": 1792386401000,
+    "testId": 7
   }
 ]
