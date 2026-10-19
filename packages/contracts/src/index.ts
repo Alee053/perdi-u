@@ -37,3 +37,9 @@ export interface PublicProfile {
   displayName: string
   photoUrl?: string
 }
+
+/** Private response of GET /me: the verified Auth subject and its own e-mail. */
+export interface AccountIdentity {
+  id: string
+  email: string
+}
