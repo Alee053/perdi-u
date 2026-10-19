@@ -2,8 +2,11 @@ import 'reflect-metadata'
 import {
   Controller,
   Get,
+  Header,
+  HttpCode,
   Inject,
   Module,
+  Post,
   Query,
   ServiceUnavailableException,
   UseGuards,
@@ -12,7 +15,12 @@ import { NestFactory } from '@nestjs/core'
 import { openDatabase, type Database } from '@perdiu/database'
 import { ListReports } from '@perdiu/catalog'
 import type { AccountIdentity } from '@perdiu/contracts'
-import type { AccessTokenVerifier, AuthenticatedUser } from './auth/access-token.js'
+import {
+  withSessionRevocation,
+  type AccessTokenVerifier,
+  type AuthenticatedUser,
+  type SessionRevocations,
+} from './auth/access-token.js'
 import { ACCESS_TOKEN_VERIFIER, AuthGuard, CurrentUser } from './auth/guard.js'
 import { parseReportQuery } from './reports/query.js'
 
@@ -31,12 +39,29 @@ class ReportsController {
   }
 }
 
+const SESSION_REVOCATIONS = 'SESSION_REVOCATIONS'
+
 @Controller('me')
 @UseGuards(AuthGuard)
 class AccountController {
+  constructor(@Inject(SESSION_REVOCATIONS) private readonly sessions: SessionRevocations) {}
+
   @Get()
+  @Header('Cache-Control', 'no-store')
   me(@CurrentUser() user: AuthenticatedUser): AccountIdentity {
     return { id: user.id, email: user.email }
+  }
+
+  /** Revokes only the verified session of this token; other devices stay signed in. */
+  @Post('logout')
+  @HttpCode(204)
+  @Header('Cache-Control', 'no-store')
+  async logout(@CurrentUser() user: AuthenticatedUser) {
+    try {
+      await this.sessions.revoke(user.sessionId)
+    } catch {
+      throw new ServiceUnavailableException('No se pudo cerrar la sesión. Intenta nuevamente.')
+    }
   }
 }
 
@@ -53,7 +78,12 @@ export async function createApplication(databaseUrl: string, verifier: AccessTok
         controllers: [ReportsController, AccountController],
         providers: [
           { provide: ListReports, useValue: new ListReports(database.reports) },
-          { provide: ACCESS_TOKEN_VERIFIER, useValue: verifier },
+          { provide: SESSION_REVOCATIONS, useValue: database.sessions },
+          // Every private route passes the guard, so every one rejects revoked sessions.
+          {
+            provide: ACCESS_TOKEN_VERIFIER,
+            useValue: withSessionRevocation(verifier, database.sessions),
+          },
           AuthGuard,
           { provide: 'DATABASE_LIFECYCLE', useValue: { onModuleDestroy: database.close } },
         ],

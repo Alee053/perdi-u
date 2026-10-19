@@ -5,6 +5,7 @@ import {
   AuthUnavailable,
   createAccessTokenVerifier,
   InvalidAccessToken,
+  withSessionRevocation,
 } from '../src/auth/access-token.js'
 
 const issuer = 'http://localhost:5173/auth'
@@ -109,4 +110,32 @@ test('si Auth no entrega sus claves, la API informa indisponibilidad y no un tok
   )
   const jwt = await token().setProtectedHeader({ alg: 'ES256', kid: key.kid }).sign(key.privateKey)
   await assert.rejects(verifier.verify(jwt), AuthUnavailable)
+})
+
+test('un token de una sesión revocada se rechaza aunque su firma siga vigente', async () => {
+  const key = await signingKey()
+  const revoked = new Set<string>()
+  let failing = false
+  const verifier = withSessionRevocation(
+    createAccessTokenVerifier(createLocalJWKSet({ keys: [key.jwk] }), { issuer, audience }),
+    {
+      revoke: async (id) => void revoked.add(id),
+      isRevoked: async (id) => {
+        if (failing) throw new Error('postgres-sentinel')
+        return revoked.has(id)
+      },
+    },
+  )
+  const sign = (claims: Record<string, unknown> = {}) =>
+    token(claims).setProtectedHeader({ alg: 'ES256', kid: key.kid }).sign(key.privateKey)
+  const current = await sign()
+  const other = await sign({ session_id: '7d2b4c39-8a3e-4c51-9b0f-2f6d1e8a4c10' })
+
+  assert.equal((await verifier.verify(current)).sessionId, sessionId)
+  revoked.add(sessionId)
+  await assert.rejects(verifier.verify(current), InvalidAccessToken)
+  await assert.rejects(verifier.verify(await sign()), InvalidAccessToken, 'tokens renovados')
+  assert.equal((await verifier.verify(other)).id, subject, 'otras sesiones siguen activas')
+  failing = true
+  await assert.rejects(verifier.verify(other), AuthUnavailable, 'sin registro no se acepta')
 })

@@ -190,12 +190,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "76d8ed13fd735b6a26b5950183575210c89d4d58",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-19T22:25:18.000Z",
       "message": "test(repo): filtrar escenarios HTTP de Auth y lanzar pnpm en Windows (#4)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/76d8ed13fd735b6a26b5950183575210c89d4d58"
     },
     "stats": {
       "total": 43,
@@ -205,6 +205,25 @@
     },
     "coverage": 88.93,
     "test_count": 41,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T22:25:42.000Z",
+      "message": "feat(api): revocar la sesión actual y rechazar sus tokens tras reiniciar (#4)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 208,
+      "additions": 202,
+      "deletions": 6,
+      "date": "2026-10-19"
+    },
+    "coverage": 89.24,
+    "test_count": 42,
     "failed_tests": 0,
     "conclusion": "success"
   }

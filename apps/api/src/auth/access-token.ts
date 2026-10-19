@@ -60,6 +60,35 @@ export function createAccessTokenVerifier(
   }
 }
 
+/** Sessions closed through the API, keyed by the verified `session_id` claim. */
+export interface SessionRevocations {
+  revoke(sessionId: string): Promise<void>
+  isRevoked(sessionId: string): Promise<boolean>
+}
+
+/**
+ * A signature stays valid until `exp`; the persisted revocation closes the session immediately.
+ * Auth keeps `session_id` across refreshes, so renewed tokens of that session are rejected too.
+ */
+export function withSessionRevocation(
+  verifier: AccessTokenVerifier,
+  revocations: SessionRevocations,
+): AccessTokenVerifier {
+  return {
+    async verify(token) {
+      const user = await verifier.verify(token)
+      let revoked
+      try {
+        revoked = await revocations.isRevoked(user.sessionId)
+      } catch {
+        throw new AuthUnavailable()
+      }
+      if (revoked) throw new InvalidAccessToken()
+      return user
+    },
+  }
+}
+
 /** Verifies tokens with the public keys that Auth publishes; no shared secret is needed. */
 export function createRemoteAccessTokenVerifier(jwksUrl: string, options: AccessTokenOptions) {
   return createAccessTokenVerifier(

@@ -300,9 +300,31 @@
     "testId": 10
   },
   {
-    "commitId": "HEAD",
+    "commitId": "76d8ed13fd735b6a26b5950183575210c89d4d58",
     "commitName": "test(repo): filtrar escenarios HTTP de Auth y lanzar pnpm en Windows (#4)",
     "commitTimestamp": 1792448718000,
     "testId": 10
+  },
+  {
+    "numPassedTests": 41,
+    "failedTests": 1,
+    "numTotalTests": 42,
+    "timestamp": 1792448729500,
+    "success": false,
+    "testId": 11
+  },
+  {
+    "numPassedTests": 42,
+    "failedTests": 0,
+    "numTotalTests": 42,
+    "timestamp": 1792448741000,
+    "success": true,
+    "testId": 11
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(api): revocar la sesión actual y rechazar sus tokens tras reiniciar (#4)",
+    "commitTimestamp": 1792448742000,
+    "testId": 11
   }
 ]
