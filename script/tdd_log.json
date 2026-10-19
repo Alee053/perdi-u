@@ -314,9 +314,15 @@
     "testId": 14
   },
   {
-    "commitId": "HEAD",
+    "commitId": "3f394b1e315f1d887a6ad7ccb6027dfaec2cb3df",
     "commitName": "feat(web): mostrar «Mi perfil» con avatar genérico, acceso a mis reportes y cierre seguro (#4)",
     "commitTimestamp": 1792449450628,
     "testId": 15
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(repo): aceptar perfil privado y revocación en la API, también desde Windows (#4)",
+    "commitTimestamp": 1792449517074,
+    "testId": 16
   }
 ]
