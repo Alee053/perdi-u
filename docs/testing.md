@@ -14,16 +14,20 @@ Los tests de caracterización de comportamiento existente pueden pasar desde el 
 
 ## Qué probar y dónde
 
-| Interfaz                           | Tipo y ubicación                                 | Qué debe demostrar                                                                                                                                                        |
-| ---------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ListReports` y `ReportRepository` | Unitarias, `packages/catalog/test`               | Transmisión de consulta, activos, orden estable/microsegundos, límite y proyección pública. El adapter aplica los predicados de búsqueda antes del límite.                |
-| Configuración de BD/API            | Unitarias, workspace dueño                       | Entradas inválidas, mensajes seguros y restricciones de mutaciones.                                                                                                       |
-| Cliente y presenter                | Unitarias, `apps/web/test`                       | DTO público, consultas HTTP, carga/error/reintento, cancelación y respuestas obsoletas. Doblar la red en esta interfaz.                                                   |
-| Migraciones y SQL                  | Integración PostgreSQL, `packages/database/test` | Orden, idempotencia, rollback y evolución. Usar PostgreSQL real, no mocks de SQL.                                                                                         |
-| `GET /reports`                     | Integración HTTP/PG, `apps/api/test`             | Validación/status, filtros reales, persistencia y privacidad.                                                                                                             |
-| Composición React/API/PG           | E2E, `scripts/browser-catalog.mjs`               | Unos pocos recorridos de usuario en móvil/escritorio: controles, búsqueda, vacío, error/reintento y guardados. Las combinaciones exhaustivas pertenecen a HTTP/unitarias. |
-| Verificadores del repositorio      | Unitarias, `scripts/test`                        | Detectar documentos/skills inválidos y admitir los válidos.                                                                                                               |
-| Documentación y skills             | Check local y revisión                           | Frontmatter y destinos locales válidos; revisar manualmente exactitud, ejemplos e impacto.                                                                                |
+| Interfaz                            | Tipo y ubicación                                 | Qué debe demostrar                                                                                                                                                        |
+| ----------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ListReports` y `ReportRepository`  | Unitarias, `packages/catalog/test`               | Transmisión de consulta, activos, orden estable/microsegundos, límite y proyección pública. El adapter aplica los predicados de búsqueda antes del límite.                |
+| Configuración de BD/API             | Unitarias, workspace dueño                       | Entradas inválidas, mensajes seguros y restricciones de mutaciones.                                                                                                       |
+| Cliente y presenter                 | Unitarias, `apps/web/test`                       | DTO público, consultas HTTP, carga/error/reintento, cancelación y respuestas obsoletas. Doblar la red en esta interfaz.                                                   |
+| Migraciones y SQL                   | Integración PostgreSQL, `packages/database/test` | Orden, idempotencia, rollback y evolución. Usar PostgreSQL real, no mocks de SQL.                                                                                         |
+| Verificador de tokens y config Auth | Unitarias, `apps/api/test`                       | Firma ES256, emisor, audiencia, expiración, rol y sesión; rechazo de HS256/`none`; indisponibilidad del JWKS distinguida de un token inválido.                            |
+| `AuthPresenter` y cliente de cuenta | Unitarias, `apps/web/test`                       | Validación, mensajes seguros, confirmación, restauración, vencimiento, cierre con fallo y secciones privadas. Doblar `AuthGateway` y la red.                              |
+| `GET /me`                           | Integración HTTP/PG, `apps/api/test`             | Guard real con un JWKS HTTP local: 200 con identidad, 401 uniforme y 503 sin claves.                                                                                      |
+| Supabase Auth real                  | Aceptación, `scripts/verify-auth.mjs`            | `compose.yaml` en un proyecto desechable: bootstrap, registro, confirmación vía Mailpit, login, `/me`, refresh y logout. Ver [la guía de Auth](auth.md).                  |
+| `GET /reports`                      | Integración HTTP/PG, `apps/api/test`             | Validación/status, filtros reales, persistencia y privacidad.                                                                                                             |
+| Composición React/API/PG            | E2E, `scripts/browser-catalog.mjs`               | Unos pocos recorridos de usuario en móvil/escritorio: controles, búsqueda, vacío, error/reintento y guardados. Las combinaciones exhaustivas pertenecen a HTTP/unitarias. |
+| Verificadores del repositorio       | Unitarias, `scripts/test`                        | Detectar documentos/skills inválidos y admitir los válidos.                                                                                                               |
+| Documentación y skills              | Check local y revisión                           | Frontmatter y destinos locales válidos; revisar manualmente exactitud, ejemplos e impacto.                                                                                |
 
 ## Comandos
 
@@ -44,6 +48,9 @@ pnpm test:integration --test-name-pattern='catálogo HTTP'
 # Integración completa o aceptación completa (esta última ya incluye integración/build).
 pnpm test:integration
 pnpm test:e2e
+
+# Supabase Auth real en un proyecto Compose desechable (requiere Docker).
+pnpm test:auth
 
 # Calidad rápida utilizada en CI.
 pnpm verify

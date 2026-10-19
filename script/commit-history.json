@@ -133,17 +133,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "0b833a5a8d2d028bbd5332b008ff96f8d78c1f5f",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-19T05:06:41.000Z",
       "message": "test(repo): aceptar Auth real con Compose desechable y ajustar e2e (#3)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/0b833a5a8d2d028bbd5332b008ff96f8d78c1f5f"
     },
     "stats": {
       "total": 321,
       "additions": 316,
       "deletions": 5,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.93,
+    "test_count": 41,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T20:48:07.000Z",
+      "message": "docs(repo): documentar autenticación, configuración y pruebas de Auth (#3)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 242,
+      "additions": 199,
+      "deletions": 43,
       "date": "2026-10-19"
     },
     "coverage": 88.93,
