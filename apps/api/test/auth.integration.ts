@@ -134,3 +134,38 @@ test('si Auth no publica claves, GET /me responde 503 sin aceptar la credencial'
     )
   })
 })
+
+test('cerrar sesión en la API revoca ese token, también después de reiniciar NestJS', async () => {
+  const key = await signingKey('logout')
+  const jwks = await jwksServer([key.jwk])
+  const closing = await key.sign({ session_id: crypto.randomUUID() })
+  const other = await key.sign({ session_id: crypto.randomUUID() })
+  const verifier = createRemoteAccessTokenVerifier(jwks.url, { issuer, audience })
+  const request = (url: string, path: string, token?: string, method = 'GET') =>
+    fetch(`${url}${path}`, {
+      method,
+      headers: token ? { authorization: `Bearer ${token}` } : {},
+    })
+  try {
+    await withApi(verifier, async (url) => {
+      assert.equal((await request(url, '/me', closing)).status, 200)
+      assert.equal((await request(url, '/me/logout', undefined, 'POST')).status, 401)
+
+      const logout = await request(url, '/me/logout', closing, 'POST')
+      assert.equal(logout.status, 204)
+      assert.equal(logout.headers.get('cache-control'), 'no-store')
+
+      const reused = await request(url, '/me', closing)
+      assert.equal(reused.status, 401, 'el mismo token no vuelve a consultar datos privados')
+      assert.equal((await reused.json()).message, 'Inicia sesión para continuar.')
+      assert.equal((await request(url, '/me/logout', closing, 'POST')).status, 401)
+      assert.equal((await request(url, '/me', other)).status, 200, 'otra sesión sigue activa')
+    })
+    await withApi(verifier, async (url) => {
+      assert.equal((await request(url, '/me', closing)).status, 401, 'tras reiniciar la API')
+      assert.equal((await request(url, '/me', other)).status, 200)
+    })
+  } finally {
+    await jwks.close()
+  }
+})
