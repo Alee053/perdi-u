@@ -114,17 +114,36 @@
     "conclusion": "failure"
   },
   {
-    "sha": "HEAD",
+    "sha": "c82e35c376135a087544e7eddb8651f1a14e89e9",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-19T05:06:17.000Z",
       "message": "feat(web): registrar, iniciar y cerrar sesión con correo en la web (#3)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/c82e35c376135a087544e7eddb8651f1a14e89e9"
     },
     "stats": {
       "total": 1366,
       "additions": 1317,
       "deletions": 49,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.57,
+    "test_count": 41,
+    "failed_tests": 3,
+    "conclusion": "failure"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T05:06:33.000Z",
+      "message": "test(repo): aceptar Auth real con Compose desechable y ajustar e2e (#3)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 258,
+      "additions": 256,
+      "deletions": 2,
       "date": "2026-10-19"
     },
     "coverage": 88.57,
