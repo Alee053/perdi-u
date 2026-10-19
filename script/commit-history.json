@@ -171,17 +171,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "95a9c0cdf031e595700d95869e4662d46a9163ac",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-19T22:20:28.000Z",
       "message": "test(repo): ejecutar las pruebas de TDDLab y documentos también en Windows (#4)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/95a9c0cdf031e595700d95869e4662d46a9163ac"
     },
     "stats": {
       "total": 68,
       "additions": 62,
       "deletions": 6,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.93,
+    "test_count": 41,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T22:25:18.000Z",
+      "message": "test(repo): filtrar escenarios HTTP de Auth y lanzar pnpm en Windows (#4)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 43,
+      "additions": 39,
+      "deletions": 4,
       "date": "2026-10-19"
     },
     "coverage": 88.93,
