@@ -209,17 +209,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "7ca956e0bf291104686b44f51540e690c3fd191a",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-19T22:25:42.000Z",
       "message": "feat(api): revocar la sesión actual y rechazar sus tokens tras reiniciar (#4)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/7ca956e0bf291104686b44f51540e690c3fd191a"
     },
     "stats": {
       "total": 208,
       "additions": 202,
       "deletions": 6,
+      "date": "2026-10-19"
+    },
+    "coverage": 89.24,
+    "test_count": 42,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T22:27:28.000Z",
+      "message": "feat(api): incluir nombre y foto del perfil propio en GET /me (#4)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 174,
+      "additions": 165,
+      "deletions": 9,
       "date": "2026-10-19"
     },
     "coverage": 89.24,

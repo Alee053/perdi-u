@@ -322,9 +322,47 @@
     "testId": 11
   },
   {
-    "commitId": "HEAD",
+    "commitId": "7ca956e0bf291104686b44f51540e690c3fd191a",
     "commitName": "feat(api): revocar la sesión actual y rechazar sus tokens tras reiniciar (#4)",
     "commitTimestamp": 1792448742000,
     "testId": 11
+  },
+  {
+    "numPassedTests": 41,
+    "failedTests": 1,
+    "numTotalTests": 42,
+    "timestamp": 1792448768250,
+    "success": false,
+    "testId": 12
+  },
+  {
+    "numPassedTests": 41,
+    "failedTests": 1,
+    "numTotalTests": 42,
+    "timestamp": 1792448794500,
+    "success": false,
+    "testId": 12
+  },
+  {
+    "numPassedTests": 41,
+    "failedTests": 1,
+    "numTotalTests": 42,
+    "timestamp": 1792448820750,
+    "success": false,
+    "testId": 12
+  },
+  {
+    "numPassedTests": 42,
+    "failedTests": 0,
+    "numTotalTests": 42,
+    "timestamp": 1792448847000,
+    "success": true,
+    "testId": 12
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(api): incluir nombre y foto del perfil propio en GET /me (#4)",
+    "commitTimestamp": 1792448848000,
+    "testId": 12
   }
 ]
