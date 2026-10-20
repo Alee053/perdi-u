@@ -30,6 +30,11 @@ export class CreateReport {
         'description',
         'La descripción debe tener al menos 20 caracteres.',
       )
-    return this.creator.create({ ...draft, ownerId, state: 'active' })
+    return this.creator.create({
+      ...draft,
+      description: draft.description.trim(),
+      ownerId,
+      state: 'active',
+    })
   }
 }

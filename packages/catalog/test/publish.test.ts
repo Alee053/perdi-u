@@ -77,3 +77,24 @@ test('la publicación rechaza una descripción menor de 20 caracteres antes de p
   )
   assert.equal(writes, 0)
 })
+
+test('la publicación recorta los espacios exteriores de la descripción persistida', async () => {
+  let submitted: ReportCreation | undefined
+  const publish = new CreateReport({
+    create: async (input) => {
+      submitted = input
+      return {
+        ...input,
+        id: 'report-4',
+        createdAt: '2026-10-19T12:00:00.000Z',
+      }
+    },
+  })
+
+  await publish.execute('verified-subject', {
+    ...draft,
+    description: `  ${draft.description}  `,
+  })
+
+  assert.equal(submitted?.description, draft.description)
+})

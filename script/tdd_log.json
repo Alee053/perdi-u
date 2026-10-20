@@ -412,9 +412,31 @@
     "testId": 22
   },
   {
-    "commitId": "HEAD",
+    "commitId": "d228def1035c725b4c115c5b1ea969a01b38e87d",
     "commitName": "feat(catalog): validar longitud de descripcion (#5)\n\nTDD — Comportamiento: una descripción de menos de 20 caracteres se rechaza antes de persistir.\n\nRED: testId 22; TDDLab timestamp 1792469304888; 48 aprobadas y 1 fallida porque se aceptó la descripción corta.\n\nVerificación intermedia fallida: mismo testId; timestamp 1792469319139; el error salió sincrónicamente aunque execute promete Promise.\n\nGREEN: testId 22; TDDLab timestamp 1792469339512; 49 aprobadas y 0 fallidas.\n\nRefactor: no hizo falta. Verificación adicional: pnpm typecheck.",
     "commitTimestamp": 1792469358814,
     "testId": 22
+  },
+  {
+    "numPassedTests": 49,
+    "failedTests": 1,
+    "numTotalTests": 50,
+    "timestamp": 1792469684927,
+    "success": false,
+    "testId": 23
+  },
+  {
+    "numPassedTests": 50,
+    "failedTests": 0,
+    "numTotalTests": 50,
+    "timestamp": 1792469696274,
+    "success": true,
+    "testId": 23
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(catalog): recortar descripcion antes de persistir (#5)\n\nTDD — Comportamiento: guardar una descripción sin los espacios exteriores.\n\nRED: testId 23; TDDLab timestamp 1792469684927; 49 aprobadas y 1 fallida porque se conservaron los espacios.\n\nGREEN: testId 23; TDDLab timestamp 1792469696274; 50 aprobadas y 0 fallidas.\n\nRefactor: no hizo falta. Verificación adicional: pnpm typecheck.",
+    "commitTimestamp": 1792469711887,
+    "testId": 23
   }
 ]
