@@ -494,12 +494,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "78022262c20ec35e73c75a8b8fab38b089a5d2c7",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-10-20T04:43:43.000Z",
       "message": "feat(catalog): limitar longitud del titulo (#5)\n\nTDD — Rechazar títulos de más de 200 caracteres antes de persistir.\\n\\nRED: testId 26; TDDLab timestamp 1792471390553; 52 aprobadas y 1 fallida porque el título largo se aceptó.\\n\\nGREEN: testId 26; TDDLab timestamp 1792471405719; 53 aprobadas y 0 fallidas.\\n\\nRefactor: no hizo falta. Verificación adicional: pnpm typecheck.",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/78022262c20ec35e73c75a8b8fab38b089a5d2c7"
     },
     "stats": {
       "total": 27,
@@ -509,6 +509,25 @@
     },
     "coverage": 89.94,
     "test_count": 53,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-10-20T04:44:37.000Z",
+      "message": "feat(catalog): exigir ciudad en reportes (#5)\n\nTDD — Rechazar una ciudad vacía antes de persistir.\n\nRED: testId 27; TDDLab timestamp 1792471448471; 53 aprobadas y 1 fallida porque se aceptó la ciudad vacía.\n\nGREEN: testId 27; TDDLab timestamp 1792471460904; 54 aprobadas y 0 fallidas.\n\nRefactor: no hizo falta. Verificación adicional: pnpm typecheck.",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 27,
+      "additions": 27,
+      "deletions": 0,
+      "date": "2026-10-20"
+    },
+    "coverage": 90,
+    "test_count": 54,
     "failed_tests": 0,
     "conclusion": "success"
   }
