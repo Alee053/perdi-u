@@ -141,3 +141,28 @@ test('la publicación recorta los espacios exteriores del título persistido', a
 
   assert.equal(submitted?.title, draft.title)
 })
+
+test('la publicación rechaza títulos mayores a 200 caracteres antes de persistir', async () => {
+  let writes = 0
+  const publish = new CreateReport({
+    create: async (input) => {
+      writes += 1
+      return {
+        ...input,
+        id: 'report-7',
+        createdAt: '2026-10-19T12:00:00.000Z',
+      }
+    },
+  })
+
+  await assert.rejects(
+    () => publish.execute('verified-subject', { ...draft, title: 'a'.repeat(201) }),
+    (error: unknown) => {
+      assert.ok(error instanceof Error)
+      assert.equal('field' in error ? error.field : undefined, 'title')
+      assert.match(error.message, /200 caracteres/)
+      return true
+    },
+  )
+  assert.equal(writes, 0)
+})

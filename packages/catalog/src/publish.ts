@@ -27,6 +27,8 @@ export class CreateReport {
   async execute(ownerId: string, draft: ReportDraft): Promise<ReportData> {
     if (!draft.title.trim())
       throw new ReportValidationError('title', 'El nombre del reporte es obligatorio.')
+    if (draft.title.trim().length > 200)
+      throw new ReportValidationError('title', 'El título no puede superar los 200 caracteres.')
     if (draft.description.trim().length < 20)
       throw new ReportValidationError(
         'description',
