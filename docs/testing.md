@@ -71,6 +71,23 @@ Las métricas del commit se calculan sobre el árbol de trabajo. Preparar commit
 
 La migración importa el código anterior como línea base; no genera evidencia retroactiva. Sus verificaciones y procedencia se documentan en [la evidencia de migración](validation/tddlab-migration.md).
 
+### Agrupar rojo, verde y refactor
+
+`testId` agrupa las ejecuciones entre commits: se mantiene al ejecutar `pnpm test` y avanza después de registrar un commit. No identifica un test ni un par rojo/verde; varios ciclos anteriores al mismo commit comparten ese ID. El log contiene resultados agregados, sin nombres de tests ni etiquetas de fase.
+
+Para cada criterio, completar un ciclo antes de empezar el siguiente:
+
+1. Añadir un test, ejecutar `pnpm test` y comprobar que el fallo corresponde al comportamiento pendiente. Anotar test, motivo del fallo, `testId` y `timestamp` de esa ejecución.
+2. Implementar lo mínimo y ejecutar `pnpm test` de nuevo. Registrar el verde del mismo test, conservando las pruebas anteriores.
+3. Revisar el diseño. Si se refactoriza, ejecutar `pnpm test` después y registrar otro verde; si no hace falta, indicarlo. TDDLab registra ese resultado, pero no una fase de refactor distinta.
+
+Agrupar estos resultados en la evidencia de la PR o en su documento de validación, con una fila por criterio/test. Usar esta plantilla solo con datos de ejecuciones reales:
+
+| Criterio / test | `testId` | Rojo: `timestamp` y fallo | Verde: `timestamp` y resultado | Refactor: cambio y `timestamp` verde, o no necesario |
+| --------------- | -------- | ------------------------- | ------------------------------ | ---------------------------------------------------- |
+
+Si se agrupan varios ciclos en un commit coherente, mantener sus filas separadas y su orden rojo → verde → refactor. Ejecutar el recorder secuencialmente y conservar `script/tdd_log.json` y `script/commit-history.json` generados; la tabla explica la evidencia, sin editar los JSON ni fabricar fases. Para integración, añadir también sus comandos y resultados reales: esas ejecuciones no aparecen en el registro unitario de `pnpm test`.
+
 ## Evidencia de PR
 
 Indicar interfaz/criterio, fallo inicial o caracterización, comandos que realmente se ejecutaron, resultado y límites. No copiar logs con secretos ni afirmar integración real si solo se usó un doble. Las pruebas futuras de Google/R2 se definen en [servicios](services.md); este catálogo no necesita esas cuentas.

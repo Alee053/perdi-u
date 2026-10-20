@@ -38,18 +38,37 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "0325c2bd6a2000c8e5c875add87c5c4551ad6acd",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-10-17T05:23:56.000Z",
       "message": "docs(repo): consolidar issues y colaboración en perdi-u",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/0325c2bd6a2000c8e5c875add87c5c4551ad6acd"
     },
     "stats": {
       "total": 93,
       "additions": 72,
       "deletions": 21,
       "date": "2026-10-17"
+    },
+    "coverage": 88.89,
+    "test_count": 28,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-20T02:03:58.000Z",
+      "message": "chore: improve testing automatino",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 28,
+      "additions": 23,
+      "deletions": 5,
+      "date": "2026-10-20"
     },
     "coverage": 88.89,
     "test_count": 28,

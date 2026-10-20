@@ -28,9 +28,15 @@
     "testId": 1
   },
   {
-    "commitId": "HEAD",
+    "commitId": "0325c2bd6a2000c8e5c875add87c5c4551ad6acd",
     "commitName": "docs(repo): consolidar issues y colaboración en perdi-u",
     "commitTimestamp": 1792214636340,
     "testId": 2
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "chore: improve testing automatino",
+    "commitTimestamp": 1792461838853,
+    "testId": 3
   }
 ]
