@@ -308,6 +308,7 @@ try {
   detailPage.on('pageerror', (error) => pageErrors.push(error.message))
   const detailUrl = `${webUrl}/reports/${detailId}`
   const ownerId = '10000000-0000-0000-0000-000000000001'
+  const viewerId = '10000000-0000-0000-0000-000000000002'
   const detailResponse = {
     id: detailId,
     type: 'found',
@@ -370,7 +371,7 @@ try {
           expires_in: 3600,
           refresh_token: 'browser-refresh-token',
           user: {
-            id: ownerId,
+            id: viewerId,
             aud: 'authenticated',
             role: 'authenticated',
             email: 'persona@example.test',
@@ -386,7 +387,7 @@ try {
       status: 200,
       contentType: 'application/json',
       headers: { 'Cache-Control': 'no-store' },
-      body: JSON.stringify({ id: ownerId, email: 'persona@example.test' }),
+      body: JSON.stringify({ id: viewerId, email: 'persona@example.test' }),
     }),
   )
   await detailPage.route(`**/api/reports/${detailId}`, async (route) => {
