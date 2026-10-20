@@ -338,9 +338,31 @@
     "testId": 18
   },
   {
-    "commitId": "HEAD",
+    "commitId": "e500a4dd68f7bd13b0bd73b6e3618084f8c23b5f",
     "commitName": "chore(repo): integrar main y conservar evidencia TDD\n\nConservar los registros de ambas ramas y resolver sus marcadores HEAD con los SHA de origen. Reasignar el testId local 3 a 18 para evitar colisiones, manteniendo resultados y timestamps.\n\nVerificación: pnpm verify completo, 46 pruebas aprobadas y comprobación de conservación de ambos historiales JSON.",
     "commitTimestamp": 1792461945849,
     "testId": 19
+  },
+  {
+    "numPassedTests": 46,
+    "failedTests": 1,
+    "numTotalTests": 47,
+    "timestamp": 1792468504895,
+    "success": false,
+    "testId": 20
+  },
+  {
+    "numPassedTests": 47,
+    "failedTests": 0,
+    "numTotalTests": 47,
+    "timestamp": 1792468525689,
+    "success": true,
+    "testId": 20
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(catalog): atribuir reporte a identidad autenticada (#5)\n\nTDD — Comportamiento: la publicación asigna el reporte al sujeto autenticado.\n\nRED: testId 20; 2026-10-20T03:55:04.895Z; 46 aprobadas y 1 fallida porque se conservó ownerId=attacker.\n\nGREEN: testId 20; 2026-10-20T03:55:25.689Z; 47 aprobadas y 0 fallidas.\n\nRefactor: no hizo falta. Verificación adicional: pnpm typecheck.",
+    "commitTimestamp": 1792468586434,
+    "testId": 20
   }
 ]
