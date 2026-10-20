@@ -532,12 +532,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "25dbec670c4ca7c865d299bf7c1785452a4623c2",
     "author": "AMIRA DEL ROCÍO CHOQUE CARRASCO",
     "commit": {
       "date": "2026-10-20T05:27:58.000Z",
       "message": "test(web): intercept WhatsApp popup in browser context (#7)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/25dbec670c4ca7c865d299bf7c1785452a4623c2"
     },
     "stats": {
       "total": 8,
@@ -549,5 +549,24 @@
     "test_count": 53,
     "failed_tests": 2,
     "conclusion": "failure"
+  },
+  {
+    "sha": "HEAD",
+    "author": "AMIRA DEL ROCÍO CHOQUE CARRASCO",
+    "commit": {
+      "date": "2026-10-20T05:31:00.000Z",
+      "message": "test(web): make the detail retry fixture deterministic (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 10,
+      "additions": 5,
+      "deletions": 5,
+      "date": "2026-10-20"
+    },
+    "coverage": 86.63,
+    "test_count": 53,
+    "failed_tests": 0,
+    "conclusion": "success"
   }
 ]

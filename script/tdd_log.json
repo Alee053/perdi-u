@@ -440,9 +440,15 @@
     "testId": 27
   },
   {
-    "commitId": "HEAD",
+    "commitId": "25dbec670c4ca7c865d299bf7c1785452a4623c2",
     "commitName": "test(web): intercept WhatsApp popup in browser context (#7)",
     "commitTimestamp": 1792474079632,
     "testId": 28
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(web): make the detail retry fixture deterministic (#7)",
+    "commitTimestamp": 1792474261284,
+    "testId": 29
   }
 ]

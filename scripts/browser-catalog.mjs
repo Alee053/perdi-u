@@ -457,19 +457,19 @@ try {
   await popup.close()
 
   const retryId = '26000000-0000-0000-0000-000000000098'
-  let detailAttempts = 0
+  let retryEnabled = false
   await detailPage.route(`**/api/reports/${retryId}`, (route) => {
-    detailAttempts++
-    return detailAttempts === 1
-      ? route.fulfill({ status: 503, contentType: 'application/json', body: '{}' })
-      : route.fulfill({
+    return retryEnabled
+      ? route.fulfill({
           status: 200,
           contentType: 'application/json',
           body: JSON.stringify({ ...detailResponse, id: retryId }),
         })
+      : route.fulfill({ status: 503, contentType: 'application/json', body: '{}' })
   })
   await detailPage.goto(`${webUrl}/reports/${retryId}`)
   await detailPage.getByRole('heading', { name: 'No se pudo cargar el reporte' }).waitFor()
+  retryEnabled = true
   await detailPage.getByRole('button', { name: 'Intentar nuevamente' }).click()
   await detailPage
     .getByRole('dialog')
