@@ -436,9 +436,15 @@
     "testId": 21
   },
   {
-    "commitId": "HEAD",
+    "commitId": "1764c2c681c55a49f12d4558afdcd4bdc2917d7b",
     "commitName": "test(repo): verificar las capas MVP de la web en check:boundaries",
     "commitTimestamp": 1792509914246,
     "testId": 22
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(web): documentar la arquitectura MVP y crear la skill mvp-react",
+    "commitTimestamp": 1792509946868,
+    "testId": 23
   }
 ]

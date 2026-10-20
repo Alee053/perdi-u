@@ -418,17 +418,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "1764c2c681c55a49f12d4558afdcd4bdc2917d7b",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-20T15:25:13.000Z",
       "message": "test(repo): verificar las capas MVP de la web en check:boundaries",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/1764c2c681c55a49f12d4558afdcd4bdc2917d7b"
     },
     "stats": {
       "total": 174,
       "additions": 173,
       "deletions": 1,
+      "date": "2026-10-20"
+    },
+    "coverage": 92.25,
+    "test_count": 78,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-20T15:25:45.000Z",
+      "message": "docs(web): documentar la arquitectura MVP y crear la skill mvp-react",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 362,
+      "additions": 344,
+      "deletions": 18,
       "date": "2026-10-20"
     },
     "coverage": 92.25,

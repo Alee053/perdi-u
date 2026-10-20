@@ -4,7 +4,7 @@ Cada workspace es responsable de una capacidad y se consume por sus exports púb
 
 | Workspace            | Responsabilidad                                                                                                                                                     | Dependencias internas permitidas   |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| `apps/web`           | React, cliente HTTP, presenter y estado de presentación. Adapter de Supabase Auth (`@supabase/auth-js`) detrás del puerto `AuthGateway`.                            | `contracts`                        |
+| `apps/web`           | SPA React/Vite organizada en MVP: `models`, `presenters`, `views`, adapters en `infrastructure` (HTTP, Supabase Auth tras `AuthGateway`) y composición en `app`.    | `contracts`                        |
 | `apps/api`           | NestJS, entrada HTTP, validación de parámetros, traducción de errores, verificación de access tokens/guard y composición de dependencias.                           | `catalog`, `database`, `contracts` |
 | `packages/catalog`   | Modelo y puerto de repositorio del catálogo, caso de uso, orden, activos y proyección pública. Independiente de HTTP, PostgreSQL y React.                           | `contracts`                        |
 | `packages/database`  | Conexión PostgreSQL, adapter SQL del puerto de catálogo, perfiles y revocaciones de sesión, esquema, migraciones, seed, configuración de BD y CLI de mantenimiento. | `catalog`, `contracts`             |
@@ -22,7 +22,7 @@ La API combina `ListReports` con `openDatabase().reports` y llama `close` al apa
 - Los paquetes compartidos se compilan en watch durante `pnpm dev`; el watcher de la API incluye sus builds para reiniciar cuando cambia una dependencia.
 - Crear otro paquete cuando tenga una responsabilidad y consumidores claros. Una carpeta o función pequeña dentro de su dueño actual no requiere otro workspace.
 
-`pnpm check:boundaries` verifica el grafo de workspaces, dependencias de infraestructura prohibidas, independencia de los módulos puros e imports ESM literales entre paquetes mediante exports públicos. Al añadir un workspace, definir su regla en `scripts/check-boundaries.mjs`. Los imports calculados y el contenido semántico de las funciones requieren revisión; este check complementa las pruebas y la revisión de código.
+`pnpm check:boundaries` verifica el grafo de workspaces, dependencias de infraestructura prohibidas, independencia de los módulos puros, imports ESM literales entre paquetes mediante exports públicos y, dentro de `apps/web/src`, las capas MVP (`scripts/lib/web-layers.mjs`). Al añadir un workspace, definir su regla en `scripts/check-boundaries.mjs`. Los imports calculados y el contenido semántico de las funciones requieren revisión; este check complementa las pruebas y la revisión de código.
 
 ## Hallazgos corregidos
 
@@ -31,5 +31,6 @@ La API combina `ListReports` con `openDatabase().reports` y llama `close` al apa
 3. El modelo y caso de uso del catálogo compartían workspace con NestJS; ahora están en `catalog`, consumido por la API y el adapter de persistencia.
 4. La aceptación de navegador importaba archivos compilados internos de la API y fixtures alojados allí; ahora usa exports públicos de `database` y fixtures SQL de ese paquete.
 5. El runner conocía solamente `001_catalog.sql`; ahora descubre versiones ordenadas y conserva el registro existente.
+6. `App.tsx` concentraba estado, reglas demo, navegación y efectos del navegador; ahora la web sigue MVP con presenters por responsabilidad. Consultar [la arquitectura MVP](architecture/mvp.md).
 
-El dashboard conserva por ahora los flujos demo documentados. Su estado compartido sigue en `App.tsx`. La sesión vive en `AuthPresenter`, un store externo como el del catálogo. Separar los flujos demo al implementar publicación sigue pendiente, sin introducir otra arquitectura de estado.
+El dashboard conserva los flujos demo documentados (resumen, mapa, publicar y mis reportes) en memoria, ahora en `ReportsPresenter` y `PublishPresenter` con reglas en `models/reports`. Conectar la publicación con la API sustituirá los datos demo por un puerto del Model, sin cambiar la View.
