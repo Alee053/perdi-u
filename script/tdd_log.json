@@ -446,9 +446,15 @@
     "testId": 28
   },
   {
-    "commitId": "HEAD",
+    "commitId": "844e28130b84678a156b991b2857fc2ff1f3d8b0",
     "commitName": "test(web): make the detail retry fixture deterministic (#7)",
     "commitTimestamp": 1792474261284,
     "testId": 29
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(web): reseed isolated database before browser checks (#7)",
+    "commitTimestamp": 1792474424734,
+    "testId": 30
   }
 ]

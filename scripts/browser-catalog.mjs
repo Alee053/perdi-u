@@ -8,6 +8,7 @@ import { createServer } from 'node:net'
 import { chromium } from 'playwright'
 import { createPool } from '@perdiu/database'
 import { assertLocalDatabase } from '@perdiu/database/config'
+import { migrate, seed } from '@perdiu/database/maintenance'
 
 async function freePort() {
   const server = createServer()
@@ -280,6 +281,9 @@ async function verifySearch(page, size) {
 }
 
 try {
+  await migrate(pool)
+  await pool.query('TRUNCATE TABLE profiles CASCADE')
+  await seed(pool)
   api = startApi()
   await waitFor(`${apiUrl}/reports`, api)
   web = start(

@@ -551,17 +551,36 @@
     "conclusion": "failure"
   },
   {
-    "sha": "HEAD",
+    "sha": "844e28130b84678a156b991b2857fc2ff1f3d8b0",
     "author": "AMIRA DEL ROCÍO CHOQUE CARRASCO",
     "commit": {
       "date": "2026-10-20T05:31:00.000Z",
       "message": "test(web): make the detail retry fixture deterministic (#7)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/844e28130b84678a156b991b2857fc2ff1f3d8b0"
     },
     "stats": {
       "total": 10,
       "additions": 5,
       "deletions": 5,
+      "date": "2026-10-20"
+    },
+    "coverage": 86.63,
+    "test_count": 53,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "AMIRA DEL ROCÍO CHOQUE CARRASCO",
+    "commit": {
+      "date": "2026-10-20T05:33:42.000Z",
+      "message": "test(web): reseed isolated database before browser checks (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 4,
+      "additions": 4,
+      "deletions": 0,
       "date": "2026-10-20"
     },
     "coverage": 86.63,
