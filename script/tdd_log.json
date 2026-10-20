@@ -620,9 +620,47 @@
     "testId": 22
   },
   {
-    "commitId": "HEAD",
+    "commitId": "1434b89b8910e26168dde532dcbe8d5153736490",
     "commitName": "refactor(web): caracterizar el formulario de acceso y migrar su presenter",
     "commitTimestamp": 1792509937000,
     "testId": 22
+  },
+  {
+    "numPassedTests": 67,
+    "failedTests": 1,
+    "numTotalTests": 68,
+    "timestamp": 1792509945250,
+    "success": false,
+    "testId": 23
+  },
+  {
+    "numPassedTests": 67,
+    "failedTests": 1,
+    "numTotalTests": 68,
+    "timestamp": 1792509953500,
+    "success": false,
+    "testId": 23
+  },
+  {
+    "numPassedTests": 67,
+    "failedTests": 1,
+    "numTotalTests": 68,
+    "timestamp": 1792509961750,
+    "success": false,
+    "testId": 23
+  },
+  {
+    "numPassedTests": 68,
+    "failedTests": 0,
+    "numTotalTests": 68,
+    "timestamp": 1792509970000,
+    "success": true,
+    "testId": 23
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "refactor(web): caracterizar publicación, guardados y gestión de reportes",
+    "commitTimestamp": 1792509971000,
+    "testId": 23
   }
 ]

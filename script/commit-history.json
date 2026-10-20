@@ -418,12 +418,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "1434b89b8910e26168dde532dcbe8d5153736490",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-20T15:25:37.000Z",
       "message": "refactor(web): caracterizar el formulario de acceso y migrar su presenter",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/1434b89b8910e26168dde532dcbe8d5153736490"
     },
     "stats": {
       "total": 603,
@@ -433,6 +433,25 @@
     },
     "coverage": 92.05,
     "test_count": 59,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-20T15:26:11.000Z",
+      "message": "refactor(web): caracterizar publicación, guardados y gestión de reportes",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 1044,
+      "additions": 1039,
+      "deletions": 5,
+      "date": "2026-10-20"
+    },
+    "coverage": 90.99,
+    "test_count": 68,
     "failed_tests": 0,
     "conclusion": "success"
   }
