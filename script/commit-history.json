@@ -399,17 +399,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "ef603b675d83cc6882e34dba16f9f7d35dbc7bad",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-20T15:24:35.000Z",
       "message": "refactor(web): separar la aplicación web en Model, View y Presenter",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/ef603b675d83cc6882e34dba16f9f7d35dbc7bad"
     },
     "stats": {
       "total": 10832,
       "additions": 4777,
       "deletions": 6055,
+      "date": "2026-10-20"
+    },
+    "coverage": 92.25,
+    "test_count": 78,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-20T15:25:13.000Z",
+      "message": "test(repo): verificar las capas MVP de la web en check:boundaries",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 174,
+      "additions": 173,
+      "deletions": 1,
       "date": "2026-10-20"
     },
     "coverage": 92.25,

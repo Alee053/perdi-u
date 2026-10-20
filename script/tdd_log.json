@@ -430,9 +430,15 @@
     "testId": 21
   },
   {
-    "commitId": "HEAD",
+    "commitId": "ef603b675d83cc6882e34dba16f9f7d35dbc7bad",
     "commitName": "refactor(web): separar la aplicación web en Model, View y Presenter",
     "commitTimestamp": 1792509876265,
     "testId": 21
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(repo): verificar las capas MVP de la web en check:boundaries",
+    "commitTimestamp": 1792509914246,
+    "testId": 22
   }
 ]

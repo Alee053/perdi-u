@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { readdir, readFile } from 'node:fs/promises'
 import { dirname, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { webLayerViolations } from './lib/web-layers.mjs'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
 // Allowed workspace dependencies; external runtime dependencies are restricted for pure modules.
@@ -107,6 +108,15 @@ for (const [directory, rule] of Object.entries(rules)) {
     }
   }
 }
+// Inside apps/web, MVP layers: View -> Presenter -> Model, with infrastructure behind model ports.
+const webSource = resolve(root, 'apps/web/src')
+const layerViolations = []
+for (const file of await sources(webSource)) {
+  const path = relative(webSource, file).replaceAll('\\', '/')
+  layerViolations.push(...webLayerViolations(path, await readFile(file, 'utf8')))
+}
+assert.deepEqual(layerViolations, [], `Capas MVP de apps/web:\n${layerViolations.join('\n')}`)
+
 console.log(
-  'Responsabilidades verificadas: api, web, catalog, contracts y database; imports entre workspaces mediante exports públicos.',
+  'Responsabilidades verificadas: api, web, catalog, contracts y database; imports entre workspaces mediante exports públicos; capas MVP de apps/web.',
 )
