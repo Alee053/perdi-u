@@ -606,9 +606,23 @@
     "testId": 21
   },
   {
-    "commitId": "HEAD",
+    "commitId": "e3216d13df6f07b04c5e3e06778843ab7f86ae3a",
     "commitName": "refactor(web): extraer y caracterizar modelos de credenciales y reportes",
     "commitTimestamp": 1792509900000,
     "testId": 21
+  },
+  {
+    "numPassedTests": 59,
+    "failedTests": 0,
+    "numTotalTests": 59,
+    "timestamp": 1792509936000,
+    "success": true,
+    "testId": 22
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "refactor(web): caracterizar el formulario de acceso y migrar su presenter",
+    "commitTimestamp": 1792509937000,
+    "testId": 22
   }
 ]

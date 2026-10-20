@@ -399,12 +399,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "e3216d13df6f07b04c5e3e06778843ab7f86ae3a",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-20T15:25:00.000Z",
       "message": "refactor(web): extraer y caracterizar modelos de credenciales y reportes",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/e3216d13df6f07b04c5e3e06778843ab7f86ae3a"
     },
     "stats": {
       "total": 484,
@@ -414,6 +414,25 @@
     },
     "coverage": 91.53,
     "test_count": 55,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-20T15:25:37.000Z",
+      "message": "refactor(web): caracterizar el formulario de acceso y migrar su presenter",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 603,
+      "additions": 597,
+      "deletions": 6,
+      "date": "2026-10-20"
+    },
+    "coverage": 92.05,
+    "test_count": 59,
     "failed_tests": 0,
     "conclusion": "success"
   }
