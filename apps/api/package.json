@@ -9,7 +9,7 @@
     "start": "node dist/main.js",
     "typecheck": "tsc -p tsconfig.check.json",
     "test": "pnpm --workspace-root exec jest --testPathPattern=apps/api/test/",
-    "test:integration": "pnpm --workspace-root exec jest --config jest.integration.config.cjs --runInBand --runTestsByPath apps/api/test/catalog.integration.ts apps/api/test/auth.integration.ts"
+    "test:integration": "pnpm --workspace-root exec jest --config jest.integration.config.cjs --runInBand --runTestsByPath apps/api/test/catalog.integration.ts apps/api/test/report-detail.integration.ts apps/api/test/auth.integration.ts"
   },
   "dependencies": {
     "@nestjs/common": "^12.1.3",

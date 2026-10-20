@@ -4,7 +4,7 @@
 
 ## Uso
 
-- `@perdiu/database`: `openDatabase(databaseUrl)` entrega `reports`, `profiles` (nombre y foto de un perfil, sin contactos), `sessions` (revocaciones de sesión persistidas) y `close()`. También exporta `createPool`, `PostgresReportRepository`, `PostgresProfileRepository` y `PostgresSessionRevocations` para integración y herramientas de BD.
+- `@perdiu/database`: `openDatabase(databaseUrl)` entrega `reports` (consulta pública/detalle), `reportContacts` (solo lectura privada de teléfono), `profiles` (nombre y foto de un perfil, sin contactos), `sessions` (revocaciones de sesión persistidas) y `close()`. También exporta `createPool`, `PostgresReportRepository`, `PostgresReportContactRepository`, `PostgresProfileRepository` y `PostgresSessionRevocations` para integración y herramientas de BD.
 - `@perdiu/database/config`: validación de `DATABASE_URL`, error de configuración seguro y `assertLocalDatabase`.
 - `@perdiu/database/maintenance`: `migrate(pool)` y `seed(pool)` para bases aisladas; no se ejecutan al iniciar la API.
 

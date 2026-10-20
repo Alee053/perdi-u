@@ -32,6 +32,14 @@ export interface ReportSummary extends Omit<ReportData, 'ownerId'> {
   imageUrls: string[]
 }
 
+/** Public fields returned by the stable report-detail endpoint. */
+export type ReportDetail = ReportSummary
+
+/** Private response of GET /reports/:id/contact; never included in public report data. */
+export interface ReportContact {
+  phone: string
+}
+
 export interface PublicProfile {
   id: string
   displayName: string

@@ -1,4 +1,4 @@
-import type { ReportCategory, ReportSummary, ReportType } from '@perdiu/contracts'
+import type { ReportCategory, ReportDetail, ReportSummary, ReportType } from '@perdiu/contracts'
 import type { ReportsClient } from './presenter.js'
 
 const invalidResponse = () => new Error('La respuesta del catálogo no es válida.')
@@ -21,7 +21,7 @@ function imageUrl(value: unknown): value is string {
   }
 }
 
-function readReport(value: unknown): ReportSummary {
+export function readReportDetail(value: unknown): ReportDetail {
   if (
     !object(value) ||
     !text(value.id) ||
@@ -31,7 +31,7 @@ function readReport(value: unknown): ReportSummary {
     !text(value.zone) ||
     !category(value.category) ||
     !type(value.type) ||
-    value.state !== 'active' ||
+    (value.state !== 'active' && value.state !== 'resolved') ||
     !text(value.incidentDate) ||
     !/^\d{4}-\d{2}-\d{2}$/.test(value.incidentDate) ||
     !Number.isFinite(Date.parse(value.incidentDate)) ||
@@ -67,6 +67,12 @@ function readReport(value: unknown): ReportSummary {
       ...(value.author.photoUrl ? { photoUrl: value.author.photoUrl } : {}),
     },
   }
+}
+
+function readReport(value: unknown): ReportSummary {
+  const report = readReportDetail(value)
+  if (report.state !== 'active') throw invalidResponse()
+  return report
 }
 
 export function createReportsClient(

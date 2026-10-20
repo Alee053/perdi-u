@@ -2326,6 +2326,22 @@ textarea:focus-visible {
   top: 12px;
   right: 12px;
 }
+.detail-share {
+  position: absolute;
+  z-index: 2;
+  top: 50px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #344136;
+  background: rgba(255, 255, 255, 0.93);
+}
+.detail-share:hover {
+  color: #4e7850;
+}
 .modal-close.on-image {
   color: #344136;
   background: rgba(255, 255, 255, 0.93);
@@ -2427,6 +2443,35 @@ textarea:focus-visible {
 }
 .contact-privacy svg {
   color: #739573;
+}
+.contact-error {
+  display: block;
+  margin-top: 8px;
+  color: #a94442;
+  text-align: center;
+}
+.detail-state {
+  min-height: 190px;
+}
+.detail-state-content {
+  min-height: 190px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 28px;
+  text-align: center;
+}
+.detail-state-content h2 {
+  margin: 0;
+  color: #364236;
+  font: 700 20px var(--font-display);
+}
+.detail-state-content p {
+  margin: 0;
+  color: #a94442;
+  font-size: 13px;
 }
 @keyframes rise-in {
   from {

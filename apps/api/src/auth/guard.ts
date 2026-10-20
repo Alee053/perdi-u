@@ -47,7 +47,36 @@ export class AuthGuard implements CanActivate {
   }
 }
 
+/** Public report details accept anonymous visitors but verify any supplied session. */
+@Injectable()
+export class OptionalAuthGuard implements CanActivate {
+  constructor(@Inject(ACCESS_TOKEN_VERIFIER) private readonly verifier: AccessTokenVerifier) {}
+
+  async canActivate(context: ExecutionContext) {
+    const request = context.switchToHttp().getRequest<AuthenticatedRequest>()
+    const response = context.switchToHttp().getResponse<{ setHeader(n: string, v: string): void }>()
+    const header = request.headers.authorization
+    if (header === undefined) return true
+    const token = typeof header === 'string' ? /^Bearer\s+(\S+)$/i.exec(header)?.[1] : undefined
+    if (!token) {
+      response.setHeader('WWW-Authenticate', 'Bearer')
+      throw new UnauthorizedException('Inicia sesión para continuar.')
+    }
+    try {
+      request.user = await this.verifier.verify(token)
+      return true
+    } catch (error) {
+      if (error instanceof InvalidAccessToken) {
+        response.setHeader('WWW-Authenticate', 'Bearer')
+        throw new UnauthorizedException('Inicia sesión para continuar.')
+      }
+      if (!(error instanceof AuthUnavailable)) console.error('No se pudo verificar una sesión.')
+      throw new ServiceUnavailableException('No se pudo verificar la sesión. Intenta nuevamente.')
+    }
+  }
+}
+
 export const CurrentUser = createParamDecorator(
   (_data: unknown, context: ExecutionContext) =>
-    context.switchToHttp().getRequest<AuthenticatedRequest>().user!,
+    context.switchToHttp().getRequest<AuthenticatedRequest>().user,
 )

@@ -338,9 +338,63 @@
     "testId": 18
   },
   {
-    "commitId": "HEAD",
+    "commitId": "e500a4dd68f7bd13b0bd73b6e3618084f8c23b5f",
     "commitName": "chore(repo): integrar main y conservar evidencia TDD\n\nConservar los registros de ambas ramas y resolver sus marcadores HEAD con los SHA de origen. Reasignar el testId local 3 a 18 para evitar colisiones, manteniendo resultados y timestamps.\n\nVerificación: pnpm verify completo, 46 pruebas aprobadas y comprobación de conservación de ambos historiales JSON.",
     "commitTimestamp": 1792461945849,
     "testId": 19
+  },
+  {
+    "numPassedTests": 47,
+    "failedTests": 0,
+    "numTotalTests": 47,
+    "timestamp": 1792471475558,
+    "success": true,
+    "testId": 20
+  },
+  {
+    "numPassedTests": 50,
+    "failedTests": 2,
+    "numTotalTests": 52,
+    "timestamp": 1792471632426,
+    "success": false,
+    "testId": 20
+  },
+  {
+    "numPassedTests": 52,
+    "failedTests": 0,
+    "numTotalTests": 52,
+    "timestamp": 1792471662329,
+    "success": true,
+    "testId": 20
+  },
+  {
+    "numPassedTests": 52,
+    "failedTests": 0,
+    "numTotalTests": 52,
+    "timestamp": 1792471841155,
+    "success": true,
+    "testId": 20
+  },
+  {
+    "numPassedTests": 53,
+    "failedTests": 0,
+    "numTotalTests": 53,
+    "timestamp": 1792472224195,
+    "success": true,
+    "testId": 20
+  },
+  {
+    "numPassedTests": 53,
+    "failedTests": 0,
+    "numTotalTests": 53,
+    "timestamp": 1792472748235,
+    "success": true,
+    "testId": 20
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(reports): consultar detalle y contacto por WhatsApp (#7)",
+    "commitTimestamp": 1792472831613,
+    "testId": 20
   }
 ]

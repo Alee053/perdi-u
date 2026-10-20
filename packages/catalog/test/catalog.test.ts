@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { test } from '@jest/globals'
-import { ListReports } from '../src/index.js'
+import { GetReport, ListReports } from '../src/index.js'
 import type { ReportRecord } from '../src/index.js'
 
 const record = (id: string, overrides: Partial<ReportRecord> = {}): ReportRecord => ({
@@ -18,6 +18,58 @@ const record = (id: string, overrides: Partial<ReportRecord> = {}): ReportRecord
   author: { id: 'owner-1', displayName: 'Autor de prueba' },
   imageUrls: [],
   ...overrides,
+})
+
+test('el detalle permite activos a visitantes y resueltos solo al propietario, con proyección pública', async () => {
+  const active = record('active', {
+    imageUrls: ['/images/object.svg'],
+    author: { id: 'owner-1', displayName: 'Autora' },
+  })
+  const resolved = record('resolved', { state: 'resolved' })
+  const privateRecord = {
+    ...resolved,
+    phone: 'private-phone-sentinel',
+    email: 'private-email-sentinel',
+    author: { ...resolved.author, email: 'private-author-sentinel' },
+  }
+  const reports = new Map([
+    [active.id, active],
+    [resolved.id, privateRecord],
+  ])
+  const detail = new GetReport({
+    find: async (id) => reports.get(id),
+  })
+
+  assert.equal((await detail.execute(active.id))?.id, active.id)
+  assert.equal(await detail.execute(resolved.id), undefined)
+  assert.deepEqual(await detail.execute(resolved.id, 'owner-1'), {
+    id: 'resolved',
+    title: 'Mochila azul',
+    description: 'Encontrada en un minibús.',
+    type: 'found',
+    state: 'resolved',
+    category: 'object',
+    city: 'La Paz',
+    zone: 'Centro',
+    incidentDate: '2026-10-10',
+    createdAt: '2026-10-10T12:00:00.000Z',
+    author: { id: 'owner-1', displayName: 'Autor de prueba' },
+    imageUrls: [],
+  })
+  assert.deepEqual(Object.keys((await detail.execute(active.id)) ?? {}).sort(), [
+    'author',
+    'category',
+    'city',
+    'createdAt',
+    'description',
+    'id',
+    'imageUrls',
+    'incidentDate',
+    'state',
+    'title',
+    'type',
+    'zone',
+  ])
 })
 
 test('el catálogo se ordena por creación descendente y por ID ascendente en empates', async () => {

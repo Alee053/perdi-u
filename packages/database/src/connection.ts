@@ -2,10 +2,12 @@ import type { ReportRepository } from '@perdiu/catalog'
 import { createPool } from './pool.js'
 import { PostgresReportRepository } from './postgres-repository.js'
 import { PostgresProfileRepository } from './profiles.js'
+import { PostgresReportContactRepository } from './report-contacts.js'
 import { PostgresSessionRevocations } from './session-revocations.js'
 
 export interface Database {
   reports: ReportRepository
+  reportContacts: PostgresReportContactRepository
   profiles: PostgresProfileRepository
   sessions: PostgresSessionRevocations
   close(): Promise<void>
@@ -18,6 +20,7 @@ export async function openDatabase(databaseUrl: string): Promise<Database> {
     await pool.query('SELECT 1')
     return {
       reports: new PostgresReportRepository(pool),
+      reportContacts: new PostgresReportContactRepository(pool),
       profiles: new PostgresProfileRepository(pool),
       sessions: new PostgresSessionRevocations(pool),
       close: () => pool.end(),

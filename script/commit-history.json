@@ -361,12 +361,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "e500a4dd68f7bd13b0bd73b6e3618084f8c23b5f",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-10-20T02:05:45.000Z",
       "message": "chore(repo): integrar main y conservar evidencia TDD\n\nConservar los registros de ambas ramas y resolver sus marcadores HEAD con los SHA de origen. Reasignar el testId local 3 a 18 para evitar colisiones, manteniendo resultados y timestamps.\n\nVerificación: pnpm verify completo, 46 pruebas aprobadas y comprobación de conservación de ambos historiales JSON.",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/e500a4dd68f7bd13b0bd73b6e3618084f8c23b5f"
     },
     "stats": {
       "total": 3182,
@@ -378,5 +378,24 @@
     "test_count": 46,
     "failed_tests": 0,
     "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "AMIRA DEL ROCÍO CHOQUE CARRASCO",
+    "commit": {
+      "date": "2026-10-20T05:07:10.000Z",
+      "message": "feat(reports): consultar detalle y contacto por WhatsApp (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 1323,
+      "additions": 1246,
+      "deletions": 77,
+      "date": "2026-10-20"
+    },
+    "coverage": 86.63,
+    "test_count": 53,
+    "failed_tests": 2,
+    "conclusion": "failure"
   }
 ]

@@ -23,10 +23,9 @@ export type ReportDisplay = {
 
 export type DemoReport = ReportDisplay & {
   source: 'demo'
-  phone: string
   position: { top: string; left: string }
 }
-export type CatalogReport = ReportDisplay & { source: 'catalog' }
+export type CatalogReport = ReportDisplay & { source: 'catalog'; authorId: string }
 export type Report = DemoReport | CatalogReport
 
 export type ReportView = 'grid' | 'map'

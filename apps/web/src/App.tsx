@@ -3,12 +3,14 @@ import type { ChangeEvent, FormEvent } from 'react'
 import { CircleAlert, CheckCircle2, LoaderCircle, X } from 'lucide-react'
 import { createAccountClient } from './auth/client'
 import { createAuthGateway } from './auth/gateway'
-import { AuthPresenter, signedOutNotice } from './auth/presenter'
+import { AuthPresenter, SessionRejected, signedOutNotice } from './auth/presenter'
 import { AppHeader } from './components/layout/AppHeader'
 import { Sidebar } from './components/layout/Sidebar'
 import { createReportsClient } from './catalog/client'
 import { CatalogPresenter, defaultCatalogFilters } from './catalog/presenter'
-import { ReportDetail } from './components/reports/ReportDetail'
+import { ReportDetail, ReportDetailStatus } from './components/reports/ReportDetail'
+import { createReportDetailClient } from './detail/client'
+import { ReportDetailPresenter, reportPath } from './detail/presenter'
 import { fallbackReportImage, initialReports } from './data/reports'
 import { AuthPage, type AuthMode } from './pages/AuthPage'
 import { ExplorePage } from './pages/ExplorePage'
@@ -23,17 +25,32 @@ import type { CatalogReport, Category, FilterStatus, Report, ReportStatus, Secti
 import { normalizeText, sectionLabels } from './utils/text'
 
 // One Auth client per page: a second instance would race to exchange the same PKCE code.
-const authPresenter = (() => {
+const { authPresenter, accessToken, apiBase } = (() => {
   const { gateway, accessToken } = createAuthGateway(import.meta.env.VITE_AUTH_URL || '/auth')
-  const account = createAccountClient(import.meta.env.VITE_API_BASE_URL || '/api', accessToken)
-  return new AuthPresenter(gateway, account)
+  const apiBase = import.meta.env.VITE_API_BASE_URL || '/api'
+  const account = createAccountClient(apiBase, accessToken)
+  return { authPresenter: new AuthPresenter(gateway, account), accessToken, apiBase }
 })()
+
+function reportIdFromPath(): string | null {
+  const match = /^\/reports\/([^/]+)\/?$/.exec(window.location.pathname)
+  if (!match) return null
+  try {
+    return decodeURIComponent(match[1]!)
+  } catch {
+    return match[1]!
+  }
+}
 
 function App() {
   const [catalog] = useState(
     () => new CatalogPresenter(createReportsClient(import.meta.env.VITE_API_BASE_URL || '/api')),
   )
   const catalogState = useSyncExternalStore(catalog.subscribe, catalog.getSnapshot)
+  const [detailPresenter] = useState(
+    () => new ReportDetailPresenter(createReportDetailClient(apiBase, accessToken)),
+  )
+  const detailState = useSyncExternalStore(detailPresenter.subscribe, detailPresenter.getSnapshot)
   const auth = authPresenter
   const authState = useSyncExternalStore(auth.subscribe, auth.getSnapshot)
   const [authView, setAuthView] = useState<AuthMode | null>(null)
@@ -45,6 +62,7 @@ function App() {
   const [category, setCategory] = useState('Todas las categorías')
   const [status, setStatus] = useState<FilterStatus>('Todos')
   const [selectedReport, setSelectedReport] = useState<Report | null>(null)
+  const [reportPathId, setReportPathId] = useState<string | null>(() => reportIdFromPath())
   const [saved, setSaved] = useState<string[]>(['demo-3'])
   const [savedCatalogReports, setSavedCatalogReports] = useState<CatalogReport[]>([])
   const [mobileMenu, setMobileMenu] = useState(false)
@@ -93,6 +111,24 @@ function App() {
     return () => catalog.cancel()
   }, [catalog, search, city, category, status])
 
+  useEffect(() => {
+    const onPopState = () => {
+      setReportPathId(reportIdFromPath())
+      setSelectedReport(null)
+    }
+    window.addEventListener('popstate', onPopState)
+    return () => window.removeEventListener('popstate', onPopState)
+  }, [])
+
+  useEffect(() => {
+    if (!reportPathId) {
+      detailPresenter.cancel()
+      return
+    }
+    void detailPresenter.load(reportPathId)
+    return () => detailPresenter.cancel()
+  }, [authState, detailPresenter, reportPathId])
+
   const filteredReports = useMemo(
     () =>
       reports.filter((report) => {
@@ -137,6 +173,29 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const openReport = (report: Report) => {
+    setSelectedReport(null)
+    if (report.source === 'catalog') {
+      window.history.pushState({ reportDetail: true }, '', reportPath(report.id))
+      setReportPathId(report.id)
+      return
+    }
+    setSelectedReport(report)
+  }
+
+  const closeReport = () => {
+    if (!reportPathId) {
+      setSelectedReport(null)
+      return
+    }
+    if (window.history.state?.reportDetail) {
+      window.history.back()
+      return
+    }
+    window.history.replaceState(null, '', '/')
+    setReportPathId(null)
+  }
+
   const openAuth = (mode: AuthMode) => {
     setPendingSection(null)
     setAuthView(mode)
@@ -157,20 +216,55 @@ function App() {
   }
 
   const contact = (report: Report) => {
-    if (report.source !== 'demo') return
-    const message = encodeURIComponent(
-      'Hola, vi tu reporte "' + report.title + '" en PerdiU. ¿Podemos coordinar?',
-    )
-    window.open(
-      'https://wa.me/' + report.phone + '?text=' + message,
-      '_blank',
-      'noopener,noreferrer',
-    )
+    if (authState.status !== 'authenticated') {
+      setPendingSection(section)
+      setAuthView('login')
+      return
+    }
+    if (report.source === 'demo') notify('El contacto no está disponible para este reporte.', true)
+  }
+
+  const contactReport = async () => {
+    if (authState.status !== 'authenticated') {
+      setPendingSection(section)
+      setAuthView('login')
+      return
+    }
+    const popup = window.open('about:blank', '_blank')
+    if (!popup) {
+      notify('Permite abrir una ventana para continuar a WhatsApp.', true)
+      return
+    }
+    popup.opener = null
+    try {
+      const url = await detailPresenter.contact(window.location.origin)
+      if (!url) {
+        popup.close()
+        const current = detailPresenter.getSnapshot()
+        notify(
+          current.status === 'ready'
+            ? (current.contactMessage ?? 'El contacto no está disponible.')
+            : 'El contacto no está disponible.',
+          true,
+        )
+        return
+      }
+      popup.location.replace(url)
+    } catch (error) {
+      popup.close()
+      if (error instanceof SessionRejected) {
+        setPendingSection(section)
+        setAuthView('login')
+      } else notify('No se pudo cargar el contacto. Intenta nuevamente.', true)
+    }
   }
 
   const toggleSaved = (id: string) => {
     const report =
       catalogState.reports.find((item) => item.id === id) ??
+      (detailState.status === 'ready' && detailState.report.id === id
+        ? detailState.report
+        : undefined) ??
       (selectedReport?.source === 'catalog' && selectedReport.id === id
         ? selectedReport
         : undefined)
@@ -213,7 +307,6 @@ function App() {
       image: imagePreview || fallbackReportImage,
       person: 'Santiago Demo',
       initials: 'SD',
-      phone: '59170000000',
       color: 'lavender',
       position: { top: '48%', left: '48%' },
     }
@@ -251,6 +344,19 @@ function App() {
 
   const account = authState.status === 'authenticated' ? authState.user : null
   const sectionAccess = auth.access(section)
+  const routedReport =
+    reportPathId && detailState.status === 'ready' && detailState.id === reportPathId
+      ? detailState.report
+      : null
+  const detailReport = reportPathId ? routedReport : selectedReport
+  const detailRouteStatus =
+    !reportPathId || routedReport
+      ? undefined
+      : detailState.status === 'unavailable' && detailState.id === reportPathId
+        ? 'unavailable'
+        : detailState.status === 'error' && detailState.id === reportPathId
+          ? 'error'
+          : 'loading'
 
   if (authView)
     return (
@@ -315,7 +421,7 @@ function App() {
               resolvedCount={resolvedCount}
               ownCount={ownReports.length}
               onNavigate={navigate}
-              onOpen={setSelectedReport}
+              onOpen={openReport}
               saved={saved}
               onSave={toggleSaved}
             />
@@ -334,7 +440,7 @@ function App() {
               status={status}
               setStatus={setStatus}
               resetFilters={resetFilters}
-              onOpen={setSelectedReport}
+              onOpen={openReport}
               saved={saved}
               onSave={toggleSaved}
               onNavigate={navigate}
@@ -349,7 +455,7 @@ function App() {
               setCategory={setCategory}
               status={status}
               setStatus={setStatus}
-              onOpen={setSelectedReport}
+              onOpen={openReport}
               onNavigate={navigate}
             />
           )}
@@ -368,7 +474,7 @@ function App() {
               reports={ownReports}
               onResolve={resolveReport}
               onRemove={removeReport}
-              onOpen={setSelectedReport}
+              onOpen={openReport}
               onNavigate={navigate}
             />
           )}
@@ -376,7 +482,7 @@ function App() {
             <SavedPage
               reports={savedReports}
               onSave={toggleSaved}
-              onOpen={setSelectedReport}
+              onOpen={openReport}
               onNavigate={navigate}
               saved={saved}
             />
@@ -406,15 +512,70 @@ function App() {
           </button>
         </div>
       )}
-      {selectedReport && (
+      {detailRouteStatus && (
+        <ReportDetailStatus
+          status={detailRouteStatus}
+          message={
+            detailState.status === 'error' && detailState.id === reportPathId
+              ? detailState.message
+              : undefined
+          }
+          onRetry={
+            detailRouteStatus === 'error' && reportPathId
+              ? () => void detailPresenter.load(reportPathId)
+              : undefined
+          }
+          onClose={closeReport}
+        />
+      )}
+      {detailReport && (
         <ReportDetail
-          report={selectedReport}
-          saved={saved.includes(selectedReport.id)}
-          onSave={() => toggleSaved(selectedReport.id)}
-          onContact={selectedReport.source === 'demo' ? () => contact(selectedReport) : undefined}
-          onResolve={() => resolveReport(selectedReport)}
-          onClose={() => setSelectedReport(null)}
-          isOwn={selectedReport.source === 'demo' && selectedReport.person === 'Santiago Demo'}
+          report={detailReport}
+          saved={saved.includes(detailReport.id)}
+          onSave={() => toggleSaved(detailReport.id)}
+          onContact={
+            detailReport.source === 'demo'
+              ? detailReport.person !== 'Santiago Demo'
+                ? () => contact(detailReport)
+                : undefined
+              : account?.id !== detailReport.authorId
+                ? () => void contactReport()
+                : undefined
+          }
+          onResolve={detailReport.source === 'demo' ? () => resolveReport(detailReport) : undefined}
+          onShare={
+            detailReport.source === 'catalog'
+              ? async () => {
+                  try {
+                    await navigator.clipboard.writeText(
+                      new URL(reportPath(detailReport.id), window.location.origin).href,
+                    )
+                    notify('Enlace del reporte copiado.')
+                  } catch {
+                    notify(
+                      'No se pudo copiar el enlace. Puedes copiarlo desde la barra del navegador.',
+                      true,
+                    )
+                  }
+                }
+              : undefined
+          }
+          contacting={
+            detailState.status === 'ready' &&
+            detailState.id === detailReport.id &&
+            Boolean(detailState.contacting)
+          }
+          contactMessage={
+            detailState.status === 'ready' && detailState.id === detailReport.id
+              ? detailState.contactMessage
+              : undefined
+          }
+          onClose={closeReport}
+          isOwn={
+            detailReport.source === 'demo'
+              ? detailReport.person === 'Santiago Demo'
+              : account?.id === detailReport.authorId
+          }
         />
       )}
     </div>

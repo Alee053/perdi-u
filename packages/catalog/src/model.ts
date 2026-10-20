@@ -10,4 +10,5 @@ export interface ReportRepository {
    * ListReports additionally enforces active state, stable order, result limit and public projection.
    */
   list(query?: ReportQuery): Promise<ReportRecord[]>
+  find(id: string): Promise<ReportRecord | undefined>
 }

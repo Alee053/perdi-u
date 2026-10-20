@@ -1,4 +1,4 @@
-import type { ReportQuery, ReportSummary } from '@perdiu/contracts'
+import type { ReportDetail, ReportQuery, ReportSummary } from '@perdiu/contracts'
 import { REPORT_RESULT_LIMIT } from '@perdiu/contracts'
 import type { ReportRepository } from './model.js'
 
@@ -8,7 +8,7 @@ function microsecondRemainder(timestamp: string) {
 }
 
 export class ListReports {
-  constructor(private readonly repository: ReportRepository) {}
+  constructor(private readonly repository: Pick<ReportRepository, 'list'>) {}
 
   async execute(query: ReportQuery = {}): Promise<ReportSummary[]> {
     return (await this.repository.list(query))
@@ -38,5 +38,32 @@ export class ListReports {
         },
         imageUrls: [...report.imageUrls],
       }))
+  }
+}
+
+export class GetReport {
+  constructor(private readonly repository: Pick<ReportRepository, 'find'>) {}
+
+  async execute(id: string, viewerId?: string): Promise<ReportDetail | undefined> {
+    const report = await this.repository.find(id)
+    if (!report || (report.state !== 'active' && report.ownerId !== viewerId)) return undefined
+    return {
+      id: report.id,
+      title: report.title,
+      description: report.description,
+      type: report.type,
+      state: report.state,
+      category: report.category,
+      city: report.city,
+      zone: report.zone,
+      incidentDate: report.incidentDate,
+      createdAt: report.createdAt,
+      author: {
+        id: report.author.id,
+        displayName: report.author.displayName,
+        ...(report.author.photoUrl ? { photoUrl: report.author.photoUrl } : {}),
+      },
+      imageUrls: [...report.imageUrls],
+    }
   }
 }

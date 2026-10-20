@@ -22,12 +22,13 @@ const categoryValues: Partial<Record<string, ReportCategory>> = {
   Documentos: 'document',
 }
 
-function presentReport(report: ReportSummary): CatalogReport {
+export function presentReport(report: ReportSummary): CatalogReport {
   const category = categories[report.category]
   const name = report.author.displayName
   return {
     id: report.id,
     source: 'catalog',
+    authorId: report.author.id,
     title: report.title,
     description: report.description,
     category,

@@ -303,6 +303,166 @@ try {
   let page = await browser.newPage({ viewport: { width: 1440, height: 1000 } })
   page.on('pageerror', (error) => pageErrors.push(error.message))
 
+  const detailId = '20000000-0000-0000-0000-000000000001'
+  const detailPage = await browser.newPage({ viewport: { width: 1440, height: 1000 } })
+  detailPage.on('pageerror', (error) => pageErrors.push(error.message))
+  const detailUrl = `${webUrl}/reports/${detailId}`
+  await detailPage.goto(detailUrl)
+  const directDetail = detailPage.getByRole('dialog')
+  await directDetail.getByRole('heading', { name: 'Mochila azul encontrada' }).waitFor()
+  assert.match(await directDetail.textContent(), /Encontrado/)
+  assert.equal(new URL(detailPage.url()).pathname, `/reports/${detailId}`)
+  await detailPage.reload()
+  await detailPage
+    .getByRole('dialog')
+    .getByRole('heading', { name: 'Mochila azul encontrada' })
+    .waitFor()
+  await detailPage.goto(`${webUrl}/reports/26000000-0000-0000-0000-000000000099`)
+  await detailPage.getByRole('heading', { name: 'Reporte no disponible' }).waitFor()
+  await detailPage.goto(detailUrl)
+  await detailPage
+    .getByRole('dialog')
+    .getByRole('heading', { name: 'Mochila azul encontrada' })
+    .waitFor()
+  await detailPage
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Contactar por WhatsApp' })
+    .click()
+  await detailPage.getByRole('heading', { name: 'Iniciar sesión', exact: true }).waitFor()
+  assert.equal(new URL(detailPage.url()).pathname, `/reports/${detailId}`)
+  await detailPage.getByRole('button', { name: 'Volver al catálogo', exact: true }).click()
+  await detailPage
+    .getByRole('dialog')
+    .getByRole('heading', { name: 'Mochila azul encontrada' })
+    .waitFor()
+
+  const ownerId = '10000000-0000-0000-0000-000000000001'
+  const detailResponse = {
+    id: detailId,
+    type: 'found',
+    state: 'active',
+    category: 'object',
+    title: 'Mochila azul encontrada',
+    description: 'Reporte ficticio para probar el catálogo persistido.',
+    city: 'La Paz',
+    zone: 'Miraflores',
+    incidentDate: '2026-10-10',
+    createdAt: '2026-10-11T12:00:00.000Z',
+    author: { id: ownerId, displayName: 'Santiago Demo' },
+    imageUrls: ['/images/object.svg'],
+  }
+  await detailPage.route(
+    (url) => url.pathname === '/auth/token' && url.searchParams.get('grant_type') === 'password',
+    (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          access_token: 'browser-session-token',
+          token_type: 'bearer',
+          expires_in: 3600,
+          refresh_token: 'browser-refresh-token',
+          user: {
+            id: ownerId,
+            aud: 'authenticated',
+            role: 'authenticated',
+            email: 'persona@example.test',
+            app_metadata: { provider: 'email', providers: ['email'] },
+            user_metadata: {},
+            created_at: '2026-10-10T12:00:00.000Z',
+          },
+        }),
+      }),
+  )
+  await detailPage.route('**/api/me', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      headers: { 'Cache-Control': 'no-store' },
+      body: JSON.stringify({ id: ownerId, email: 'persona@example.test' }),
+    }),
+  )
+  await detailPage.route(`**/api/reports/${detailId}`, async (route) => {
+    if (route.request().headers().authorization)
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(detailResponse),
+      })
+    else await route.continue()
+  })
+  let contactAttempts = 0
+  await detailPage.route(`**/api/reports/${detailId}/contact`, (route) => {
+    contactAttempts++
+    return contactAttempts === 1
+      ? route.fulfill({
+          status: 404,
+          contentType: 'application/json',
+          body: JSON.stringify({ message: 'El contacto no está disponible.' }),
+        })
+      : route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          headers: { 'Cache-Control': 'no-store' },
+          body: JSON.stringify({ phone: '59170000001' }),
+        })
+  })
+  await detailPage.route('https://wa.me/**', (route) =>
+    route.fulfill({ status: 200, contentType: 'text/plain', body: 'WhatsApp link verified.' }),
+  )
+  await detailPage.getByLabel('Correo electrónico').fill('persona@example.test')
+  await detailPage.getByLabel('Contraseña').fill('Correcta-123')
+  await detailPage.getByRole('button', { name: 'Iniciar sesión', exact: true }).click()
+  await detailPage
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Contactar por WhatsApp' })
+    .waitFor()
+  const failedPopupEvent = detailPage.waitForEvent('popup')
+  await detailPage
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Contactar por WhatsApp' })
+    .click()
+  const failedPopup = await failedPopupEvent
+  await detailPage
+    .getByRole('alert')
+    .filter({ hasText: 'El contacto no está disponible.' })
+    .waitFor()
+  assert.equal(failedPopup.isClosed(), true)
+
+  const whatsappPopup = detailPage.waitForEvent('popup')
+  await detailPage
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Contactar por WhatsApp' })
+    .click()
+  const popup = await whatsappPopup
+  await popup.waitForURL(/https:\/\/wa\.me\/59170000001\?text=/)
+  const preparedMessage = new URL(popup.url()).searchParams.get('text')
+  assert.match(preparedMessage, /Mochila azul encontrada/)
+  assert.ok(preparedMessage.includes(detailUrl))
+  await popup.close()
+
+  const retryId = '26000000-0000-0000-0000-000000000098'
+  let detailAttempts = 0
+  await detailPage.route(`**/api/reports/${retryId}`, (route) => {
+    detailAttempts++
+    return detailAttempts === 1
+      ? route.fulfill({ status: 503, contentType: 'application/json', body: '{}' })
+      : route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ ...detailResponse, id: retryId }),
+        })
+  })
+  await detailPage.goto(`${webUrl}/reports/${retryId}`)
+  await detailPage.getByRole('heading', { name: 'No se pudo cargar el reporte' }).waitFor()
+  await detailPage.getByRole('button', { name: 'Intentar nuevamente' }).click()
+  await detailPage
+    .getByRole('dialog')
+    .getByRole('heading', { name: 'Mochila azul encontrada' })
+    .waitFor()
+  await detailPage.unroute(`**/api/reports/${retryId}`)
+  await detailPage.close()
+
   let release
   const gate = new Promise((resolve) => {
     release = resolve
@@ -345,6 +505,10 @@ try {
     0,
   )
   assert.match(await dialog.textContent(), /Santiago Demo/)
+  await page.goBack()
+  assert.equal(new URL(page.url()).pathname, '/')
+  await page.goForward()
+  await page.getByRole('dialog').getByRole('heading', { name: 'Mochila azul encontrada' }).waitFor()
   await dialog.getByRole('button', { name: 'Cerrar', exact: true }).click()
 
   await stop(api)
@@ -365,6 +529,14 @@ try {
   browser = await launch()
   page = await browser.newPage({ viewport: { width: 390, height: 844 } })
   page.on('pageerror', (error) => pageErrors.push(error.message))
+  await page.goto(`${webUrl}/reports/${detailId}`)
+  await page.getByRole('dialog').getByRole('heading', { name: 'Mochila azul encontrada' }).waitFor()
+  await page.reload()
+  await page.getByRole('dialog').getByRole('heading', { name: 'Mochila azul encontrada' }).waitFor()
+  assert.ok(
+    await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1),
+    'El detalle móvil no debe desbordar horizontalmente.',
+  )
   await page.goto(webUrl)
   await page.getByRole('button', { name: 'Abrir menú' }).click()
   await page
@@ -437,7 +609,7 @@ try {
   assert.equal(await page.locator('.report-card').count(), 0)
   assert.deepEqual(pageErrors, [])
   console.log(
-    'Navegador: catálogo real, privacidad, búsqueda sin tildes, filtros combinados, limpieza, publicación desde vacío, cambios rápidos, error/reintento con filtros, límite de 50, reinicio y móvil/escritorio verificados.',
+    'Navegador: catálogo real, detalle por enlace/recarga/Atrás, retorno de login, apertura WhatsApp sin envío, privacidad, búsqueda/filtros, error/reintento, límite de 50 y móvil/escritorio verificados.',
   )
 } finally {
   await browser?.close()
