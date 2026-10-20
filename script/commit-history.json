@@ -380,12 +380,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "c1b19dadbae29a3c2e93866b805f08525c2c2684",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-20T14:46:34.000Z",
       "message": "fix(repo): reintentar la limpieza de fixtures temporales en Windows",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/c1b19dadbae29a3c2e93866b805f08525c2c2684"
     },
     "stats": {
       "total": 8,
@@ -395,6 +395,25 @@
     },
     "coverage": 89.63,
     "test_count": 46,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-20T15:24:35.000Z",
+      "message": "refactor(web): separar la aplicación web en Model, View y Presenter",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 10832,
+      "additions": 4777,
+      "deletions": 6055,
+      "date": "2026-10-20"
+    },
+    "coverage": 92.25,
+    "test_count": 78,
     "failed_tests": 0,
     "conclusion": "success"
   }

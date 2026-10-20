@@ -344,9 +344,95 @@
     "testId": 19
   },
   {
-    "commitId": "HEAD",
+    "commitId": "c1b19dadbae29a3c2e93866b805f08525c2c2684",
     "commitName": "fix(repo): reintentar la limpieza de fixtures temporales en Windows",
     "commitTimestamp": 1792507596978,
     "testId": 20
+  },
+  {
+    "numPassedTests": 49,
+    "failedTests": 4,
+    "numTotalTests": 53,
+    "timestamp": 1792507906293,
+    "success": false,
+    "testId": 21
+  },
+  {
+    "numPassedTests": 55,
+    "failedTests": 0,
+    "numTotalTests": 55,
+    "timestamp": 1792507981628,
+    "success": true,
+    "testId": 21
+  },
+  {
+    "numPassedTests": 55,
+    "failedTests": 4,
+    "numTotalTests": 59,
+    "timestamp": 1792508185291,
+    "success": false,
+    "testId": 21
+  },
+  {
+    "numPassedTests": 59,
+    "failedTests": 0,
+    "numTotalTests": 59,
+    "timestamp": 1792508228319,
+    "success": true,
+    "testId": 21
+  },
+  {
+    "numPassedTests": 59,
+    "failedTests": 9,
+    "numTotalTests": 68,
+    "timestamp": 1792508341301,
+    "success": false,
+    "testId": 21
+  },
+  {
+    "numPassedTests": 68,
+    "failedTests": 0,
+    "numTotalTests": 68,
+    "timestamp": 1792508432015,
+    "success": true,
+    "testId": 21
+  },
+  {
+    "numPassedTests": 68,
+    "failedTests": 5,
+    "numTotalTests": 73,
+    "timestamp": 1792508512963,
+    "success": false,
+    "testId": 21
+  },
+  {
+    "numPassedTests": 73,
+    "failedTests": 0,
+    "numTotalTests": 73,
+    "timestamp": 1792508559186,
+    "success": true,
+    "testId": 21
+  },
+  {
+    "numPassedTests": 74,
+    "failedTests": 4,
+    "numTotalTests": 78,
+    "timestamp": 1792509109527,
+    "success": false,
+    "testId": 21
+  },
+  {
+    "numPassedTests": 78,
+    "failedTests": 0,
+    "numTotalTests": 78,
+    "timestamp": 1792509170946,
+    "success": true,
+    "testId": 21
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "refactor(web): separar la aplicación web en Model, View y Presenter",
+    "commitTimestamp": 1792509876265,
+    "testId": 21
   }
 ]

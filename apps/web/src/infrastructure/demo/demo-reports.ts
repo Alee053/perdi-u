@@ -1,0 +1,138 @@
+import { demoOwner, type DemoReport } from '../../models/reports/report.js'
+
+const photo = (id: string, width = 900) =>
+  'https://images.unsplash.com/' + id + '?auto=format&fit=crop&w=' + width + '&q=85'
+const owner = { id: demoOwner.id, displayName: demoOwner.displayName }
+
+/** In-memory data for the flows that do not use the API yet (overview, map, own reports). */
+export const demoReports: DemoReport[] = [
+  {
+    id: 'demo-1',
+    source: 'demo',
+    title: 'Luna, mi compañera de aventuras',
+    description:
+      'Se perdió cerca del parque. Es muy cariñosa y lleva su collar lila con una plaquita.',
+    category: 'pet',
+    type: 'lost',
+    state: 'active',
+    city: 'La Paz',
+    zone: 'Sopocachi',
+    incidentDate: '2026-10-06',
+    createdAt: '2026-10-06T16:00:00.000Z',
+    imageUrls: [photo('photo-1543466835-00a7907e9de1')],
+    author: { id: 'demo-mariana', displayName: 'Mariana Rojas' },
+    phone: '59170000001',
+    position: { top: '30%', left: '28%' },
+  },
+  {
+    id: 'demo-2',
+    source: 'demo',
+    title: 'Mochila azul encontrada',
+    description:
+      'La encontré en un minibús de la línea 2. Tiene un cuaderno adentro. Quiero devolverla a su dueño.',
+    category: 'object',
+    type: 'found',
+    state: 'active',
+    city: 'La Paz',
+    zone: 'Miraflores',
+    incidentDate: '2026-10-06',
+    createdAt: '2026-10-06T14:00:00.000Z',
+    imageUrls: [photo('photo-1553062407-98eeb64c6a62')],
+    author: { id: 'demo-diego', displayName: 'Diego Flores' },
+    phone: '59170000002',
+    position: { top: '53%', left: '55%' },
+  },
+  {
+    id: 'demo-3',
+    source: 'demo',
+    title: 'Naranjito busca su hogar',
+    description:
+      'Este gatito apareció en mi jardín. Está sano y busca a su familia. ¿Lo reconoces?',
+    category: 'pet',
+    type: 'found',
+    state: 'active',
+    city: 'Cochabamba',
+    zone: 'Queru Queru',
+    incidentDate: '2026-10-05',
+    createdAt: '2026-10-05T18:00:00.000Z',
+    imageUrls: [photo('photo-1573865526739-10659fec78a5')],
+    author: { id: 'demo-sofia', displayName: 'Sofía Paredes' },
+    phone: '59170000003',
+    position: { top: '41%', left: '76%' },
+  },
+  {
+    id: 'demo-4',
+    source: 'demo',
+    title: 'Llavero con dos llaves',
+    description:
+      'Perdí mis llaves en la plaza Abaroa. El llavero tiene forma de una pequeña hoja verde.',
+    category: 'object',
+    type: 'lost',
+    state: 'active',
+    city: 'La Paz',
+    zone: 'San Jorge',
+    incidentDate: '2026-10-05',
+    createdAt: '2026-10-05T15:00:00.000Z',
+    imageUrls: [photo('photo-1518895949257-7621c3c786d7')],
+    author: { id: 'demo-andres', displayName: 'Andrés Molina' },
+    phone: '59170000004',
+    position: { top: '68%', left: '34%' },
+  },
+  {
+    id: 'demo-5',
+    source: 'demo',
+    title: 'Bongo, perrito café',
+    description:
+      'Se escapó durante el paseo por la zona norte. Responde a su nombre y es muy juguetón.',
+    category: 'pet',
+    type: 'lost',
+    state: 'active',
+    city: 'Santa Cruz',
+    zone: 'Equipetrol',
+    incidentDate: '2026-10-04',
+    createdAt: '2026-10-04T20:00:00.000Z',
+    imageUrls: [photo('photo-1551717743-49959800b1f6')],
+    author: { id: 'demo-paola', displayName: 'Paola Suárez' },
+    phone: '59170000005',
+    position: { top: '24%', left: '61%' },
+  },
+  {
+    id: 'demo-6',
+    source: 'demo',
+    title: 'Carnet encontrado',
+    description:
+      'Encontré un documento en la parada del PumaKatari. Lo resguardo para entregarlo a su dueño.',
+    category: 'document',
+    type: 'found',
+    state: 'active',
+    city: 'La Paz',
+    zone: 'Obrajes',
+    incidentDate: '2026-10-04',
+    createdAt: '2026-10-04T13:00:00.000Z',
+    imageUrls: [photo('photo-1554224155-6726b3ff858f')],
+    author: { id: 'demo-gabriela', displayName: 'Gabriela Lima' },
+    phone: '59170000006',
+    position: { top: '73%', left: '77%' },
+  },
+  {
+    id: 'demo-7',
+    source: 'demo',
+    title: 'Milo, gato gris con collar azul',
+    description:
+      'Se perdió por la zona de Cala Cala. Tiene una mancha blanca en el pecho y es muy tranquilo.',
+    category: 'pet',
+    type: 'lost',
+    state: 'active',
+    city: 'Cochabamba',
+    zone: 'Cala Cala',
+    incidentDate: '2026-10-06',
+    createdAt: '2026-10-06T13:00:00.000Z',
+    imageUrls: [photo('photo-1514888286974-6c03e2ca1dba')],
+    author: owner,
+    phone: demoOwner.phone,
+    position: { top: '58%', left: '42%' },
+  },
+]
+
+/** Reports saved on this device when the demo starts. */
+export const demoSavedIds = ['demo-3']

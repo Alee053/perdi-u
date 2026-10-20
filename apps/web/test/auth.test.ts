@@ -3,12 +3,12 @@ import { test } from '@jest/globals'
 import type { AccountIdentity } from '@perdiu/contracts'
 import {
   AuthGatewayError,
-  AuthPresenter,
   SessionRejected,
   type AccountClient,
   type AuthGateway,
-} from '../src/auth/presenter.js'
-import { createAccountClient } from '../src/auth/client.js'
+} from '../src/models/auth/session.js'
+import { AuthPresenter } from '../src/presenters/auth/auth.presenter.js'
+import { createAccountClient } from '../src/infrastructure/http/account-client.js'
 
 const identity: AccountIdentity = {
   id: '66068112-224a-4d11-a6cd-c18bdd1ffb1b',

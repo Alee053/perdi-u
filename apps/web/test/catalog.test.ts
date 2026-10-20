@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict'
 import { expect, test } from '@jest/globals'
 import type { ReportSummary } from '@perdiu/contracts'
-import { CatalogPresenter } from '../src/catalog/presenter.js'
-import { createReportsClient } from '../src/catalog/client.js'
+import { CatalogPresenter } from '../src/presenters/catalog/catalog.presenter.js'
+import { createReportsClient } from '../src/infrastructure/http/catalog-client.js'
 
 const summary: ReportSummary = {
   id: '20000000-0000-0000-0000-000000000001',
