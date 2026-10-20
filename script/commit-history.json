@@ -361,17 +361,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "e500a4dd68f7bd13b0bd73b6e3618084f8c23b5f",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-10-20T02:05:45.000Z",
       "message": "chore(repo): integrar main y conservar evidencia TDD\n\nConservar los registros de ambas ramas y resolver sus marcadores HEAD con los SHA de origen. Reasignar el testId local 3 a 18 para evitar colisiones, manteniendo resultados y timestamps.\n\nVerificación: pnpm verify completo, 46 pruebas aprobadas y comprobación de conservación de ambos historiales JSON.",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/e500a4dd68f7bd13b0bd73b6e3618084f8c23b5f"
     },
     "stats": {
       "total": 3182,
       "additions": 3046,
       "deletions": 136,
+      "date": "2026-10-20"
+    },
+    "coverage": 89.63,
+    "test_count": 46,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-20T14:46:34.000Z",
+      "message": "fix(repo): reintentar la limpieza de fixtures temporales en Windows",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 8,
+      "additions": 6,
+      "deletions": 2,
       "date": "2026-10-20"
     },
     "coverage": 89.63,
