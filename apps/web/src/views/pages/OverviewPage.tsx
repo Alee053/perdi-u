@@ -1,4 +1,3 @@
-import { Plus, ShieldCheck } from 'lucide-react'
 import type { Section } from '../../presenters/app/sections'
 import type { AppView } from '../../presenters/app/useApp'
 import { PageHeading } from '../components/PageHeading'
@@ -20,34 +19,24 @@ export function OverviewPage({ overview, onNavigate, ...cards }: OverviewPagePro
         description="Actividad de los reportes de demostración de la comunidad."
         action={
           <button className="primary-button" onClick={() => onNavigate('publish')}>
-            <Plus size={16} /> Nuevo reporte
+            Nuevo reporte
           </button>
         }
       />
-      <section className="metrics" aria-label="Resumen de reportes">
-        {overview.metrics.map((metric) => (
-          <div className="metric" key={metric.label}>
-            <strong>{metric.value}</strong>
-            <span>{metric.label}</span>
-          </div>
-        ))}
-      </section>
-
-      <section className="panel">
-        <div className="section-heading">
-          <h2>Por ciudad</h2>
-          <button className="text-button" onClick={() => onNavigate('map')}>
-            Ver mapa
-          </button>
-        </div>
+      <section className="panel summary" aria-label="Resumen de reportes">
+        <dl className="metrics">
+          {overview.metrics.map((metric) => (
+            <div key={metric.label}>
+              <dt>{metric.label}</dt>
+              <dd>{metric.value}</dd>
+            </div>
+          ))}
+        </dl>
+        <h2>Reportes activos por ciudad</h2>
         <ul className="city-list">
           {overview.cities.map((row) => (
             <li key={row.city}>
-              <span>{row.city}</span>
-              <span className="city-bar" aria-hidden="true">
-                <i style={{ width: row.share + '%' }} />
-              </span>
-              <b>{row.count}</b>
+              {row.city}: <b>{row.count}</b>
             </li>
           ))}
         </ul>
@@ -61,15 +50,12 @@ export function OverviewPage({ overview, onNavigate, ...cards }: OverviewPagePro
       </div>
       <ReportGrid reports={overview.recent} {...cards} />
 
-      <p className="tip">
-        <ShieldCheck size={17} aria-hidden="true" />
-        <span>
-          Coordina la devolución en un lugar público y comparte tus datos solo cuando te sientas
-          cómodo.{' '}
-          <button className="text-button" onClick={() => onNavigate('safety')}>
-            Ver recomendaciones
-          </button>
-        </span>
+      <p className="hint tip">
+        Coordina la devolución en un lugar público y comparte tus datos solo cuando te sientas
+        cómodo.{' '}
+        <button className="text-button" onClick={() => onNavigate('safety')}>
+          Ver recomendaciones
+        </button>
       </p>
     </>
   )

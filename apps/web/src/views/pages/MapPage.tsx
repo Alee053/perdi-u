@@ -1,4 +1,3 @@
-import { ChevronRight, Plus } from 'lucide-react'
 import type { Section } from '../../presenters/app/sections'
 import type { AppView } from '../../presenters/app/useApp'
 import {
@@ -28,7 +27,7 @@ export function MapPage({ map, selection, filters, onOpen, onNavigate }: MapPage
         description="Ubica reportes cercanos y abre cada punto para ver sus detalles."
         action={
           <button className="primary-button" onClick={() => onNavigate('publish')}>
-            <Plus size={16} /> Nuevo reporte
+            Nuevo reporte
           </button>
         }
       />
@@ -64,7 +63,6 @@ export function MapPage({ map, selection, filters, onOpen, onNavigate }: MapPage
                   {report.zone}, {report.city}
                 </small>
               </span>
-              <ChevronRight size={15} aria-hidden="true" />
             </button>
           ))}
           {map.count === 0 && (

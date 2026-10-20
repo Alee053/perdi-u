@@ -1,4 +1,3 @@
-import { Heart, ImagePlus, LockKeyhole, Plus, Search, X } from 'lucide-react'
 import type { FormEvent } from 'react'
 import {
   publishOptions,
@@ -36,7 +35,7 @@ export function PublishPage({ form, actions }: PublishPageProps) {
             className={draft.type === 'lost' ? 'selected lost' : ''}
             onClick={() => actions.setType('lost')}
           >
-            <Search size={16} /> Perdí algo
+            Perdí algo
           </button>
           <button
             type="button"
@@ -44,7 +43,7 @@ export function PublishPage({ form, actions }: PublishPageProps) {
             className={draft.type === 'found' ? 'selected found' : ''}
             onClick={() => actions.setType('found')}
           >
-            <Heart size={16} /> Encontré algo
+            Encontré algo
           </button>
         </fieldset>
 
@@ -52,18 +51,12 @@ export function PublishPage({ form, actions }: PublishPageProps) {
           {imagePreview ? (
             <>
               <img src={imagePreview} alt="Vista previa de la foto" />
-              <button
-                type="button"
-                className="icon-button"
-                onClick={actions.clearPhoto}
-                aria-label="Quitar foto"
-              >
-                <X size={16} />
+              <button type="button" className="secondary-button" onClick={actions.clearPhoto}>
+                Quitar foto
               </button>
             </>
           ) : (
             <label className="upload-zone">
-              <ImagePlus size={20} aria-hidden="true" />
               <strong>Selecciona una foto</strong>
               <small>JPG o PNG · Hasta 5 MB</small>
               <input
@@ -155,12 +148,9 @@ export function PublishPage({ form, actions }: PublishPageProps) {
         </div>
 
         <div className="form-footer">
-          <small className="hint">
-            <LockKeyhole size={13} aria-hidden="true" /> Tu correo y tu número no aparecen
-            públicamente.
-          </small>
+          <small className="hint">Tu correo y tu número no aparecen públicamente.</small>
           <button className="primary-button" type="submit">
-            <Plus size={16} /> Publicar reporte
+            Publicar reporte
           </button>
         </div>
       </form>

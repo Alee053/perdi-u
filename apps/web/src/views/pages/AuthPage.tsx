@@ -1,13 +1,5 @@
 import type { FormEvent } from 'react'
-import {
-  ArrowLeft,
-  Eye,
-  EyeOff,
-  LoaderCircle,
-  LockKeyhole,
-  MailCheck,
-  PawPrint,
-} from 'lucide-react'
+import { Eye, EyeOff, LoaderCircle } from 'lucide-react'
 import type { AuthMode } from '../../presenters/auth/auth-form.presenter'
 import type { AuthPresenter } from '../../presenters/auth/auth.presenter'
 import { useAuthForm } from '../../presenters/auth/useAuthForm'
@@ -31,15 +23,12 @@ export function AuthPage({ mode, auth, notice, onModeChange, onBack }: AuthPageP
   return (
     <main className="auth-page">
       <button type="button" className="text-button" onClick={onBack}>
-        <ArrowLeft size={15} /> Volver al catálogo
+        Volver al catálogo
       </button>
       <section className="panel auth-card" aria-labelledby="auth-title">
-        <span className="brand-mark" aria-hidden="true">
-          <PawPrint size={18} />
-        </span>
+        <span className="auth-brand">PerdiU</span>
         {state.sentTo ? (
           <div className="auth-sent" role="status">
-            <MailCheck size={24} aria-hidden="true" />
             <h1 id="auth-title">Revisa tu correo</h1>
             <p>
               Si <b>{state.sentTo}</b> puede registrarse, te enviamos un enlace para confirmar la
@@ -158,8 +147,7 @@ export function AuthPage({ mode, auth, notice, onModeChange, onBack }: AuthPageP
               </button>
             </p>
             <p className="hint auth-privacy">
-              <LockKeyhole size={13} aria-hidden="true" /> Tu correo es privado y no se muestra a
-              otras personas.
+              Tu correo es privado y no se muestra a otras personas.
             </p>
           </>
         )}

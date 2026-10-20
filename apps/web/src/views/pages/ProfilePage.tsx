@@ -1,4 +1,3 @@
-import { ChevronRight, Lock, LogOut, Mail } from 'lucide-react'
 import type { Section } from '../../presenters/app/sections'
 import type { AccountView } from '../../presenters/app/shell.presenter'
 import { PageHeading } from '../components/PageHeading'
@@ -19,12 +18,8 @@ export function ProfilePage({ account, signingOut, onNavigate, onSignOut }: Prof
         <UserAvatar account={account} size="large" />
         <div>
           <h2>{account.name}</h2>
-          <p>
-            <Mail size={14} aria-hidden="true" /> {account.email}
-          </p>
-          <small className="hint">
-            <Lock size={12} aria-hidden="true" /> Tu correo es privado: solo tú lo ves aquí.
-          </small>
+          <p>{account.email}</p>
+          <small className="hint">Tu correo es privado: solo tú lo ves aquí.</small>
         </div>
       </section>
       <div className="profile-actions">
@@ -33,10 +28,9 @@ export function ProfilePage({ account, signingOut, onNavigate, onSignOut }: Prof
             <b>Mis reportes</b>
             <small>Consulta el título, el tipo y el estado de tus publicaciones.</small>
           </span>
-          <ChevronRight size={16} aria-hidden="true" />
         </button>
         <button className="secondary-button" disabled={signingOut} onClick={onSignOut}>
-          <LogOut size={14} /> {signingOut ? 'Cerrando sesión…' : 'Cerrar sesión'}
+          {signingOut ? 'Cerrando sesión…' : 'Cerrar sesión'}
         </button>
       </div>
     </>

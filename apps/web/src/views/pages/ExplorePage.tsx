@@ -1,4 +1,3 @@
-import { Plus } from 'lucide-react'
 import type { Section } from '../../presenters/app/sections'
 import type { AppView } from '../../presenters/app/useApp'
 import {
@@ -38,7 +37,7 @@ export function ExplorePage({
         description="Busca por palabra, ciudad o categoría."
         action={
           <button className="primary-button" onClick={() => onNavigate('publish')}>
-            <Plus size={16} /> Publicar reporte
+            Publicar reporte
           </button>
         }
       />

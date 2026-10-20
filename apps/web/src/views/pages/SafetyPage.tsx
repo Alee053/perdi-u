@@ -1,4 +1,3 @@
-import { LockKeyhole } from 'lucide-react'
 import { PageHeading } from '../components/PageHeading'
 
 const tips = [
@@ -39,9 +38,7 @@ export function SafetyPage() {
         </ol>
       </section>
       <section className="panel">
-        <h2>
-          <LockKeyhole size={16} aria-hidden="true" /> Tu privacidad en PerdiU
-        </h2>
+        <h2>Tu privacidad en PerdiU</h2>
         <p>
           El correo de tu cuenta nunca se muestra en el catálogo. Tú decides si inicias una
           conversación y cuándo compartir tus datos. Si algo no se siente bien, puedes dejar de

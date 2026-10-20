@@ -39,7 +39,6 @@ export interface MapPin {
   top: string
   left: string
   number: number
-  pet: boolean
 }
 
 interface Dependencies {
@@ -163,7 +162,6 @@ export class ReportsPresenter extends Store<ReportsState> {
 
   overview = () => {
     const stats = summarizeReports(this.state.reports)
-    const share = (count: number) => (stats.active ? Math.round((count / stats.active) * 100) : 0)
     return {
       metrics: [
         { label: 'Reportes activos', value: stats.active },
@@ -171,9 +169,7 @@ export class ReportsPresenter extends Store<ReportsState> {
         { label: 'Encontrados', value: stats.found },
         { label: 'Resueltos', value: stats.resolved },
       ],
-      cities: [...stats.byCity, { city: 'Otras ciudades', count: stats.other }].map(
-        ({ city, count }) => ({ city, count, share: share(count) }),
-      ),
+      cities: [...stats.byCity, { city: 'Otras ciudades', count: stats.other }],
       recent: this.state.reports.filter(isActive).slice(0, 3).map(toReportCard),
     }
   }
@@ -191,7 +187,6 @@ export class ReportsPresenter extends Store<ReportsState> {
         top: report.position.top,
         left: report.position.left,
         number: index + 1,
-        pet: report.category === 'pet',
       }))
     return { count: visible.length, pins, list: visible.slice(0, 7).map(toReportCard) }
   }

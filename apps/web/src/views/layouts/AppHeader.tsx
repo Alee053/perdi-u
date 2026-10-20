@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronDown, LogIn, LogOut, Menu, UserRound } from 'lucide-react'
+import { Menu } from 'lucide-react'
 import type { AccountView } from '../../presenters/app/shell.presenter'
 import { UserAvatar } from '../components/UserAvatar'
 
@@ -46,7 +46,6 @@ export function AppHeader({
             >
               <UserAvatar account={account} size="small" />
               <span className="header-account-name">{account.name}</span>
-              <ChevronDown size={13} />
             </button>
             {menuOpen && (
               <div className="account-popover" role="menu">
@@ -59,7 +58,7 @@ export function AppHeader({
                     onOpenProfile()
                   }}
                 >
-                  <UserRound size={14} /> Mi perfil
+                  Mi perfil
                 </button>
                 <button
                   className="secondary-button"
@@ -67,7 +66,7 @@ export function AppHeader({
                   disabled={signingOut}
                   onClick={onSignOut}
                 >
-                  <LogOut size={14} /> {signingOut ? 'Cerrando sesión…' : 'Cerrar sesión'}
+                  {signingOut ? 'Cerrando sesión…' : 'Cerrar sesión'}
                 </button>
               </div>
             )}
@@ -82,7 +81,7 @@ export function AppHeader({
               Crear cuenta
             </button>
             <button className="primary-button" onClick={onSignIn}>
-              <LogIn size={14} /> Iniciar sesión
+              Iniciar sesión
             </button>
           </>
         )}

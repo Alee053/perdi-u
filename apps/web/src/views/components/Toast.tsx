@@ -1,4 +1,4 @@
-import { CheckCircle2, CircleAlert, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import type { Notice } from '../../presenters/app/notice.presenter'
 
 export function Toast({ notice, onClose }: { notice: Notice; onClose: () => void }) {
@@ -7,7 +7,7 @@ export function Toast({ notice, onClose }: { notice: Notice; onClose: () => void
       className={'toast' + (notice.error ? ' toast-error' : '')}
       role={notice.error ? 'alert' : 'status'}
     >
-      {notice.error ? <CircleAlert size={16} /> : <CheckCircle2 size={16} />} {notice.message}
+      {notice.message}
       <button onClick={onClose} aria-label="Cerrar aviso">
         <X size={14} />
       </button>

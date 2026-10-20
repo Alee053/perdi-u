@@ -1,4 +1,4 @@
-import { Heart, MapPin } from 'lucide-react'
+import { Heart } from 'lucide-react'
 import type { ReportCard as ReportCardView } from '../../presenters/reports/report-card'
 
 type ReportCardProps = {
@@ -19,7 +19,6 @@ export function ReportCard({ report, saved, onSave, onOpen }: ReportCardProps) {
         >
           <img src={report.image} alt="" loading="lazy" />
         </button>
-        <span className={'status-badge ' + report.tone}>{report.badge}</span>
         <button
           className={'save-button' + (saved ? ' saved' : '')}
           onClick={onSave}
@@ -30,24 +29,16 @@ export function ReportCard({ report, saved, onSave, onOpen }: ReportCardProps) {
       </div>
       <div className="card-content">
         <span className="card-meta">
-          {report.category} · {report.posted}
+          <span className={'status-text ' + report.tone}>{report.badge}</span> · {report.category} ·{' '}
+          {report.posted}
         </span>
         <button className="card-title" onClick={onOpen}>
           {report.title}
         </button>
         <p className="card-description">{report.description}</p>
-        <span className="card-location">
-          <MapPin size={13} aria-hidden="true" /> {report.zone}, {report.city}
+        <span className="card-meta">
+          {report.zone}, {report.city} · {report.person}
         </span>
-        <div className="card-footer">
-          <span className="poster-avatar" aria-hidden="true">
-            {report.initials}
-          </span>
-          <span>{report.person}</span>
-          <button className="text-button" onClick={onOpen}>
-            Ver detalle
-          </button>
-        </div>
       </div>
     </article>
   )

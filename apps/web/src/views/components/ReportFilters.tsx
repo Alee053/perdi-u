@@ -1,4 +1,3 @@
-import { Search } from 'lucide-react'
 import type { FilterSelection } from '../../presenters/catalog/filters.presenter'
 
 type FilterActions = {
@@ -24,16 +23,14 @@ export function ReportFilters({
   return (
     <>
       {withSearch && (
-        <label className="search-field">
-          <Search size={16} aria-hidden="true" />
-          <input
-            value={selection.search}
-            onChange={(event) => actions.setSearch(event.target.value)}
-            placeholder="Buscar por nombre o descripción"
-            aria-label="Buscar reportes"
-            maxLength={200}
-          />
-        </label>
+        <input
+          className="search-field"
+          value={selection.search}
+          onChange={(event) => actions.setSearch(event.target.value)}
+          placeholder="Buscar por nombre o descripción"
+          aria-label="Buscar reportes"
+          maxLength={200}
+        />
       )}
       <select
         className="select-field"

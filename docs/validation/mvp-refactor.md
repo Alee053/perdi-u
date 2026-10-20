@@ -35,6 +35,10 @@ Caracterización (verde desde el inicio, sin rojo inventado):
 - `pnpm test:e2e`: integración de base de datos 1/1, API 7/7 y recorrido de navegador completo en escritorio y móvil, sin cambios en `scripts/browser-catalog.mjs`.
 - Capturas manuales de resumen, mapa, detalle, ingreso y menú móvil: sin errores de página ni desborde horizontal. Revelaron tres defectos de estilo (botón de guardar sobre la foto, espacio en la marca, íconos de los pines del mapa), corregidos antes del E2E final.
 
+### Segunda simplificación visual
+
+Cambios de vista y estilos sin nuevo comportamiento; los presenters solo perdieron campos que ya no se mostraban (`initials`, `share`, `pet`). `pnpm test` registró el verde del refactor (`testId` 24, 1792510528459: 78/78). Después: `pnpm check:boundaries`, typecheck web, `pnpm test:e2e` completo en verde y capturas de resumen, detalle y móvil sin errores ni desborde.
+
 ## Límites
 
 - El formulario de publicación y «Mis reportes» requieren sesión; se verificaron con pruebas de presenter, no con un recorrido de navegador autenticado (`pnpm test:auth` cubre Supabase Auth sin interfaz).

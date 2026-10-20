@@ -1,4 +1,3 @@
-import { MapPin, PawPrint } from 'lucide-react'
 import type { MapPin as MapPinView } from '../../presenters/reports/reports.presenter'
 
 type MapViewProps = {
@@ -26,8 +25,7 @@ export function MapView({ pins, onOpen }: MapViewProps) {
           onClick={() => onOpen(pin.id)}
           aria-label={pin.label}
         >
-          {pin.pet ? <PawPrint size={14} /> : <MapPin size={14} />}
-          <span>{pin.number}</span>
+          {pin.number}
         </button>
       ))}
       <span className="map-caption">Mapa ilustrativo · datos de demostración</span>

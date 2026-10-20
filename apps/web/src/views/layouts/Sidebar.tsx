@@ -1,20 +1,6 @@
-import {
-  Bookmark,
-  ClipboardList,
-  House,
-  LogIn,
-  Map,
-  PawPrint,
-  Plus,
-  Search,
-  ShieldCheck,
-  UserRound,
-  X,
-} from 'lucide-react'
-import type { ReactNode } from 'react'
+import { X } from 'lucide-react'
 import type { Section } from '../../presenters/app/sections'
 import type { AccountView } from '../../presenters/app/shell.presenter'
-import { UserAvatar } from '../components/UserAvatar'
 
 type SidebarProps = {
   section: Section
@@ -26,30 +12,15 @@ type SidebarProps = {
   onSignIn: () => void
 }
 
-const groups: { label: string; items: { section: Section; label: string; icon: ReactNode }[] }[] = [
-  {
-    label: 'General',
-    items: [
-      { section: 'overview', label: 'Resumen', icon: <House size={17} /> },
-      { section: 'explore', label: 'Explorar reportes', icon: <Search size={17} /> },
-      { section: 'map', label: 'Mapa', icon: <Map size={17} /> },
-    ],
-  },
-  {
-    label: 'Gestión',
-    items: [
-      { section: 'publish', label: 'Publicar reporte', icon: <Plus size={17} /> },
-      { section: 'my-reports', label: 'Mis reportes', icon: <ClipboardList size={17} /> },
-      { section: 'saved', label: 'Guardados', icon: <Bookmark size={17} /> },
-    ],
-  },
-  {
-    label: 'Cuenta',
-    items: [
-      { section: 'profile', label: 'Mi perfil', icon: <UserRound size={17} /> },
-      { section: 'safety', label: 'Seguridad y privacidad', icon: <ShieldCheck size={17} /> },
-    ],
-  },
+const items: { section: Section; label: string }[] = [
+  { section: 'overview', label: 'Resumen' },
+  { section: 'explore', label: 'Explorar reportes' },
+  { section: 'map', label: 'Mapa' },
+  { section: 'publish', label: 'Publicar reporte' },
+  { section: 'my-reports', label: 'Mis reportes' },
+  { section: 'saved', label: 'Guardados' },
+  { section: 'profile', label: 'Mi perfil' },
+  { section: 'safety', label: 'Seguridad y privacidad' },
 ]
 
 export function Sidebar({
@@ -74,53 +45,34 @@ export function Sidebar({
           onClick={() => onNavigate('overview')}
           aria-label="PerdiU, resumen"
         >
-          <span className="brand-mark" aria-hidden="true">
-            <PawPrint size={18} />
-          </span>
-          <span className="brand-word">
-            Perdi<span>U</span>
-          </span>
+          PerdiU
         </button>
         <button className="sidebar-close" aria-label="Cerrar menú" onClick={onClose}>
           <X size={18} />
         </button>
       </div>
       <nav aria-label="Navegación del panel">
-        {groups.map((group) => (
-          <div className="nav-group" key={group.label}>
-            <span className="nav-label">{group.label}</span>
-            {group.items.map((item) => (
-              <button
-                key={item.section}
-                className={'nav-item' + (section === item.section ? ' active' : '')}
-                aria-current={section === item.section ? 'page' : undefined}
-                onClick={() => onNavigate(item.section)}
-              >
-                {item.icon}
-                <span>{item.label}</span>
-                {Boolean(badges[item.section]) && <small>{badges[item.section]}</small>}
-              </button>
-            ))}
-          </div>
+        {items.map((item) => (
+          <button
+            key={item.section}
+            className={'nav-item' + (section === item.section ? ' active' : '')}
+            aria-current={section === item.section ? 'page' : undefined}
+            onClick={() => onNavigate(item.section)}
+          >
+            <span>{item.label}</span>
+            {Boolean(badges[item.section]) && <small>{badges[item.section]}</small>}
+          </button>
         ))}
       </nav>
       {account ? (
         <button className="sidebar-user" onClick={() => onNavigate('profile')}>
-          <UserAvatar account={account} />
-          <span>
-            <b>{account.name}</b>
-            <small>Ver mi perfil</small>
-          </span>
+          <b>{account.name}</b>
+          <small>Ver mi perfil</small>
         </button>
       ) : (
         <button className="sidebar-user" onClick={onSignIn}>
-          <span className="user-avatar" aria-hidden="true">
-            <LogIn size={15} />
-          </span>
-          <span>
-            <b>Invitado</b>
-            <small>Iniciar sesión o crear cuenta</small>
-          </span>
+          <b>Invitado</b>
+          <small>Iniciar sesión o crear cuenta</small>
         </button>
       )}
     </aside>

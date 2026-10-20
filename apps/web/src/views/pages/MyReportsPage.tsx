@@ -1,4 +1,3 @@
-import { CheckCircle2, MapPin, Plus, Trash2 } from 'lucide-react'
 import type { Section } from '../../presenters/app/sections'
 import type { AppView } from '../../presenters/app/useApp'
 import type { OwnFilter } from '../../presenters/reports/reports.presenter'
@@ -36,7 +35,7 @@ export function MyReportsPage({
         description={`${myReports.total} publicados · ${myReports.active} activos. Solo tú puedes cambiar su estado.`}
         action={
           <button className="primary-button" onClick={() => onNavigate('publish')}>
-            <Plus size={16} /> Nuevo reporte
+            Nuevo reporte
           </button>
         }
       />
@@ -59,29 +58,29 @@ export function MyReportsPage({
             </button>
             <div>
               <span className="card-meta">
-                <span className={'status-badge inline ' + report.tone}>{report.badge}</span>
+                <span className={'status-text ' + report.tone}>{report.badge}</span> ·{' '}
                 {report.category} · {report.posted}
               </span>
               <button className="card-title" onClick={() => onOpen(report.id)}>
                 {report.title}
               </button>
               <p className="card-description">{report.description}</p>
-              <span className="card-location">
-                <MapPin size={13} aria-hidden="true" /> {report.zone}, {report.city}
+              <span className="card-meta">
+                {report.zone}, {report.city}
               </span>
             </div>
             <div className="managed-actions">
               {!report.resolved && (
                 <button className="secondary-button" onClick={() => onResolve(report.id)}>
-                  <CheckCircle2 size={15} /> Marcar resuelto
+                  Marcar resuelto
                 </button>
               )}
               <button
-                className="icon-button danger"
+                className="text-button danger"
                 onClick={() => onRemove(report.id)}
                 aria-label="Eliminar reporte"
               >
-                <Trash2 size={16} />
+                Eliminar
               </button>
             </div>
           </article>

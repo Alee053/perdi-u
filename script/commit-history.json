@@ -437,12 +437,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "4654f40cc5c01cbc14093fc694d24ea5aeeb7e4b",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-20T15:25:45.000Z",
       "message": "docs(web): documentar la arquitectura MVP y crear la skill mvp-react",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/4654f40cc5c01cbc14093fc694d24ea5aeeb7e4b"
     },
     "stats": {
       "total": 362,
@@ -451,6 +451,25 @@
       "date": "2026-10-20"
     },
     "coverage": 92.25,
+    "test_count": 78,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-20T15:37:15.000Z",
+      "message": "style(web): dejar una interfaz sobria con texto, bordes y tipografía del sistema",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 869,
+      "additions": 255,
+      "deletions": 614,
+      "date": "2026-10-20"
+    },
+    "coverage": 92.17,
     "test_count": 78,
     "failed_tests": 0,
     "conclusion": "success"

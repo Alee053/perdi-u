@@ -157,7 +157,6 @@ test('el mapa aplica la selección visible y numera los puntos', () => {
       top: '30%',
       left: '28%',
       number: 1,
-      pet: false,
     },
   ])
 })
