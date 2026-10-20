@@ -551,12 +551,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "4ad1c7a1dfae3a2e9aecbdd075a8ea991237fe82",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-10-20T04:55:18.000Z",
       "message": "feat(api): guardar WhatsApp de forma privada (#5)\n\nNormalizar espacios, guiones y paréntesis del teléfono antes de persistirlo en report_contacts dentro de la transacción de publicación. La respuesta HTTP y el catálogo público no contienen el contacto.\n\nRED: testId 29; TDDLab timestamp 1792471997299; 54 aprobadas y 1 fallida porque se conservaron los separadores. La prueba HTTP/PG del mismo recorrido también falló: no existía fila privada para el reporte.\n\nGREEN: testId 29; TDDLab timestamp 1792472038850; 55 aprobadas y 0 fallidas. La integración HTTP/PostgreSQL pasó 1/1 y comprobó el valor normalizado en report_contacts y su ausencia de las respuestas públicas. Verificación adicional: pnpm typecheck, pnpm check:docs y pnpm format:check.",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/4ad1c7a1dfae3a2e9aecbdd075a8ea991237fe82"
     },
     "stats": {
       "total": 42,
@@ -566,6 +566,25 @@
     },
     "coverage": 90,
     "test_count": 55,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-10-20T04:56:30.000Z",
+      "message": "feat(catalog): validar formato internacional de WhatsApp (#5)\n\nRechazar contactos que no incluyan el código de país E.164 antes de llamar al repositorio.\n\nRED: testId 30; TDDLab timestamp 1792472141131; 55 aprobadas y 1 fallida porque el número nacional se aceptó.\n\nGREEN: testId 30; TDDLab timestamp 1792472161384; 56 aprobadas y 0 fallidas. Verificación adicional: pnpm typecheck y pnpm format:check. Refactor: no hizo falta.",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 33,
+      "additions": 32,
+      "deletions": 1,
+      "date": "2026-10-20"
+    },
+    "coverage": 90.1,
+    "test_count": 56,
     "failed_tests": 0,
     "conclusion": "success"
   }

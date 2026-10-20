@@ -35,11 +35,17 @@ export class CreateReport {
         'La descripción debe tener al menos 20 caracteres.',
       )
     if (!draft.city.trim()) throw new ReportValidationError('city', 'La ciudad es obligatoria.')
+    const whatsapp = draft.whatsapp.replace(/[\s()-]/g, '')
+    if (!/^\+[1-9]\d{7,14}$/.test(whatsapp))
+      throw new ReportValidationError(
+        'whatsapp',
+        'Incluye el código de país y revisa el número de WhatsApp.',
+      )
     return this.creator.create({
       ...draft,
       title: draft.title.trim(),
       description: draft.description.trim(),
-      whatsapp: draft.whatsapp.replace(/[\s()-]/g, ''),
+      whatsapp,
       ownerId,
       state: 'active',
     })
