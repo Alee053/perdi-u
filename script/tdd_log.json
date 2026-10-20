@@ -326,9 +326,21 @@
     "testId": 16
   },
   {
-    "commitId": "HEAD",
+    "commitId": "934e5c0209df85d87f1aea739a1dffa3dc5b1f3a",
     "commitName": "docs(repo): documentar perfil, revocación de sesión y sus pruebas (#4)",
     "commitTimestamp": 1792449562992,
     "testId": 17
+  },
+  {
+    "commitId": "696fc9ad3e6a99927837aa0ce988a78625576688",
+    "commitName": "chore: improve testing automatino",
+    "commitTimestamp": 1792461838853,
+    "testId": 18
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "chore(repo): integrar main y conservar evidencia TDD\n\nConservar los registros de ambas ramas y resolver sus marcadores HEAD con los SHA de origen. Reasignar el testId local 3 a 18 para evitar colisiones, manteniendo resultados y timestamps.\n\nVerificación: pnpm verify completo, 46 pruebas aprobadas y comprobación de conservación de ambos historiales JSON.",
+    "commitTimestamp": 1792461945849,
+    "testId": 19
   }
 ]

@@ -323,18 +323,56 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "934e5c0209df85d87f1aea739a1dffa3dc5b1f3a",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-19T22:39:20.000Z",
       "message": "docs(repo): documentar perfil, revocación de sesión y sus pruebas (#4)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/934e5c0209df85d87f1aea739a1dffa3dc5b1f3a"
     },
     "stats": {
       "total": 77,
       "additions": 40,
       "deletions": 37,
       "date": "2026-10-19"
+    },
+    "coverage": 89.63,
+    "test_count": 46,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "696fc9ad3e6a99927837aa0ce988a78625576688",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-20T02:03:58.000Z",
+      "message": "chore: improve testing automatino",
+      "url": "https://github.com/Alee053/perdi-u/commit/696fc9ad3e6a99927837aa0ce988a78625576688"
+    },
+    "stats": {
+      "total": 28,
+      "additions": 23,
+      "deletions": 5,
+      "date": "2026-10-20"
+    },
+    "coverage": 88.89,
+    "test_count": 28,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-20T02:05:45.000Z",
+      "message": "chore(repo): integrar main y conservar evidencia TDD\n\nConservar los registros de ambas ramas y resolver sus marcadores HEAD con los SHA de origen. Reasignar el testId local 3 a 18 para evitar colisiones, manteniendo resultados y timestamps.\n\nVerificación: pnpm verify completo, 46 pruebas aprobadas y comprobación de conservación de ambos historiales JSON.",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 3182,
+      "additions": 3046,
+      "deletions": 136,
+      "date": "2026-10-20"
     },
     "coverage": 89.63,
     "test_count": 46,
