@@ -584,9 +584,31 @@
     "testId": 20
   },
   {
-    "commitId": "HEAD",
+    "commitId": "34fd883450d171bb0bfbd5e2c1e9098be2a48556",
     "commitName": "fix(repo): reintentar la limpieza de fixtures temporales en Windows",
     "commitTimestamp": 1792507652000,
     "testId": 20
+  },
+  {
+    "numPassedTests": 54,
+    "failedTests": 1,
+    "numTotalTests": 55,
+    "timestamp": 1792509869000,
+    "success": false,
+    "testId": 21
+  },
+  {
+    "numPassedTests": 55,
+    "failedTests": 0,
+    "numTotalTests": 55,
+    "timestamp": 1792509899000,
+    "success": true,
+    "testId": 21
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "refactor(web): extraer y caracterizar modelos de credenciales y reportes",
+    "commitTimestamp": 1792509900000,
+    "testId": 21
   }
 ]
