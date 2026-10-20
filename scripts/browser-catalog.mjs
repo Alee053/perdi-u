@@ -415,9 +415,11 @@ try {
           body: JSON.stringify({ phone: '59170000001' }),
         })
   })
-  await detailPage.route('https://wa.me/**', (route) =>
-    route.fulfill({ status: 200, contentType: 'text/plain', body: 'WhatsApp link verified.' }),
-  )
+  await detailPage
+    .context()
+    .route('https://wa.me/**', (route) =>
+      route.fulfill({ status: 200, contentType: 'text/plain', body: 'WhatsApp link verified.' }),
+    )
   await detailPage
     .getByRole('dialog')
     .getByRole('button', { name: 'Contactar por WhatsApp' })

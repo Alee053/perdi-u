@@ -513,12 +513,12 @@
     "conclusion": "failure"
   },
   {
-    "sha": "HEAD",
+    "sha": "78c8ac68ef3506b23d123c7812c1047f59d44db1",
     "author": "AMIRA DEL ROCÍO CHOQUE CARRASCO",
     "commit": {
       "date": "2026-10-20T05:25:29.000Z",
       "message": "test(web): scope contact alert assertion to detail (#7)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/78c8ac68ef3506b23d123c7812c1047f59d44db1"
     },
     "stats": {
       "total": 1,
@@ -530,5 +530,24 @@
     "test_count": 53,
     "failed_tests": 0,
     "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "AMIRA DEL ROCÍO CHOQUE CARRASCO",
+    "commit": {
+      "date": "2026-10-20T05:27:58.000Z",
+      "message": "test(web): intercept WhatsApp popup in browser context (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 8,
+      "additions": 5,
+      "deletions": 3,
+      "date": "2026-10-20"
+    },
+    "coverage": 86.63,
+    "test_count": 53,
+    "failed_tests": 2,
+    "conclusion": "failure"
   }
 ]

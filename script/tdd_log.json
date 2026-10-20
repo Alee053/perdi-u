@@ -434,9 +434,15 @@
     "testId": 26
   },
   {
-    "commitId": "HEAD",
+    "commitId": "78c8ac68ef3506b23d123c7812c1047f59d44db1",
     "commitName": "test(web): scope contact alert assertion to detail (#7)",
     "commitTimestamp": 1792473929946,
     "testId": 27
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(web): intercept WhatsApp popup in browser context (#7)",
+    "commitTimestamp": 1792474079632,
+    "testId": 28
   }
 ]
