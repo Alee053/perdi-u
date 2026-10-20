@@ -626,7 +626,7 @@ try {
     .click()
   await page.getByRole('heading', { name: 'Todavía no hay reportes' }).waitFor()
   assert.equal(await page.locator('.report-card').count(), 0)
-  assert.deepEqual(pageErrors, [])
+  assert.deepEqual(pageErrors, [], `Errores JavaScript del navegador: ${pageErrors.join('\n')}`)
   console.log(
     'Navegador: catálogo real, detalle por enlace/recarga/Atrás, retorno de login, apertura WhatsApp sin envío, privacidad, búsqueda/filtros, error/reintento, límite de 50 y móvil/escritorio verificados.',
   )

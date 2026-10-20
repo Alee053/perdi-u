@@ -452,9 +452,15 @@
     "testId": 29
   },
   {
-    "commitId": "HEAD",
+    "commitId": "ff82a4ed850754cc13af2df41ae8631294598e9b",
     "commitName": "test(web): reseed isolated database before browser checks (#7)",
     "commitTimestamp": 1792474424734,
     "testId": 30
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(web): report browser errors on acceptance failure (#7)",
+    "commitTimestamp": 1792474647247,
+    "testId": 31
   }
 ]
