@@ -416,9 +416,15 @@
     "testId": 23
   },
   {
-    "commitId": "HEAD",
+    "commitId": "c2311b0d16dfe9236502849351d7877066f9d3ee",
     "commitName": "test(web): reopen login after returning to report (#7)",
     "commitTimestamp": 1792473544183,
     "testId": 24
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(web): target the password input in browser flow (#7)",
+    "commitTimestamp": 1792473663913,
+    "testId": 25
   }
 ]

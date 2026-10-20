@@ -422,7 +422,7 @@ try {
     .getByRole('button', { name: 'Contactar por WhatsApp' })
     .click()
   await detailPage.getByLabel('Correo electrónico').fill('persona@example.test')
-  await detailPage.getByLabel('Contraseña').fill('Correcta-123')
+  await detailPage.getByPlaceholder('Tu contraseña').fill('Correcta-123')
   await detailPage.getByRole('button', { name: 'Iniciar sesión', exact: true }).click()
   await detailPage
     .getByRole('dialog')

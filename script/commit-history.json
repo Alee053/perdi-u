@@ -456,17 +456,36 @@
     "conclusion": "failure"
   },
   {
-    "sha": "HEAD",
+    "sha": "c2311b0d16dfe9236502849351d7877066f9d3ee",
     "author": "AMIRA DEL ROCÍO CHOQUE CARRASCO",
     "commit": {
       "date": "2026-10-20T05:19:03.000Z",
       "message": "test(web): reopen login after returning to report (#7)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/c2311b0d16dfe9236502849351d7877066f9d3ee"
     },
     "stats": {
       "total": 4,
       "additions": 4,
       "deletions": 0,
+      "date": "2026-10-20"
+    },
+    "coverage": 86.63,
+    "test_count": 53,
+    "failed_tests": 2,
+    "conclusion": "failure"
+  },
+  {
+    "sha": "HEAD",
+    "author": "AMIRA DEL ROCÍO CHOQUE CARRASCO",
+    "commit": {
+      "date": "2026-10-20T05:21:03.000Z",
+      "message": "test(web): target the password input in browser flow (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 2,
+      "additions": 1,
+      "deletions": 1,
       "date": "2026-10-20"
     },
     "coverage": 86.63,
