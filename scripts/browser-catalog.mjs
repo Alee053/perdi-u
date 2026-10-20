@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict'
-import { spawn } from 'node:child_process'
+import { execFileSync } from 'node:child_process'
+// cross-spawn resolves pnpm's .cmd shim on Windows without passing arguments through a shell.
+import { spawn } from 'cross-spawn'
 import { existsSync } from 'node:fs'
 import { mkdir, readFile } from 'node:fs/promises'
 import { createServer } from 'node:net'
@@ -40,6 +42,13 @@ async function stop(child) {
   )
     return
   const exited = new Promise((resolve) => child.once('exit', resolve))
+  // Windows has no POSIX process groups: end the whole tree with taskkill instead.
+  if (process.platform === 'win32') {
+    try {
+      execFileSync('taskkill', ['/pid', String(child.pid), '/T', '/F'], { stdio: 'ignore' })
+    } catch {}
+    return void (await exited)
+  }
   try {
     process.kill(-child.pid, 'SIGTERM')
   } catch (error) {
@@ -88,7 +97,14 @@ const apiPort = await freePort()
 const webPort = await freePort()
 const apiUrl = `http://127.0.0.1:${apiPort}`
 const webUrl = `http://127.0.0.1:${webPort}`
-const apiEnv = { DATABASE_URL: databaseUrl, PORT: String(apiPort), HOST: '127.0.0.1' }
+// The public catalog never consults Auth; these values only satisfy the API's configuration.
+const apiEnv = {
+  DATABASE_URL: databaseUrl,
+  PORT: String(apiPort),
+  HOST: '127.0.0.1',
+  AUTH_JWKS_URL: 'http://127.0.0.1:9/.well-known/jwks.json',
+  AUTH_JWT_ISSUER: 'http://127.0.0.1/auth',
+}
 const startApi = () =>
   start(process.execPath, ['dist/main.js'], new URL('../apps/api/', import.meta.url), apiEnv)
 let api
@@ -157,7 +173,14 @@ async function verifySearch(page, size) {
     .locator('.empty-state')
     .getByRole('button', { name: 'Publicar reporte', exact: true })
     .click()
-  await page.getByRole('heading', { name: 'Publicar reporte', exact: true }).waitFor()
+  // Publishing requires an account: anonymous visitors are sent to the login screen.
+  await page.getByRole('heading', { name: 'Iniciar sesión', exact: true }).waitFor()
+  await page.getByRole('button', { name: 'Volver al catálogo', exact: true }).click()
+  // The profile shows private account data, so it asks for a session as well.
+  if (size === 'mobile') await page.getByRole('button', { name: 'Abrir menú' }).click()
+  await page.getByRole('navigation').getByRole('button', { name: 'Mi perfil' }).click()
+  await page.getByRole('heading', { name: 'Iniciar sesión', exact: true }).waitFor()
+  await page.getByRole('button', { name: 'Volver al catálogo', exact: true }).click()
   if (size === 'mobile') await page.getByRole('button', { name: 'Abrir menú' }).click()
   await page
     .getByRole('navigation')

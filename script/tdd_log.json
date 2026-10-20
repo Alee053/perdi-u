@@ -34,9 +34,313 @@
     "testId": 2
   },
   {
-    "commitId": "HEAD",
+    "numPassedTests": 25,
+    "failedTests": 4,
+    "numTotalTests": 29,
+    "timestamp": 1792382137689,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 26,
+    "failedTests": 3,
+    "numTotalTests": 29,
+    "timestamp": 1792382190634,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 27,
+    "failedTests": 5,
+    "numTotalTests": 32,
+    "timestamp": 1792382235981,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 29,
+    "failedTests": 3,
+    "numTotalTests": 32,
+    "timestamp": 1792382253035,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 29,
+    "failedTests": 5,
+    "numTotalTests": 34,
+    "timestamp": 1792382870848,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 31,
+    "failedTests": 3,
+    "numTotalTests": 34,
+    "timestamp": 1792382895858,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 31,
+    "failedTests": 5,
+    "numTotalTests": 36,
+    "timestamp": 1792382914704,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 33,
+    "failedTests": 3,
+    "numTotalTests": 36,
+    "timestamp": 1792382934808,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 33,
+    "failedTests": 6,
+    "numTotalTests": 39,
+    "timestamp": 1792382955435,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 36,
+    "failedTests": 3,
+    "numTotalTests": 39,
+    "timestamp": 1792382988363,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 36,
+    "failedTests": 4,
+    "numTotalTests": 40,
+    "timestamp": 1792383008987,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 37,
+    "failedTests": 3,
+    "numTotalTests": 40,
+    "timestamp": 1792383027137,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 37,
+    "failedTests": 4,
+    "numTotalTests": 41,
+    "timestamp": 1792383073830,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 38,
+    "failedTests": 3,
+    "numTotalTests": 41,
+    "timestamp": 1792383088233,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 37,
+    "failedTests": 4,
+    "numTotalTests": 41,
+    "timestamp": 1792384019655,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "numPassedTests": 38,
+    "failedTests": 3,
+    "numTotalTests": 41,
+    "timestamp": 1792384059755,
+    "success": false,
+    "testId": 3
+  },
+  {
+    "commitId": "b1c1eb795a11a963939ceb87309bb7c369890e62",
+    "commitName": "chore(repo): añadir jose y @supabase/auth-js para Auth (#3)",
+    "commitTimestamp": 1792386252426,
+    "testId": 3
+  },
+  {
+    "commitId": "3df0dc2876ce3139dbc0d3f824112d5794e8da87",
+    "commitName": "feat(database): ejecutar Supabase Auth self-hosted sobre PostgreSQL con Compose (#3)",
+    "commitTimestamp": 1792386333444,
+    "testId": 4
+  },
+  {
+    "commitId": "1609494a80564bf34ac8d4727628c30ddc037d28",
+    "commitName": "feat(api): verificar JWT de Supabase Auth y proteger GET /me (#3)",
+    "commitTimestamp": 1792386357930,
+    "testId": 5
+  },
+  {
+    "commitId": "c82e35c376135a087544e7eddb8651f1a14e89e9",
+    "commitName": "feat(web): registrar, iniciar y cerrar sesión con correo en la web (#3)",
+    "commitTimestamp": 1792386379665,
+    "testId": 6
+  },
+  {
+    "commitId": "c7b3e84f012c5f2ae5450315b873455fb2b43ff2",
+    "commitName": "test(repo): aceptar Auth real con Compose desechable y ajustar e2e (#3)",
+    "commitTimestamp": 1792386394926,
+    "testId": 7
+  },
+  {
+    "commitId": "b1fca454df720975714a564384d0a36e9dd5ddd0",
+    "commitName": "docs(repo): documentar autenticación, configuración y pruebas de Auth (#3)",
+    "commitTimestamp": 1792386404637,
+    "testId": 8
+  },
+  {
+    "commitId": "74e799ac18f1db9fab9b0866c4f382715d9bb284",
+    "commitName": "test(repo): ejecutar las pruebas de TDDLab y documentos también en Windows (#4)",
+    "commitTimestamp": 1792448405844,
+    "testId": 9
+  },
+  {
+    "numPassedTests": 41,
+    "failedTests": 1,
+    "numTotalTests": 42,
+    "timestamp": 1792448478466,
+    "success": false,
+    "testId": 10
+  },
+  {
+    "numPassedTests": 42,
+    "failedTests": 0,
+    "numTotalTests": 42,
+    "timestamp": 1792448507393,
+    "success": true,
+    "testId": 10
+  },
+  {
+    "commitId": "e8bf54ce7bfb1fcecb1bdbca8d3dafa38b2cdd0c",
+    "commitName": "test(repo): filtrar escenarios HTTP de Auth y lanzar pnpm en Windows (#4)",
+    "commitTimestamp": 1792448695906,
+    "testId": 10
+  },
+  {
+    "commitId": "0f0db447e6248f186a5f60d69ff2bf478f681f53",
+    "commitName": "feat(api): revocar la sesión actual y rechazar sus tokens tras reiniciar (#4)",
+    "commitTimestamp": 1792448720113,
+    "testId": 11
+  },
+  {
+    "commitId": "0fcfabd51352c1f7760e28aa7b07c65d9c8a10d0",
+    "commitName": "feat(api): incluir nombre y foto del perfil propio en GET /me (#4)",
+    "commitTimestamp": 1792448824514,
+    "testId": 12
+  },
+  {
+    "numPassedTests": 42,
+    "failedTests": 1,
+    "numTotalTests": 43,
+    "timestamp": 1792448867375,
+    "success": false,
+    "testId": 13
+  },
+  {
+    "numPassedTests": 43,
+    "failedTests": 0,
+    "numTotalTests": 43,
+    "timestamp": 1792448899352,
+    "success": true,
+    "testId": 13
+  },
+  {
+    "numPassedTests": 43,
+    "failedTests": 1,
+    "numTotalTests": 44,
+    "timestamp": 1792448926088,
+    "success": false,
+    "testId": 13
+  },
+  {
+    "numPassedTests": 44,
+    "failedTests": 0,
+    "numTotalTests": 44,
+    "timestamp": 1792448952105,
+    "success": true,
+    "testId": 13
+  },
+  {
+    "commitId": "dcf9c1597ed8fda4665a1ba24508d0d193aaa002",
+    "commitName": "feat(web): revocar la sesión en la API y leer el perfil propio sin caché (#4)",
+    "commitTimestamp": 1792448984629,
+    "testId": 13
+  },
+  {
+    "numPassedTests": 43,
+    "failedTests": 2,
+    "numTotalTests": 45,
+    "timestamp": 1792449020046,
+    "success": false,
+    "testId": 14
+  },
+  {
+    "numPassedTests": 45,
+    "failedTests": 0,
+    "numTotalTests": 45,
+    "timestamp": 1792449046730,
+    "success": true,
+    "testId": 14
+  },
+  {
+    "numPassedTests": 45,
+    "failedTests": 1,
+    "numTotalTests": 46,
+    "timestamp": 1792449080492,
+    "success": false,
+    "testId": 14
+  },
+  {
+    "numPassedTests": 46,
+    "failedTests": 0,
+    "numTotalTests": 46,
+    "timestamp": 1792449104188,
+    "success": true,
+    "testId": 14
+  },
+  {
+    "commitId": "913c0beade300b21fcba5ec16051346dcbe5047e",
+    "commitName": "feat(web): cerrar primero la sesión en la API y proteger «Mi perfil» (#4)",
+    "commitTimestamp": 1792449134451,
+    "testId": 14
+  },
+  {
+    "commitId": "3f394b1e315f1d887a6ad7ccb6027dfaec2cb3df",
+    "commitName": "feat(web): mostrar «Mi perfil» con avatar genérico, acceso a mis reportes y cierre seguro (#4)",
+    "commitTimestamp": 1792449450628,
+    "testId": 15
+  },
+  {
+    "commitId": "7291cb6c1988fe8f43698bfee340a0b4d8a2e77c",
+    "commitName": "test(repo): aceptar perfil privado y revocación en la API, también desde Windows (#4)",
+    "commitTimestamp": 1792449517074,
+    "testId": 16
+  },
+  {
+    "commitId": "934e5c0209df85d87f1aea739a1dffa3dc5b1f3a",
+    "commitName": "docs(repo): documentar perfil, revocación de sesión y sus pruebas (#4)",
+    "commitTimestamp": 1792449562992,
+    "testId": 17
+  },
+  {
+    "commitId": "696fc9ad3e6a99927837aa0ce988a78625576688",
     "commitName": "chore: improve testing automatino",
     "commitTimestamp": 1792461838853,
-    "testId": 3
+    "testId": 18
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "chore(repo): integrar main y conservar evidencia TDD\n\nConservar los registros de ambas ramas y resolver sus marcadores HEAD con los SHA de origen. Reasignar el testId local 3 a 18 para evitar colisiones, manteniendo resultados y timestamps.\n\nVerificación: pnpm verify completo, 46 pruebas aprobadas y comprobación de conservación de ambos historiales JSON.",
+    "commitTimestamp": 1792461945849,
+    "testId": 19
   }
 ]

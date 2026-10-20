@@ -6,6 +6,8 @@ module.exports = {
   // Use tsc's output for Nest decorators while tests retain the source's types.
   moduleNameMapper: {
     '^\\.\\./src/app\\.js$': '<rootDir>/apps/api/dist/app.js',
+    // Same module instances as the compiled guard, so its error classes are recognised.
+    '^\\.\\./src/auth/access-token\\.js$': '<rootDir>/apps/api/dist/auth/access-token.js',
     ...unit.moduleNameMapper,
   },
   testMatch: [

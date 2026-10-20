@@ -1,4 +1,5 @@
-import { spawn } from 'node:child_process'
+// cross-spawn resolves pnpm's .cmd shim on Windows without passing arguments through a shell.
+import { spawn } from 'cross-spawn'
 import { randomBytes } from 'node:crypto'
 import { parseArgs } from 'node:util'
 
@@ -97,6 +98,7 @@ try {
         `--testNamePattern=${values['test-name-pattern']}`,
         '--runTestsByPath',
         'apps/api/test/catalog.integration.ts',
+        'apps/api/test/auth.integration.ts',
       ],
       env,
     )

@@ -57,12 +57,297 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "b1c1eb795a11a963939ceb87309bb7c369890e62",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T05:04:09.000Z",
+      "message": "chore(repo): añadir jose y @supabase/auth-js para Auth (#3)",
+      "url": "https://github.com/Alee053/perdi-u/commit/b1c1eb795a11a963939ceb87309bb7c369890e62"
+    },
+    "stats": {
+      "total": 37,
+      "additions": 29,
+      "deletions": 8,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.27,
+    "test_count": 28,
+    "failed_tests": 3,
+    "conclusion": "failure"
+  },
+  {
+    "sha": "3df0dc2876ce3139dbc0d3f824112d5794e8da87",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T05:05:30.000Z",
+      "message": "feat(database): ejecutar Supabase Auth self-hosted sobre PostgreSQL con Compose (#3)",
+      "url": "https://github.com/Alee053/perdi-u/commit/3df0dc2876ce3139dbc0d3f824112d5794e8da87"
+    },
+    "stats": {
+      "total": 137,
+      "additions": 136,
+      "deletions": 1,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.27,
+    "test_count": 28,
+    "failed_tests": 3,
+    "conclusion": "failure"
+  },
+  {
+    "sha": "1609494a80564bf34ac8d4727628c30ddc037d28",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T05:05:53.000Z",
+      "message": "feat(api): verificar JWT de Supabase Auth y proteger GET /me (#3)",
+      "url": "https://github.com/Alee053/perdi-u/commit/1609494a80564bf34ac8d4727628c30ddc037d28"
+    },
+    "stats": {
+      "total": 500,
+      "additions": 487,
+      "deletions": 13,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.95,
+    "test_count": 32,
+    "failed_tests": 3,
+    "conclusion": "failure"
+  },
+  {
+    "sha": "c82e35c376135a087544e7eddb8651f1a14e89e9",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T05:06:17.000Z",
+      "message": "feat(web): registrar, iniciar y cerrar sesión con correo en la web (#3)",
+      "url": "https://github.com/Alee053/perdi-u/commit/c82e35c376135a087544e7eddb8651f1a14e89e9"
+    },
+    "stats": {
+      "total": 1366,
+      "additions": 1317,
+      "deletions": 49,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.57,
+    "test_count": 41,
+    "failed_tests": 3,
+    "conclusion": "failure"
+  },
+  {
+    "sha": "c7b3e84f012c5f2ae5450315b873455fb2b43ff2",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T05:06:33.000Z",
+      "message": "test(repo): aceptar Auth real con Compose desechable y ajustar e2e (#3)",
+      "url": "https://github.com/Alee053/perdi-u/commit/c7b3e84f012c5f2ae5450315b873455fb2b43ff2"
+    },
+    "stats": {
+      "total": 258,
+      "additions": 256,
+      "deletions": 2,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.57,
+    "test_count": 41,
+    "failed_tests": 3,
+    "conclusion": "failure"
+  },
+  {
+    "sha": "b1fca454df720975714a564384d0a36e9dd5ddd0",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T05:06:43.000Z",
+      "message": "docs(repo): documentar autenticación, configuración y pruebas de Auth (#3)",
+      "url": "https://github.com/Alee053/perdi-u/commit/b1fca454df720975714a564384d0a36e9dd5ddd0"
+    },
+    "stats": {
+      "total": 187,
+      "additions": 147,
+      "deletions": 40,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.57,
+    "test_count": 41,
+    "failed_tests": 3,
+    "conclusion": "failure"
+  },
+  {
+    "sha": "74e799ac18f1db9fab9b0866c4f382715d9bb284",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T22:20:04.000Z",
+      "message": "test(repo): ejecutar las pruebas de TDDLab y documentos también en Windows (#4)",
+      "url": "https://github.com/Alee053/perdi-u/commit/74e799ac18f1db9fab9b0866c4f382715d9bb284"
+    },
+    "stats": {
+      "total": 13,
+      "additions": 10,
+      "deletions": 3,
+      "date": "2026-10-19"
+    },
+    "coverage": 88.93,
+    "test_count": 41,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "e8bf54ce7bfb1fcecb1bdbca8d3dafa38b2cdd0c",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T22:24:54.000Z",
+      "message": "test(repo): filtrar escenarios HTTP de Auth y lanzar pnpm en Windows (#4)",
+      "url": "https://github.com/Alee053/perdi-u/commit/e8bf54ce7bfb1fcecb1bdbca8d3dafa38b2cdd0c"
+    },
+    "stats": {
+      "total": 4,
+      "additions": 3,
+      "deletions": 1,
+      "date": "2026-10-19"
+    },
+    "coverage": 89.24,
+    "test_count": 42,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "0f0db447e6248f186a5f60d69ff2bf478f681f53",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T22:25:19.000Z",
+      "message": "feat(api): revocar la sesión actual y rechazar sus tokens tras reiniciar (#4)",
+      "url": "https://github.com/Alee053/perdi-u/commit/0f0db447e6248f186a5f60d69ff2bf478f681f53"
+    },
+    "stats": {
+      "total": 161,
+      "additions": 158,
+      "deletions": 3,
+      "date": "2026-10-19"
+    },
+    "coverage": 89.24,
+    "test_count": 42,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "0fcfabd51352c1f7760e28aa7b07c65d9c8a10d0",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T22:27:03.000Z",
+      "message": "feat(api): incluir nombre y foto del perfil propio en GET /me (#4)",
+      "url": "https://github.com/Alee053/perdi-u/commit/0fcfabd51352c1f7760e28aa7b07c65d9c8a10d0"
+    },
+    "stats": {
+      "total": 111,
+      "additions": 105,
+      "deletions": 6,
+      "date": "2026-10-19"
+    },
+    "coverage": 89.24,
+    "test_count": 42,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "dcf9c1597ed8fda4665a1ba24508d0d193aaa002",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T22:29:43.000Z",
+      "message": "feat(web): revocar la sesión en la API y leer el perfil propio sin caché (#4)",
+      "url": "https://github.com/Alee053/perdi-u/commit/dcf9c1597ed8fda4665a1ba24508d0d193aaa002"
+    },
+    "stats": {
+      "total": 80,
+      "additions": 78,
+      "deletions": 2,
+      "date": "2026-10-19"
+    },
+    "coverage": 89.6,
+    "test_count": 44,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "913c0beade300b21fcba5ec16051346dcbe5047e",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T22:32:13.000Z",
+      "message": "feat(web): cerrar primero la sesión en la API y proteger «Mi perfil» (#4)",
+      "url": "https://github.com/Alee053/perdi-u/commit/913c0beade300b21fcba5ec16051346dcbe5047e"
+    },
+    "stats": {
+      "total": 65,
+      "additions": 60,
+      "deletions": 5,
+      "date": "2026-10-19"
+    },
+    "coverage": 89.63,
+    "test_count": 46,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "3f394b1e315f1d887a6ad7ccb6027dfaec2cb3df",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T22:37:29.000Z",
+      "message": "feat(web): mostrar «Mi perfil» con avatar genérico, acceso a mis reportes y cierre seguro (#4)",
+      "url": "https://github.com/Alee053/perdi-u/commit/3f394b1e315f1d887a6ad7ccb6027dfaec2cb3df"
+    },
+    "stats": {
+      "total": 276,
+      "additions": 253,
+      "deletions": 23,
+      "date": "2026-10-19"
+    },
+    "coverage": 89.63,
+    "test_count": 46,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "7291cb6c1988fe8f43698bfee340a0b4d8a2e77c",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T22:38:35.000Z",
+      "message": "test(repo): aceptar perfil privado y revocación en la API, también desde Windows (#4)",
+      "url": "https://github.com/Alee053/perdi-u/commit/7291cb6c1988fe8f43698bfee340a0b4d8a2e77c"
+    },
+    "stats": {
+      "total": 26,
+      "additions": 25,
+      "deletions": 1,
+      "date": "2026-10-19"
+    },
+    "coverage": 89.63,
+    "test_count": 46,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "934e5c0209df85d87f1aea739a1dffa3dc5b1f3a",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-19T22:39:20.000Z",
+      "message": "docs(repo): documentar perfil, revocación de sesión y sus pruebas (#4)",
+      "url": "https://github.com/Alee053/perdi-u/commit/934e5c0209df85d87f1aea739a1dffa3dc5b1f3a"
+    },
+    "stats": {
+      "total": 77,
+      "additions": 40,
+      "deletions": 37,
+      "date": "2026-10-19"
+    },
+    "coverage": 89.63,
+    "test_count": 46,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "696fc9ad3e6a99927837aa0ce988a78625576688",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-10-20T02:03:58.000Z",
       "message": "chore: improve testing automatino",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/696fc9ad3e6a99927837aa0ce988a78625576688"
     },
     "stats": {
       "total": 28,
@@ -72,6 +357,25 @@
     },
     "coverage": 88.89,
     "test_count": 28,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-20T02:05:45.000Z",
+      "message": "chore(repo): integrar main y conservar evidencia TDD\n\nConservar los registros de ambas ramas y resolver sus marcadores HEAD con los SHA de origen. Reasignar el testId local 3 a 18 para evitar colisiones, manteniendo resultados y timestamps.\n\nVerificación: pnpm verify completo, 46 pruebas aprobadas y comprobación de conservación de ambos historiales JSON.",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 3182,
+      "additions": 3046,
+      "deletions": 136,
+      "date": "2026-10-20"
+    },
+    "coverage": 89.63,
+    "test_count": 46,
     "failed_tests": 0,
     "conclusion": "success"
   }

@@ -3,15 +3,19 @@ import {
   Bookmark,
   ClipboardList,
   House,
+  LogIn,
   Map,
   PawPrint,
   Plus,
   Search,
   ShieldCheck,
+  UserRound,
   X,
 } from 'lucide-react'
 import type { ReactNode } from 'react'
+import type { AccountIdentity } from '@perdiu/contracts'
 import type { Section } from '../../types'
+import { UserAvatar, accountName } from '../common/UserAvatar'
 
 type SidebarProps = {
   section: Section
@@ -21,7 +25,8 @@ type SidebarProps = {
   savedCount: number
   onNavigate: (section: Section) => void
   onClose: () => void
-  onNotify: (message: string) => void
+  account: AccountIdentity | null
+  onSignIn: () => void
 }
 
 export function Sidebar({
@@ -32,7 +37,8 @@ export function Sidebar({
   savedCount,
   onNavigate,
   onClose,
-  onNotify,
+  account,
+  onSignIn,
 }: SidebarProps) {
   const go = (next: Section) => {
     onNavigate(next)
@@ -107,6 +113,12 @@ export function Sidebar({
         />
         <div className="nav-label nav-label-spaced">CUENTA</div>
         <NavItem
+          active={section === 'profile'}
+          icon={<UserRound size={17} />}
+          label="Mi perfil"
+          onClick={() => go('profile')}
+        />
+        <NavItem
           active={section === 'safety'}
           icon={<ShieldCheck size={17} />}
           label="Seguridad y privacidad"
@@ -127,17 +139,26 @@ export function Sidebar({
           <ArrowUpRight size={15} />
         </button>
       </div>
-      <button
-        className="sidebar-user"
-        onClick={() => onNotify('Estás usando el perfil de demostración de PerdiU.')}
-      >
-        <span className="user-avatar">S</span>
-        <span className="user-info">
-          <b>Santiago Demo</b>
-          <small>Cuenta de demostración</small>
-        </span>
-        <span className="user-more">•••</span>
-      </button>
+      {account ? (
+        <button className="sidebar-user" onClick={() => go('profile')}>
+          <UserAvatar account={account} />
+          <span className="user-info">
+            <b>{accountName(account)}</b>
+            <small>Ver mi perfil</small>
+          </span>
+          <ArrowUpRight size={15} />
+        </button>
+      ) : (
+        <button className="sidebar-user" onClick={onSignIn}>
+          <span className="user-avatar">
+            <LogIn size={15} />
+          </span>
+          <span className="user-info">
+            <b>Invitado</b>
+            <small>Iniciar sesión o crear cuenta</small>
+          </span>
+        </button>
+      )}
       <div className="sidebar-version">
         PERDIU · VERSIÓN DEMO <span>●</span>
       </div>
