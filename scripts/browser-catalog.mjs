@@ -519,9 +519,9 @@ try {
   await page.getByRole('button', { name: 'Mochila azul encontrada', exact: true }).click()
   const dialog = page.getByRole('dialog')
   await dialog.waitFor()
-  assert.equal(
-    await dialog.getByRole('button', { name: /WhatsApp|Marcar como resuelto/ }).count(),
-    0,
+  assert.ok(
+    await dialog.getByRole('button', { name: 'Contactar por WhatsApp' }).isVisible(),
+    'El detalle público debe permitir solicitar contacto sin exponer el teléfono.',
   )
   assert.match(await dialog.textContent(), /Santiago Demo/)
   await page.goBack()

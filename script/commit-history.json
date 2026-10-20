@@ -589,17 +589,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "5b3e6ca8ceecc939561e25fa4fd9a998c030be27",
     "author": "AMIRA DEL ROCÍO CHOQUE CARRASCO",
     "commit": {
       "date": "2026-10-20T05:37:24.000Z",
       "message": "test(web): report browser errors on acceptance failure (#7)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/5b3e6ca8ceecc939561e25fa4fd9a998c030be27"
     },
     "stats": {
       "total": 2,
       "additions": 1,
       "deletions": 1,
+      "date": "2026-10-20"
+    },
+    "coverage": 86.63,
+    "test_count": 53,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "AMIRA DEL ROCÍO CHOQUE CARRASCO",
+    "commit": {
+      "date": "2026-10-20T05:41:05.000Z",
+      "message": "test(web): assert public contact prompt in catalog detail (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 6,
+      "additions": 3,
+      "deletions": 3,
       "date": "2026-10-20"
     },
     "coverage": 86.63,

@@ -458,9 +458,15 @@
     "testId": 30
   },
   {
-    "commitId": "HEAD",
+    "commitId": "5b3e6ca8ceecc939561e25fa4fd9a998c030be27",
     "commitName": "test(web): report browser errors on acceptance failure (#7)",
     "commitTimestamp": 1792474647247,
     "testId": 31
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(web): assert public contact prompt in catalog detail (#7)",
+    "commitTimestamp": 1792474868332,
+    "testId": 32
   }
 ]
