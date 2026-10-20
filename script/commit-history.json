@@ -570,12 +570,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "1a328d5cd22b77b0e156f94dcd3086e677ea285c",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-10-20T04:56:30.000Z",
       "message": "feat(catalog): validar formato internacional de WhatsApp (#5)\n\nRechazar contactos que no incluyan el código de país E.164 antes de llamar al repositorio.\n\nRED: testId 30; TDDLab timestamp 1792472141131; 55 aprobadas y 1 fallida porque el número nacional se aceptó.\n\nGREEN: testId 30; TDDLab timestamp 1792472161384; 56 aprobadas y 0 fallidas. Verificación adicional: pnpm typecheck y pnpm format:check. Refactor: no hizo falta.",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/1a328d5cd22b77b0e156f94dcd3086e677ea285c"
     },
     "stats": {
       "total": 33,
@@ -585,6 +585,25 @@
     },
     "coverage": 90.1,
     "test_count": 56,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-10-20T04:57:24.000Z",
+      "message": "feat(catalog): exigir zona del reporte (#5)\n\nRechazar reportes cuya zona está vacía después de recortar espacios y evitar la escritura al repositorio.\n\nRED: testId 31; TDDLab timestamp 1792472209274; 56 aprobadas y 1 fallida porque se aceptó la zona vacía.\n\nGREEN: testId 31; TDDLab timestamp 1792472223726; 57 aprobadas y 0 fallidas. Verificación adicional: pnpm typecheck y pnpm format:check. Refactor: no hizo falta.",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 26,
+      "additions": 26,
+      "deletions": 0,
+      "date": "2026-10-20"
+    },
+    "coverage": 90.16,
+    "test_count": 57,
     "failed_tests": 0,
     "conclusion": "success"
   }

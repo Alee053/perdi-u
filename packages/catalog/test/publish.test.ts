@@ -235,3 +235,28 @@ test('la publicación rechaza WhatsApp sin código de país antes de persistir',
   )
   assert.equal(writes, 0)
 })
+
+test('la publicación rechaza una zona vacía antes de persistir', async () => {
+  let writes = 0
+  const publish = new CreateReport({
+    create: async (input) => {
+      writes += 1
+      return {
+        ...input,
+        id: 'report-11',
+        createdAt: '2026-10-19T12:00:00.000Z',
+      }
+    },
+  })
+
+  await assert.rejects(
+    () => publish.execute('verified-subject', { ...draft, zone: '   ' }),
+    (error: unknown) => {
+      assert.ok(error instanceof Error)
+      assert.equal('field' in error ? error.field : undefined, 'zone')
+      assert.match(error.message, /zona/i)
+      return true
+    },
+  )
+  assert.equal(writes, 0)
+})

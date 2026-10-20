@@ -588,9 +588,31 @@
     "testId": 30
   },
   {
-    "commitId": "HEAD",
+    "commitId": "1a328d5cd22b77b0e156f94dcd3086e677ea285c",
     "commitName": "feat(catalog): validar formato internacional de WhatsApp (#5)\n\nRechazar contactos que no incluyan el código de país E.164 antes de llamar al repositorio.\n\nRED: testId 30; TDDLab timestamp 1792472141131; 55 aprobadas y 1 fallida porque el número nacional se aceptó.\n\nGREEN: testId 30; TDDLab timestamp 1792472161384; 56 aprobadas y 0 fallidas. Verificación adicional: pnpm typecheck y pnpm format:check. Refactor: no hizo falta.",
     "commitTimestamp": 1792472190872,
     "testId": 30
+  },
+  {
+    "numPassedTests": 56,
+    "failedTests": 1,
+    "numTotalTests": 57,
+    "timestamp": 1792472209274,
+    "success": false,
+    "testId": 31
+  },
+  {
+    "numPassedTests": 57,
+    "failedTests": 0,
+    "numTotalTests": 57,
+    "timestamp": 1792472223726,
+    "success": true,
+    "testId": 31
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(catalog): exigir zona del reporte (#5)\n\nRechazar reportes cuya zona está vacía después de recortar espacios y evitar la escritura al repositorio.\n\nRED: testId 31; TDDLab timestamp 1792472209274; 56 aprobadas y 1 fallida porque se aceptó la zona vacía.\n\nGREEN: testId 31; TDDLab timestamp 1792472223726; 57 aprobadas y 0 fallidas. Verificación adicional: pnpm typecheck y pnpm format:check. Refactor: no hizo falta.",
+    "commitTimestamp": 1792472244782,
+    "testId": 31
   }
 ]

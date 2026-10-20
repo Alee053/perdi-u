@@ -35,6 +35,7 @@ export class CreateReport {
         'La descripción debe tener al menos 20 caracteres.',
       )
     if (!draft.city.trim()) throw new ReportValidationError('city', 'La ciudad es obligatoria.')
+    if (!draft.zone.trim()) throw new ReportValidationError('zone', 'La zona es obligatoria.')
     const whatsapp = draft.whatsapp.replace(/[\s()-]/g, '')
     if (!/^\+[1-9]\d{7,14}$/.test(whatsapp))
       throw new ReportValidationError(
