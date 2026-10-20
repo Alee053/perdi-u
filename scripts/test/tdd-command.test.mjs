@@ -35,6 +35,10 @@ async function command(root, executable, args) {
   }
 }
 
+// Windows may still lock the fixture briefly after its child processes exit.
+const removeFixture = (root) =>
+  rm(root, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 })
+
 async function fixture() {
   const root = await mkdtemp(join(tmpdir(), 'perdiu-tddlab-'))
   for (const directory of ['script', 'scripts', '.husky']) await mkdir(join(root, directory))
@@ -134,7 +138,7 @@ test('TDDLab registra rojo y verde y vincula dos commits con sus pruebas y cober
     assert.equal(commits[1].commitId, 'HEAD')
     assert.equal((await command(root, 'git', ['status', '--porcelain'])).stdout.trim(), '')
   } finally {
-    await rm(root, { recursive: true, force: true })
+    await removeFixture(root)
   }
 }, 60000)
 
@@ -149,6 +153,6 @@ test('el comando TDD rechaza una ejecución sin pruebas aunque exista un reporte
     assert.equal((await command(root, 'pnpm', ['test'])).code, 1)
     await assert.rejects(readFile(join(root, 'script/report.json')), { code: 'ENOENT' })
   } finally {
-    await rm(root, { recursive: true, force: true })
+    await removeFixture(root)
   }
 }, 30000)

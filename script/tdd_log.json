@@ -562,9 +562,31 @@
     "testId": 19
   },
   {
-    "commitId": "HEAD",
+    "commitId": "f0b0f30690aac9397772c3be96a0774cb60ea94a",
     "commitName": "docs(repo): sincronizar las instrucciones de pruebas",
     "commitTimestamp": 1792462295000,
     "testId": 19
+  },
+  {
+    "numPassedTests": 45,
+    "failedTests": 1,
+    "numTotalTests": 46,
+    "timestamp": 1792507621000,
+    "success": false,
+    "testId": 20
+  },
+  {
+    "numPassedTests": 46,
+    "failedTests": 0,
+    "numTotalTests": 46,
+    "timestamp": 1792507651000,
+    "success": true,
+    "testId": 20
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "fix(repo): reintentar la limpieza de fixtures temporales en Windows",
+    "commitTimestamp": 1792507652000,
+    "testId": 20
   }
 ]

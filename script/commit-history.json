@@ -361,17 +361,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "f0b0f30690aac9397772c3be96a0774cb60ea94a",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-20T02:11:35.000Z",
       "message": "docs(repo): sincronizar las instrucciones de pruebas",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/f0b0f30690aac9397772c3be96a0774cb60ea94a"
     },
     "stats": {
       "total": 58,
       "additions": 50,
       "deletions": 8,
+      "date": "2026-10-20"
+    },
+    "coverage": 89.63,
+    "test_count": 46,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-20T14:47:32.000Z",
+      "message": "fix(repo): reintentar la limpieza de fixtures temporales en Windows",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 55,
+      "additions": 50,
+      "deletions": 5,
       "date": "2026-10-20"
     },
     "coverage": 89.63,
