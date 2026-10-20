@@ -323,18 +323,37 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "1df51d673101bcd061a0633c29a8488ffa6a9c97",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-19T23:17:46.000Z",
       "message": "docs(repo): documentar perfil, revocación de sesión y sus pruebas (#4)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/1df51d673101bcd061a0633c29a8488ffa6a9c97"
     },
     "stats": {
       "total": 124,
       "additions": 84,
       "deletions": 40,
       "date": "2026-10-19"
+    },
+    "coverage": 89.63,
+    "test_count": 46,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-20T02:04:07.000Z",
+      "message": "docs(repo): precisar el registro de ciclos TDD",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 88,
+      "additions": 85,
+      "deletions": 3,
+      "date": "2026-10-20"
     },
     "coverage": 89.63,
     "test_count": 46,

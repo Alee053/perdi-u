@@ -494,9 +494,55 @@
     "testId": 17
   },
   {
-    "commitId": "HEAD",
+    "commitId": "1df51d673101bcd061a0633c29a8488ffa6a9c97",
     "commitName": "docs(repo): documentar perfil, revocación de sesión y sus pruebas (#4)",
     "commitTimestamp": 1792451866000,
     "testId": 17
+  },
+  {
+    "numPassedTests": 45,
+    "failedTests": 1,
+    "numTotalTests": 46,
+    "timestamp": 1792461726000,
+    "success": false,
+    "testId": 18
+  },
+  {
+    "numPassedTests": 45,
+    "failedTests": 1,
+    "numTotalTests": 46,
+    "timestamp": 1792461756000,
+    "success": false,
+    "testId": 18
+  },
+  {
+    "numPassedTests": 46,
+    "failedTests": 0,
+    "numTotalTests": 46,
+    "timestamp": 1792461786000,
+    "success": true,
+    "testId": 18
+  },
+  {
+    "numPassedTests": 45,
+    "failedTests": 1,
+    "numTotalTests": 46,
+    "timestamp": 1792461816000,
+    "success": false,
+    "testId": 18
+  },
+  {
+    "numPassedTests": 46,
+    "failedTests": 0,
+    "numTotalTests": 46,
+    "timestamp": 1792461846000,
+    "success": true,
+    "testId": 18
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(repo): precisar el registro de ciclos TDD",
+    "commitTimestamp": 1792461847000,
+    "testId": 18
   }
 ]
