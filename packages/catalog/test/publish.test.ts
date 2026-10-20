@@ -32,3 +32,23 @@ test('la publicación asigna el reporte al sujeto autenticado', async () => {
 
   assert.equal(submitted?.ownerId, 'verified-subject')
 })
+
+test('la publicación crea inicialmente un reporte activo', async () => {
+  let submitted: ReportCreation | undefined
+  const publish = new CreateReport({
+    create: async (input) => {
+      submitted = input
+      return {
+        ...input,
+        id: 'report-2',
+        state: 'active',
+        createdAt: '2026-10-19T12:00:00.000Z',
+      }
+    },
+  })
+
+  await publish.execute('verified-subject', draft)
+
+  assert.ok(submitted)
+  assert.equal(Reflect.get(submitted, 'state'), 'active')
+})

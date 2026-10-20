@@ -5,7 +5,7 @@ export type ReportDraft = Pick<
   'title' | 'description' | 'type' | 'category' | 'city' | 'zone' | 'incidentDate'
 >
 
-export type ReportCreation = ReportDraft & { ownerId: string }
+export type ReportCreation = ReportDraft & { ownerId: string; state: 'active' }
 
 export interface ReportCreator {
   create(report: ReportCreation): Promise<ReportData>
@@ -15,6 +15,6 @@ export class CreateReport {
   constructor(private readonly creator: ReportCreator) {}
 
   execute(ownerId: string, draft: ReportDraft): Promise<ReportData> {
-    return this.creator.create({ ...draft, ownerId })
+    return this.creator.create({ ...draft, ownerId, state: 'active' })
   }
 }

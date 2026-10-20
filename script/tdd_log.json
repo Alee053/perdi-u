@@ -360,9 +360,31 @@
     "testId": 20
   },
   {
-    "commitId": "HEAD",
+    "commitId": "7e61db6b303597c9446fd4c302a6dfe6004bdad1",
     "commitName": "feat(catalog): atribuir reporte a identidad autenticada (#5)\n\nTDD — Comportamiento: la publicación asigna el reporte al sujeto autenticado.\n\nRED: testId 20; 2026-10-20T03:55:04.895Z; 46 aprobadas y 1 fallida porque se conservó ownerId=attacker.\n\nGREEN: testId 20; 2026-10-20T03:55:25.689Z; 47 aprobadas y 0 fallidas.\n\nRefactor: no hizo falta. Verificación adicional: pnpm typecheck.",
     "commitTimestamp": 1792468586434,
     "testId": 20
+  },
+  {
+    "numPassedTests": 47,
+    "failedTests": 1,
+    "numTotalTests": 48,
+    "timestamp": 1792468939570,
+    "success": false,
+    "testId": 21
+  },
+  {
+    "numPassedTests": 48,
+    "failedTests": 0,
+    "numTotalTests": 48,
+    "timestamp": 1792468950899,
+    "success": true,
+    "testId": 21
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(catalog): crear reportes como activos (#5)\n\nTDD — Comportamiento: la publicación envía el reporte con estado inicial active.\n\nRED: testId 21; timestamp 1792468939570; 47 aprobadas y 1 fallida (state no definido).\n\nGREEN: testId 21; timestamp 1792468950899; 48 aprobadas y 0 fallidas.\n\nRefactor: no hizo falta. Verificación adicional: pnpm typecheck.",
+    "commitTimestamp": 1792468969743,
+    "testId": 21
   }
 ]
