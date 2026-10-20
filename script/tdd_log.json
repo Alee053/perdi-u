@@ -398,9 +398,15 @@
     "testId": 20
   },
   {
-    "commitId": "HEAD",
+    "commitId": "f1479721b3d7ca83d57ad8e4fea2e6a23807ffda",
     "commitName": "test(api): assert report image response fields (#7)",
     "commitTimestamp": 1792473057570,
     "testId": 21
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(api): avoid cross-realm integration assertions (#7)",
+    "commitTimestamp": 1792473188834,
+    "testId": 22
   }
 ]

@@ -123,7 +123,9 @@ test('GET detalle y contacto aplican disponibilidad, ownership y proyección pri
       200,
       'un tercero autenticado puede contactar un reporte activo',
     )
-    assert.deepEqual(await activeContact.json(), { phone: '59170123456' })
+    const privateContact = await activeContact.json()
+    assert.deepEqual(Object.keys(privateContact).sort(), ['phone'])
+    assert.equal(privateContact.phone, '59170123456')
 
     const unavailableContact = await request(`/reports/${resolvedId}/contact`, 'owner-token')
     assert.equal(unavailableContact.status, 404)

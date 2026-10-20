@@ -399,16 +399,35 @@
     "conclusion": "failure"
   },
   {
-    "sha": "HEAD",
+    "sha": "f1479721b3d7ca83d57ad8e4fea2e6a23807ffda",
     "author": "AMIRA DEL ROCÍO CHOQUE CARRASCO",
     "commit": {
       "date": "2026-10-20T05:10:56.000Z",
       "message": "test(api): assert report image response fields (#7)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/f1479721b3d7ca83d57ad8e4fea2e6a23807ffda"
     },
     "stats": {
       "total": 3,
       "additions": 2,
+      "deletions": 1,
+      "date": "2026-10-20"
+    },
+    "coverage": 86.63,
+    "test_count": 53,
+    "failed_tests": 2,
+    "conclusion": "failure"
+  },
+  {
+    "sha": "HEAD",
+    "author": "AMIRA DEL ROCÍO CHOQUE CARRASCO",
+    "commit": {
+      "date": "2026-10-20T05:13:07.000Z",
+      "message": "test(api): avoid cross-realm integration assertions (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 4,
+      "additions": 3,
       "deletions": 1,
       "date": "2026-10-20"
     },
