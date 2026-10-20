@@ -34,8 +34,7 @@ export class CreateReport {
         'description',
         'La descripción debe tener al menos 20 caracteres.',
       )
-    if (!draft.city.trim())
-      throw new ReportValidationError('city', 'La ciudad es obligatoria.')
+    if (!draft.city.trim()) throw new ReportValidationError('city', 'La ciudad es obligatoria.')
     return this.creator.create({
       ...draft,
       title: draft.title.trim(),

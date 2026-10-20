@@ -25,6 +25,7 @@ Los tests de caracterización de comportamiento existente pueden pasar desde el 
 | `GET /me` y `POST /me/logout`       | Integración HTTP/PG, `apps/api/test`             | Guard real con un JWKS HTTP local: 200 con identidad y perfil propio, 401 uniforme, 503 sin claves; token revocado rechazado antes y después de reiniciar NestJS.                                        |
 | Supabase Auth real                  | Aceptación, `scripts/verify-auth.mjs`            | `compose.yaml` en un proyecto desechable: bootstrap, registro, confirmación vía Mailpit, login, `/me`, refresh, revocación en la API y logout. Ver [la guía de Auth](auth.md).                           |
 | `GET /reports`                      | Integración HTTP/PG, `apps/api/test`             | Validación/status, filtros reales, persistencia y privacidad.                                                                                                                                            |
+| `POST /reports`                     | Integración HTTP/PG, `apps/api/test`             | Token verificado, atribución de propietario, estado activo, escritura PostgreSQL y proyección pública al consultar el catálogo.                                                                          |
 | Composición React/API/PG            | E2E, `scripts/browser-catalog.mjs`               | Unos pocos recorridos de usuario en móvil/escritorio: controles, búsqueda, vacío, error/reintento, guardados y secciones privadas sin sesión. Las combinaciones exhaustivas pertenecen a HTTP/unitarias. |
 | Verificadores del repositorio       | Unitarias, `scripts/test`                        | Detectar documentos/skills inválidos y admitir los válidos.                                                                                                                                              |
 | Documentación y skills              | Check local y revisión                           | Frontmatter y destinos locales válidos; revisar manualmente exactitud, ejemplos e impacto.                                                                                                               |
@@ -44,6 +45,7 @@ pnpm exec jest --runTestsByPath packages/catalog/test/catalog.test.ts --testName
 # Un escenario HTTP, sobre un PostgreSQL desechable nuevo.
 pnpm test:integration --test-name-pattern='la búsqueda HTTP'
 pnpm test:integration --test-name-pattern='catálogo HTTP'
+pnpm test:integration --test-name-pattern='POST /reports'
 pnpm test:integration --test-name-pattern='cerrar sesión en la API'
 
 # Integración completa o aceptación completa (esta última ya incluye integración/build).

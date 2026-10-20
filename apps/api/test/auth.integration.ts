@@ -221,3 +221,51 @@ test('GET /me agrega nombre y foto del perfil propio, sin contacto privado ni ot
     await jwks.close()
   }
 })
+
+test('POST /reports atribuye al sujeto verificado y publica el reporte en el catálogo', async () => {
+  const key = await signingKey('publish')
+  const jwks = await jwksServer([key.jwk])
+  const verifier = createRemoteAccessTokenVerifier(jwks.url, { issuer, audience })
+  try {
+    await withApi(verifier, async (url) => {
+      const response = await fetch(`${url}/reports`, {
+        method: 'POST',
+        headers: {
+          authorization: `Bearer ${await key.sign()}`,
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: 'Mochila perdida',
+          description: 'Mochila azul perdida cerca de la plaza principal.',
+          type: 'lost',
+          category: 'object',
+          city: 'La Paz',
+          zone: 'Centro',
+          incidentDate: '2026-10-19',
+          ownerId: crypto.randomUUID(),
+          state: 'resolved',
+        }),
+      })
+      assert.equal(response.status, 201)
+      const created = await response.json()
+      assert.equal(created.ownerId, subject)
+      assert.equal(created.state, 'active')
+      assert.equal(created.title, 'Mochila perdida')
+      assert.ok(created.id)
+      assert.ok(created.createdAt)
+
+      const catalog = await fetch(`${url}/reports`)
+      assert.equal(catalog.status, 200)
+      const reports = await catalog.json()
+      assert.equal(reports.length, 1)
+      assert.equal(reports[0].id, created.id)
+      assert.equal(reports[0].title, 'Mochila perdida')
+      assert.equal(reports[0].state, 'active')
+      assert.equal(reports[0].author.id, subject)
+      assert.equal('ownerId' in reports[0], false)
+      assert.equal('email' in reports[0], false)
+    })
+  } finally {
+    await jwks.close()
+  }
+})

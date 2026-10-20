@@ -513,17 +513,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "82b1b4e2a7535a4ba3fcc66ab18c68b9ebe3c1b5",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-10-20T04:44:37.000Z",
       "message": "feat(catalog): exigir ciudad en reportes (#5)\n\nTDD — Rechazar una ciudad vacía antes de persistir.\n\nRED: testId 27; TDDLab timestamp 1792471448471; 53 aprobadas y 1 fallida porque se aceptó la ciudad vacía.\n\nGREEN: testId 27; TDDLab timestamp 1792471460904; 54 aprobadas y 0 fallidas.\n\nRefactor: no hizo falta. Verificación adicional: pnpm typecheck.",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/82b1b4e2a7535a4ba3fcc66ab18c68b9ebe3c1b5"
     },
     "stats": {
       "total": 27,
       "additions": 27,
       "deletions": 0,
+      "date": "2026-10-20"
+    },
+    "coverage": 90,
+    "test_count": 54,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-10-20T04:51:17.000Z",
+      "message": "feat(api): publicar reportes autenticados (#5)\n\nPublicar un reporte en PostgreSQL asignando el sujeto verificado, estado activo, ID y fecha generados por el servidor; exponerlo después en el catálogo público.\n\nRED: el escenario HTTP/PostgreSQL de publicación devolvió 404 antes de existir POST /reports. Ejecutado contra PostgreSQL 16 desechable local porque la imagen PostgreSQL 17 no estaba disponible y su pull quedó colgado.\n\nGREEN: el mismo escenario pasó (1/1), comprobando propietario verificado pese al ownerId manipulado, estado activo, persistencia y proyección pública. pnpm test: testId 28, TDDLab timestamps 1792471761132 y 1792471803901; 54 aprobadas y 0 fallidas en ambas ejecuciones. También pasaron pnpm typecheck, pnpm check:boundaries, pnpm check:docs y pnpm format:check.\n\nLimitación de evidencia: la RED/GREEN HTTP/PG se conserva en la prueba de integración, fuera del recorder TDDLab; el recorder no ejecutó esa suite.",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 128,
+      "additions": 118,
+      "deletions": 10,
       "date": "2026-10-20"
     },
     "coverage": 90,
