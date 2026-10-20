@@ -494,12 +494,12 @@
     "conclusion": "failure"
   },
   {
-    "sha": "HEAD",
+    "sha": "411be0c0b9d90c0fb57983ce216fe3221dcbb0ab",
     "author": "AMIRA DEL ROCÍO CHOQUE CARRASCO",
     "commit": {
       "date": "2026-10-20T05:23:32.000Z",
       "message": "test(web): use a non-owner session in contact flow (#7)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/411be0c0b9d90c0fb57983ce216fe3221dcbb0ab"
     },
     "stats": {
       "total": 5,
@@ -511,5 +511,24 @@
     "test_count": 53,
     "failed_tests": 2,
     "conclusion": "failure"
+  },
+  {
+    "sha": "HEAD",
+    "author": "AMIRA DEL ROCÍO CHOQUE CARRASCO",
+    "commit": {
+      "date": "2026-10-20T05:25:29.000Z",
+      "message": "test(web): scope contact alert assertion to detail (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 1,
+      "additions": 1,
+      "deletions": 0,
+      "date": "2026-10-20"
+    },
+    "coverage": 86.63,
+    "test_count": 53,
+    "failed_tests": 0,
+    "conclusion": "success"
   }
 ]

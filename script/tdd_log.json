@@ -428,9 +428,15 @@
     "testId": 25
   },
   {
-    "commitId": "HEAD",
+    "commitId": "411be0c0b9d90c0fb57983ce216fe3221dcbb0ab",
     "commitName": "test(web): use a non-owner session in contact flow (#7)",
     "commitTimestamp": 1792473813605,
     "testId": 26
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(web): scope contact alert assertion to detail (#7)",
+    "commitTimestamp": 1792473929946,
+    "testId": 27
   }
 ]

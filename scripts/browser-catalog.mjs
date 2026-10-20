@@ -436,6 +436,7 @@ try {
     .click()
   const failedPopup = await failedPopupEvent
   await detailPage
+    .getByRole('dialog')
     .getByRole('alert')
     .filter({ hasText: 'El contacto no está disponible.' })
     .waitFor()
