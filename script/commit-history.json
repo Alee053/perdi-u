@@ -418,17 +418,36 @@
     "conclusion": "failure"
   },
   {
-    "sha": "HEAD",
+    "sha": "875e6204419ee2424905e0588e50973709ca2bd5",
     "author": "AMIRA DEL ROCÍO CHOQUE CARRASCO",
     "commit": {
       "date": "2026-10-20T05:13:07.000Z",
       "message": "test(api): avoid cross-realm integration assertions (#7)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/875e6204419ee2424905e0588e50973709ca2bd5"
     },
     "stats": {
       "total": 4,
       "additions": 3,
       "deletions": 1,
+      "date": "2026-10-20"
+    },
+    "coverage": 86.63,
+    "test_count": 53,
+    "failed_tests": 2,
+    "conclusion": "failure"
+  },
+  {
+    "sha": "HEAD",
+    "author": "AMIRA DEL ROCÍO CHOQUE CARRASCO",
+    "commit": {
+      "date": "2026-10-20T05:16:29.000Z",
+      "message": "test(web): register detail fixture before navigation (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 37,
+      "additions": 22,
+      "deletions": 15,
       "date": "2026-10-20"
     },
     "coverage": 86.63,

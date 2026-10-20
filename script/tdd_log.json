@@ -404,9 +404,15 @@
     "testId": 21
   },
   {
-    "commitId": "HEAD",
+    "commitId": "875e6204419ee2424905e0588e50973709ca2bd5",
     "commitName": "test(api): avoid cross-realm integration assertions (#7)",
     "commitTimestamp": 1792473188834,
     "testId": 22
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(web): register detail fixture before navigation (#7)",
+    "commitTimestamp": 1792473389958,
+    "testId": 23
   }
 ]

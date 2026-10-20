@@ -307,6 +307,28 @@ try {
   const detailPage = await browser.newPage({ viewport: { width: 1440, height: 1000 } })
   detailPage.on('pageerror', (error) => pageErrors.push(error.message))
   const detailUrl = `${webUrl}/reports/${detailId}`
+  const ownerId = '10000000-0000-0000-0000-000000000001'
+  const detailResponse = {
+    id: detailId,
+    type: 'found',
+    state: 'active',
+    category: 'object',
+    title: 'Mochila azul encontrada',
+    description: 'Reporte ficticio para probar el catálogo persistido.',
+    city: 'La Paz',
+    zone: 'Miraflores',
+    incidentDate: '2026-10-10',
+    createdAt: '2026-10-11T12:00:00.000Z',
+    author: { id: ownerId, displayName: 'Santiago Demo' },
+    imageUrls: ['/images/object.svg'],
+  }
+  await detailPage.route(`**/api/reports/${detailId}`, (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(detailResponse),
+    }),
+  )
   await detailPage.goto(detailUrl)
   const directDetail = detailPage.getByRole('dialog')
   await directDetail.getByRole('heading', { name: 'Mochila azul encontrada' }).waitFor()
@@ -336,21 +358,6 @@ try {
     .getByRole('heading', { name: 'Mochila azul encontrada' })
     .waitFor()
 
-  const ownerId = '10000000-0000-0000-0000-000000000001'
-  const detailResponse = {
-    id: detailId,
-    type: 'found',
-    state: 'active',
-    category: 'object',
-    title: 'Mochila azul encontrada',
-    description: 'Reporte ficticio para probar el catálogo persistido.',
-    city: 'La Paz',
-    zone: 'Miraflores',
-    incidentDate: '2026-10-10',
-    createdAt: '2026-10-11T12:00:00.000Z',
-    author: { id: ownerId, displayName: 'Santiago Demo' },
-    imageUrls: ['/images/object.svg'],
-  }
   await detailPage.route(
     (url) => url.pathname === '/auth/token' && url.searchParams.get('grant_type') === 'password',
     (route) =>
