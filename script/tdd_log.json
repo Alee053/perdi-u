@@ -382,9 +382,39 @@
     "testId": 21
   },
   {
-    "commitId": "HEAD",
+    "commitId": "842b2514fdc6dfc8ae1cac623e9e914f76483c18",
     "commitName": "feat(catalog): crear reportes como activos (#5)\n\nTDD — Comportamiento: la publicación envía el reporte con estado inicial active.\n\nRED: testId 21; timestamp 1792468939570; 47 aprobadas y 1 fallida (state no definido).\n\nGREEN: testId 21; timestamp 1792468950899; 48 aprobadas y 0 fallidas.\n\nRefactor: no hizo falta. Verificación adicional: pnpm typecheck.",
     "commitTimestamp": 1792468969743,
     "testId": 21
+  },
+  {
+    "numPassedTests": 48,
+    "failedTests": 1,
+    "numTotalTests": 49,
+    "timestamp": 1792469304888,
+    "success": false,
+    "testId": 22
+  },
+  {
+    "numPassedTests": 48,
+    "failedTests": 1,
+    "numTotalTests": 49,
+    "timestamp": 1792469319139,
+    "success": false,
+    "testId": 22
+  },
+  {
+    "numPassedTests": 49,
+    "failedTests": 0,
+    "numTotalTests": 49,
+    "timestamp": 1792469339512,
+    "success": true,
+    "testId": 22
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(catalog): validar longitud de descripcion (#5)\n\nTDD — Comportamiento: una descripción de menos de 20 caracteres se rechaza antes de persistir.\n\nRED: testId 22; TDDLab timestamp 1792469304888; 48 aprobadas y 1 fallida porque se aceptó la descripción corta.\n\nVerificación intermedia fallida: mismo testId; timestamp 1792469319139; el error salió sincrónicamente aunque execute promete Promise.\n\nGREEN: testId 22; TDDLab timestamp 1792469339512; 49 aprobadas y 0 fallidas.\n\nRefactor: no hizo falta. Verificación adicional: pnpm typecheck.",
+    "commitTimestamp": 1792469358814,
+    "testId": 22
   }
 ]

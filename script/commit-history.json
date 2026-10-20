@@ -399,12 +399,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "842b2514fdc6dfc8ae1cac623e9e914f76483c18",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-10-20T04:02:49.000Z",
       "message": "feat(catalog): crear reportes como activos (#5)\n\nTDD — Comportamiento: la publicación envía el reporte con estado inicial active.\n\nRED: testId 21; timestamp 1792468939570; 47 aprobadas y 1 fallida (state no definido).\n\nGREEN: testId 21; timestamp 1792468950899; 48 aprobadas y 0 fallidas.\n\nRefactor: no hizo falta. Verificación adicional: pnpm typecheck.",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/842b2514fdc6dfc8ae1cac623e9e914f76483c18"
     },
     "stats": {
       "total": 24,
@@ -414,6 +414,25 @@
     },
     "coverage": 89.67,
     "test_count": 48,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-10-20T04:09:18.000Z",
+      "message": "feat(catalog): validar longitud de descripcion (#5)\n\nTDD — Comportamiento: una descripción de menos de 20 caracteres se rechaza antes de persistir.\n\nRED: testId 22; TDDLab timestamp 1792469304888; 48 aprobadas y 1 fallida porque se aceptó la descripción corta.\n\nVerificación intermedia fallida: mismo testId; timestamp 1792469319139; el error salió sincrónicamente aunque execute promete Promise.\n\nGREEN: testId 22; TDDLab timestamp 1792469339512; 49 aprobadas y 0 fallidas.\n\nRefactor: no hizo falta. Verificación adicional: pnpm typecheck.",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 49,
+      "additions": 47,
+      "deletions": 2,
+      "date": "2026-10-20"
+    },
+    "coverage": 89.8,
+    "test_count": 49,
     "failed_tests": 0,
     "conclusion": "success"
   }

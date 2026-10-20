@@ -52,3 +52,28 @@ test('la publicación crea inicialmente un reporte activo', async () => {
   assert.ok(submitted)
   assert.equal(Reflect.get(submitted, 'state'), 'active')
 })
+
+test('la publicación rechaza una descripción menor de 20 caracteres antes de persistir', async () => {
+  let writes = 0
+  const publish = new CreateReport({
+    create: async (input) => {
+      writes += 1
+      return {
+        ...input,
+        id: 'report-3',
+        createdAt: '2026-10-19T12:00:00.000Z',
+      }
+    },
+  })
+
+  await assert.rejects(
+    publish.execute('verified-subject', { ...draft, description: 'Muy corto' }),
+    (error: unknown) => {
+      assert.ok(error instanceof Error)
+      assert.equal('field' in error ? error.field : undefined, 'description')
+      assert.match(error.message, /20 caracteres/)
+      return true
+    },
+  )
+  assert.equal(writes, 0)
+})
