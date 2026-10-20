@@ -98,3 +98,28 @@ test('la publicación recorta los espacios exteriores de la descripción persist
 
   assert.equal(submitted?.description, draft.description)
 })
+
+test('la publicación rechaza un título vacío después de recortar espacios', async () => {
+  let writes = 0
+  const publish = new CreateReport({
+    create: async (input) => {
+      writes += 1
+      return {
+        ...input,
+        id: 'report-5',
+        createdAt: '2026-10-19T12:00:00.000Z',
+      }
+    },
+  })
+
+  await assert.rejects(
+    () => publish.execute('verified-subject', { ...draft, title: '   ' }),
+    (error: unknown) => {
+      assert.ok(error instanceof Error)
+      assert.equal('field' in error ? error.field : undefined, 'title')
+      assert.match(error.message, /obligatorio/)
+      return true
+    },
+  )
+  assert.equal(writes, 0)
+})

@@ -25,6 +25,8 @@ export class CreateReport {
   constructor(private readonly creator: ReportCreator) {}
 
   async execute(ownerId: string, draft: ReportDraft): Promise<ReportData> {
+    if (!draft.title.trim())
+      throw new ReportValidationError('title', 'El nombre del reporte es obligatorio.')
     if (draft.description.trim().length < 20)
       throw new ReportValidationError(
         'description',

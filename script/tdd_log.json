@@ -434,9 +434,31 @@
     "testId": 23
   },
   {
-    "commitId": "HEAD",
+    "commitId": "721d93277e217f3737ef3f14aa0936fd6de3a004",
     "commitName": "feat(catalog): recortar descripcion antes de persistir (#5)\n\nTDD — Comportamiento: guardar una descripción sin los espacios exteriores.\n\nRED: testId 23; TDDLab timestamp 1792469684927; 49 aprobadas y 1 fallida porque se conservaron los espacios.\n\nGREEN: testId 23; TDDLab timestamp 1792469696274; 50 aprobadas y 0 fallidas.\n\nRefactor: no hizo falta. Verificación adicional: pnpm typecheck.",
     "commitTimestamp": 1792469711887,
     "testId": 23
+  },
+  {
+    "numPassedTests": 50,
+    "failedTests": 1,
+    "numTotalTests": 51,
+    "timestamp": 1792470036823,
+    "success": false,
+    "testId": 24
+  },
+  {
+    "numPassedTests": 51,
+    "failedTests": 0,
+    "numTotalTests": 51,
+    "timestamp": 1792470047927,
+    "success": true,
+    "testId": 24
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(catalog): exigir titulo para publicar (#5)\n\nTDD — Comportamiento: un título vacío o compuesto por espacios se rechaza antes de persistir.\n\nRED: testId 24; TDDLab timestamp 1792470036823; 50 aprobadas y 1 fallida porque se aceptó el título vacío.\n\nGREEN: testId 24; TDDLab timestamp 1792470047927; 51 aprobadas y 0 fallidas.\n\nRefactor: no hizo falta. Verificación adicional: pnpm typecheck.",
+    "commitTimestamp": 1792470062627,
+    "testId": 24
   }
 ]

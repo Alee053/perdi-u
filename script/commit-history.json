@@ -437,12 +437,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "721d93277e217f3737ef3f14aa0936fd6de3a004",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-10-20T04:15:11.000Z",
       "message": "feat(catalog): recortar descripcion antes de persistir (#5)\n\nTDD — Comportamiento: guardar una descripción sin los espacios exteriores.\n\nRED: testId 23; TDDLab timestamp 1792469684927; 49 aprobadas y 1 fallida porque se conservaron los espacios.\n\nGREEN: testId 23; TDDLab timestamp 1792469696274; 50 aprobadas y 0 fallidas.\n\nRefactor: no hizo falta. Verificación adicional: pnpm typecheck.",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/721d93277e217f3737ef3f14aa0936fd6de3a004"
     },
     "stats": {
       "total": 28,
@@ -452,6 +452,25 @@
     },
     "coverage": 89.8,
     "test_count": 50,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-10-20T04:21:02.000Z",
+      "message": "feat(catalog): exigir titulo para publicar (#5)\n\nTDD — Comportamiento: un título vacío o compuesto por espacios se rechaza antes de persistir.\n\nRED: testId 24; TDDLab timestamp 1792470036823; 50 aprobadas y 1 fallida porque se aceptó el título vacío.\n\nGREEN: testId 24; TDDLab timestamp 1792470047927; 51 aprobadas y 0 fallidas.\n\nRefactor: no hizo falta. Verificación adicional: pnpm typecheck.",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 27,
+      "additions": 27,
+      "deletions": 0,
+      "date": "2026-10-20"
+    },
+    "coverage": 89.87,
+    "test_count": 51,
     "failed_tests": 0,
     "conclusion": "success"
   }
