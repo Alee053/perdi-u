@@ -34,6 +34,7 @@ export class CreateReport {
       )
     return this.creator.create({
       ...draft,
+      title: draft.title.trim(),
       description: draft.description.trim(),
       ownerId,
       state: 'active',

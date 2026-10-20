@@ -123,3 +123,21 @@ test('la publicación rechaza un título vacío después de recortar espacios', 
   )
   assert.equal(writes, 0)
 })
+
+test('la publicación recorta los espacios exteriores del título persistido', async () => {
+  let submitted: ReportCreation | undefined
+  const publish = new CreateReport({
+    create: async (input) => {
+      submitted = input
+      return {
+        ...input,
+        id: 'report-6',
+        createdAt: '2026-10-19T12:00:00.000Z',
+      }
+    },
+  })
+
+  await publish.execute('verified-subject', { ...draft, title: `  ${draft.title}  ` })
+
+  assert.equal(submitted?.title, draft.title)
+})
