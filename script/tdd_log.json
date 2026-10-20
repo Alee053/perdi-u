@@ -662,9 +662,31 @@
     "testId": 33
   },
   {
-    "commitId": "HEAD",
+    "commitId": "de04512db4456669fc744efa3e7bad05e0c6cf0f",
     "commitName": "feat(catalog): validar tipo de reporte (#5)\n\nRechazar tipos distintos de lost/found antes de escribir el reporte.\n\nRED: testId 33; TDDLab timestamp 1792472391809; 58 aprobadas y 1 fallida porque se aceptó un tipo desconocido.\n\nGREEN: testId 33; TDDLab timestamps 1792472406864 y 1792472425616; 59 aprobadas y 0 fallidas en ambas ejecuciones. La primera verificación de tipos detectó un cast insuficiente en la prueba; se corrigió y pnpm typecheck pasó. pnpm format:check también pasó.",
     "commitTimestamp": 1792472453996,
     "testId": 33
+  },
+  {
+    "numPassedTests": 59,
+    "failedTests": 1,
+    "numTotalTests": 60,
+    "timestamp": 1792472471405,
+    "success": false,
+    "testId": 34
+  },
+  {
+    "numPassedTests": 60,
+    "failedTests": 0,
+    "numTotalTests": 60,
+    "timestamp": 1792472485981,
+    "success": true,
+    "testId": 34
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(catalog): validar categoria de reporte (#5)\n\nRechazar categorías distintas de pet, object o document antes de persistir el reporte.\n\nRED: testId 34; TDDLab timestamp 1792472471405; 59 aprobadas y 1 fallida porque se aceptó una categoría desconocida.\n\nGREEN: testId 34; TDDLab timestamp 1792472485981; 60 aprobadas y 0 fallidas. Verificación adicional: pnpm typecheck y pnpm format:check. Refactor: no hizo falta.",
+    "commitTimestamp": 1792472509821,
+    "testId": 34
   }
 ]

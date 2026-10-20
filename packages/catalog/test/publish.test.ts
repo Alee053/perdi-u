@@ -311,3 +311,32 @@ test('la publicación rechaza un tipo desconocido antes de persistir', async () 
   )
   assert.equal(writes, 0)
 })
+
+test('la publicación rechaza una categoría desconocida antes de persistir', async () => {
+  let writes = 0
+  const publish = new CreateReport({
+    create: async (input) => {
+      writes += 1
+      return {
+        ...input,
+        id: 'report-14',
+        createdAt: '2026-10-19T12:00:00.000Z',
+      }
+    },
+  })
+
+  await assert.rejects(
+    () =>
+      publish.execute('verified-subject', {
+        ...draft,
+        category: 'vehicle',
+      } as unknown as ReportDraft),
+    (error: unknown) => {
+      assert.ok(error instanceof Error)
+      assert.equal('field' in error ? error.field : undefined, 'category')
+      assert.match(error.message, /categoría/i)
+      return true
+    },
+  )
+  assert.equal(writes, 0)
+})

@@ -627,12 +627,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "de04512db4456669fc744efa3e7bad05e0c6cf0f",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-10-20T05:00:53.000Z",
       "message": "feat(catalog): validar tipo de reporte (#5)\n\nRechazar tipos distintos de lost/found antes de escribir el reporte.\n\nRED: testId 33; TDDLab timestamp 1792472391809; 58 aprobadas y 1 fallida porque se aceptó un tipo desconocido.\n\nGREEN: testId 33; TDDLab timestamps 1792472406864 y 1792472425616; 59 aprobadas y 0 fallidas en ambas ejecuciones. La primera verificación de tipos detectó un cast insuficiente en la prueba; se corrigió y pnpm typecheck pasó. pnpm format:check también pasó.",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/de04512db4456669fc744efa3e7bad05e0c6cf0f"
     },
     "stats": {
       "total": 28,
@@ -642,6 +642,25 @@
     },
     "coverage": 90.31,
     "test_count": 59,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-10-20T05:01:49.000Z",
+      "message": "feat(catalog): validar categoria de reporte (#5)\n\nRechazar categorías distintas de pet, object o document antes de persistir el reporte.\n\nRED: testId 34; TDDLab timestamp 1792472471405; 59 aprobadas y 1 fallida porque se aceptó una categoría desconocida.\n\nGREEN: testId 34; TDDLab timestamp 1792472485981; 60 aprobadas y 0 fallidas. Verificación adicional: pnpm typecheck y pnpm format:check. Refactor: no hizo falta.",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 34,
+      "additions": 34,
+      "deletions": 0,
+      "date": "2026-10-20"
+    },
+    "coverage": 90.37,
+    "test_count": 60,
     "failed_tests": 0,
     "conclusion": "success"
   }

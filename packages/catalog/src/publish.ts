@@ -27,6 +27,11 @@ export class CreateReport {
   async execute(ownerId: string, draft: ReportDraft): Promise<ReportData> {
     if (draft.type !== 'lost' && draft.type !== 'found')
       throw new ReportValidationError('type', 'El tipo debe ser pérdida o hallazgo.')
+    if (draft.category !== 'pet' && draft.category !== 'object' && draft.category !== 'document')
+      throw new ReportValidationError(
+        'category',
+        'La categoría debe ser mascota, objeto o documento.',
+      )
     if (!draft.title.trim())
       throw new ReportValidationError('title', 'El nombre del reporte es obligatorio.')
     if (draft.title.trim().length > 200)
