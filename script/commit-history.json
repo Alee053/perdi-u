@@ -437,17 +437,36 @@
     "conclusion": "failure"
   },
   {
-    "sha": "HEAD",
+    "sha": "474e01a6c82388fca4d4fb786be766c6e4445d31",
     "author": "AMIRA DEL ROCÍO CHOQUE CARRASCO",
     "commit": {
       "date": "2026-10-20T05:16:29.000Z",
       "message": "test(web): register detail fixture before navigation (#7)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/474e01a6c82388fca4d4fb786be766c6e4445d31"
     },
     "stats": {
       "total": 37,
       "additions": 22,
       "deletions": 15,
+      "date": "2026-10-20"
+    },
+    "coverage": 86.63,
+    "test_count": 53,
+    "failed_tests": 2,
+    "conclusion": "failure"
+  },
+  {
+    "sha": "HEAD",
+    "author": "AMIRA DEL ROCÍO CHOQUE CARRASCO",
+    "commit": {
+      "date": "2026-10-20T05:19:03.000Z",
+      "message": "test(web): reopen login after returning to report (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 4,
+      "additions": 4,
+      "deletions": 0,
       "date": "2026-10-20"
     },
     "coverage": 86.63,

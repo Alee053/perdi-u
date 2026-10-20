@@ -417,6 +417,10 @@ try {
   await detailPage.route('https://wa.me/**', (route) =>
     route.fulfill({ status: 200, contentType: 'text/plain', body: 'WhatsApp link verified.' }),
   )
+  await detailPage
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Contactar por WhatsApp' })
+    .click()
   await detailPage.getByLabel('Correo electrónico').fill('persona@example.test')
   await detailPage.getByLabel('Contraseña').fill('Correcta-123')
   await detailPage.getByRole('button', { name: 'Iniciar sesión', exact: true }).click()

@@ -410,9 +410,15 @@
     "testId": 22
   },
   {
-    "commitId": "HEAD",
+    "commitId": "474e01a6c82388fca4d4fb786be766c6e4445d31",
     "commitName": "test(web): register detail fixture before navigation (#7)",
     "commitTimestamp": 1792473389958,
     "testId": 23
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(web): reopen login after returning to report (#7)",
+    "commitTimestamp": 1792473544183,
+    "testId": 24
   }
 ]
