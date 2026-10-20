@@ -11,6 +11,7 @@ const draft: ReportDraft = {
   city: 'La Paz',
   zone: 'Centro',
   incidentDate: '2026-10-19',
+  whatsapp: '+59170000000',
 }
 
 test('la publicación asigna el reporte al sujeto autenticado', async () => {
@@ -190,4 +191,22 @@ test('la publicación rechaza una ciudad vacía antes de persistir', async () =>
     },
   )
   assert.equal(writes, 0)
+})
+
+test('la publicación normaliza separadores del WhatsApp antes de persistirlo', async () => {
+  let submitted: ReportCreation | undefined
+  const publish = new CreateReport({
+    create: async (input) => {
+      submitted = input
+      return {
+        ...input,
+        id: 'report-9',
+        createdAt: '2026-10-19T12:00:00.000Z',
+      }
+    },
+  })
+
+  await publish.execute('verified-subject', { ...draft, whatsapp: '+591 (7000) 0000' })
+
+  assert.equal(submitted?.whatsapp, '+59170000000')
 })

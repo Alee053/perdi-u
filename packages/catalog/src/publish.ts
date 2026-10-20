@@ -3,7 +3,7 @@ import type { ReportData } from '@perdiu/contracts'
 export type ReportDraft = Pick<
   ReportData,
   'title' | 'description' | 'type' | 'category' | 'city' | 'zone' | 'incidentDate'
->
+> & { whatsapp: string }
 
 export type ReportCreation = ReportDraft & { ownerId: string; state: 'active' }
 
@@ -39,6 +39,7 @@ export class CreateReport {
       ...draft,
       title: draft.title.trim(),
       description: draft.description.trim(),
+      whatsapp: draft.whatsapp.replace(/[\s()-]/g, ''),
       ownerId,
       state: 'active',
     })

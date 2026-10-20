@@ -242,6 +242,7 @@ test('POST /reports atribuye al sujeto verificado y publica el reporte en el cat
           city: 'La Paz',
           zone: 'Centro',
           incidentDate: '2026-10-19',
+          whatsapp: '+591 (7000) 0000',
           ownerId: crypto.randomUUID(),
           state: 'resolved',
         }),
@@ -253,6 +254,7 @@ test('POST /reports atribuye al sujeto verificado y publica el reporte en el cat
       assert.equal(created.title, 'Mochila perdida')
       assert.ok(created.id)
       assert.ok(created.createdAt)
+      assert.equal('whatsapp' in created, false)
 
       const catalog = await fetch(`${url}/reports`)
       assert.equal(catalog.status, 200)
@@ -264,6 +266,18 @@ test('POST /reports atribuye al sujeto verificado y publica el reporte en el cat
       assert.equal(reports[0].author.id, subject)
       assert.equal('ownerId' in reports[0], false)
       assert.equal('email' in reports[0], false)
+      assert.equal(JSON.stringify(reports).includes('59170000000'), false)
+
+      const pool = createPool(process.env.TEST_DATABASE_URL!)
+      try {
+        const contact = await pool.query<{ phone: string }>(
+          'SELECT phone FROM report_contacts WHERE report_id = $1',
+          [created.id],
+        )
+        assert.deepEqual(contact.rows, [{ phone: '+59170000000' }])
+      } finally {
+        await pool.end()
+      }
     })
   } finally {
     await jwks.close()

@@ -34,6 +34,10 @@ export class PostgresReportRepository implements ReportRepository, ReportCreator
           report.incidentDate,
         ],
       )
+      await client.query('INSERT INTO report_contacts (report_id, phone) VALUES ($1, $2)', [
+        result.rows[0]!.id,
+        report.whatsapp,
+      ])
       await client.query('COMMIT')
       return result.rows[0]!
     } catch (error) {

@@ -544,9 +544,31 @@
     "testId": 28
   },
   {
-    "commitId": "HEAD",
+    "commitId": "c69c92a4196a1aac17b428f6479da5b59f857035",
     "commitName": "feat(api): publicar reportes autenticados (#5)\n\nPublicar un reporte en PostgreSQL asignando el sujeto verificado, estado activo, ID y fecha generados por el servidor; exponerlo después en el catálogo público.\n\nRED: el escenario HTTP/PostgreSQL de publicación devolvió 404 antes de existir POST /reports. Ejecutado contra PostgreSQL 16 desechable local porque la imagen PostgreSQL 17 no estaba disponible y su pull quedó colgado.\n\nGREEN: el mismo escenario pasó (1/1), comprobando propietario verificado pese al ownerId manipulado, estado activo, persistencia y proyección pública. pnpm test: testId 28, TDDLab timestamps 1792471761132 y 1792471803901; 54 aprobadas y 0 fallidas en ambas ejecuciones. También pasaron pnpm typecheck, pnpm check:boundaries, pnpm check:docs y pnpm format:check.\n\nLimitación de evidencia: la RED/GREEN HTTP/PG se conserva en la prueba de integración, fuera del recorder TDDLab; el recorder no ejecutó esa suite.",
     "commitTimestamp": 1792471877906,
     "testId": 28
+  },
+  {
+    "numPassedTests": 54,
+    "failedTests": 1,
+    "numTotalTests": 55,
+    "timestamp": 1792471997299,
+    "success": false,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 55,
+    "failedTests": 0,
+    "numTotalTests": 55,
+    "timestamp": 1792472038850,
+    "success": true,
+    "testId": 29
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(api): guardar WhatsApp de forma privada (#5)\n\nNormalizar espacios, guiones y paréntesis del teléfono antes de persistirlo en report_contacts dentro de la transacción de publicación. La respuesta HTTP y el catálogo público no contienen el contacto.\n\nRED: testId 29; TDDLab timestamp 1792471997299; 54 aprobadas y 1 fallida porque se conservaron los separadores. La prueba HTTP/PG del mismo recorrido también falló: no existía fila privada para el reporte.\n\nGREEN: testId 29; TDDLab timestamp 1792472038850; 55 aprobadas y 0 fallidas. La integración HTTP/PostgreSQL pasó 1/1 y comprobó el valor normalizado en report_contacts y su ausencia de las respuestas públicas. Verificación adicional: pnpm typecheck, pnpm check:docs y pnpm format:check.",
+    "commitTimestamp": 1792472118990,
+    "testId": 29
   }
 ]
