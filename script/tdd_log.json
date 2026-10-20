@@ -658,9 +658,31 @@
     "testId": 23
   },
   {
-    "commitId": "HEAD",
+    "commitId": "a328eed2bba8388e1212c9878075be6345d42dc9",
     "commitName": "refactor(web): caracterizar publicación, guardados y gestión de reportes",
     "commitTimestamp": 1792509971000,
     "testId": 23
+  },
+  {
+    "numPassedTests": 77,
+    "failedTests": 1,
+    "numTotalTests": 78,
+    "timestamp": 1792510798000,
+    "success": false,
+    "testId": 24
+  },
+  {
+    "numPassedTests": 78,
+    "failedTests": 0,
+    "numTotalTests": 78,
+    "timestamp": 1792510828000,
+    "success": true,
+    "testId": 24
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "refactor(web): integrar vistas MVP, navegación y límites con verificación progresiva",
+    "commitTimestamp": 1792510829000,
+    "testId": 24
   }
 ]

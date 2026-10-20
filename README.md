@@ -43,13 +43,13 @@ La interfaz abre directamente en un dashboard. La barra lateral separa Resumen, 
 
 ## Estructura de la interfaz
 
-- apps/web/src/pages: un archivo por apartado del dashboard.
-- apps/web/src/components/layout: barra lateral y encabezado.
-- apps/web/src/components/reports: tarjetas, detalle, búsqueda, filtros y mapa de reportes.
-- apps/web/src/components/common: encabezados de página y estados vacíos reutilizables.
-- apps/web/src/data: publicaciones de demostración.
-- apps/web/src/types.ts: tipos compartidos de la interfaz.
-- apps/web/src/App.tsx: estado compartido y composición del dashboard.
+La aplicación web sigue Model–View–Presenter; la [guía MVP](docs/architecture/mvp.md) explica capas, flujo y pruebas.
+
+- apps/web/src/models: entidades, reglas y puertos, sin React ni navegador.
+- apps/web/src/presenters: estado de presentación por funcionalidad y adaptadores React `use*.ts`.
+- apps/web/src/views: páginas, layouts (barra lateral, encabezado) y componentes reutilizables.
+- apps/web/src/infrastructure: clientes HTTP, Supabase Auth, efectos del navegador y datos demo.
+- apps/web/src/app: entrada y composición de dependencias.
 
 ## Workspaces
 

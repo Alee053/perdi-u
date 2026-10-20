@@ -15,6 +15,15 @@
     ]
   },
   {
+    "area": "Arquitectura MVP de la web",
+    "prefixes": ["apps/web/src/", "scripts/lib/web-layers.mjs"],
+    "review": [
+      "docs/architecture/mvp.md",
+      ".agents/skills/mvp-react/SKILL.md",
+      ".agents/skills/mvp-react/references/examples.md"
+    ]
+  },
+  {
     "area": "Pruebas y herramientas",
     "prefixes": [
       "package.json",

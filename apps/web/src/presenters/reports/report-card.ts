@@ -20,7 +20,6 @@ export interface ReportCard {
   posted: string
   image: string
   person: string
-  initials: string
 }
 
 export const categoryLabels: Record<ReportCategory, string> = {
@@ -41,15 +40,6 @@ const publishedDay = new Intl.DateTimeFormat('es-BO', {
   timeZone: 'America/La_Paz',
 })
 
-export const initials = (name: string) =>
-  name
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0])
-    .join('')
-    .toLocaleUpperCase('es')
-
 export function toReportCard(report: Report): ReportCard {
   const resolved = report.state === 'resolved'
   return {
@@ -68,6 +58,5 @@ export function toReportCard(report: Report): ReportCard {
     posted: publishedDay.format(new Date(report.createdAt)),
     image: report.imageUrls[0] || categoryImages[report.category],
     person: report.author.displayName,
-    initials: initials(report.author.displayName),
   }
 }

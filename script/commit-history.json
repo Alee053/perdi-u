@@ -437,12 +437,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "a328eed2bba8388e1212c9878075be6345d42dc9",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-20T15:26:11.000Z",
       "message": "refactor(web): caracterizar publicación, guardados y gestión de reportes",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/a328eed2bba8388e1212c9878075be6345d42dc9"
     },
     "stats": {
       "total": 1044,
@@ -452,6 +452,25 @@
     },
     "coverage": 90.99,
     "test_count": 68,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-10-20T15:40:29.000Z",
+      "message": "refactor(web): integrar vistas MVP, navegación y límites con verificación progresiva",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 10008,
+      "additions": 3469,
+      "deletions": 6539,
+      "date": "2026-10-20"
+    },
+    "coverage": 92.17,
+    "test_count": 78,
     "failed_tests": 0,
     "conclusion": "success"
   }

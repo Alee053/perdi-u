@@ -2,12 +2,15 @@
 
 Las reglas del proyecto se versionan junto al código. Al abrir una sesión en este repo, Codex descubre las skills de `.agents/skills/`; [AGENTS.md](../AGENTS.md) indica cuándo consultar cada una. No se necesita instalarlas globalmente, añadir un conector ni configurar una API de OpenAI para ejecutar las pruebas del proyecto. El acceso y uso de Codex se gestionan por cada integrante.
 
-| Skill                 | Cuándo se usa                                                       | Fuente canónica                                                     |
-| --------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| `perdiu-workflow`     | Tomar una issue, preparar rama/commits o entregar una PR.           | [CONTRIBUTING.md](../CONTRIBUTING.md)                               |
-| `perdiu-architecture` | Cambiar ownership, contratos, persistencia, exports o dependencias. | [Arquitectura](architecture.md), [servicios](services.md) y código. |
-| `perdiu-testing`      | Cambiar comportamiento o estrategia/comandos de verificación.       | [TDD y pruebas](testing.md)                                         |
-| `perdiu-docs-sync`    | Antes de cerrar un cambio y preparar la PR.                         | [Mapa de impacto](maintenance-map.json)                             |
+| Skill                 | Cuándo se usa                                                           | Fuente canónica                                                         |
+| --------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `perdiu-workflow`     | Tomar una issue, preparar rama/commits o entregar una PR.               | [CONTRIBUTING.md](../CONTRIBUTING.md)                                   |
+| `perdiu-architecture` | Cambiar ownership, contratos, persistencia, exports o dependencias.     | [Arquitectura](architecture.md), [servicios](services.md) y código.     |
+| `mvp-react`           | Crear o cambiar pantallas, presenters, reglas o clientes de `apps/web`. | [Arquitectura MVP](architecture/mvp.md) y `scripts/lib/web-layers.mjs`. |
+| `perdiu-testing`      | Cambiar comportamiento o estrategia/comandos de verificación.           | [TDD y pruebas](testing.md)                                             |
+| `perdiu-docs-sync`    | Antes de cerrar un cambio y preparar la PR.                             | [Mapa de impacto](maintenance-map.json)                                 |
+
+Claude Code descubre las skills en `.claude/skills/`. Para no mantener instrucciones divergentes, `.claude/skills/mvp-react/SKILL.md` solo repite el frontmatter y remite a la versión canónica de `.agents/skills/`; cualquier cambio de reglas se hace allí.
 
 ## Actualizar dentro de la misma PR
 
