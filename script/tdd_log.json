@@ -610,9 +610,31 @@
     "testId": 31
   },
   {
-    "commitId": "HEAD",
+    "commitId": "33cdc2b3ad9be549b8ca22c3d94a234ca40d3cb5",
     "commitName": "feat(catalog): exigir zona del reporte (#5)\n\nRechazar reportes cuya zona está vacía después de recortar espacios y evitar la escritura al repositorio.\n\nRED: testId 31; TDDLab timestamp 1792472209274; 56 aprobadas y 1 fallida porque se aceptó la zona vacía.\n\nGREEN: testId 31; TDDLab timestamp 1792472223726; 57 aprobadas y 0 fallidas. Verificación adicional: pnpm typecheck y pnpm format:check. Refactor: no hizo falta.",
     "commitTimestamp": 1792472244782,
     "testId": 31
+  },
+  {
+    "numPassedTests": 57,
+    "failedTests": 1,
+    "numTotalTests": 58,
+    "timestamp": 1792472297319,
+    "success": false,
+    "testId": 32
+  },
+  {
+    "numPassedTests": 58,
+    "failedTests": 0,
+    "numTotalTests": 58,
+    "timestamp": 1792472321168,
+    "success": true,
+    "testId": 32
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(catalog): validar fecha real del reporte (#5)\n\nRechazar fechas de hecho que no cumplen YYYY-MM-DD o que no existen en el calendario antes de persistir.\n\nRED: testId 32; TDDLab timestamp 1792472297319; 57 aprobadas y 1 fallida porque se aceptó el 30 de febrero.\n\nGREEN: testId 32; TDDLab timestamp 1792472321168; 58 aprobadas y 0 fallidas. Verificación adicional: pnpm typecheck y pnpm format:check. Refactor: no hizo falta.",
+    "commitTimestamp": 1792472346682,
+    "testId": 32
   }
 ]

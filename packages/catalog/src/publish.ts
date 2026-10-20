@@ -36,6 +36,14 @@ export class CreateReport {
       )
     if (!draft.city.trim()) throw new ReportValidationError('city', 'La ciudad es obligatoria.')
     if (!draft.zone.trim()) throw new ReportValidationError('zone', 'La zona es obligatoria.')
+    const incidentDate = new Date(`${draft.incidentDate}T00:00:00.000Z`)
+    if (
+      !/^\d{4}-\d{2}-\d{2}$/.test(draft.incidentDate) ||
+      draft.incidentDate.startsWith('0000') ||
+      Number.isNaN(incidentDate.getTime()) ||
+      incidentDate.toISOString().slice(0, 10) !== draft.incidentDate
+    )
+      throw new ReportValidationError('incidentDate', 'La fecha del hecho no es válida.')
     const whatsapp = draft.whatsapp.replace(/[\s()-]/g, '')
     if (!/^\+[1-9]\d{7,14}$/.test(whatsapp))
       throw new ReportValidationError(

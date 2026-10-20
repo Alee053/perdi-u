@@ -260,3 +260,28 @@ test('la publicación rechaza una zona vacía antes de persistir', async () => {
   )
   assert.equal(writes, 0)
 })
+
+test('la publicación rechaza una fecha de hecho inexistente antes de persistir', async () => {
+  let writes = 0
+  const publish = new CreateReport({
+    create: async (input) => {
+      writes += 1
+      return {
+        ...input,
+        id: 'report-12',
+        createdAt: '2026-10-19T12:00:00.000Z',
+      }
+    },
+  })
+
+  await assert.rejects(
+    () => publish.execute('verified-subject', { ...draft, incidentDate: '2026-02-30' }),
+    (error: unknown) => {
+      assert.ok(error instanceof Error)
+      assert.equal('field' in error ? error.field : undefined, 'incidentDate')
+      assert.match(error.message, /fecha/i)
+      return true
+    },
+  )
+  assert.equal(writes, 0)
+})
