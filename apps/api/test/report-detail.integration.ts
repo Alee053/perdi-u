@@ -91,7 +91,8 @@ test('GET detalle y contacto aplican disponibilidad, ownership y proyección pri
       'type',
       'zone',
     ])
-    assert.deepEqual(publicDetail.imageUrls, ['/images/object.svg'])
+    assert.equal(publicDetail.imageUrls.length, 1)
+    assert.equal(publicDetail.imageUrls[0], '/images/object.svg')
     assert.ok(
       !JSON.stringify(publicDetail).includes('private-email-sentinel') &&
         !JSON.stringify(publicDetail).includes('private-storage-sentinel') &&

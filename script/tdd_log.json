@@ -392,9 +392,15 @@
     "testId": 20
   },
   {
-    "commitId": "HEAD",
+    "commitId": "8f1067bb2bd6f68861cf7fe9c4c3b2157d0ece46",
     "commitName": "feat(reports): consultar detalle y contacto por WhatsApp (#7)",
     "commitTimestamp": 1792472831613,
     "testId": 20
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(api): assert report image response fields (#7)",
+    "commitTimestamp": 1792473057570,
+    "testId": 21
   }
 ]
