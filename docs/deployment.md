@@ -3,7 +3,7 @@
 Backend manual y desechable en `/opt/stacks/perdi-u`, independiente de Pulso y del resto de stacks. El frontend se despliega con Vercel. No hay CD, registro de imágenes ni servicios nuevos de pago.
 
 ```text
-Navegador → https://perdi-u.vercel.app
+Navegador → https://perdi-u-chi.vercel.app
                 /api/* y /auth/* (rewrites de Vercel)
                          ↓ HTTPS
                 perdi-u-api.alecastro.dev (NPM)
@@ -58,9 +58,11 @@ Apuntar el DNS al VPS. NPM ya pertenece a `proxy-net`; no hacen falta puertos nu
 
 Usar la **raíz del monorepo** como Root Directory, Node 24 y pnpm del `packageManager`. [`vercel.json`](../vercel.json) define Vite, build web con Turbo, salida `apps/web/dist`, rewrites externas y fallback de la SPA. Esa configuración debe estar integrada en `main` antes del deploy automático del frontend; prepararla localmente no cambia un proyecto Vercel existente.
 
-Mantener `VITE_API_BASE_URL=/api` y `VITE_AUTH_URL=/auth` (son los valores por defecto). `API_PROXY_TARGET`/`AUTH_PROXY_TARGET` solo sirven a Vite local; no configuran el proxy en Vercel. No definir secretos de BD/Auth en Vercel. Comprobar que `perdi-u.vercel.app` pertenece al proyecto nuevo y que las rewrites están publicadas.
+En Vercel, `ENABLE_EXPERIMENTAL_COREPACK=1` permite usar el pnpm fijado en `packageManager`; mantener Install Command automático.
 
-Auth usa `AUTH_SITE_URL=https://perdi-u.vercel.app`, issuer `https://perdi-u.vercel.app/auth` y solo permite redirigir a ese sitio. Si cambia el dominio definitivo, cambiar `AUTH_SITE_URL` en el VPS, recrear el stack y actualizar la documentación. Los previews con otra URL no se habilitan automáticamente para autenticación.
+Mantener `VITE_API_BASE_URL=/api` y `VITE_AUTH_URL=/auth` (son los valores por defecto). `API_PROXY_TARGET`/`AUTH_PROXY_TARGET` solo sirven a Vite local; no configuran el proxy en Vercel. No definir secretos de BD/Auth en Vercel. Comprobar que `perdi-u-chi.vercel.app` pertenece al proyecto nuevo y que las rewrites están publicadas.
+
+Auth usa `AUTH_SITE_URL=https://perdi-u-chi.vercel.app`, issuer `https://perdi-u-chi.vercel.app/auth` y solo permite redirigir a ese sitio. Si cambia el dominio definitivo, cambiar `AUTH_SITE_URL` en el VPS, recrear Auth y API y actualizar la documentación. Ambos deben usar el mismo issuer; las sesiones que conserven el anterior deben volver a iniciar sesión. Los previews con otra URL no se habilitan automáticamente para autenticación.
 
 ## Arranque y actualización manual
 
@@ -95,23 +97,34 @@ docker compose logs --tail 80 migrate database-init
 
 Los logs de Auth pueden contener correos y rutas de confirmación; inspeccionarlos en privado y no compartirlos sin filtrar. No ejecutar `docker compose config` sin `--quiet` en una salida compartida: expande los secretos.
 
-## Confirmar cuentas para la demo
+## Registro directo para la demo
 
-Mailpit captura correos sin enviarlos. La confirmación sigue siendo obligatoria; no se ha habilitado autoconfirmación ni SMTP real. Abrir un túnel desde el portátil:
+En el `.env` privado de este VPS se habilitó `AUTH_MAILER_AUTOCONFIRM=true` por decisión del propietario: el registro entrega sesión inmediatamente y no envía un enlace de confirmación. El correo declarado no demuestra control de la casilla. No se ha configurado entrega de correo ni recuperación de contraseña por correo para esta demo.
+
+El Compose conserva `false` como valor por defecto; el [ejemplo de entorno de la demo](../deploy/vps/.env.example) activa la excepción expresamente. No cambiar el Compose raíz de desarrollo. El frontend ya admite una sesión inmediata al registrarse, así que este ajuste solo requiere recrear Auth/API:
+
+```bash
+cd /opt/stacks/perdi-u
+docker compose up -d --no-deps --force-recreate --wait --wait-timeout 120 auth api
+```
+
+Las cuentas que quedaron pendientes antes del cambio siguen pendientes al intentar iniciar sesión. Volver a «Crear cuenta» con el mismo correo y la contraseña original completa su registro bajo la nueva configuración; no se borran cuentas ni se cambian contraseñas.
+
+Mailpit sigue privado para diagnóstico. Para inspeccionarlo, abrir un túnel desde el portátil:
 
 ```bash
 ssh -N -L 18025:127.0.0.1:18025 tars-vps
 ```
 
-Abrir <http://127.0.0.1:18025>, registrar una cuenta desde Vercel y abrir el enlace en el mismo navegador para completar PKCE. Luego verificar inicio de sesión, recarga, `/api/me` y cierre. Esta captura privada sirve a la demo; para registros públicos con entrega de correo hace falta configurar un SMTP autorizado y verificar el remitente.
+Abrir <http://127.0.0.1:18025>. No hace falta acceder a Mailpit para registrarse en el modo actual. Para volver a exigir confirmación, poner `AUTH_MAILER_AUTOCONFIRM=false`, configurar un SMTP autorizado con su remitente y recrear Auth/API. Con confirmación habilitada, el enlace debe abrirse en el mismo navegador para completar PKCE; Mailpit solo captura correos y no los entrega.
 
 ## Verificar después de NPM y Vercel
 
 ```bash
 curl --fail https://perdi-u-api.alecastro.dev/api/reports
 curl --fail https://perdi-u-api.alecastro.dev/auth/health
-curl --fail https://perdi-u.vercel.app/api/reports
-curl -i https://perdi-u.vercel.app/api/me
+curl --fail https://perdi-u-chi.vercel.app/api/reports
+curl -i https://perdi-u-chi.vercel.app/api/me
 ```
 
 Esperar catálogo `200` con array JSON, Auth `200` y `/me` sin token `401`. Confirmar que el dominio de Vercel devuelve JSON en `/api/reports`, no el HTML de la SPA. El catálogo sembrado no debe exponer contactos privados ni claves de almacenamiento. Un stack saludable en Docker no demuestra todavía que DNS, certificado o rewrites estén correctos; probar ambos dominios y una sesión real.

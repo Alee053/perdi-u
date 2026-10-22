@@ -494,17 +494,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "a344d65335336e8f6c639c7d67504455e581793d",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-10-22T02:42:32.000Z",
       "message": "docs(api): registrar verificación HTTPS de la demo",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/a344d65335336e8f6c639c7d67504455e581793d"
     },
     "stats": {
       "total": 12,
       "additions": 9,
       "deletions": 3,
+      "date": "2026-10-22"
+    },
+    "coverage": 92.17,
+    "test_count": 78,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-22T03:10:08.000Z",
+      "message": "fix(api): ajustar dominio y registro directo de la demo",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 57,
+      "additions": 44,
+      "deletions": 13,
       "date": "2026-10-22"
     },
     "coverage": 92.17,
