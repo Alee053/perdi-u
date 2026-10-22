@@ -1,3 +1,4 @@
+import { whatsAppUrl } from '../../models/reports/contact.js'
 import { matchesFilters } from '../../models/reports/filters.js'
 import { removeReport, resolveReport } from '../../models/reports/publication.js'
 import {
@@ -124,10 +125,11 @@ export class ReportsPresenter extends Store<ReportsState> {
   contact = (id: string) => {
     const report = this.find(id)
     if (report?.source !== 'demo') return
-    this.dependencies.effects.openWhatsApp(
+    const url = whatsAppUrl(
       report.phone,
       'Hola, vi tu reporte "' + report.title + '" en PerdiU. ¿Podemos coordinar?',
     )
+    if (url) this.dependencies.effects.openWhatsApp(url)
   }
 
   add = (report: Report) => this.update({ reports: [report, ...this.state.reports] })

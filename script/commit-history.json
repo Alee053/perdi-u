@@ -646,12 +646,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "3e33cda882391e0cb9ecd8646eb8b6bef46671cb",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-22T03:12:27.000Z",
       "message": "feat(web): presentar la carga, ausencia y error del detalle de un reporte (#7)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/3e33cda882391e0cb9ecd8646eb8b6bef46671cb"
     },
     "stats": {
       "total": 150,
@@ -661,6 +661,25 @@
     },
     "coverage": 90.3,
     "test_count": 93,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T03:16:42.000Z",
+      "message": "feat(web): contactar al autor por WhatsApp tras iniciar sesión (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 172,
+      "additions": 159,
+      "deletions": 13,
+      "date": "2026-10-22"
+    },
+    "coverage": 90.47,
+    "test_count": 95,
     "failed_tests": 0,
     "conclusion": "success"
   }

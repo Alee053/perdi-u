@@ -14,7 +14,10 @@ export interface Effects {
   /** The page came back from the back/forward cache. */
   onPageRestored(listener: () => void): () => void
   reload(): void
-  openWhatsApp(phone: string, message: string): void
+  /** Opens a chat link already built and validated by `models/reports/contact`. */
+  openWhatsApp(url: string): void
+  /** Absolute address of an app path, to share it outside PerdiU. */
+  absoluteUrl(path: string): string
   createPreview(file: PhotoFile): string
   revokePreview(url: string): void
   now(): Date

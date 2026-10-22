@@ -924,9 +924,39 @@
     "testId": 34
   },
   {
-    "commitId": "HEAD",
+    "commitId": "3e33cda882391e0cb9ecd8646eb8b6bef46671cb",
     "commitName": "feat(web): presentar la carga, ausencia y error del detalle de un reporte (#7)",
     "commitTimestamp": 1792638748399,
     "testId": 34
+  },
+  {
+    "numPassedTests": 93,
+    "failedTests": 2,
+    "numTotalTests": 95,
+    "timestamp": 1792638877405,
+    "success": false,
+    "testId": 35
+  },
+  {
+    "numPassedTests": 94,
+    "failedTests": 1,
+    "numTotalTests": 95,
+    "timestamp": 1792638921747,
+    "success": false,
+    "testId": 35
+  },
+  {
+    "numPassedTests": 95,
+    "failedTests": 0,
+    "numTotalTests": 95,
+    "timestamp": 1792638970044,
+    "success": true,
+    "testId": 35
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): contactar al autor por WhatsApp tras iniciar sesión (#7)",
+    "commitTimestamp": 1792639003753,
+    "testId": 35
   }
 ]

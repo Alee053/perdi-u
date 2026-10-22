@@ -41,14 +41,14 @@ const catalogReport: CatalogReport = {
 
 function setup(reports: DemoReport[] = [], saved: string[] = []) {
   const notices: { message: string; error: boolean }[] = []
-  const opened: [string, string][] = []
+  const opened: string[] = []
   const catalog = { find: (id: string) => (id === catalogReport.id ? catalogReport : undefined) }
   const presenter = new ReportsPresenter(
     reports,
     {
       catalog,
       notices: { show: (message: string, error = false) => notices.push({ message, error }) },
-      effects: { openWhatsApp: (phone: string, message: string) => opened.push([phone, message]) },
+      effects: { openWhatsApp: (url: string) => opened.push(url) },
     },
     saved,
   )
@@ -88,7 +88,8 @@ test('el detalle ofrece contacto en reportes ajenos y resolver en los propios', 
   )
   presenter.contact('demo-1')
   assert.deepEqual(opened, [
-    ['59170000001', 'Hola, vi tu reporte "Reporte demo-1" en PerdiU. ¿Podemos coordinar?'],
+    'https://wa.me/59170000001?text=' +
+      encodeURIComponent('Hola, vi tu reporte "Reporte demo-1" en PerdiU. ¿Podemos coordinar?'),
   ])
   presenter.open('demo-2')
   assert.equal(presenter.detail()?.canResolve, true)
