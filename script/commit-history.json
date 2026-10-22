@@ -513,17 +513,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "c62b92c76b04a3dca679d621d56fd9eb3548f154",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-10-22T02:40:17.000Z",
       "message": "feat(web): gestionar reportes propios con confirmación y reintento (#8)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/c62b92c76b04a3dca679d621d56fd9eb3548f154"
     },
     "stats": {
       "total": 1150,
       "additions": 924,
       "deletions": 226,
+      "date": "2026-10-22"
+    },
+    "coverage": 89.75,
+    "test_count": 91,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-22T02:47:02.000Z",
+      "message": "test(reports): aceptar historial y cierre con Auth real y documentar S1-08 (#8)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 533,
+      "additions": 478,
+      "deletions": 55,
       "date": "2026-10-22"
     },
     "coverage": 89.75,

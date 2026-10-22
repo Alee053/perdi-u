@@ -32,6 +32,8 @@ Los tests de caracterización de comportamiento existente pueden pasar desde el 
 | Verificadores del repositorio       | Unitarias, `scripts/test`                        | Detectar documentos/skills inválidos y admitir los válidos.                                                                                                                                              |
 | Documentación y skills              | Check local y revisión                           | Frontmatter y destinos locales válidos; revisar manualmente exactitud, ejemplos e impacto.                                                                                                               |
 
+La gestión de S1-08 tiene unitarias de `ListOwnReports`/`ResolveReport`, selección propia, cliente HTTP y `OwnReportsPresenter`. `apps/api/test/own-reports.integration.ts` comprueba identidad con JWKS real, dos propietarios de igual nombre, filtros, 401/403/404/400, 503 real de PostgreSQL, persistencia tras reinicio e idempotencia mediante la versión `xmin` de la fila.
+
 ## Comandos
 
 Usar la versión de [`.node-version`](../.node-version) y pnpm de [`packageManager`](../package.json). Desde un clone limpio, instalar con `pnpm install --frozen-lockfile`. Los imports entre workspaces resuelven `dist`: el build de dependencias debe preceder a una prueba focalizada. `pnpm test` y `pnpm test:unit` preparan ese build. `.npmrc` habilita los módulos ESM de Jest tanto para pnpm como para el `npx jest` del hook original; conservar pnpm 10.29.2 y Node 24.
@@ -56,6 +58,9 @@ pnpm test:e2e
 # Supabase Auth real en un proyecto Compose desechable (requiere Docker).
 pnpm test:auth
 
+# Reportes privados en Chromium móvil/escritorio con Auth real.
+pnpm test:auth --with-browser
+
 # Calidad rápida utilizada en CI.
 pnpm verify
 ```
@@ -65,6 +70,8 @@ pnpm verify
 La configuración de integración resuelve el import de `apps/api/src/app.js` contra `apps/api/dist/app.js`, generado con el compilador real del proyecto antes de ejecutar las pruebas. TypeScript comprueba los tipos del código fuente. Esto conserva los decoradores y metadata de NestJS y comprueba el mismo artefacto que arranca en producción. Babel solo elimina tipos de los tests y módulos sin decoradores.
 
 El runner solo crea/elimina su contenedor y usa credenciales efímeras; `TRUNCATE` en preparación de tests exige su indicador de aislamiento. No apuntar estos comandos a bases compartidas. Las capturas quedan en `test-results/`, ignoradas por Git; se pueden adjuntar con datos ficticios y en CI se conservan por tiempo limitado.
+
+`scripts/browser-own-reports.mjs`, invocado por `pnpm test:auth --with-browser`, usa dos cuentas confirmadas en GoTrue/Mailpit y reportes preparados en PostgreSQL aislado. Comprueba lista/filtros, cancelación, fallo/reintento, cierre desde detalle/lista, catálogo, cambio de cuenta, vacío, perfil/recarga y reinicio en móvil/escritorio. Los fallos HTTP deliberados se inyectan solo para verificar el mensaje y reintento; el cierre y la persistencia usan servicios reales. No demuestra publicación ni contacto: #5/#7 siguen pendientes. Este comando adicional no forma parte de los jobs actuales de CI; `acceptance` conserva `pnpm test:e2e` con los nuevos escenarios HTTP.
 
 ## Registro original de TDDLab
 

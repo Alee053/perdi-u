@@ -34,10 +34,10 @@ flowchart LR
   end
   subgraph Model["Model (models/)"]
     Rules["Reglas y entidades<br/>filters, publication, credentials"]
-    Ports["Puertos<br/>ReportsRepository, AuthGateway, AccountClient"]
+    Ports["Puertos<br/>ReportsRepository, OwnReportsRepository, AuthGateway, AccountClient"]
   end
   subgraph Infra["Infrastructure (infrastructure/)"]
-    Http["HTTP: catalog-client, account-client"]
+    Http["HTTP: catalog-client, own-reports-client, account-client"]
     Auth["Supabase Auth"]
     Browser["browser-effects, datos demo"]
   end
@@ -73,7 +73,7 @@ apps/web/src/
 │   ├── app/                  shell (navegación), notice (avisos), useApp
 │   ├── auth/                 auth (sesión), auth-form (formulario), useAuthForm
 │   ├── catalog/              catalog (consulta), filters (selección)
-│   └── reports/              reports (demo y detalle), publish (formulario), report-card
+│   └── reports/              reports (demo y detalle), own-reports (historial/cierre), publish, report-card
 ├── views/                    View
 │   ├── layouts/              AppShell, Sidebar, AppHeader
 │   ├── pages/                Una página por sección
@@ -108,6 +108,16 @@ apps/web/src/
 
 La View nunca filtra ni formatea; el Model nunca sabe qué texto se mostrará.
 
+## Consultar y resolver reportes propios
+
+1. `OwnReportsPresenter.start(auth)` sigue la identidad verificada. Un cambio cancela listas y cierres pendientes, vacía el historial anterior y pide a la composición limpiar detalle, guardados y borradores.
+2. `OwnReportsRepository` del Model se implementa con `own-reports-client`: bearer, `no-store`, DTO validado y proyección explícita. `selectOwnReports` compara `author.id`; los filtros de la vista se aplican al historial completo recibido.
+3. `MyReportsPage` y `ReportDetail` delegan `requestResolve`. El presenter expone la confirmación; `ResolveConfirmation` usa un diálogo nativo para foco y teclado y delega cancelar/confirmar.
+4. `confirmResolve` bloquea envíos simultáneos y espera `PATCH /reports/:id/resolve`. Ante fallo conserva el estado y muestra un mensaje seguro. Ante 401 descarta datos y solicita ingreso. Un éxito tardío de otra cuenta se descarta.
+5. Tras el `204`, la composición actualiza detalle/guardados, excluye el reporte del catálogo y repite su consulta vigente. El reporte sigue visible en su historial privado, con el tipo original y estado Resuelto.
+
+La autorización efectiva pertenece a la API y al cambio condicional en PostgreSQL; ocultar controles no sustituye ese límite. El detalle/contacto persistente de #7 y la publicación de #5 siguen pendientes; el formulario demo vuelve al resumen y no agrega filas al historial real.
+
 ## 7. Papel de React y Vite
 
 - React renderiza la View y aporta el ciclo de vida. Los hooks `use*.ts` del Presenter son el único punto de contacto: `useStore` usa `useSyncExternalStore` para suscribirse al estado del núcleo, y `useApp` arranca y limpia la sesión y el catálogo con `useEffect`.
@@ -120,8 +130,8 @@ La View nunca filtra ni formatea; el Model nunca sabe qué texto se mostrará.
 | -------------- | ------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | Model          | `apps/web/test/models/` — reglas, límites, datos inválidos.                                                         | Jest                         |
 | Presenter      | `apps/web/test/presenters/`, `auth.test.ts`, `catalog.test.ts` — eventos, estados, errores, navegación, con dobles. | Jest                         |
-| Infrastructure | Clientes HTTP con `fetch` doblado (`catalog.test.ts`, `auth.test.ts`).                                              | Jest                         |
-| View           | Recorridos en Chromium de escritorio y móvil (`scripts/browser-catalog.mjs`).                                       | Playwright (`pnpm test:e2e`) |
+| Infrastructure | Clientes HTTP con `fetch` doblado (`catalog.test.ts`, `auth.test.ts`, `own-reports-client.test.ts`).                | Jest                         |
+| View           | Recorridos en Chromium de escritorio y móvil (`scripts/browser-catalog.mjs` y `scripts/browser-own-reports.mjs`).   | Playwright (`pnpm test:e2e`) |
 | Arquitectura   | Imports permitidos por capa (`scripts/test/web-layers.test.mjs`, `pnpm check:boundaries`).                          | Jest + script                |
 
 Los ciclos rojo-verde de esta migración están en [su evidencia](../validation/mvp-refactor.md).

@@ -61,9 +61,11 @@ La aplicación web sigue Model–View–Presenter; la [guía MVP](docs/architect
 
 La [guía de arquitectura](docs/architecture.md) define responsabilidades y dependencias. `pnpm check:boundaries` comprueba imports entre workspaces y sus exports públicos. Los paquetes compartidos se recompilan en modo watch con `pnpm dev`.
 
-«Explorar reportes» consulta `GET /reports` de PostgreSQL a través del proxy `/api` de Vite. La búsqueda por título/descripción ignora mayúsculas y tildes y se combina en el servidor con tipo, categoría y ciudad. Cada consulta devuelve hasta 50 reportes activos, del más reciente al más antiguo; al alcanzar el límite, la interfaz sugiere ajustar los filtros. «Limpiar filtros» restablece el catálogo y los controles; las consultas anteriores se cancelan y sus respuestas se descartan. Distingue carga, error con reintento de la misma búsqueda, catálogo vacío y búsqueda sin coincidencias con acceso a publicación. No usa datos demo como fallback. El detalle abierto desde este catálogo muestra únicamente datos públicos, sin contacto ni controles de propietario. Las imágenes ausentes usan SVG locales por categoría; el mapa ilustrativo pertenece a la demo.
+«Explorar reportes» consulta `GET /reports` de PostgreSQL a través del proxy `/api` de Vite. La búsqueda por título/descripción ignora mayúsculas y tildes y se combina en el servidor con tipo, categoría y ciudad. Cada consulta devuelve hasta 50 reportes activos, del más reciente al más antiguo; al alcanzar el límite, la interfaz sugiere ajustar los filtros. «Limpiar filtros» restablece el catálogo y los controles; las consultas anteriores se cancelan y sus respuestas se descartan. Distingue carga, error con reintento de la misma búsqueda, catálogo vacío y búsqueda sin coincidencias con acceso a publicación. No usa datos demo como fallback. El detalle del catálogo conserva la proyección pública; si el reporte pertenece a la cuenta verificada, ofrece el cierre con confirmación. El contacto persistente de #7 sigue pendiente. Las imágenes ausentes usan SVG locales por categoría; el mapa ilustrativo pertenece a la demo.
 
-Resumen, Publicar, Mis reportes y Guardados conservan sus flujos de demostración: el encabezado muestra la cuenta autenticada, pero aún no hay escrituras persistentes desde la web. Los guardados solo viven en memoria. Los reportes/telefonía demo y el seed son ficticios; el seed incluye un autor «Santiago Demo» para comprobar que su nombre no concede permisos. Las fotos y tipografías demo usan Unsplash y Google Fonts.
+«Mis reportes» consulta `GET /me/reports` con la sesión verificada, incluye activos y resueltos y permite filtrar Todos/Activos/Resueltos. El cierre pide confirmación y llama `PATCH /reports/:id/resolve`: solo el propietario puede resolver, un fallo conserva el estado y repetir un cierre autorizado no vuelve a escribirlo. Los resueltos salen del catálogo y siguen en el historial privado y desde «Mi perfil», también después de recargar.
+
+Resumen, mapa y Publicar conservan sus flujos de demostración; el formulario lo advierte y sus reportes no se añaden al historial persistente. Los guardados solo viven en memoria. Los reportes/telefonía demo y el seed son ficticios; el seed incluye un autor «Santiago Demo» para comprobar que su nombre no concede permisos. La publicación persistente de #5 y el detalle/contacto de #7 siguen pendientes: el recorrido completo publicar → contactar → resolver requiere integrarlas. Consulta [la evidencia de S1-08](docs/validation/s1-08.md).
 
 ## Seguimiento TDD
 
@@ -83,11 +85,14 @@ Ejecutar `pnpm test` en rojo y en verde durante cada ciclo. Los scripts original
 pnpm verify
 pnpm test:integration
 pnpm test:e2e
+pnpm test:auth --with-browser
 ```
 
 La [guía de TDD y pruebas](docs/testing.md) explica selección de interfaces, ciclos red/green y comandos focalizados. `test:e2e` ya incluye integración/build: no hace falta ejecutar ambos íntegros en cada entrega. `pnpm test:auth` comprueba registro, confirmación, sesión y `GET /me` contra Supabase Auth real en un proyecto Compose desechable. `pnpm format` aplica el estilo; `pnpm format:check` lo verifica. Jest 29.7 es el ejecutor compartido con la instrumentación original de TDDLab.
 
-Las dos últimas órdenes crean y eliminan un PostgreSQL aislado con credenciales efímeras, sin requerir `.env` ni modificar la base de desarrollo. `test:e2e` también inicia API/web en puertos libres y usa Chromium para comprobar carga, búsqueda sin tildes, filtros combinados, limpieza, límite, privacidad, error/reintento, vacío, reinicio y recorridos de móvil/escritorio. Usa Chromium del sistema (`/usr/bin/chromium`) o define `CHROMIUM_PATH`; si no tienes uno, instala el navegador local de Playwright con `pnpm exec playwright install chromium`. Las capturas quedan en `test-results/`, ignorado por Git.
+Las verificaciones de integración crean y eliminan un PostgreSQL aislado con credenciales efímeras, sin requerir `.env` ni modificar la base de desarrollo. `test:e2e` también inicia API/web en puertos libres y usa Chromium para comprobar carga, búsqueda sin tildes, filtros combinados, limpieza, límite, privacidad, error/reintento, vacío, reinicio y recorridos de móvil/escritorio. Usa Chromium del sistema (`/usr/bin/chromium`) o define `CHROMIUM_PATH`; si no tienes uno, instala el navegador local de Playwright con `pnpm exec playwright install chromium`. Las capturas quedan en `test-results/`, ignorado por Git.
+
+`pnpm test:auth --with-browser` añade el recorrido privado de S1-08 con dos cuentas ficticias, confirmación, errores, recarga, reinicio y capturas móvil/escritorio; prepara reportes en la base aislada porque #5/#7 siguen pendientes.
 
 Consulta [la API](apps/api/README.md), [la evidencia de S1-01](docs/validation/s1-01.md) y [la de S1-02](docs/validation/s1-02.md).
 

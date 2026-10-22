@@ -45,7 +45,7 @@ Buscar en `views/`: cálculos (`filter`, conteos, fechas), `new FormData`, `wind
 
 ## Reglas que suelen romperse
 
-- La propiedad se compara por `author.id` (`isOwnedBy`), nunca por nombre visible.
+- La selección propia usa `author.id` (`selectOwnReports`); `isOwnedBy` pertenece a la demo. La autorización persistente exige el sujeto verificado en la API, nunca el nombre visible.
 - La View no importa `@perdiu/contracts`: recibe `ReportCard`, `AccountView` u otros view models.
 - Los mensajes para la persona los escribe el Presenter; el Model devuelve códigos (`'too_short'`, `'invalid'`).
 - No crear un presenter para todo: uno por responsabilidad (`ShellPresenter` navegación, `CatalogPresenter` catálogo, `PublishPresenter` formulario…). Tampoco interfaces sin un segundo implementador o un doble de prueba que las justifique.

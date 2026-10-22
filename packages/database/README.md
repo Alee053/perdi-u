@@ -1,6 +1,6 @@
 # @perdiu/database
 
-Único dueño de PostgreSQL: conexión, adapter SQL del catálogo, migraciones, seed y mantenimiento local. No depende de NestJS ni React. Implementa el puerto definido por `@perdiu/catalog`.
+Único dueño de PostgreSQL: conexión, adapter SQL del catálogo, migraciones, seed y mantenimiento local. No depende de NestJS ni React. Implementa los puertos público y privado definidos por `@perdiu/catalog`.
 
 ## Uso
 
@@ -19,6 +19,12 @@ pnpm db:seed
 ```
 
 Turbo compila las dependencias antes del mantenimiento, propaga `DATABASE_URL`/`NODE_ENV` y nunca cachea mutaciones. Compose sigue en la raíz: PostgreSQL 17, puerto local 5433 y volumen persistente. `pnpm db:down` conserva el volumen.
+
+## Gestión de reportes propios
+
+`reports.listOwned(ownerId, { state? })` filtra por UUID del propietario y estado opcional, conservando activos/resueltos y todo el historial en el orden del catálogo. `reports.resolveOwned(id, ownerId)` devuelve `resolved`, `forbidden` o `not_found`. La escritura incluye propietario y estado activo en el propio `UPDATE`: no existe una ventana de autorización entre una lectura y la mutación. Una repetición autorizada consulta la existencia sin reescribir el registro. No modifica `type`, `created_at`, contactos ni imágenes.
+
+El llamador debe suministrar el sujeto verificado de Auth. La API impone ese límite; el caso de uso no toma identidad del cuerpo ni del nombre. El esquema existente basta y las migraciones aplicadas se conservan. Las pruebas HTTP usan PostgreSQL desechable y comparan `xmin` para comprobar que repetir el cierre no genera una nueva versión de la fila.
 
 ## Base de Auth
 

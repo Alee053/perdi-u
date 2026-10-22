@@ -27,10 +27,12 @@ Rutas relativas a `apps/web/src`.
 - Presenter `presenters/reports/publish.presenter.ts` valida con `validateDraft`, muestra mensajes por campo, pide la vista previa a `Effects`, crea el reporte con `publishDemoReport` y coordina: `reports.add`, `filters.reset`, `onPublished` (navegar) y el aviso.
 - Model `models/reports/publication.ts`: reglas del borrador, foto aceptada, creación y permisos de resolver/eliminar.
 
-## Receta: añadir «Marcar como encontrado» a un reporte propio
+## 4. Resolver un caso propio
 
-1. Model: `markFound(reports, id, ownerId)` en `models/reports/publication.ts` usando `isOwnedBy`; prueba en `test/models/reports.test.ts`.
-2. Presenter: método `markFound = (id) => …` en `ReportsPresenter` que llama al Model y muestra el aviso; `detail()` expone `canMarkFound`. Prueba en `test/presenters/reports.test.ts`.
-3. View: en `views/components/ReportDetail.tsx`, `{detail.canMarkFound && <button onClick={onMarkFound}>…</button>}`; `AppShell` pasa `onMarkFound={() => reports.markFound(detail.card.id)}`.
+- Model: `models/reports/own-reports.ts` selecciona por `author.id`; `own-reports-repository.ts` define lista y cierre. El tipo `lost | found` se conserva al pasar a estado `resolved`.
+- Presenter: `OwnReportsPresenter` administra historial, filtros, confirmación, carga, error y respuestas tardías. `ReportsPresenter` conserva el detalle; `CatalogPresenter` descarta la fila pública tras la confirmación del servidor.
+- View: `MyReportsPage` y `ReportDetail` llaman `requestResolve`; `ResolveConfirmation` delega cancelar/confirmar y administra únicamente el foco nativo del diálogo.
+- Infrastructure: `own-reports-client.ts` consume `GET /me/reports` y `PATCH /reports/:id/resolve`. `app/dependencies.ts` conecta sesión y actualización de listas.
+- Pruebas: `test/presenters/own-reports.test.ts`, `test/own-reports-client.test.ts` y aceptación real documentada en [la guía de pruebas](../../../../docs/testing.md).
 
-Incorrecto: comprobar `report.person === …` o cambiar el array dentro del componente.
+Para extender este flujo, agregar primero un ejemplo del comportamiento en su interfaz pública y conservar las garantías de identidad, confirmación y persistencia. Las funciones de `publication.ts` pertenecen a la demo local; el cierre real usa el puerto y el servidor.

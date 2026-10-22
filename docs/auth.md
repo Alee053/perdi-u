@@ -18,6 +18,8 @@ Navegador ──/auth──▶ Vite proxy ──▶ GoTrue :9999 ──▶ Postg
 6. Cerrar sesión revoca la sesión actual en tres pasos: `POST /api/me/logout` registra el `session_id` verificado en `session_revocations`; luego se revoca en GoTrue y por último se borra la sesión local. Si la API falla, Auth no se cierra y se informa el error. Si falla GoTrue después de la API, la API ya rechaza el token y un reintento continúa con un 401 de la API. Los refresh tokens revocados dejan de funcionar y GoTrue conserva el `session_id` al renovar, así que la API también rechaza los tokens renovados de esa sesión. La revocación sobrevive a reinicios de la API.
 7. «Mi perfil» muestra nombre, foto o avatar genérico y correo propio a partir de `GET /api/me` (`Cache-Control: no-store`). Al cerrar sesión se vuelve al catálogo y se descartan identidad, guardados, detalle y borradores; si el navegador restaura la página desde su caché atrás/adelante, la web la recarga para verificar la sesión nuevamente.
 
+Un 401 de la lista propia o del cierre descarta sus datos y vuelve a solicitar ingreso. La sesión restaurada se verifica de nuevo con `/me`; el cambio de identidad cancela listas y cierres pendientes de la cuenta anterior.
+
 La identidad es siempre el `sub` verificado: un nombre visible o un ID enviado por el cliente nunca concede propiedad. `Publicar reporte`, `Mis reportes` y `Mi perfil` requieren sesión en la web; el catálogo, el mapa, los guardados del dispositivo y la seguridad siguen siendo públicos.
 
 ## Datos y permisos en PostgreSQL
@@ -75,7 +77,7 @@ pnpm dev              # web http://localhost:5173, API http://127.0.0.1:3000
 | `pnpm test:integration` | `GET /me` sobre PostgreSQL aislado con un JWKS HTTP local: 200 con identidad y perfil propio, 401 uniforme, 503 si no hay claves; `POST /me/logout` y reutilización del token antes y después de reiniciar la API; catálogo público.             |
 | `pnpm test:auth`        | Proveedor real: levanta este `compose.yaml` como proyecto desechable, registra, confirma vía Mailpit, inicia sesión, llama `/me`, renueva, revoca en la API (el mismo token recibe 401) y en Auth. Elimina contenedores y volúmenes al terminar. |
 
-La interfaz (formularios, redirecciones, recarga y cierre de sesión en móvil/escritorio) se comprobó manualmente con Playwright contra este stack. `pnpm test:e2e` solo cubre que una visita anónima a «Publicar» o «Mi perfil» lleva al login.
+`pnpm test:auth --with-browser` añade la aceptación de reportes propios con dos cuentas reales del proveedor: filtros, confirmación/cancelación, errores, cierre, catálogo, recarga desde perfil, reinicio, cambio de cuenta y móvil/escritorio. Los reportes se preparan directamente en la base de pruebas; publicación/contacto siguen pendientes en #5/#7. `pnpm test:e2e` solo cubre que una visita anónima a «Publicar» o «Mi perfil» lleva al login.
 
 ## Producción y límites
 

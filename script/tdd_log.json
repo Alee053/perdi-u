@@ -898,9 +898,15 @@
     "testId": 27
   },
   {
-    "commitId": "HEAD",
+    "commitId": "c62b92c76b04a3dca679d621d56fd9eb3548f154",
     "commitName": "feat(web): gestionar reportes propios con confirmación y reintento (#8)",
     "commitTimestamp": 1792636817753,
     "testId": 27
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(reports): aceptar historial y cierre con Auth real y documentar S1-08 (#8)",
+    "commitTimestamp": 1792637222895,
+    "testId": 28
   }
 ]

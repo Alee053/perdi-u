@@ -6,7 +6,23 @@ NestJS con PostgreSQL independiente y consultas parametrizadas mediante `pg`. El
 
 `GET /reports` devuelve un array de `ReportSummary` de `@perdiu/contracts`: solo activos, ordenados por `createdAt` descendente e ID ascendente en empates. `type` distingue pérdida/hallazgo y `state` distingue activo/resuelto. `incidentDate` usa `YYYY-MM-DD`; `createdAt` usa ISO UTC con seis decimales, conserva los microsegundos y se genera en PostgreSQL.
 
-El autor público tiene ID (sujeto de Auth), nombre y foto opcional. Los contactos están en tablas privadas; ni esos datos ni claves de almacenamiento se consultan para el catálogo. Una lista vacía devuelve `200 []`; fallos de consulta devuelven `503` con mensaje seguro en español. El catálogo es público y no tiene endpoints de escritura.
+El autor público tiene ID (sujeto de Auth), nombre y foto opcional. Los contactos están en tablas privadas; ni esos datos ni claves de almacenamiento se consultan para el catálogo. Una lista vacía devuelve `200 []`; fallos de consulta devuelven `503` con mensaje seguro en español. La lectura del catálogo es pública; el cierre de reportes requiere identidad verificada.
+
+## Reportes propios y cierre
+
+`GET /me/reports` exige el mismo guard que `/me`, responde con `Cache-Control: no-store` y un array de `ReportSummary`. Incluye todo el historial del sujeto verificado: activos y resueltos, sin el límite público de 50, por creación descendente e ID ascendente. `?state=active` o `?state=resolved` filtra antes de devolver los resultados; omitir `state` devuelve ambos. Parámetros desconocidos (incluido `ownerId`), repetidos o estados inválidos reciben `400`. Sin publicaciones devuelve `200 []`. El nombre visible no participa en la propiedad y se mantiene la proyección sin contacto ni claves de almacenamiento.
+
+`PATCH /reports/:id/resolve` no necesita cuerpo. Responde `204` sin contenido al cerrar un reporte propio o repetir un cierre propio ya aplicado. El propietario procede exclusivamente del token verificado; otros campos enviados no cambian autor, tipo ni estado de destino. Un `UPDATE` parametrizado condiciona simultáneamente ID, propietario y `state = active`; solo escribe `state = resolved`. Conserva `type`, fecha de publicación y los demás datos. Repeticiones y solicitudes concurrentes no generan otro cambio en una fila resuelta.
+
+| Situación                                          | Respuesta                         |
+| -------------------------------------------------- | --------------------------------- |
+| Token ausente, inválido, vencido o sesión revocada | `401`, `WWW-Authenticate: Bearer` |
+| Reporte de otro propietario, incluso ya resuelto   | `403`                             |
+| UUID válido inexistente                            | `404`                             |
+| Identificador mal formado                          | `400`                             |
+| Fallo de PostgreSQL o verificación no disponible   | `503` con mensaje seguro          |
+
+La lista y el cierre pasan por `ListOwnReports` y `ResolveReport` de `@perdiu/catalog`; el puerto privado `OwnReportsRepository` lo implementa el adapter PostgreSQL. No hay migraciones nuevas: `state` ya existía. Los resueltos quedan fuera de toda búsqueda pública y permanecen en la lista privada tras reiniciar. Editar, eliminar, reabrir y publicar no se incorporan con este endpoint. Evidencia y dependencias: [S1-08](../../docs/validation/s1-08.md).
 
 ## Cuenta autenticada
 

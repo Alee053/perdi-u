@@ -27,8 +27,8 @@ export function PublishPage({ form, actions }: PublishPageProps) {
         description="Comparte lo esencial para que la comunidad pueda reconocerlo."
       />
       <p className="hint">
-        Este formulario es una demostración. El reporte se conserva durante esta sesión y no
-        aparece en Mis reportes.
+        Este formulario es una demostración. El reporte se conserva durante esta sesión y no aparece
+        en Mis reportes.
       </p>
       <form className="panel publish-form" onSubmit={submit} noValidate>
         <fieldset className="type-choice">
