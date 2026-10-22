@@ -1248,9 +1248,39 @@
     "testId": 41
   },
   {
-    "commitId": "HEAD",
+    "commitId": "f7fa75c819bbbea061952f4ba106abe92b5a863e",
     "commitName": "feat(catalog): consultar y resolver reportes por propietario verificado (#8)",
     "commitTimestamp": 1792643280487,
     "testId": 41
+  },
+  {
+    "numPassedTests": 110,
+    "failedTests": 1,
+    "numTotalTests": 111,
+    "timestamp": 1792643308818,
+    "success": false,
+    "testId": 42
+  },
+  {
+    "numPassedTests": 111,
+    "failedTests": 0,
+    "numTotalTests": 111,
+    "timestamp": 1792643329163,
+    "success": true,
+    "testId": 42
+  },
+  {
+    "numPassedTests": 111,
+    "failedTests": 0,
+    "numTotalTests": 111,
+    "timestamp": 1792643454178,
+    "success": true,
+    "testId": 42
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(api): persistir historial y cierre autorizado de reportes (#8)",
+    "commitTimestamp": 1792643490325,
+    "testId": 42
   }
 ]

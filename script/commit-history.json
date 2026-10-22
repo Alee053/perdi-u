@@ -912,12 +912,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "f7fa75c819bbbea061952f4ba106abe92b5a863e",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-10-22T04:28:00.000Z",
       "message": "feat(catalog): consultar y resolver reportes por propietario verificado (#8)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/f7fa75c819bbbea061952f4ba106abe92b5a863e"
     },
     "stats": {
       "total": 152,
@@ -927,6 +927,25 @@
     },
     "coverage": 89.57,
     "test_count": 110,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-22T04:31:30.000Z",
+      "message": "feat(api): persistir historial y cierre autorizado de reportes (#8)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 337,
+      "additions": 330,
+      "deletions": 7,
+      "date": "2026-10-22"
+    },
+    "coverage": 89.61,
+    "test_count": 111,
     "failed_tests": 0,
     "conclusion": "success"
   }

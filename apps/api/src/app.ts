@@ -3,6 +3,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  ForbiddenException,
   Get,
   Header,
   HttpCode,
@@ -10,6 +11,7 @@ import {
   Module,
   NotFoundException,
   Param,
+  Patch,
   Post,
   Query,
   ServiceUnavailableException,
@@ -21,8 +23,10 @@ import {
   CreateReport,
   GetReport,
   GetReportContact,
+  ListOwnReports,
   ListReports,
   ReportValidationError,
+  ResolveReport,
 } from '@perdiu/catalog'
 import type { AccountIdentity, ReportContact, ReportSummary } from '@perdiu/contracts'
 import {
@@ -32,7 +36,7 @@ import {
   type SessionRevocations,
 } from './auth/access-token.js'
 import { ACCESS_TOKEN_VERIFIER, AuthGuard, CurrentUser, OptionalAuthGuard } from './auth/guard.js'
-import { parseReportId, parseReportQuery } from './reports/query.js'
+import { parseOwnReportQuery, parseReportId, parseReportQuery } from './reports/query.js'
 
 @Controller('reports')
 class ReportsController {
@@ -41,7 +45,25 @@ class ReportsController {
     @Inject(CreateReport) private readonly publisher: CreateReport,
     @Inject(GetReport) private readonly detail: GetReport,
     @Inject(GetReportContact) private readonly contacts: GetReportContact,
+    @Inject(ResolveReport) private readonly resolver: ResolveReport,
   ) {}
+
+  @Patch(':id/resolve')
+  @UseGuards(AuthGuard)
+  @HttpCode(204)
+  @Header('Cache-Control', 'no-store')
+  async resolve(@Param('id') input: string, @CurrentUser() user: AuthenticatedUser) {
+    const id = parseReportId(input)
+    let result
+    try {
+      result = await this.resolver.execute(id, user.id)
+    } catch {
+      throw new ServiceUnavailableException('No se pudo resolver el reporte. Intenta nuevamente.')
+    }
+    if (result === 'forbidden')
+      throw new ForbiddenException('Solo puedes resolver tus propios reportes.')
+    if (result === 'not_found') throw new NotFoundException('Reporte no disponible.')
+  }
 
   @Get()
   async list(@Query() input: Record<string, unknown>) {
@@ -117,7 +139,22 @@ class AccountController {
   constructor(
     @Inject(SESSION_REVOCATIONS) private readonly sessions: SessionRevocations,
     @Inject(PROFILES) private readonly profiles: Pick<PostgresProfileRepository, 'find'>,
+    @Inject(ListOwnReports) private readonly reports: ListOwnReports,
   ) {}
+
+  @Get('reports')
+  @Header('Cache-Control', 'no-store')
+  async ownReports(
+    @CurrentUser() user: AuthenticatedUser,
+    @Query() input: Record<string, unknown>,
+  ): Promise<ReportSummary[]> {
+    const query = parseOwnReportQuery(input)
+    try {
+      return await this.reports.execute(user.id, query)
+    } catch {
+      throw new ServiceUnavailableException('No se pudo cargar tus reportes. Intenta nuevamente.')
+    }
+  }
 
   /** Private data never cached by the browser, so Back or reload cannot replay it. */
   @Get()
@@ -164,6 +201,8 @@ export async function createApplication(databaseUrl: string, verifier: AccessTok
         controllers: [ReportsController, AccountController],
         providers: [
           { provide: ListReports, useValue: new ListReports(database.reports) },
+          { provide: ListOwnReports, useValue: new ListOwnReports(database.reports) },
+          { provide: ResolveReport, useValue: new ResolveReport(database.reports) },
           { provide: CreateReport, useValue: new CreateReport(database.publisher) },
           { provide: GetReport, useValue: new GetReport(database.reports) },
           { provide: GetReportContact, useValue: new GetReportContact(database.reports) },
