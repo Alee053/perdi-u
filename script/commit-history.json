@@ -1083,17 +1083,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "b203c153276f7afc8f39d3e1fdcf31882cbf2dda",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-10-22T06:42:11.000Z",
       "message": "fix(repo): habilitar fotos privadas y despliegue R2 (#6)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/b203c153276f7afc8f39d3e1fdcf31882cbf2dda"
     },
     "stats": {
       "total": 604,
       "additions": 576,
       "deletions": 28,
+      "date": "2026-10-22"
+    },
+    "coverage": 87.97,
+    "test_count": 141,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-22T06:48:38.000Z",
+      "message": "docs(repo): registrar verificación real de R2 en el VPS (#6)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 36,
+      "additions": 23,
+      "deletions": 13,
       "date": "2026-10-22"
     },
     "coverage": 87.97,

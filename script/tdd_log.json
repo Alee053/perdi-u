@@ -1782,9 +1782,15 @@
     "testId": 47
   },
   {
-    "commitId": "HEAD",
+    "commitId": "b203c153276f7afc8f39d3e1fdcf31882cbf2dda",
     "commitName": "fix(repo): habilitar fotos privadas y despliegue R2 (#6)",
     "commitTimestamp": 1792651331665,
     "testId": 47
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(repo): registrar verificación real de R2 en el VPS (#6)",
+    "commitTimestamp": 1792651719028,
+    "testId": 48
   }
 ]

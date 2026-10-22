@@ -31,3 +31,13 @@ La primera aceptación de catálogo falló al esperar un botón de reintento des
 - `pnpm test:e2e`: aprobado con PostgreSQL aislado y Chromium, incluido error/reintento después de reiniciar API.
 - `pnpm test:auth --with-browser`: aprobado con GoTrue, PostgreSQL y Chromium reales; publicación sin fotos y tres imágenes privadas visibles antes y después de recargar en móvil/escritorio. Un intento previo terminó con timeout al buscar el campo de contraseña; al repetir aisladamente pasó. No se atribuye ese timeout a una causa de aplicación demostrada.
 - Revisión independiente de estándares y criterios: corregidas la eliminación concurrente por índice y la pérdida de imágenes adicionales en el detalle, sin pendientes en esos hallazgos.
+
+## Verificación de R2 y del VPS
+
+Backend construido y desplegado desde `b203c153276f7afc8f39d3e1fdcf31882cbf2dda` en `tars-vps:/opt/stacks/perdi-u`. Se conservó `.env` con modo `600`; el proceso de API confirmó las cuatro variables presentes sin imprimirlas. La configuración, base y anterior imagen quedaron respaldadas antes de actualizar. PostgreSQL, Auth, API, gateway y Mailpit terminaron saludables; migración y bootstrap finalizaron correctamente. Se comprobaron las versiones 1, 2, 3 y 4 de `schema_migrations`.
+
+Con el adapter real del contenedor y un objeto efímero privado de 5 MiB se verificaron `put`, `get`, igualdad SHA-256, otra lectura después de cerrar/recrear el cliente S3, `delete` y ausencia posterior con 404. El objeto quedó eliminado. Esto verifica el proveedor y sus credenciales, no una publicación de usuario de extremo a extremo en producción.
+
+Se comprobaron ambos orígenes HTTPS, backend y Vercel: catálogo 200, historial sin sesión 401, medio inexistente 404, Auth health 200 y publicación sin sesión 401. Un multipart anónimo con archivo de 5 MiB recibió 401 en ambos, confirmando que llegó a la autenticación de la API y no fue rechazado por tamaño en los proxies. Las pruebas de publicación autenticada, persistencia y lectura de fotos antes/después de reiniciar usan PostgreSQL aislado; la aceptación de navegador del detalle usa el binario de storage doblado, como se explicó arriba.
+
+La sincronización del frontend de producción depende del merge de la PR #23. La protección de `main` exige los checks `quality` y `acceptance` y una aprobación de otra persona; el backend se actualizó antes del merge por autorización del propietario.
