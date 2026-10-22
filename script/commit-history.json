@@ -513,6 +513,25 @@
     "conclusion": "success"
   },
   {
+    "sha": "a344d65335336e8f6c639c7d67504455e581793d",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-22T02:42:32.000Z",
+      "message": "docs(api): registrar verificación HTTPS de la demo",
+      "url": "https://github.com/Alee053/perdi-u/commit/a344d65335336e8f6c639c7d67504455e581793d"
+    },
+    "stats": {
+      "total": 12,
+      "additions": 9,
+      "deletions": 3,
+      "date": "2026-10-22"
+    },
+    "coverage": 92.17,
+    "test_count": 78,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
     "sha": "46a7ffffe3ddc9f16bd7a06afa97581a2e77cc6f",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
@@ -551,17 +570,74 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "d9865625a2257166acd35330930e35adfe0ab748",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-22T03:10:08.000Z",
+      "message": "fix(api): ajustar dominio y registro directo de la demo",
+      "url": "https://github.com/Alee053/perdi-u/commit/d9865625a2257166acd35330930e35adfe0ab748"
+    },
+    "stats": {
+      "total": 57,
+      "additions": 44,
+      "deletions": 13,
+      "date": "2026-10-22"
+    },
+    "coverage": 92.17,
+    "test_count": 78,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "7ee4f4b87a6a81fae986d4f3aded16bd5a2c121d",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-10-22T03:28:39.000Z",
       "message": "feat(repo): adjuntar fotos a reportes (#6)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/7ee4f4b87a6a81fae986d4f3aded16bd5a2c121d"
     },
     "stats": {
       "total": 1622,
       "additions": 1535,
       "deletions": 87,
+      "date": "2026-10-22"
+    },
+    "coverage": 84.75,
+    "test_count": 94,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "7b28a852edea7f992e8fc209f02d2baadf0adb69",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-10-22T03:31:20.000Z",
+      "message": "Merge origin/main into feat/s1-05-publicacion-persistente",
+      "url": "https://github.com/Alee053/perdi-u/commit/7b28a852edea7f992e8fc209f02d2baadf0adb69"
+    },
+    "stats": {
+      "total": 57,
+      "additions": 44,
+      "deletions": 13,
+      "date": "2026-10-22"
+    },
+    "coverage": 90.16,
+    "test_count": 85,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-10-22T03:33:53.000Z",
+      "message": "Merge feat/s1-05-publicacion-persistente into feat/s1-06-adjuntar-fotos",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 57,
+      "additions": 44,
+      "deletions": 13,
       "date": "2026-10-22"
     },
     "coverage": 84.75,

@@ -31,3 +31,19 @@ No cambió comportamiento de aplicación ni se añadieron tests unitarios que re
 El backend público ya está verificado con DNS, NPM y TLS. `/api/reports` en `perdi-u.vercel.app` todavía devolvía 404 al comprobarlo. Falta integrar `vercel.json`, configurar la raíz del monorepo en Vercel, publicar las rewrites y verificar el catálogo y una sesión de navegador desde el frontend. La aceptación del backend **no certifica todavía ese recorrido desde Vercel**.
 
 SMTP real, Google OAuth y las funcionalidades que no estén integradas en `main` no se habilitan por este despliegue. Mailpit permanece privado y la confirmación es obligatoria.
+
+## Actualización: dominio definitivo y registro directo
+
+El 2026-10-21, el frontend quedó desplegado en `https://perdi-u-chi.vercel.app`. Se corrigieron en el VPS `AUTH_SITE_URL`, el issuer de Auth/API y las redirecciones permitidas. El propietario autorizó `AUTH_MAILER_AUTOCONFIRM=true` para usar la demo sin SMTP ni enlaces de confirmación. Esta configuración sustituye el modo de confirmación descrito en la verificación inicial anterior; el Compose local y el valor por defecto del Compose del VPS siguen exigiendo confirmación.
+
+Antes del cambio, el nuevo frontend devolvía catálogo y salud de Auth con 200, pero `/auth/settings` indicaba `mailer_autoconfirm=false` y registrar una cuenta ficticia devolvía 200 sin sesión. Después de cambiar la configuración:
+
+- `/auth/settings` indicó autoconfirmación activa. Una cuenta nueva recibió sesión inmediatamente, con JWT ES256 e issuer `https://perdi-u-chi.vercel.app/auth`, aceptado por `/api/me`.
+- La cuenta ficticia pendiente siguió recibiendo `email_not_confirmed` al intentar login; repetir el registro con su mismo correo y contraseña original la confirmó y entregó sesión. El cambio de configuración por sí solo no confirma retroactivamente cuentas existentes.
+- Para ambas cuentas se comprobaron login con contraseña, rechazo de contraseña/token incorrectos, renovación rotativa, revocación en API y cierre en Auth. No se generaron nuevos mensajes de confirmación en Mailpit.
+- En Chromium real contra el frontend público, el registro inició sesión sin pantalla de confirmación, la sesión sobrevivió a una recarga, el perfil mostró la identidad propia y el cierre volvió al estado anónimo.
+- `docker compose config` comprobó el valor por defecto `false` y la activación explícita con `true`. Pasaron formato, documentos y límites de arquitectura.
+
+Solo se recrearon Auth y API. Se verificó que PostgreSQL, Pulso y NPM conservaron sus arranques y que los secretos existentes no cambiaron. Se guardó una copia privada de la configuración previa. Las credenciales ficticias temporales de la comprobación se eliminaron; no se imprimieron secretos, enlaces ni correos de usuarios reales.
+
+La demo acepta el correo declarado sin comprobar control de la casilla. SMTP y recuperación de contraseña por correo siguen fuera de este despliegue; para volver a exigir confirmación, seguir la [guía de operación vigente](../deployment.md).

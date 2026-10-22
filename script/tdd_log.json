@@ -798,6 +798,24 @@
     "testId": 28
   },
   {
+    "commitId": "a344d65335336e8f6c639c7d67504455e581793d",
+    "commitName": "docs(api): registrar verificación HTTPS de la demo",
+    "commitTimestamp": 1792636952952,
+    "testId": 26
+  },
+  {
+    "commitId": "d9865625a2257166acd35330930e35adfe0ab748",
+    "commitName": "fix(api): ajustar dominio y registro directo de la demo",
+    "commitTimestamp": 1792638608416,
+    "testId": 27
+  },
+  {
+    "commitId": "7b28a852edea7f992e8fc209f02d2baadf0adb69",
+    "commitName": "Merge origin/main into feat/s1-05-publicacion-persistente",
+    "commitTimestamp": 1792639880744,
+    "testId": 28
+  },
+  {
     "numPassedTests": 84,
     "failedTests": 1,
     "numTotalTests": 85,
@@ -942,9 +960,15 @@
     "testId": 29
   },
   {
-    "commitId": "HEAD",
+    "commitId": "7ee4f4b87a6a81fae986d4f3aded16bd5a2c121d",
     "commitName": "feat(repo): adjuntar fotos a reportes (#6)",
     "commitTimestamp": 1792639719320,
     "testId": 29
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "Merge feat/s1-05-publicacion-persistente into feat/s1-06-adjuntar-fotos",
+    "commitTimestamp": 1792640033338,
+    "testId": 30
   }
 ]
