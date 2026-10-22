@@ -1,5 +1,14 @@
 import { BadRequestException } from '@nestjs/common'
-import type { ReportQuery } from '@perdiu/contracts'
+import type { OwnReportQuery, ReportQuery } from '@perdiu/contracts'
+
+export function parseOwnReportQuery(input: Record<string, unknown>): OwnReportQuery {
+  if (
+    Object.keys(input).some((key) => key !== 'state') ||
+    (input.state !== undefined && input.state !== 'active' && input.state !== 'resolved')
+  )
+    throw new BadRequestException('Parámetros de mis reportes inválidos.')
+  return input.state ? { state: input.state } : {}
+}
 
 /** HTTP input is untrusted; never echo values in validation errors. */
 export function parseReportQuery(input: Record<string, unknown>): ReportQuery {

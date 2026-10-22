@@ -758,9 +758,39 @@
     "testId": 25
   },
   {
-    "commitId": "HEAD",
+    "commitId": "844500625ff2bbb1d8f1775320554d189dc6dfbc",
     "commitName": "feat(catalog): consultar y resolver reportes propios por identidad (#8)",
     "commitTimestamp": 1792636074679,
     "testId": 25
+  },
+  {
+    "numPassedTests": 81,
+    "failedTests": 1,
+    "numTotalTests": 82,
+    "timestamp": 1792636105306,
+    "success": false,
+    "testId": 26
+  },
+  {
+    "numPassedTests": 82,
+    "failedTests": 0,
+    "numTotalTests": 82,
+    "timestamp": 1792636136576,
+    "success": true,
+    "testId": 26
+  },
+  {
+    "numPassedTests": 82,
+    "failedTests": 0,
+    "numTotalTests": 82,
+    "timestamp": 1792636282816,
+    "success": true,
+    "testId": 26
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(api): persistir consulta y cierre autorizado de reportes (#8)",
+    "commitTimestamp": 1792636310966,
+    "testId": 26
   }
 ]

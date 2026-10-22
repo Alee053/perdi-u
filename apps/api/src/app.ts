@@ -1,11 +1,16 @@
 import 'reflect-metadata'
 import {
   Controller,
+  BadRequestException,
+  ForbiddenException,
   Get,
   Header,
   HttpCode,
   Inject,
   Module,
+  NotFoundException,
+  Param,
+  Patch,
   Post,
   Query,
   ServiceUnavailableException,
@@ -13,7 +18,7 @@ import {
 } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { openDatabase, type Database, type PostgresProfileRepository } from '@perdiu/database'
-import { ListReports } from '@perdiu/catalog'
+import { ListOwnReports, ListReports, ResolveReport } from '@perdiu/catalog'
 import type { AccountIdentity } from '@perdiu/contracts'
 import {
   withSessionRevocation,
@@ -22,11 +27,32 @@ import {
   type SessionRevocations,
 } from './auth/access-token.js'
 import { ACCESS_TOKEN_VERIFIER, AuthGuard, CurrentUser } from './auth/guard.js'
-import { parseReportQuery } from './reports/query.js'
+import { parseOwnReportQuery, parseReportQuery } from './reports/query.js'
 
 @Controller('reports')
 class ReportsController {
-  constructor(@Inject(ListReports) private readonly catalog: ListReports) {}
+  constructor(
+    @Inject(ListReports) private readonly catalog: ListReports,
+    @Inject(ResolveReport) private readonly resolveReport: ResolveReport,
+  ) {}
+
+  @Patch(':id/resolve')
+  @UseGuards(AuthGuard)
+  @HttpCode(204)
+  @Header('Cache-Control', 'no-store')
+  async resolve(@Param('id') id: string, @CurrentUser() user: AuthenticatedUser) {
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id))
+      throw new BadRequestException('Identificador de reporte inválido.')
+    let result
+    try {
+      result = await this.resolveReport.execute(id, user.id)
+    } catch {
+      throw new ServiceUnavailableException('No se pudo resolver el reporte. Intenta nuevamente.')
+    }
+    if (result === 'not_found') throw new NotFoundException('El reporte no existe.')
+    if (result === 'forbidden')
+      throw new ForbiddenException('Solo puedes resolver tus propios reportes.')
+  }
 
   @Get()
   async list(@Query() input: Record<string, unknown>) {
@@ -48,7 +74,19 @@ class AccountController {
   constructor(
     @Inject(SESSION_REVOCATIONS) private readonly sessions: SessionRevocations,
     @Inject(PROFILES) private readonly profiles: Pick<PostgresProfileRepository, 'find'>,
+    @Inject(ListOwnReports) private readonly ownReports: ListOwnReports,
   ) {}
+
+  @Get('reports')
+  @Header('Cache-Control', 'no-store')
+  async reports(@CurrentUser() user: AuthenticatedUser, @Query() input: Record<string, unknown>) {
+    const query = parseOwnReportQuery(input)
+    try {
+      return await this.ownReports.execute(user.id, query)
+    } catch {
+      throw new ServiceUnavailableException('No se pudo cargar tus reportes. Intenta nuevamente.')
+    }
+  }
 
   /** Private data never cached by the browser, so Back or reload cannot replay it. */
   @Get()
@@ -95,6 +133,8 @@ export async function createApplication(databaseUrl: string, verifier: AccessTok
         controllers: [ReportsController, AccountController],
         providers: [
           { provide: ListReports, useValue: new ListReports(database.reports) },
+          { provide: ListOwnReports, useValue: new ListOwnReports(database.reports) },
+          { provide: ResolveReport, useValue: new ResolveReport(database.reports) },
           { provide: SESSION_REVOCATIONS, useValue: database.sessions },
           { provide: PROFILES, useValue: database.profiles },
           // Every private route passes the guard, so every one rejects revoked sessions.

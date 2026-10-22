@@ -1,11 +1,10 @@
-import type { ReportRepository } from '@perdiu/catalog'
 import { createPool } from './pool.js'
 import { PostgresReportRepository } from './postgres-repository.js'
 import { PostgresProfileRepository } from './profiles.js'
 import { PostgresSessionRevocations } from './session-revocations.js'
 
 export interface Database {
-  reports: ReportRepository
+  reports: ReportRepository & OwnReportsRepository
   profiles: PostgresProfileRepository
   sessions: PostgresSessionRevocations
   close(): Promise<void>
@@ -27,3 +26,4 @@ export async function openDatabase(databaseUrl: string): Promise<Database> {
     throw error
   }
 }
+import type { OwnReportsRepository, ReportRepository } from '@perdiu/catalog'
