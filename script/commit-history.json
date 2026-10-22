@@ -532,12 +532,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "7fdb7e11acff76c8396f6357d6d536147312b4de",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-22T02:46:05.000Z",
       "message": "feat(catalog): entregar el contacto de WhatsApp de un reporte accesible (#7)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/7fdb7e11acff76c8396f6357d6d536147312b4de"
     },
     "stats": {
       "total": 90,
@@ -547,6 +547,25 @@
     },
     "coverage": 92.34,
     "test_count": 85,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T02:53:01.000Z",
+      "message": "feat(api): consultar el detalle de un reporte con GET /reports/:id (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 353,
+      "additions": 289,
+      "deletions": 64,
+      "date": "2026-10-22"
+    },
+    "coverage": 89.73,
+    "test_count": 86,
     "failed_tests": 0,
     "conclusion": "success"
   }

@@ -1,25 +1,32 @@
 import type { Pool } from 'pg'
 import { REPORT_RESULT_LIMIT, type ReportQuery } from '@perdiu/contracts'
-import type { ReportRecord, ReportRepository } from '@perdiu/catalog'
+import type { ReportDetailRepository, ReportRecord, ReportRepository } from '@perdiu/catalog'
 
-export class PostgresReportRepository implements ReportRepository {
+// Public columns plus the owner ID; contact and storage tables are never joined here.
+const reportColumns = `
+  r.id, r.owner_id AS "ownerId", r.type, r.state, r.category,
+  r.title, r.description, r.city, r.zone,
+  to_char(r.incident_date, 'YYYY-MM-DD') AS "incidentDate",
+  to_char(r.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS "createdAt",
+  jsonb_strip_nulls(jsonb_build_object('id', p.id, 'displayName', p.display_name, 'photoUrl', p.photo_url)) AS author,
+  ARRAY(SELECT i.public_url FROM report_images i WHERE i.report_id = r.id ORDER BY i.position) AS "imageUrls"
+`
+
+export class PostgresReportRepository
+  implements ReportRepository, Pick<ReportDetailRepository, 'find'>
+{
   constructor(private readonly pool: Pool) {}
 
   async list(query: ReportQuery = {}): Promise<ReportRecord[]> {
     // SQL restricts work; the case of use also enforces catalog invariants for other adapters.
     const result = await this.pool.query<ReportRecord>(
       `
-      SELECT r.id, r.owner_id AS "ownerId", r.type, r.state, r.category,
-        r.title, r.description, r.city, r.zone,
-        to_char(r.incident_date, 'YYYY-MM-DD') AS "incidentDate",
-        to_char(r.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS "createdAt",
-        jsonb_strip_nulls(jsonb_build_object('id', p.id, 'displayName', p.display_name, 'photoUrl', p.photo_url)) AS author,
-        ARRAY(SELECT i.public_url FROM report_images i WHERE i.report_id = r.id ORDER BY i.position) AS "imageUrls"
+      SELECT ${reportColumns}
       FROM reports r JOIN profiles p ON p.id = r.owner_id
       WHERE r.state = $1
         AND ($2 = '' OR
-          position($2 in lower(regexp_replace(normalize(r.title, NFD), '[\u0300-\u036f]', '', 'g'))) > 0 OR
-          position($2 in lower(regexp_replace(normalize(r.description, NFD), '[\u0300-\u036f]', '', 'g'))) > 0)
+          position($2 in lower(regexp_replace(normalize(r.title, NFD), '[̀-ͯ]', '', 'g'))) > 0 OR
+          position($2 in lower(regexp_replace(normalize(r.description, NFD), '[̀-ͯ]', '', 'g'))) > 0)
         AND ($3::text IS NULL OR r.type = $3)
         AND ($4::text IS NULL OR r.category = $4)
         AND ($5::text IS NULL OR r.city = $5)
@@ -28,11 +35,7 @@ export class PostgresReportRepository implements ReportRepository {
     `,
       [
         'active',
-        (query.q ?? '')
-          .trim()
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '')
-          .toLocaleLowerCase('es'),
+        (query.q ?? '').trim().normalize('NFD').replace(/[̀-ͯ]/g, '').toLocaleLowerCase('es'),
         query.type ?? null,
         query.category ?? null,
         query.city ?? null,
@@ -40,5 +43,14 @@ export class PostgresReportRepository implements ReportRepository {
       ],
     )
     return result.rows
+  }
+
+  /** Any state: the case of use decides who may see a resolved report. */
+  async find(id: string): Promise<ReportRecord | undefined> {
+    const result = await this.pool.query<ReportRecord>(
+      `SELECT ${reportColumns} FROM reports r JOIN profiles p ON p.id = r.owner_id WHERE r.id = $1`,
+      [id],
+    )
+    return result.rows[0]
   }
 }

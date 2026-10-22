@@ -1,11 +1,11 @@
-import type { ReportRepository } from '@perdiu/catalog'
+import type { ReportDetailRepository, ReportRepository } from '@perdiu/catalog'
 import { createPool } from './pool.js'
 import { PostgresReportRepository } from './postgres-repository.js'
 import { PostgresProfileRepository } from './profiles.js'
 import { PostgresSessionRevocations } from './session-revocations.js'
 
 export interface Database {
-  reports: ReportRepository
+  reports: ReportRepository & Pick<ReportDetailRepository, 'find'>
   profiles: PostgresProfileRepository
   sessions: PostgresSessionRevocations
   close(): Promise<void>

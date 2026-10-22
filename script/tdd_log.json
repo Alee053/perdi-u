@@ -768,9 +768,39 @@
     "testId": 28
   },
   {
-    "commitId": "HEAD",
+    "commitId": "7fdb7e11acff76c8396f6357d6d536147312b4de",
     "commitName": "feat(catalog): entregar el contacto de WhatsApp de un reporte accesible (#7)",
     "commitTimestamp": 1792637168305,
     "testId": 28
+  },
+  {
+    "numPassedTests": 85,
+    "failedTests": 1,
+    "numTotalTests": 86,
+    "timestamp": 1792637379242,
+    "success": false,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 85,
+    "failedTests": 1,
+    "numTotalTests": 86,
+    "timestamp": 1792637442465,
+    "success": false,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 86,
+    "failedTests": 0,
+    "numTotalTests": 86,
+    "timestamp": 1792637510670,
+    "success": true,
+    "testId": 29
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(api): consultar el detalle de un reporte con GET /reports/:id (#7)",
+    "commitTimestamp": 1792637583575,
+    "testId": 29
   }
 ]

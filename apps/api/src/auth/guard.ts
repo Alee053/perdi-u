@@ -47,6 +47,20 @@ export class AuthGuard implements CanActivate {
   }
 }
 
+/**
+ * Public routes that also serve a verified viewer: without credentials the request is anonymous,
+ * but a credential that is present must pass the same checks as on private routes.
+ */
+@Injectable()
+export class OptionalAuthGuard implements CanActivate {
+  constructor(@Inject(AuthGuard) private readonly guard: AuthGuard) {}
+
+  canActivate(context: ExecutionContext) {
+    const request = context.switchToHttp().getRequest<AuthenticatedRequest>()
+    return request.headers.authorization === undefined || this.guard.canActivate(context)
+  }
+}
+
 export const CurrentUser = createParamDecorator(
   (_data: unknown, context: ExecutionContext) =>
     context.switchToHttp().getRequest<AuthenticatedRequest>().user!,

@@ -99,6 +99,7 @@ try {
         '--runTestsByPath',
         'apps/api/test/catalog.integration.ts',
         'apps/api/test/auth.integration.ts',
+        'apps/api/test/report-detail.integration.ts',
       ],
       env,
     )
