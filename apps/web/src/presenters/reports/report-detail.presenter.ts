@@ -5,7 +5,7 @@ import type { AuthPresenter } from '../auth/auth.presenter.js'
 import type { Effects } from '../effects.js'
 import { Store } from '../store.js'
 import { toReportCard, type ReportCard } from './report-card.js'
-import { reportPath } from './report-route.js'
+import { parseReportPath, reportPath } from './report-route.js'
 
 export type ReportDetailState =
   | { status: 'closed' }
@@ -25,7 +25,10 @@ export type ReportDetailState =
 interface Dependencies {
   repository: ReportDetailRepository
   auth: Pick<AuthPresenter, 'getSnapshot' | 'subscribe'>
-  effects: Pick<Effects, 'openWhatsApp' | 'absoluteUrl'>
+  effects: Pick<
+    Effects,
+    'openWhatsApp' | 'absoluteUrl' | 'currentPath' | 'showPath' | 'onPathChange' | 'back'
+  >
   /** Opens the login screen; the report stays open behind it to return to after signing in. */
   onLoginRequired: () => void
 }
@@ -37,19 +40,91 @@ const contactFailed = 'No se pudo obtener el contacto. Intenta nuevamente.'
 
 /** Report reached by its link: loading, unavailable, error/retry and contact with the author. */
 export class ReportDetailPresenter extends Store<ReportDetailState> {
+  /** The detail added a history entry, so closing it is the same as «Atrás». */
+  private pushed = false
+  private request = 0
+  private controller?: AbortController
+  /** Who the shown report was loaded for: an account ID, null for a visitor. */
+  private loadedFor?: string | null
   constructor(private readonly dependencies: Dependencies) {
     super({ status: 'closed' })
   }
 
+  /** Undefined while the session is being restored: the answer depends on who is looking. */
+  private viewer() {
+    const session = this.dependencies.auth.getSnapshot()
+    if (session.status === 'restoring') return undefined
+    return session.status === 'authenticated' ? session.user.id : null
+  }
+
+  private cancel() {
+    this.request++
+    this.controller?.abort()
+  }
+
+  /** Opens a report from the app and gives it its own address. */
   open = async (id: string) => {
+    this.dependencies.effects.showPath(reportPath(id), 'push')
+    this.pushed = true
+    await this.load(id)
+  }
+
+  /** Follows the address bar and the session; returns the cleanup for the view's lifecycle. */
+  start = () => {
+    const { effects, auth } = this.dependencies
+    const stopFollowing = effects.onPathChange(this.followPath)
+    const unsubscribe = auth.subscribe(this.followSession)
+    this.followPath(effects.currentPath())
+    return () => {
+      stopFollowing()
+      unsubscribe()
+      this.cancel()
+    }
+  }
+
+  close = () => {
+    if (this.state.status === 'closed') return
+    this.cancel()
+    this.setState({ status: 'closed' })
+    const { effects } = this.dependencies
+    // A direct link has nothing behind it in PerdiU: replace the address instead of leaving.
+    if (this.pushed) effects.back()
+    else effects.showPath('/', 'replace')
+    this.pushed = false
+  }
+
+  private followPath = (path: string) => {
+    const id = parseReportPath(path)
+    if (!id) {
+      this.pushed = false
+      this.cancel()
+      if (this.state.status !== 'closed') this.setState({ status: 'closed' })
+    } else if (this.state.status === 'closed' || this.state.id !== id) void this.load(id)
+  }
+
+  /** Signing in, out or switching accounts may change what this person can see of the report. */
+  private followSession = () => {
+    const viewer = this.viewer()
+    if (viewer !== undefined && viewer !== this.loadedFor && this.state.status !== 'closed')
+      void this.load(this.state.id)
+  }
+
+  private load = async (id: string) => {
+    this.cancel()
+    const request = this.request
     this.setState({ status: 'loading', id })
+    this.loadedFor = this.viewer()
+    // The session subscription loads it once Auth has finished restoring.
+    if (this.loadedFor === undefined) return
+    this.controller = new AbortController()
     let report
     try {
-      report = await this.dependencies.repository.find(id, new AbortController().signal)
+      report = await this.dependencies.repository.find(id, this.controller.signal)
     } catch {
-      this.setState({ status: 'error', id, message: loadFailed })
+      if (request === this.request) this.setState({ status: 'error', id, message: loadFailed })
       return
     }
+    if (request !== this.request) return
     if (!report) {
       this.setState({ status: 'unavailable', id, message: unavailable })
       return
@@ -109,6 +184,6 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
 
   /** Loads the open report again, for example after a failure. */
   retry = async () => {
-    if (this.state.status !== 'closed') await this.open(this.state.id)
+    if (this.state.status !== 'closed') await this.load(this.state.id)
   }
 }

@@ -665,12 +665,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "3a01c4316e9a83baea3f51ce63dcd3675c1f2d0d",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-22T03:16:42.000Z",
       "message": "feat(web): contactar al autor por WhatsApp tras iniciar sesión (#7)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/3a01c4316e9a83baea3f51ce63dcd3675c1f2d0d"
     },
     "stats": {
       "total": 172,
@@ -680,6 +680,25 @@
     },
     "coverage": 90.47,
     "test_count": 95,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T03:21:41.000Z",
+      "message": "feat(web): abrir un reporte desde su enlace estable y seguir la sesión (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 240,
+      "additions": 232,
+      "deletions": 8,
+      "date": "2026-10-22"
+    },
+    "coverage": 90.92,
+    "test_count": 97,
     "failed_tests": 0,
     "conclusion": "success"
   }

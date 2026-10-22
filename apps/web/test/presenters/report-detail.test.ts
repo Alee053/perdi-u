@@ -25,25 +25,64 @@ class Session extends Store<AuthState> {
   set = (state: AuthState) => this.setState(state)
 }
 
-function setup() {
-  const session = new Session({ status: 'anonymous' })
+/** Address bar double: `push`/`replace` and «Atrás» as the browser history would apply them. */
+function fakeHistory(initial: string) {
+  const entries = [initial]
+  const changes: string[] = []
+  let listener: ((path: string) => void) | undefined
+  return {
+    changes,
+    current: () => entries[entries.length - 1]!,
+    /** The person presses «Atrás» or «Adelante» to a path. */
+    navigate: (path: string) => {
+      entries.push(path)
+      listener?.(path)
+    },
+    effects: {
+      currentPath: () => entries[entries.length - 1]!,
+      showPath: (path: string, mode: 'push' | 'replace') => {
+        changes.push(`${mode} ${path}`)
+        if (mode === 'replace') entries.pop()
+        entries.push(path)
+      },
+      onPathChange: (next: (path: string) => void) => {
+        listener = next
+        return () => {
+          listener = undefined
+        }
+      },
+      back: () => {
+        changes.push('back')
+        entries.pop()
+        listener?.(entries[entries.length - 1]!)
+      },
+    },
+  }
+}
+
+function setup(options: { path?: string; session?: AuthState } = {}) {
+  const session = new Session(options.session ?? { status: 'anonymous' })
   const api = {
     find: async (_id: string, _signal: AbortSignal): Promise<ReportSummary | undefined> => report,
     contact: async (_id: string): Promise<ReportContact | undefined> => ({ available: false }),
   }
   const opened: string[] = []
   const logins: string[] = []
+  const history = fakeHistory(options.path ?? '/')
   const presenter = new ReportDetailPresenter({
     repository: { find: (id, signal) => api.find(id, signal), contact: (id) => api.contact(id) },
     auth: session,
     effects: {
+      ...history.effects,
       openWhatsApp: (url) => opened.push(url),
       absoluteUrl: (path) => 'https://perdiu.test' + path,
     },
     onLoginRequired: () => logins.push('login'),
   })
-  return { presenter, api, session, opened, logins }
+  return { presenter, api, session, opened, logins, history }
 }
+
+const settle = () => new Promise((resolve) => setTimeout(resolve, 0))
 
 test('abrir un reporte pasa de carga a su ficha pública con imagen genérica si no tiene fotos', async () => {
   const { presenter, api } = setup()
@@ -170,4 +209,81 @@ test('sin contacto válido, con fallo o en un reporte propio no se abre ninguna 
   await presenter.contact()
   assert.equal(asked, 0, 'la autora no se contacta a sí misma')
   assert.deepEqual(opened, [])
+})
+
+test('el enlace abre el reporte directamente o al recargar, y «Atrás» vuelve a la pantalla anterior', async () => {
+  const direct = setup({ path: '/reportes/' + report.id })
+  const stop = direct.presenter.start()
+  await settle()
+  assert.equal(
+    direct.presenter.getSnapshot().status,
+    'ready',
+    'acceso directo sin pasar por el catálogo',
+  )
+  direct.presenter.close()
+  assert.deepEqual(direct.history.changes, ['replace /'], 'cerrar no saca a la persona de PerdiU')
+  assert.equal(direct.presenter.getSnapshot().status, 'closed')
+  stop()
+
+  const { presenter, history } = setup()
+  presenter.start()
+  await presenter.open(report.id)
+  assert.equal(history.current(), '/reportes/' + report.id, 'la dirección es estable y recargable')
+  history.navigate('/')
+  assert.equal(presenter.getSnapshot().status, 'closed', '«Atrás» cierra el detalle')
+  history.navigate('/reportes/otro-reporte')
+  await settle()
+  const forward = presenter.getSnapshot()
+  assert.ok(forward.status === 'ready' && forward.id === 'otro-reporte', '«Adelante» lo reabre')
+  history.navigate('/')
+  await presenter.open(report.id)
+  presenter.close()
+  assert.deepEqual(history.changes, [
+    'push /reportes/' + report.id,
+    'push /reportes/' + report.id,
+    'back',
+  ])
+  assert.equal(presenter.getSnapshot().status, 'closed')
+})
+
+test('el detalle espera la sesión, se recarga al cambiarla e ignora respuestas anteriores', async () => {
+  const owner: AuthState = {
+    status: 'authenticated',
+    user: { id: report.author.id, email: 'autora@example.test' },
+  }
+  const { presenter, api, session } = setup({
+    path: '/reportes/' + report.id,
+    session: { status: 'restoring' },
+  })
+  const requests: string[] = []
+  api.find = async () => {
+    const viewer = session.getSnapshot()
+    requests.push(viewer.status)
+    return viewer.status === 'authenticated' ? { ...report, state: 'resolved' } : undefined
+  }
+  presenter.start()
+  await settle()
+  assert.deepEqual(requests, [], 'no consulta hasta saber quién mira')
+  session.set(owner)
+  await settle()
+  assert.equal(presenter.getSnapshot().status, 'ready', 'la autora ve su caso resuelto al recargar')
+
+  session.set({ status: 'anonymous', notice: 'Cerraste sesión correctamente.' })
+  await settle()
+  assert.equal(presenter.getSnapshot().status, 'unavailable', 'sin sesión deja de verlo')
+  assert.deepEqual(requests, ['authenticated', 'anonymous'])
+
+  let resolveOld!: (value: ReportSummary) => void
+  api.find = (id) =>
+    id === 'old'
+      ? new Promise((done) => {
+          resolveOld = done
+        })
+      : Promise.resolve(report)
+  const old = presenter.open('old')
+  await presenter.open(report.id)
+  resolveOld({ ...report, id: 'old', title: 'Respuesta anterior' })
+  await old
+  const state = presenter.getSnapshot()
+  assert.ok(state.status === 'ready' && state.id === report.id && state.card.title === report.title)
 })

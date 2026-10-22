@@ -954,9 +954,39 @@
     "testId": 35
   },
   {
-    "commitId": "HEAD",
+    "commitId": "3a01c4316e9a83baea3f51ce63dcd3675c1f2d0d",
     "commitName": "feat(web): contactar al autor por WhatsApp tras iniciar sesión (#7)",
     "commitTimestamp": 1792639003753,
     "testId": 35
+  },
+  {
+    "numPassedTests": 95,
+    "failedTests": 2,
+    "numTotalTests": 97,
+    "timestamp": 1792639128692,
+    "success": false,
+    "testId": 36
+  },
+  {
+    "numPassedTests": 95,
+    "failedTests": 2,
+    "numTotalTests": 97,
+    "timestamp": 1792639187164,
+    "success": false,
+    "testId": 36
+  },
+  {
+    "numPassedTests": 97,
+    "failedTests": 0,
+    "numTotalTests": 97,
+    "timestamp": 1792639268559,
+    "success": true,
+    "testId": 36
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): abrir un reporte desde su enlace estable y seguir la sesión (#7)",
+    "commitTimestamp": 1792639302919,
+    "testId": 36
   }
 ]
