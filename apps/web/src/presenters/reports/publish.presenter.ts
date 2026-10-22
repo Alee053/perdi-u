@@ -95,6 +95,7 @@ export const publishOptions = {
 
 /** Coordinates the form, server request, feedback and catalog refresh. */
 export class PublishPresenter extends Store<PublishState> {
+  private attempt = 0
   constructor(private readonly dependencies: Dependencies) {
     super({ draft: emptyDraft, photos: [], pending: false, errors: {}, message: '' })
   }
@@ -140,31 +141,43 @@ export class PublishPresenter extends Store<PublishState> {
   }
 
   removePhoto = async (index: number) => {
+    const attempt = this.attempt
     const photo = this.state.photos[index]
     if (!photo) return
     if (photo.mediaId) {
       try {
         await this.dependencies.media.remove(photo.mediaId)
       } catch {
+        if (attempt !== this.attempt) return
         this.setState({ ...this.state, message: 'No se pudo quitar la foto. Intenta nuevamente.' })
         return
       }
     }
+    if (attempt !== this.attempt || !this.state.photos.includes(photo)) return
     this.dependencies.effects.revokePreview(photo.previewUrl)
     this.setState({
       ...this.state,
-      photos: this.state.photos.filter((_, photoIndex) => photoIndex !== index),
+      photos: this.state.photos.filter((item) => item !== photo),
       message: '',
     })
   }
 
   releasePhotos = () => {
+    this.attempt++
     const photos = this.state.photos
     for (const photo of photos) {
       this.dependencies.effects.revokePreview(photo.previewUrl)
-      if (photo.mediaId) void this.dependencies.media.remove(photo.mediaId).catch(() => {})
+      if (photo.mediaId) void this.discardPhoto(photo.mediaId)
     }
-    this.setState({ ...this.state, photos: [] })
+    this.setState({ ...this.state, photos: [], pending: false })
+  }
+
+  private async discardPhoto(id: string) {
+    try {
+      await this.dependencies.media.remove(id)
+    } catch {
+      // An expired session or a network interruption uses the documented manual orphan cleanup.
+    }
   }
 
   /** Returns false on validation, network failure or while another request is pending. */
@@ -179,17 +192,22 @@ export class PublishPresenter extends Store<PublishState> {
       return false
     }
 
+    const attempt = ++this.attempt
+    const selected = [...this.state.photos]
     this.setState({ ...this.state, pending: true, errors: {}, message: '' })
     let uploadingMedia = false
     try {
       const { petSpecies, ...draft } = this.state.draft
       const mediaIds: string[] = []
       uploadingMedia = true
-      for (let index = 0; index < this.state.photos.length; index++) {
-        const photo = this.state.photos[index]!
+      for (const [index, photo] of selected.entries()) {
         let mediaId = photo.mediaId
         if (!mediaId) {
           mediaId = await this.dependencies.media.upload(photo.file)
+          if (attempt !== this.attempt) {
+            await this.discardPhoto(mediaId)
+            return false
+          }
           const photos = this.state.photos.map((item, photoIndex) =>
             photoIndex === index ? { ...item, mediaId } : item,
           )
@@ -202,6 +220,7 @@ export class PublishPresenter extends Store<PublishState> {
         ...(draft.category === 'pet' ? { ...draft, petSpecies } : draft),
         ...(mediaIds.length ? { mediaIds } : {}),
       })
+      if (attempt !== this.attempt) return false
       for (const photo of this.state.photos)
         this.dependencies.effects.revokePreview(photo.previewUrl)
       this.setState({ draft: emptyDraft, photos: [], pending: false, errors: {}, message: '' })
@@ -210,6 +229,7 @@ export class PublishPresenter extends Store<PublishState> {
       this.dependencies.notices.show('Tu reporte se publicó y ya aparece en el catálogo.')
       return true
     } catch (error) {
+      if (attempt !== this.attempt) return false
       const failure = error instanceof ReportPublishFailure ? error : undefined
       const errors: PublishState['errors'] = {}
       if (failure?.reason === 'validation') {

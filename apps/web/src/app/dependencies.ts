@@ -8,6 +8,7 @@ import {
 } from '../infrastructure/http/catalog-client.js'
 import { createReportPublisher } from '../infrastructure/http/publish-client.js'
 import { createReportMediaClient } from '../infrastructure/http/media-client.js'
+import { createReportPhotoLoader } from '../infrastructure/http/report-photo-loader.js'
 import { createOwnReportsClient } from '../infrastructure/http/own-reports-client.js'
 import { NoticePresenter } from '../presenters/app/notice.presenter.js'
 import { ShellPresenter } from '../presenters/app/shell.presenter.js'
@@ -87,7 +88,8 @@ export function createPresenters(env = import.meta.env) {
       publish.reset()
     },
   })
-  return { auth, notices, catalog, filters, reports, own, reportDetail, publish, shell }
+  const photos = createReportPhotoLoader(apiUrl, accessToken)
+  return { auth, notices, catalog, filters, reports, own, reportDetail, publish, shell, photos }
 }
 
 export type Presenters = ReturnType<typeof createPresenters>

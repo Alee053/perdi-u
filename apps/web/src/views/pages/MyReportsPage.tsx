@@ -4,6 +4,7 @@ import type { OwnFilter } from '../../presenters/reports/own-reports.presenter'
 import { EmptyState } from '../components/EmptyState'
 import { PageHeading } from '../components/PageHeading'
 import { StatusTabs } from '../components/StatusTabs'
+import { ReportPhoto } from '../components/ReportPhoto'
 
 type MyReportsPageProps = {
   myReports: AppView['myReports']
@@ -72,7 +73,7 @@ export function MyReportsPage({
                 aria-label={'Ver ' + report.title}
                 onClick={() => onOpen(report.id)}
               >
-                <img src={report.image} alt="" />
+                <ReportPhoto src={report.image} privatePhoto={report.resolved} alt="" />
               </button>
               <div>
                 <span className="card-meta">

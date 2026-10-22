@@ -64,6 +64,14 @@ Mantener `VITE_API_BASE_URL=/api` y `VITE_AUTH_URL=/auth` (son los valores por d
 
 Auth usa `AUTH_SITE_URL=https://perdi-u-chi.vercel.app`, issuer `https://perdi-u-chi.vercel.app/auth` y solo permite redirigir a ese sitio. Si cambia el dominio definitivo, cambiar `AUTH_SITE_URL` en el VPS, recrear Auth y API y actualizar la documentación. Ambos deben usar el mismo issuer; las sesiones que conserven el anterior deben volver a iniciar sesión. Los previews con otra URL no se habilitan automáticamente para autenticación.
 
+## Fotos en R2
+
+Para habilitar fotos, completar juntas `R2_ACCOUNT_ID`, `R2_BUCKET_NAME`, `R2_ACCESS_KEY_ID` y `R2_SECRET_ACCESS_KEY` en `/opt/stacks/perdi-u/.env`, conservando modo `600`. El Compose pasa esas variables únicamente a la API. Sin las cuatro, las fotos siguen deshabilitadas; una configuración parcial impide iniciar la API. Los reportes sin fotos no requieren R2.
+
+Usar un bucket privado con endpoint estándar `https://<account-id>.r2.cloudflarestorage.com` y credenciales S3 de lectura/escritura de objetos limitadas a ese bucket. El adapter actual no admite endpoints de jurisdicciones especiales. No añadir secretos a Vercel ni usar prefijos `VITE_`. Como el navegador accede mediante la API, no se requiere acceso público ni CORS en el bucket.
+
+El gateway admite `6m` por petición para una foto de hasta 5 MiB más multipart. Comprobar que NPM permita al menos ese tamaño. El esquema debe incluir `004_report_media.sql`; la actualización completa ejecuta las migraciones y renueva los permisos del rol de aplicación antes de arrancar la API. Un healthcheck de catálogo no demuestra que las credenciales de R2 permitan subir, leer y borrar: comprobar ese recorrido con un objeto de prueba y retirarlo al terminar, sin mostrar claves ni URLs privadas.
+
 ## Arranque y actualización manual
 
 Los archivos de despliegue pueden copiarse al VPS antes de integrarlos a `main`; el clon `repo/` conserva exclusivamente el código publicado. Una vez integrados, para actualizar también la configuración copiar los cinco archivos de `repo/deploy/vps/` sobre los equivalentes del stack, sin sobrescribir `.env`.
@@ -79,6 +87,8 @@ docker compose ps -a
 ```
 
 Compose recrea los contenedores conservando el volumen, espera PostgreSQL, ejecuta las migraciones idempotentes y el bootstrap de roles, espera Auth/API y finalmente inicia el gateway. La recreación también carga cambios de configuración montada, como `nginx.conf`. Si un paso falla, diagnosticar ese servicio antes de continuar. No hacer `reset --hard`, borrar volúmenes ni usar `docker system prune` para resolver fallos. El código ejecutado es el SHA de `git -C repo rev-parse HEAD`.
+
+Cuando se autorice actualizar el backend antes del merge para evitar que el frontend nuevo llegue primero, usar un SHA exacto de la rama ya verificada: comprobar árbol limpio, hacer fetch y `git -C repo switch --detach <sha>`, copiar sus archivos de `deploy/vps`, construir y ejecutar el mismo procedimiento. Registrar ese SHA y respaldar previamente configuración, base e imagen anterior. Tras el merge autorizado por las reglas del repositorio, volver a `main` y actualizar con `--ff-only`; contrastar que el código desplegado coincide. El despliegue del backend sigue siendo manual: el merge por sí solo no lo actualiza.
 
 Solo para preparar los datos ficticios iniciales, con el stack ya levantado:
 

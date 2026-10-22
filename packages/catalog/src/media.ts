@@ -1,3 +1,6 @@
+import type { ReportState } from '@perdiu/contracts'
+import { canView } from './report-detail.js'
+
 export const REPORT_MEDIA_MAX_BYTES = 5 * 1024 * 1024
 const supportedContentTypes = new Set(['image/jpeg', 'image/png'])
 const mediaIdPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
@@ -12,9 +15,15 @@ export interface ReportMediaMetadataRepository {
   ): Promise<void>
   beginDelete(ownerId: string, id: string): Promise<string | undefined>
   completeDelete(id: string): Promise<void>
-  findAttached(
-    id: string,
-  ): Promise<{ storageKey: string; contentType: 'image/jpeg' | 'image/png' } | undefined>
+  findAttached(id: string): Promise<
+    | {
+        storageKey: string
+        contentType: 'image/jpeg' | 'image/png'
+        ownerId: string
+        state: ReportState
+      }
+    | undefined
+  >
 }
 
 export interface ReportMediaStorage {
@@ -104,7 +113,7 @@ export class ReportMediaService {
     }
   }
 
-  async read(id: string): Promise<{ contentType: string; bytes: Uint8Array }> {
+  async read(id: string, viewerId?: string): Promise<{ contentType: string; bytes: Uint8Array }> {
     if (!mediaIdPattern.test(id)) throw new ReportMediaError('not_found')
     const storage = this.storage
     if (!storage) throw new ReportMediaError('unavailable')
@@ -114,7 +123,7 @@ export class ReportMediaService {
     } catch {
       throw new ReportMediaError('unavailable')
     }
-    if (!media) throw new ReportMediaError('not_found')
+    if (!media || !canView(media, viewerId)) throw new ReportMediaError('not_found')
     try {
       const bytes = await storage.get(media.storageKey)
       if (!bytes) throw new Error()

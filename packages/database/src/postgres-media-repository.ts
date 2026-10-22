@@ -1,4 +1,5 @@
 import type { Pool } from 'pg'
+import type { ReportState } from '@perdiu/contracts'
 import { MediaLimitError, type ReportMediaMetadataRepository } from '@perdiu/catalog'
 
 export class PostgresMediaRepository implements ReportMediaMetadataRepository {
@@ -57,9 +58,13 @@ export class PostgresMediaRepository implements ReportMediaMetadataRepository {
     const result = await this.pool.query<{
       storageKey: string
       contentType: 'image/jpeg' | 'image/png'
+      ownerId: string
+      state: ReportState
     }>(
-      `SELECT storage_key AS "storageKey", content_type AS "contentType"
-       FROM report_media WHERE id = $1 AND report_id IS NOT NULL AND status = 'available'`,
+      `SELECT m.storage_key AS "storageKey", m.content_type AS "contentType",
+              r.owner_id AS "ownerId", r.state
+       FROM report_media m JOIN reports r ON r.id = m.report_id
+       WHERE m.id = $1 AND m.status = 'available'`,
       [id],
     )
     return result.rows[0]

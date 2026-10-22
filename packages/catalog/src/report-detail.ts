@@ -7,7 +7,7 @@ import { toPublicReport } from './catalog.js'
  * Active reports are public; a resolved one stays reachable only for its owner, identified by the
  * verified Auth subject. A display name never grants access.
  */
-export const canView = (report: ReportRecord, viewerId?: string) =>
+export const canView = (report: Pick<ReportRecord, 'state' | 'ownerId'>, viewerId?: string) =>
   report.state === 'active' || (viewerId !== undefined && report.ownerId === viewerId)
 
 /** Detail of one report reached by its link. */

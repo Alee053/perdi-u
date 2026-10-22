@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { test } from '@jest/globals'
-import { ReportMediaService } from '../src/media.js'
+import { ReportMediaError, ReportMediaService } from '../src/media.js'
 
 test('subir una imagen guarda el objeto privado y devuelve solo su ID', async () => {
   const calls: unknown[][] = []
@@ -54,4 +54,45 @@ test('subir una imagen guarda el objeto privado y devuelve solo su ID', async ()
       4,
     ],
   ])
+})
+
+test('leer fotos respeta la visibilidad del reporte y solo el propietario ve las resueltas', async () => {
+  let state: 'active' | 'resolved' = 'active'
+  let reads = 0
+  const service = new ReportMediaService(
+    {
+      async create() {},
+      async beginDelete() {
+        return undefined
+      },
+      async completeDelete() {},
+      async findAttached() {
+        return {
+          storageKey: 'private-key',
+          contentType: 'image/png' as const,
+          ownerId: 'owner',
+          state,
+        }
+      },
+    },
+    {
+      async put() {},
+      async get() {
+        reads++
+        return Uint8Array.from([137, 80, 78, 71])
+      },
+      async delete() {},
+    },
+  )
+  const id = '11111111-1111-4111-8111-111111111111'
+  await service.read(id)
+  state = 'resolved'
+  for (const viewer of [undefined, 'other'])
+    await assert.rejects(
+      service.read(id, viewer),
+      (error: unknown) => error instanceof ReportMediaError && error.reason === 'not_found',
+    )
+  assert.equal(reads, 1, 'una lectura no autorizada no llega al bucket')
+  await service.read(id, 'owner')
+  assert.equal(reads, 2)
 })

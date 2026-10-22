@@ -1680,9 +1680,111 @@
     "testId": 45
   },
   {
-    "commitId": "HEAD",
+    "commitId": "8f91bfece3846d11a7fdb0c47d2f29cfcec7f1b8",
     "commitName": "fix(web): indicar que las fotos del reporte son opcionales (#6)",
     "commitTimestamp": 1792648958255,
     "testId": 46
+  },
+  {
+    "numPassedTests": 133,
+    "failedTests": 1,
+    "numTotalTests": 134,
+    "timestamp": 1792650565470,
+    "success": false,
+    "testId": 47
+  },
+  {
+    "numPassedTests": 134,
+    "failedTests": 0,
+    "numTotalTests": 134,
+    "timestamp": 1792650595648,
+    "success": true,
+    "testId": 47
+  },
+  {
+    "numPassedTests": 134,
+    "failedTests": 2,
+    "numTotalTests": 136,
+    "timestamp": 1792650629603,
+    "success": false,
+    "testId": 47
+  },
+  {
+    "numPassedTests": 136,
+    "failedTests": 0,
+    "numTotalTests": 136,
+    "timestamp": 1792650662493,
+    "success": true,
+    "testId": 47
+  },
+  {
+    "numPassedTests": 136,
+    "failedTests": 2,
+    "numTotalTests": 138,
+    "timestamp": 1792650704027,
+    "success": false,
+    "testId": 47
+  },
+  {
+    "numPassedTests": 138,
+    "failedTests": 0,
+    "numTotalTests": 138,
+    "timestamp": 1792650737364,
+    "success": true,
+    "testId": 47
+  },
+  {
+    "numPassedTests": 138,
+    "failedTests": 1,
+    "numTotalTests": 139,
+    "timestamp": 1792650764302,
+    "success": false,
+    "testId": 47
+  },
+  {
+    "numPassedTests": 139,
+    "failedTests": 0,
+    "numTotalTests": 139,
+    "timestamp": 1792650804165,
+    "success": true,
+    "testId": 47
+  },
+  {
+    "numPassedTests": 139,
+    "failedTests": 1,
+    "numTotalTests": 140,
+    "timestamp": 1792651042237,
+    "success": false,
+    "testId": 47
+  },
+  {
+    "numPassedTests": 140,
+    "failedTests": 0,
+    "numTotalTests": 140,
+    "timestamp": 1792651064326,
+    "success": true,
+    "testId": 47
+  },
+  {
+    "numPassedTests": 140,
+    "failedTests": 1,
+    "numTotalTests": 141,
+    "timestamp": 1792651084731,
+    "success": false,
+    "testId": 47
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1792651127508,
+    "success": true,
+    "testId": 47
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "fix(repo): habilitar fotos privadas y despliegue R2 (#6)",
+    "commitTimestamp": 1792651331665,
+    "testId": 47
   }
 ]

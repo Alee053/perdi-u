@@ -1,5 +1,6 @@
 import { LoaderCircle, X } from 'lucide-react'
 import type { ReportLinkView } from '../../presenters/reports/report-detail.presenter'
+import { ReportPhoto } from './ReportPhoto'
 
 type ReportDetailProps = {
   view: ReportLinkView
@@ -77,7 +78,17 @@ function ReadyDetail({
   const { card: report, saved, canContact, canResolve } = view.detail
   return (
     <>
-      <img className="detail-image" src={report.image} alt={report.title} />
+      <div className="detail-images" role="group" aria-label="Fotos del reporte">
+        {report.images.map((image) => (
+          <ReportPhoto
+            key={image}
+            className="detail-image"
+            src={image}
+            privatePhoto={report.resolved}
+            alt={report.title}
+          />
+        ))}
+      </div>
       <div className="detail-content">
         <span className="card-meta">
           <span className={'status-text ' + report.tone}>{report.badge}</span> · {report.category} ·

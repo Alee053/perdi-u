@@ -21,6 +21,7 @@ export interface ReportCard {
   date: string
   posted: string
   image: string
+  images: string[]
   person: string
 }
 
@@ -44,6 +45,7 @@ const publishedDay = new Intl.DateTimeFormat('es-BO', {
 
 export function toReportCard(report: Report): ReportCard {
   const resolved = report.state === 'resolved'
+  const images = report.imageUrls.length ? [...report.imageUrls] : [categoryImages[report.category]]
   return {
     id: report.id,
     source: report.source,
@@ -60,7 +62,8 @@ export function toReportCard(report: Report): ReportCard {
     zone: report.zone,
     date: incidentDay.format(new Date(report.incidentDate + 'T00:00:00Z')),
     posted: publishedDay.format(new Date(report.createdAt)),
-    image: report.imageUrls[0] || categoryImages[report.category],
+    image: images[0]!,
+    images,
     person: report.author.displayName,
   }
 }

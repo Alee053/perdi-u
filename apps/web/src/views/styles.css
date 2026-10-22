@@ -905,6 +905,11 @@ nav {
   border-radius: 50%;
   background: var(--surface);
 }
+.detail-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 4px;
+}
 .detail-image {
   height: 220px;
   background: var(--line);

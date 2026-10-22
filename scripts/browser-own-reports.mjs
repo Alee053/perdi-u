@@ -159,6 +159,13 @@ export async function verifyOwnReportsBrowser({
           titles[i],
         ],
       )
+    const privatePhotoIds = Array.from({ length: 3 }, () => crypto.randomUUID())
+    for (const [position, id] of privatePhotoIds.entries())
+      await pool.query(
+        `INSERT INTO report_media (id, owner_id, storage_key, content_type, size_bytes, report_id, position)
+         VALUES ($1, $2, $3, 'image/png', 68, $4, $5)`,
+        [id, accounts[0].id, `acceptance-private-photo-${position}`, ids[2], position],
+      )
     const executablePath =
       process.env.CHROMIUM_PATH ||
       (existsSync('/usr/bin/chromium') ? '/usr/bin/chromium' : undefined)
@@ -171,6 +178,21 @@ export async function verifyOwnReportsBrowser({
       const context = await browser.newContext({ viewport })
       const page = await context.newPage()
       page.on('pageerror', (error) => errors.push(error.message))
+      // The provider image is doubled; Auth, the DTO and its ownership remain real.
+      let authenticatedPhotoReads = 0
+      for (const privatePhotoId of privatePhotoIds)
+        await page.route(`**/api/media/${privatePhotoId}`, async (route) => {
+          assert.match(route.request().headers().authorization ?? '', /^Bearer \S+$/)
+          authenticatedPhotoReads++
+          await route.fulfill({
+            status: 200,
+            contentType: 'image/png',
+            body: Buffer.from(
+              'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
+              'base64',
+            ),
+          })
+        })
       await page.goto(webUrl)
       let listFails = size === 'desktop'
       await page.route('**/api/me/reports', async (route) => {
@@ -214,6 +236,35 @@ export async function verifyOwnReportsBrowser({
         await contactPublishedReport(browser, viewport)
         await ownPage(page)
       }
+      await row(page, titles[0]).waitFor()
+      const privateImage = row(page, titles[2]).locator('img')
+      await privateImage.evaluate(
+        (image) =>
+          new Promise((resolve, reject) => {
+            if (image.complete && image.naturalWidth > 0) return resolve()
+            image.onload = () => resolve()
+            image.onerror = () => reject(new Error('No se pudo mostrar la foto privada.'))
+          }),
+      )
+      assert.ok(authenticatedPhotoReads > 0)
+      await row(page, titles[2]).getByRole('button', { name: titles[2], exact: true }).click()
+      for (const reload of [false, true]) {
+        if (reload) await page.reload()
+        const detail = page.getByRole('dialog')
+        await detail.getByRole('heading', { name: titles[2], exact: true }).waitFor()
+        assert.equal(await detail.locator('.detail-image').count(), 3)
+        for (const image of await detail.locator('.detail-image').all())
+          await image.evaluate(
+            (element) =>
+              new Promise((resolve, reject) => {
+                if (element.complete && element.naturalWidth > 0) return resolve()
+                element.onload = () => resolve()
+                element.onerror = () => reject(new Error('La foto del detalle no está disponible.'))
+              }),
+          )
+      }
+      await page.getByRole('dialog').getByRole('button', { name: 'Cerrar', exact: true }).click()
+      await ownPage(page)
       await row(page, titles[0]).waitFor()
       assert.equal(await page.locator('.managed-report').count(), 3)
       assert.equal(await page.getByText(titles[3], { exact: true }).count(), 0)

@@ -18,7 +18,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express'
 import { randomUUID } from 'node:crypto'
 import { ReportMediaError, type ReportMediaService } from '@perdiu/catalog'
-import { AuthGuard, CurrentUser } from '../auth/guard.js'
+import { AuthGuard, CurrentUser, OptionalAuthGuard } from '../auth/guard.js'
 import type { AuthenticatedUser } from '../auth/access-token.js'
 import { detectImageContent, MAX_MEDIA_BYTES } from './content.js'
 
@@ -57,10 +57,11 @@ export class MediaController {
   }
 
   @Get(':id')
+  @UseGuards(OptionalAuthGuard)
   @Header('Cache-Control', 'no-store')
-  async read(@Param('id') id: string) {
+  async read(@Param('id') id: string, @CurrentUser() user: AuthenticatedUser | undefined) {
     try {
-      const image = await this.media.read(id)
+      const image = await this.media.read(id, user?.id)
       return new StreamableFile(Buffer.from(image.bytes), {
         type: image.contentType,
         disposition: 'inline',

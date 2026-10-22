@@ -420,6 +420,40 @@ test('el recorrido de medios privado valida, asocia en transacción y sirve solo
       204,
     )
     assert.equal(objects.size, 3)
+
+    const resolved = await fetch(`${base}/reports/${published.id}/resolve`, {
+      method: 'PATCH',
+      headers: { authorization: 'Bearer verified-publication-token' },
+    })
+    assert.equal(resolved.status, 204)
+    assert.equal((await fetch(`${base}/media/${mediaId}`)).status, 404)
+    assert.equal(
+      (
+        await fetch(`${base}/media/${mediaId}`, {
+          headers: { authorization: 'Bearer verified-second-publication-token' },
+        })
+      ).status,
+      404,
+    )
+    assert.equal(
+      (
+        await fetch(`${base}/media/${mediaId}`, {
+          headers: { authorization: 'Bearer invalid-token' },
+        })
+      ).status,
+      401,
+    )
+    await app.close()
+    app = await createApplication(databaseUrl, mediaVerifier, { mediaStorage })
+    await app.listen(0, '127.0.0.1')
+    const ownedImage = await fetch(`${await app.getUrl()}/media/${mediaId}`, {
+      headers: { authorization: 'Bearer verified-publication-token' },
+    })
+    assert.equal(ownedImage.status, 200)
+    assert.deepEqual(
+      Array.from(new Uint8Array(await ownedImage.arrayBuffer())),
+      [137, 80, 78, 71, 13, 10, 26, 10],
+    )
   } finally {
     await app?.close()
     await pool.end()

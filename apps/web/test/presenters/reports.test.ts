@@ -7,6 +7,7 @@ import { PublishPresenter } from '../../src/presenters/reports/publish.presenter
 import type { ReportPhotoFile } from '../../src/models/reports/publication.js'
 import { ReportsPresenter } from '../../src/presenters/reports/reports.presenter.js'
 import { ReportPublishFailure, type ReportDraft } from '../../src/models/reports/publication.js'
+import { toReportCard } from '../../src/presenters/reports/report-card.js'
 
 const base = {
   type: 'lost' as const,
@@ -40,6 +41,12 @@ const catalogReport: CatalogReport = {
   category: 'object',
   author: { id: 'owner-1', displayName: 'Santiago Demo' },
 }
+
+test('el detalle conserva todas las fotos publicadas y un respaldo cuando no hay fotos', () => {
+  const images = ['/api/media/one', '/api/media/two', '/api/media/three']
+  assert.deepEqual(toReportCard({ ...catalogReport, imageUrls: images }).images, images)
+  assert.deepEqual(toReportCard(catalogReport).images, ['/images/object.svg'])
+})
 
 function setup(reports: DemoReport[] = [], saved: string[] = []) {
   const notices: { message: string; error: boolean }[] = []

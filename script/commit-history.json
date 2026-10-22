@@ -1064,12 +1064,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "8f91bfece3846d11a7fdb0c47d2f29cfcec7f1b8",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-22T06:02:36.000Z",
       "message": "fix(web): indicar que las fotos del reporte son opcionales (#6)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/8f91bfece3846d11a7fdb0c47d2f29cfcec7f1b8"
     },
     "stats": {
       "total": 5,
@@ -1079,6 +1079,25 @@
     },
     "coverage": 86.32,
     "test_count": 133,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-22T06:42:11.000Z",
+      "message": "fix(repo): habilitar fotos privadas y despliegue R2 (#6)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 604,
+      "additions": 576,
+      "deletions": 28,
+      "date": "2026-10-22"
+    },
+    "coverage": 87.97,
+    "test_count": 141,
     "failed_tests": 0,
     "conclusion": "success"
   }
