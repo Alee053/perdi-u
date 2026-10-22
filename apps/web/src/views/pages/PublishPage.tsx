@@ -1,4 +1,5 @@
 import type { FormEvent } from 'react'
+import { usePublishPage } from '../../presenters/reports/usePublishPage.js'
 import {
   publishOptions,
   type PublishPresenter,
@@ -6,12 +7,8 @@ import {
 } from '../../presenters/reports/publish.presenter'
 import { PageHeading } from '../components/PageHeading'
 
-type PublishPageProps = {
-  form: PublishState
-  actions: Pick<PublishPresenter, 'setType' | 'setField' | 'submit'>
-}
-
-export function PublishPage({ form, actions }: PublishPageProps) {
+export function PublishPage({ presenter }: { presenter: PublishPresenter }) {
+  const { form, actions } = usePublishPage(presenter)
   const { draft, errors } = form
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -158,6 +155,42 @@ export function PublishPage({ form, actions }: PublishPageProps) {
             )}
           </label>
         </div>
+
+        <section className="photo-field" aria-label="Fotos del reporte">
+          <label className="upload-zone">
+            <span>
+              Fotos (opcional): añade hasta 3 JPG o PNG de máximo 5 MB cada una. Puedes publicar sin
+              fotos.
+            </span>
+            <input
+              type="file"
+              accept="image/jpeg,image/png"
+              multiple
+              disabled={form.pending}
+              onChange={(event) => {
+                actions.addPhotos(Array.from(event.target.files ?? []))
+                event.target.value = ''
+              }}
+            />
+          </label>
+          {form.photos.length > 0 && (
+            <div className="photo-previews">
+              {form.photos.map((photo, index) => (
+                <figure className="photo-preview" key={photo.previewUrl}>
+                  <img src={photo.previewUrl} alt={`Vista previa de ${photo.file.name}`} />
+                  <button
+                    type="button"
+                    className="text-button"
+                    disabled={form.pending}
+                    onClick={() => void actions.removePhoto(index)}
+                  >
+                    Quitar foto
+                  </button>
+                </figure>
+              ))}
+            </div>
+          )}
+        </section>
 
         {form.message && (
           <p className="message message-error" role="alert">

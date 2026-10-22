@@ -671,6 +671,24 @@ nav {
   max-height: 240px;
   object-fit: cover;
 }
+.photo-previews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+.photo-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0;
+}
+.photo-preview img {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radius);
+  object-fit: cover;
+}
 .upload-zone {
   position: relative;
   width: 100%;
@@ -886,6 +904,11 @@ nav {
   place-items: center;
   border-radius: 50%;
   background: var(--surface);
+}
+.detail-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 4px;
 }
 .detail-image {
   height: 220px;

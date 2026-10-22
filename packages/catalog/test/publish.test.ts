@@ -23,6 +23,21 @@ test('un reporte válido supera la validación inicial', () => {
   assert.deepEqual(validateReportDraft(draft), {})
 })
 
+test('la publicación acepta hasta tres identificadores de fotos únicos', () => {
+  const mediaIds = [
+    '11111111-1111-4111-8111-111111111111',
+    '22222222-2222-4222-8222-222222222222',
+    '33333333-3333-4333-8333-333333333333',
+  ]
+  assert.deepEqual(validateReportDraft({ ...draft, mediaIds }), {})
+  assert.deepEqual(validateReportDraft({ ...draft, mediaIds: [mediaIds[0], mediaIds[0]] }), {
+    mediaIds: 'invalid',
+  })
+  assert.deepEqual(validateReportDraft({ ...draft, mediaIds: [...mediaIds, mediaIds[0]] }), {
+    mediaIds: 'invalid',
+  })
+})
+
 test('la validación informa varios campos inválidos en una sola respuesta', () => {
   assert.deepEqual(
     validateReportDraft({

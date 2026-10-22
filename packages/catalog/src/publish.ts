@@ -44,6 +44,20 @@ export function validateReportDraft(input: unknown): ReportValidationErrors {
   if (typeof draft.phone !== 'string' || !draft.phone.trim()) errors.phone = 'required'
   else if (!/^\+[1-9]\d{7,14}$/.test(normalizeReportPhone(draft.phone))) errors.phone = 'invalid'
 
+  if (draft.mediaIds !== undefined) {
+    const mediaIds = draft.mediaIds as unknown
+    const validIds =
+      Array.isArray(mediaIds) &&
+      mediaIds.length <= 3 &&
+      mediaIds.every(
+        (id) =>
+          typeof id === 'string' &&
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id),
+      ) &&
+      new Set(mediaIds).size === mediaIds.length
+    if (!validIds) errors.mediaIds = 'invalid'
+  }
+
   return errors
 }
 
@@ -71,6 +85,7 @@ export class CreateReport {
       incidentDate: draft.incidentDate,
       phone: normalizeReportPhone(draft.phone),
       ...(draft.category === 'pet' ? { petSpecies: draft.petSpecies!.trim() } : {}),
+      ...(draft.mediaIds ? { mediaIds: [...draft.mediaIds] } : {}),
     }
     return toPublicReport(await this.publisher.create(ownerId, normalized))
   }

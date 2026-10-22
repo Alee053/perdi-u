@@ -1,5 +1,6 @@
 import { Heart } from 'lucide-react'
 import type { ReportCard as ReportCardView } from '../../presenters/reports/report-card'
+import { ReportPhoto } from './ReportPhoto'
 
 type ReportCardProps = {
   report: ReportCardView
@@ -17,7 +18,7 @@ export function ReportCard({ report, saved, onSave, onOpen }: ReportCardProps) {
           onClick={onOpen}
           aria-label={'Ver reporte: ' + report.title}
         >
-          <img src={report.image} alt="" loading="lazy" />
+          <ReportPhoto src={report.image} privatePhoto={report.resolved} alt="" loading="lazy" />
         </button>
         <button
           className={'save-button' + (saved ? ' saved' : '')}

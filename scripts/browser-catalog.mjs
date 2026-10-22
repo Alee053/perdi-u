@@ -528,11 +528,14 @@ try {
     .getByRole('navigation')
     .getByRole('button', { name: /^Explorar reportes/ })
     .click()
-  await page.getByRole('alert').waitFor()
+  await page.locator('.catalog-state[role="alert"]').waitFor()
   assert.equal(await page.locator('.report-card').count(), 0)
   api = startApi()
   await waitFor(`${apiUrl}/reports`, api)
-  await page.getByRole('button', { name: 'Reintentar', exact: true }).click()
+  await page
+    .locator('.catalog-state[role="alert"]')
+    .getByRole('button', { name: 'Reintentar', exact: true })
+    .click()
   await expectCatalog(page)
 
   await browser.close()

@@ -9,6 +9,7 @@ Leer [arquitectura](../../../docs/architecture.md), el código/exports afectados
 
 1. Identificar qué comportamiento cambia y quién lo posee. Mantener HTTP/composición, reglas de catálogo, persistencia y presentación en los workspaces definidos; verificar callers y tipos antes de mover código. Dentro de `apps/web`, aplicar las capas de `mvp-react`.
 2. Consumir exports públicos y respetar el puerto de catálogo: sus predicados pertenecen al adapter y sus garantías adicionales al caso de uso. Mantener proyección pública explícita e identidad verificada; el nombre no demuestra propiedad.
+   Para fotos privadas, el caso de uso y puerto de almacenamiento viven en `catalog`, el adapter R2/configuración HTTP en `apps/api`, y propiedad, estado y asociación transaccional en `database`; consultar los límites canónicos en arquitectura/servicios.
 3. Para persistencia, leer [la guía de database](../../../packages/database/README.md). Añadir migraciones nuevas sin editar las aplicadas y probar solo en bases aisladas. Mantener configuración/credenciales del lado correspondiente.
 4. Elegir la solución más pequeña que preserve contratos. Crear otro paquete o proveedor solo con responsabilidad y necesidad claras; acordar decisiones que alteren arquitectura, permisos, datos o costo.
 5. Ejecutar `pnpm check:boundaries` y pruebas del recorrido. Actualizar la guía y esta skill si cambian responsabilidades, garantías o referencias; `perdiu-docs-sync` indica qué más revisar en la misma PR.

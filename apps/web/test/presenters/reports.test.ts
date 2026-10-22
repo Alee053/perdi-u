@@ -4,8 +4,10 @@ import { demoOwner, type CatalogReport, type DemoReport } from '../../src/models
 import { defaultSelection } from '../../src/presenters/catalog/filters.presenter.js'
 import { NoticePresenter } from '../../src/presenters/app/notice.presenter.js'
 import { PublishPresenter } from '../../src/presenters/reports/publish.presenter.js'
+import type { ReportPhotoFile } from '../../src/models/reports/publication.js'
 import { ReportsPresenter } from '../../src/presenters/reports/reports.presenter.js'
-import type { ReportDraft } from '../../src/models/reports/publication.js'
+import { ReportPublishFailure, type ReportDraft } from '../../src/models/reports/publication.js'
+import { toReportCard } from '../../src/presenters/reports/report-card.js'
 
 const base = {
   type: 'lost' as const,
@@ -39,6 +41,12 @@ const catalogReport: CatalogReport = {
   category: 'object',
   author: { id: 'owner-1', displayName: 'Santiago Demo' },
 }
+
+test('el detalle conserva todas las fotos publicadas y un respaldo cuando no hay fotos', () => {
+  const images = ['/api/media/one', '/api/media/two', '/api/media/three']
+  assert.deepEqual(toReportCard({ ...catalogReport, imageUrls: images }).images, images)
+  assert.deepEqual(toReportCard(catalogReport).images, ['/images/object.svg'])
+})
 
 function setup(reports: DemoReport[] = [], saved: string[] = []) {
   const notices: { message: string; error: boolean }[] = []
@@ -152,6 +160,10 @@ test('cerrar sesión borra los datos privados del dispositivo', () => {
 function publishSetup(publish: (draft: ReportDraft) => Promise<void> = async () => {}) {
   const submissions: ReportDraft[] = []
   const notices: string[] = []
+  const revokedPreviews: string[] = []
+  const uploads: ReportPhotoFile[] = []
+  const removedMedia: string[] = []
+  let previewId = 0
   let resets = 0
   let published = 0
   const presenter = new PublishPresenter({
@@ -161,12 +173,120 @@ function publishSetup(publish: (draft: ReportDraft) => Promise<void> = async () 
         await publish(draft)
       },
     },
+    media: {
+      upload: async (file: ReportPhotoFile) => {
+        uploads.push(file)
+        return 'media-id'
+      },
+      remove: async (id: string) => {
+        removedMedia.push(id)
+      },
+    },
+    effects: {
+      createPreview: () => `blob:preview-${++previewId}`,
+      revokePreview: (url: string) => revokedPreviews.push(url),
+    },
     filters: { reset: () => resets++ },
     notices: { show: (message: string) => notices.push(message) },
     onPublished: () => published++,
   })
-  return { presenter, submissions, notices, counts: () => ({ resets, published }) }
+  return {
+    presenter,
+    submissions,
+    notices,
+    revokedPreviews,
+    uploads,
+    removedMedia,
+    counts: () => ({ resets, published }),
+  }
 }
+
+test('publicar sube las fotos seleccionadas y envía sus identificadores opacos', async () => {
+  const { presenter, submissions, uploads } = publishSetup()
+  presenter.setField('category', 'object')
+  presenter.setField('title', 'Gatita gris')
+  presenter.setField('description', 'Gatita gris vista cerca del mercado central.')
+  presenter.setField('zone', 'Sopocachi')
+  presenter.setField('incidentDate', '2026-10-20')
+  presenter.setField('phone', '+591 70123456')
+  const photo = {
+    name: 'gata.jpg',
+    type: 'image/jpeg',
+    size: 10,
+    async arrayBuffer() {
+      return new ArrayBuffer(1)
+    },
+  }
+  presenter.addPhotos([photo])
+
+  assert.equal(await presenter.submit(), true)
+  assert.deepEqual(uploads, [photo])
+  assert.deepEqual(submissions[0]?.mediaIds, ['media-id'])
+})
+
+test('el formulario explica cuando el API rechaza las fotos adjuntas', async () => {
+  const { presenter } = publishSetup(async () => {
+    throw new ReportPublishFailure('validation', { mediaIds: 'invalid' })
+  })
+  presenter.setField('category', 'object')
+  presenter.setField('title', 'Gatita gris')
+  presenter.setField('description', 'Gatita gris vista cerca del mercado central.')
+  presenter.setField('zone', 'Sopocachi')
+  presenter.setField('incidentDate', '2026-10-20')
+  presenter.setField('phone', '+591 70123456')
+
+  assert.equal(await presenter.submit(), false)
+  assert.equal(presenter.getSnapshot().message, 'Revisa las fotos adjuntas e intenta nuevamente.')
+})
+
+test('al abandonar el formulario libera previews y fotos subidas sin asociar', async () => {
+  const { presenter, revokedPreviews, removedMedia } = publishSetup(async () => {
+    throw new ReportPublishFailure('unavailable')
+  })
+  presenter.setField('category', 'object')
+  presenter.setField('title', 'Gatita gris')
+  presenter.setField('description', 'Gatita gris vista cerca del mercado central.')
+  presenter.setField('zone', 'Sopocachi')
+  presenter.setField('incidentDate', '2026-10-20')
+  presenter.setField('phone', '+591 70123456')
+  presenter.addPhotos([
+    {
+      name: 'gata.jpg',
+      type: 'image/jpeg',
+      size: 10,
+      async arrayBuffer() {
+        return new ArrayBuffer(1)
+      },
+    },
+  ])
+  assert.equal(await presenter.submit(), false)
+
+  presenter.releasePhotos()
+
+  assert.deepEqual(revokedPreviews, ['blob:preview-1'])
+  assert.deepEqual(removedMedia, ['media-id'])
+  assert.deepEqual(presenter.getSnapshot().photos, [])
+})
+
+test('el formulario muestra hasta tres vistas previas y explica el límite', () => {
+  const { presenter } = publishSetup()
+  const photos = ['uno.jpg', 'dos.jpg', 'tres.jpg', 'cuatro.jpg'].map((name) => ({
+    name,
+    type: 'image/jpeg',
+    size: 10,
+    async arrayBuffer() {
+      return new ArrayBuffer(1)
+    },
+  }))
+
+  presenter.addPhotos(photos)
+
+  assert.deepEqual(
+    presenter.getSnapshot().photos.map(({ previewUrl }: { previewUrl: string }) => previewUrl),
+    ['blob:preview-1', 'blob:preview-2', 'blob:preview-3'],
+  )
+  assert.equal(presenter.getSnapshot().message, 'Puedes adjuntar hasta 3 fotos.')
+})
 
 test('publicar muestra los errores del modelo junto a cada campo y no llama al API', async () => {
   const { presenter, submissions } = publishSetup()

@@ -2,6 +2,7 @@ import { DatabaseConfigurationError } from '@perdiu/database/config'
 import { createApplication } from './app.js'
 import { createRemoteAccessTokenVerifier } from './auth/access-token.js'
 import { ConfigurationError, loadEnvironment, readConfig } from './config.js'
+import { R2ReportMediaStorage } from './media/r2-storage.js'
 
 try {
   loadEnvironment()
@@ -9,6 +10,7 @@ try {
   const app = await createApplication(
     config.databaseUrl,
     createRemoteAccessTokenVerifier(config.auth.jwksUrl, config.auth),
+    { ...(config.r2 && { mediaStorage: new R2ReportMediaStorage(config.r2) }) },
   )
   try {
     await app.listen(config.port, config.host)

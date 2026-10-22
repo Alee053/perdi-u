@@ -146,6 +146,10 @@ services:
       DATABASE_URL: postgresql://perdiu_app:${APP_DB_PASSWORD}@postgres:5432/perdiu_demo_dev
       AUTH_JWKS_URL: http://auth:9999/.well-known/jwks.json
       AUTH_JWT_ISSUER: ${AUTH_SITE_URL}/auth
+      R2_ACCOUNT_ID: ${R2_ACCOUNT_ID:-}
+      R2_BUCKET_NAME: ${R2_BUCKET_NAME:-}
+      R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID:-}
+      R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY:-}
     networks:
       backend:
         aliases: [perdi-u-api]
