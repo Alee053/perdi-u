@@ -494,6 +494,25 @@
     "conclusion": "success"
   },
   {
+    "sha": "4ea1fd1cb51284ca488cde2ddec2746428bbbf27",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-22T02:42:32.000Z",
+      "message": "docs(api): registrar verificación HTTPS de la demo",
+      "url": "https://github.com/Alee053/perdi-u/commit/4ea1fd1cb51284ca488cde2ddec2746428bbbf27"
+    },
+    "stats": {
+      "total": 12,
+      "additions": 9,
+      "deletions": 3,
+      "date": "2026-10-22"
+    },
+    "coverage": 92.17,
+    "test_count": 78,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
     "sha": "a344d65335336e8f6c639c7d67504455e581793d",
     "author": "Alejandro Castro",
     "commit": {
@@ -513,12 +532,50 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "46a7ffffe3ddc9f16bd7a06afa97581a2e77cc6f",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-10-22T02:43:58.000Z",
+      "message": "feat(repo): publicar reportes persistentes (#5)",
+      "url": "https://github.com/Alee053/perdi-u/commit/46a7ffffe3ddc9f16bd7a06afa97581a2e77cc6f"
+    },
+    "stats": {
+      "total": 1112,
+      "additions": 900,
+      "deletions": 212,
+      "date": "2026-10-22"
+    },
+    "coverage": 90.16,
+    "test_count": 85,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "ffac0dd1a3131253afc8d756d4b610e6c2781518",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-10-22T03:02:15.000Z",
+      "message": "Merge remote-tracking branch 'origin/main' into feat/s1-05-publicacion-persistente\n\n# Conflicts:\n#\tscript/commit-history.json\n#\tscript/tdd_log.json",
+      "url": "https://github.com/Alee053/perdi-u/commit/ffac0dd1a3131253afc8d756d4b610e6c2781518"
+    },
+    "stats": {
+      "total": 588,
+      "additions": 573,
+      "deletions": 15,
+      "date": "2026-10-22"
+    },
+    "coverage": 90.16,
+    "test_count": 85,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "d9865625a2257166acd35330930e35adfe0ab748",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-10-22T03:10:08.000Z",
       "message": "fix(api): ajustar dominio y registro directo de la demo",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/d9865625a2257166acd35330930e35adfe0ab748"
     },
     "stats": {
       "total": 57,
@@ -528,6 +585,25 @@
     },
     "coverage": 92.17,
     "test_count": 78,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-10-22T03:31:20.000Z",
+      "message": "Merge origin/main into feat/s1-05-publicacion-persistente",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 57,
+      "additions": 44,
+      "deletions": 13,
+      "date": "2026-10-22"
+    },
+    "coverage": 90.16,
+    "test_count": 85,
     "failed_tests": 0,
     "conclusion": "success"
   }

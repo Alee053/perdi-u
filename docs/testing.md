@@ -16,7 +16,7 @@ Los tests de caracterización de comportamiento existente pueden pasar desde el 
 
 | Interfaz                            | Tipo y ubicación                                 | Qué debe demostrar                                                                                                                                                                                       |
 | ----------------------------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ListReports` y `ReportRepository`  | Unitarias, `packages/catalog/test`               | Transmisión de consulta, activos, orden estable/microsegundos, límite y proyección pública. El adapter aplica los predicados de búsqueda antes del límite.                                               |
+| Catálogo y `CreateReport`           | Unitarias, `packages/catalog/test`               | Filtros, validación del borrador, autor inyectado, estado activo y proyección pública sin contacto.                                                                                                      |
 | Configuración de BD/API             | Unitarias, workspace dueño                       | Entradas inválidas, mensajes seguros y restricciones de mutaciones.                                                                                                                                      |
 | Model web                           | Unitarias, `apps/web/test/models`                | Reglas de filtros, resumen, borrador, foto, propiedad por id y credenciales. Funciones puras, sin React ni dobles.                                                                                       |
 | Cliente y presenter                 | Unitarias, `apps/web/test`                       | DTO público, consultas HTTP, carga/error/reintento, cancelación y respuestas obsoletas. Doblar la red en esta interfaz.                                                                                  |
@@ -27,7 +27,7 @@ Los tests de caracterización de comportamiento existente pueden pasar desde el 
 | `AuthPresenter` y cliente de cuenta | Unitarias, `apps/web/test`                       | Validación, mensajes seguros, confirmación, restauración, vencimiento, cierre API→Auth con fallo, perfil sin caché, secciones privadas y cambio de cuenta. Doblar `AuthGateway` y la red.                |
 | `GET /me` y `POST /me/logout`       | Integración HTTP/PG, `apps/api/test`             | Guard real con un JWKS HTTP local: 200 con identidad y perfil propio, 401 uniforme, 503 sin claves; token revocado rechazado antes y después de reiniciar NestJS.                                        |
 | Supabase Auth real                  | Aceptación, `scripts/verify-auth.mjs`            | `compose.yaml` en un proyecto desechable: bootstrap, registro, confirmación vía Mailpit, login, `/me`, refresh, revocación en la API y logout. Ver [la guía de Auth](auth.md).                           |
-| `GET /reports`                      | Integración HTTP/PG, `apps/api/test`             | Validación/status, filtros reales, persistencia y privacidad.                                                                                                                                            |
+| `GET /reports` y `POST /reports`    | Integración HTTP/PG, `apps/api/test`             | Filtros y publicación autenticada con PostgreSQL: validación/status, autor verificado, persistencia y privacidad del contacto.                                                                           |
 | Composición React/API/PG            | E2E, `scripts/browser-catalog.mjs`               | Unos pocos recorridos de usuario en móvil/escritorio: controles, búsqueda, vacío, error/reintento, guardados y secciones privadas sin sesión. Las combinaciones exhaustivas pertenecen a HTTP/unitarias. |
 | Verificadores del repositorio       | Unitarias, `scripts/test`                        | Detectar documentos/skills inválidos y admitir los válidos.                                                                                                                                              |
 | Documentación y skills              | Check local y revisión                           | Frontmatter y destinos locales válidos; revisar manualmente exactitud, ejemplos e impacto.                                                                                                               |
@@ -48,6 +48,7 @@ pnpm exec jest --runTestsByPath packages/catalog/test/catalog.test.ts --testName
 pnpm test:integration --test-name-pattern='la búsqueda HTTP'
 pnpm test:integration --test-name-pattern='catálogo HTTP'
 pnpm test:integration --test-name-pattern='cerrar sesión en la API'
+pnpm test:integration --test-name-pattern='publicar un reporte'
 
 # Integración completa o aceptación completa (esta última ya incluye integración/build).
 pnpm test:integration

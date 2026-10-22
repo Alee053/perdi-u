@@ -36,6 +36,7 @@ export function ReportCard({ report, saved, onSave, onOpen }: ReportCardProps) {
           {report.title}
         </button>
         <p className="card-description">{report.description}</p>
+        {report.petSpecies && <span className="card-meta">Especie: {report.petSpecies}</span>}
         <span className="card-meta">
           {report.zone}, {report.city} · {report.person}
         </span>

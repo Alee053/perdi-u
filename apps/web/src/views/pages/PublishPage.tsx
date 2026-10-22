@@ -8,14 +8,14 @@ import { PageHeading } from '../components/PageHeading'
 
 type PublishPageProps = {
   form: PublishState
-  actions: Pick<PublishPresenter, 'setType' | 'setField' | 'choosePhoto' | 'clearPhoto' | 'submit'>
+  actions: Pick<PublishPresenter, 'setType' | 'setField' | 'submit'>
 }
 
 export function PublishPage({ form, actions }: PublishPageProps) {
-  const { draft, errors, imagePreview } = form
+  const { draft, errors } = form
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    actions.submit()
+    void actions.submit()
   }
   const error = (field: keyof PublishState['errors']) =>
     errors[field] && <small id={field + '-error'}>{errors[field]}</small>
@@ -47,31 +47,6 @@ export function PublishPage({ form, actions }: PublishPageProps) {
           </button>
         </fieldset>
 
-        <div className="photo-field">
-          {imagePreview ? (
-            <>
-              <img src={imagePreview} alt="Vista previa de la foto" />
-              <button type="button" className="secondary-button" onClick={actions.clearPhoto}>
-                Quitar foto
-              </button>
-            </>
-          ) : (
-            <label className="upload-zone">
-              <strong>Selecciona una foto</strong>
-              <small>JPG o PNG · Hasta 5 MB</small>
-              <input
-                type="file"
-                accept="image/jpeg,image/png"
-                onChange={(event) => {
-                  const file = event.target.files?.[0]
-                  if (file) actions.choosePhoto(file)
-                }}
-                aria-label="Subir fotografía"
-              />
-            </label>
-          )}
-        </div>
-
         <div className="form-grid">
           <label className="form-field form-wide">
             <span>Nombre del reporte</span>
@@ -79,6 +54,7 @@ export function PublishPage({ form, actions }: PublishPageProps) {
               value={draft.title}
               onChange={(event) => actions.setField('title', event.target.value)}
               placeholder="Ej. Perrito café, mochila azul…"
+              maxLength={200}
               aria-invalid={Boolean(errors.title)}
               aria-describedby={errors.title ? 'title-error' : undefined}
             />
@@ -91,6 +67,7 @@ export function PublishPage({ form, actions }: PublishPageProps) {
               onChange={(event) => actions.setField('description', event.target.value)}
               placeholder="Color, características, cuándo y dónde…"
               rows={4}
+              maxLength={5000}
               aria-invalid={Boolean(errors.description)}
               aria-describedby={errors.description ? 'description-error' : 'description-hint'}
             />
@@ -115,6 +92,20 @@ export function PublishPage({ form, actions }: PublishPageProps) {
               ))}
             </select>
           </label>
+          {draft.category === 'pet' && (
+            <label className="form-field">
+              <span>Especie</span>
+              <input
+                value={draft.petSpecies ?? ''}
+                onChange={(event) => actions.setField('petSpecies', event.target.value)}
+                placeholder="Ej. Perro, gato…"
+                maxLength={100}
+                aria-invalid={Boolean(errors.petSpecies)}
+                aria-describedby={errors.petSpecies ? 'petSpecies-error' : undefined}
+              />
+              {error('petSpecies')}
+            </label>
+          )}
           <label className="form-field">
             <span>Ciudad</span>
             <select
@@ -132,6 +123,7 @@ export function PublishPage({ form, actions }: PublishPageProps) {
               value={draft.zone}
               onChange={(event) => actions.setField('zone', event.target.value)}
               placeholder="Ej. Sopocachi, Equipetrol…"
+              maxLength={200}
               aria-invalid={Boolean(errors.zone)}
               aria-describedby={errors.zone ? 'zone-error' : undefined}
             />
@@ -143,14 +135,41 @@ export function PublishPage({ form, actions }: PublishPageProps) {
               type="date"
               value={draft.incidentDate}
               onChange={(event) => actions.setField('incidentDate', event.target.value)}
+              aria-invalid={Boolean(errors.incidentDate)}
+              aria-describedby={errors.incidentDate ? 'incidentDate-error' : undefined}
             />
+            {error('incidentDate')}
+          </label>
+          <label className="form-field">
+            <span>Número de WhatsApp</span>
+            <input
+              type="tel"
+              value={draft.phone}
+              onChange={(event) => actions.setField('phone', event.target.value)}
+              placeholder="+591 70000000"
+              autoComplete="tel"
+              aria-invalid={Boolean(errors.phone)}
+              aria-describedby={errors.phone ? 'phone-error' : 'phone-hint'}
+            />
+            {error('phone') || (
+              <small id="phone-hint" className="hint">
+                Incluye el código de país; el número no se muestra en el catálogo.
+              </small>
+            )}
           </label>
         </div>
 
+        {form.message && (
+          <p className="message message-error" role="alert">
+            {form.message}
+          </p>
+        )}
         <div className="form-footer">
-          <small className="hint">Tu correo y tu número no aparecen públicamente.</small>
-          <button className="primary-button" type="submit">
-            Publicar reporte
+          <small className="hint">
+            No publiques números de documentos, cuentas bancarias ni contraseñas.
+          </small>
+          <button className="primary-button" type="submit" disabled={form.pending}>
+            {form.pending ? 'Publicando…' : 'Publicar reporte'}
           </button>
         </div>
       </form>

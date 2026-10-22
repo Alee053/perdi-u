@@ -1,31 +1,68 @@
-import type { PublicProfile, ReportCategory, ReportType } from '@perdiu/contracts'
+import type {
+  CreateReportField,
+  CreateReportInput,
+  PublicProfile,
+  ReportCategory,
+  ReportType,
+  ReportValidationErrors,
+  ReportValidationIssue,
+} from '@perdiu/contracts'
 import { isOwnedBy, type DemoReport, type Report } from './report.js'
 
-export interface ReportDraft {
+export type ReportDraft = CreateReportInput
+export interface ReportPublisher {
+  publish(draft: ReportDraft): Promise<void>
+}
+
+export class ReportPublishFailure extends Error {
+  constructor(
+    readonly reason: 'validation' | 'unauthorized' | 'unavailable',
+    readonly errors: ReportValidationErrors = {},
+  ) {
+    super(reason)
+  }
+}
+
+export interface DemoReportDraft {
   type: ReportType
   category: ReportCategory
   title: string
   description: string
   city: string
   zone: string
-  /** `YYYY-MM-DD`; empty when the person does not know it. */
   incidentDate: string
   imageUrl?: string
 }
 
-export type DraftField = 'title' | 'description' | 'zone'
-export type DraftIssue = 'required' | 'too_short'
-export const draftMinimums = { title: 3, description: 20 }
+export type DraftField = CreateReportField
+export type DraftIssue = ReportValidationIssue
 
 export function validateDraft(draft: ReportDraft): Partial<Record<DraftField, DraftIssue>> {
   const issues: Partial<Record<DraftField, DraftIssue>> = {}
-  const title = draft.title.trim()
-  const description = draft.description.trim()
-  if (!title) issues.title = 'required'
-  else if (title.length < draftMinimums.title) issues.title = 'too_short'
-  if (!description) issues.description = 'required'
-  else if (description.length < draftMinimums.description) issues.description = 'too_short'
-  if (!draft.zone.trim()) issues.zone = 'required'
+  const required = (field: DraftField, max: number) => {
+    const value = draft[field]
+    if (typeof value !== 'string' || !value.trim()) issues[field] = 'required'
+    else if (value.trim().length > max) issues[field] = 'too_long'
+  }
+  required('title', 200)
+  required('city', 100)
+  required('zone', 200)
+  if (!draft.description.trim()) issues.description = 'required'
+  else if (draft.description.trim().length < 20) issues.description = 'too_short'
+  else if (draft.description.trim().length > 5000) issues.description = 'too_long'
+  if (draft.type !== 'lost' && draft.type !== 'found') issues.type = 'invalid'
+  if (draft.category !== 'pet' && draft.category !== 'object' && draft.category !== 'document')
+    issues.category = 'invalid'
+  if (draft.category === 'pet') required('petSpecies', 100)
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(draft.incidentDate)) issues.incidentDate = 'invalid'
+  else {
+    const date = new Date(`${draft.incidentDate}T00:00:00Z`)
+    if (!Number.isFinite(date.getTime()) || date.toISOString().slice(0, 10) !== draft.incidentDate)
+      issues.incidentDate = 'invalid'
+  }
+  const phone = draft.phone.trim().replace(/[\s().-]/g, '')
+  if (!phone) issues.phone = 'required'
+  else if (!/^\+[1-9]\d{7,14}$/.test(phone)) issues.phone = 'invalid'
   return issues
 }
 
@@ -40,7 +77,7 @@ const localDay = (now: Date) =>
   new Intl.DateTimeFormat('en-CA', { timeZone: 'America/La_Paz' }).format(now)
 
 export function publishDemoReport(
-  draft: ReportDraft,
+  draft: DemoReportDraft,
   context: { id: string; now: Date; owner: PublicProfile & { phone: string } },
 ): DemoReport {
   const { owner } = context

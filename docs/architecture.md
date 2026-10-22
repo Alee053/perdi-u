@@ -2,15 +2,15 @@
 
 Cada workspace es responsable de una capacidad y se consume por sus exports públicos. Los cambios de una capa se prueban en su propia interfaz; las pruebas HTTP y de navegador verifican la composición completa.
 
-| Workspace            | Responsabilidad                                                                                                                                                     | Dependencias internas permitidas   |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| `apps/web`           | SPA React/Vite organizada en MVP: `models`, `presenters`, `views`, adapters en `infrastructure` (HTTP, Supabase Auth tras `AuthGateway`) y composición en `app`.    | `contracts`                        |
-| `apps/api`           | NestJS, entrada HTTP, validación de parámetros, traducción de errores, verificación de access tokens/guard y composición de dependencias.                           | `catalog`, `database`, `contracts` |
-| `packages/catalog`   | Modelo y puerto de repositorio del catálogo, caso de uso, orden, activos y proyección pública. Independiente de HTTP, PostgreSQL y React.                           | `contracts`                        |
-| `packages/database`  | Conexión PostgreSQL, adapter SQL del puerto de catálogo, perfiles y revocaciones de sesión, esquema, migraciones, seed, configuración de BD y CLI de mantenimiento. | `catalog`, `contracts`             |
-| `packages/contracts` | DTOs, tipos y constantes compartidos. Independiente de los demás workspaces y de frameworks.                                                                        | Ninguna                            |
+| Workspace            | Responsabilidad                                                                                                                                                      | Dependencias internas permitidas   |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `apps/web`           | SPA React/Vite organizada en MVP: `models`, `presenters`, `views`, adapters en `infrastructure` (HTTP, Supabase Auth tras `AuthGateway`) y composición en `app`.     | `contracts`                        |
+| `apps/api`           | NestJS, entrada HTTP, validación de parámetros, traducción de errores, verificación de access tokens/guard y composición de dependencias.                            | `catalog`, `database`, `contracts` |
+| `packages/catalog`   | Modelo y puertos de catálogo/publicación, casos de uso, validación, orden, activos y proyección pública. Independiente de HTTP, PostgreSQL y React.                  | `contracts`                        |
+| `packages/database`  | Conexión PostgreSQL, adapter SQL de catálogo/publicación, perfiles y revocaciones de sesión, esquema, migraciones, seed, configuración de BD y CLI de mantenimiento. | `catalog`, `contracts`             |
+| `packages/contracts` | DTOs, tipos y constantes compartidos. Independiente de los demás workspaces y de frameworks.                                                                         | Ninguna                            |
 
-La API combina `ListReports` con `openDatabase().reports` y llama `close` al apagar. También recibe un `AccessTokenVerifier` que valida tokens de Supabase Auth con su JWKS público; la API lo combina con las revocaciones de `openDatabase().sessions`, de modo que el guard rechaza sesiones cerradas en toda ruta privada; Auth es un servicio externo de Compose con base propia (`perdiu_auth`), no un workspace. Consultar la [guía de Auth](auth.md). El paquete de base de datos administra el pool, comprueba la conexión e implementa el repositorio. El caso de uso conserva las reglas del catálogo y entrega la proyección pública explícita.
+La API combina `ListReports` con `openDatabase().reports` y `CreateReport` con `openDatabase().publisher`; llama `close` al apagar. También recibe un `AccessTokenVerifier` que valida tokens de Supabase Auth con su JWKS público; la API lo combina con las revocaciones de `openDatabase().sessions`, de modo que el guard rechaza sesiones cerradas en toda ruta privada; Auth es un servicio externo de Compose con base propia (`perdiu_auth`), no un workspace. Consultar la [guía de Auth](auth.md). El paquete de base de datos administra el pool, comprueba la conexión e implementa los puertos. Los casos de uso conservan la validación y reglas del catálogo; la respuesta aplica una proyección pública explícita.
 
 ## Reglas para cambios
 
@@ -33,4 +33,4 @@ La API combina `ListReports` con `openDatabase().reports` y llama `close` al apa
 5. El runner conocía solamente `001_catalog.sql`; ahora descubre versiones ordenadas y conserva el registro existente.
 6. `App.tsx` concentraba estado, reglas demo, navegación y efectos del navegador; ahora la web sigue MVP con presenters por responsabilidad. Consultar [la arquitectura MVP](architecture/mvp.md).
 
-El dashboard conserva los flujos demo documentados (resumen, mapa, publicar y mis reportes) en memoria, ahora en `ReportsPresenter` y `PublishPresenter` con reglas en `models/reports`. Conectar la publicación con la API sustituirá los datos demo por un puerto del Model, sin cambiar la View.
+El dashboard conserva flujos demo de resumen, mapa y mis reportes en memoria, con presenters y reglas en `models/reports`. La publicación ya usa un puerto del Model, un presenter y un adapter HTTP para persistir el reporte sin fotos; la asociación de medios queda para S1-06.

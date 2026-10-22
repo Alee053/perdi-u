@@ -3,6 +3,7 @@ import { browserEffects } from '../infrastructure/browser/browser-effects.js'
 import { demoReports, demoSavedIds } from '../infrastructure/demo/demo-reports.js'
 import { createAccountClient } from '../infrastructure/http/account-client.js'
 import { createReportsClient } from '../infrastructure/http/catalog-client.js'
+import { createReportPublisher } from '../infrastructure/http/publish-client.js'
 import { NoticePresenter } from '../presenters/app/notice.presenter.js'
 import { ShellPresenter } from '../presenters/app/shell.presenter.js'
 import { AuthPresenter } from '../presenters/auth/auth.presenter.js'
@@ -29,11 +30,10 @@ export function createPresenters(env = import.meta.env) {
     demoSavedIds,
   )
   const publish = new PublishPresenter({
-    reports,
+    publisher: createReportPublisher(apiUrl, accessToken),
     filters,
     notices,
-    effects: browserEffects,
-    onPublished: () => shell.navigate('my-reports'),
+    onPublished: () => shell.navigate('explore'),
   })
   const shell: ShellPresenter = new ShellPresenter({
     auth,

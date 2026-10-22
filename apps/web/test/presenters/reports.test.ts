@@ -5,6 +5,7 @@ import { defaultSelection } from '../../src/presenters/catalog/filters.presenter
 import { NoticePresenter } from '../../src/presenters/app/notice.presenter.js'
 import { PublishPresenter } from '../../src/presenters/reports/publish.presenter.js'
 import { ReportsPresenter } from '../../src/presenters/reports/reports.presenter.js'
+import type { ReportDraft } from '../../src/models/reports/publication.js'
 
 const base = {
   type: 'lost' as const,
@@ -170,88 +171,93 @@ test('cerrar sesión borra los datos privados del dispositivo', () => {
   assert.equal(presenter.detail(), null)
 })
 
-function publishSetup() {
-  const added: unknown[] = []
+function publishSetup(publish: (draft: ReportDraft) => Promise<void> = async () => {}) {
+  const submissions: ReportDraft[] = []
   const notices: string[] = []
-  const revoked: string[] = []
   let resets = 0
   let published = 0
   const presenter = new PublishPresenter({
-    reports: { add: (report) => added.push(report) },
+    publisher: {
+      publish: async (draft) => {
+        submissions.push({ ...draft })
+        await publish(draft)
+      },
+    },
     filters: { reset: () => resets++ },
     notices: { show: (message: string) => notices.push(message) },
-    effects: {
-      createPreview: (file) => 'blob:' + file.type,
-      revokePreview: (url) => revoked.push(url),
-      now: () => new Date('2026-10-20T15:00:00.000Z'),
-      newId: () => 'demo-new',
-    },
     onPublished: () => published++,
   })
-  return { presenter, added, notices, revoked, counts: () => ({ resets, published }) }
+  return { presenter, submissions, notices, counts: () => ({ resets, published }) }
 }
 
-test('publicar muestra los errores del modelo junto a cada campo y no publica', () => {
-  const { presenter, added } = publishSetup()
-  presenter.setField('title', 'ab')
-  assert.equal(presenter.submit(), false)
+test('publicar muestra los errores del modelo junto a cada campo y no llama al API', async () => {
+  const { presenter, submissions } = publishSetup()
+  assert.equal(await presenter.submit(), false)
   assert.deepEqual(presenter.getSnapshot().errors, {
-    title: 'Usa al menos 3 caracteres.',
+    title: 'Escribe un nombre para el reporte.',
     description: 'Describe lo que perdiste o encontraste.',
     zone: 'Indica la zona o el barrio.',
+    incidentDate: 'Indica una fecha válida.',
+    phone: 'Ingresa un número de WhatsApp con código de país.',
+    petSpecies: 'Indica la especie de la mascota.',
   })
   presenter.setField('title', 'Mochila azul')
   assert.equal(presenter.getSnapshot().errors.title, undefined, 'editar limpia su error')
-  assert.deepEqual(added, [])
+  assert.deepEqual(submissions, [])
 })
 
-test('una foto inválida se rechaza con aviso y reemplazar la vista previa libera la anterior', () => {
-  const { presenter, notices, revoked } = publishSetup()
-  presenter.choosePhoto({ type: 'image/gif', size: 10 })
-  assert.equal(presenter.getSnapshot().imagePreview, '')
-  assert.deepEqual(notices, ['Elige una imagen JPG o PNG de máximo 5 MB.'])
-  presenter.choosePhoto({ type: 'image/png', size: 10 })
-  presenter.choosePhoto({ type: 'image/jpeg', size: 10 })
-  assert.equal(presenter.getSnapshot().imagePreview, 'blob:image/jpeg')
-  presenter.clearPhoto()
-  assert.deepEqual(revoked, ['blob:image/png', 'blob:image/jpeg'])
-})
-
-test('publicar un borrador válido crea el reporte del dueño, limpia filtros y el formulario', () => {
-  const { presenter, added, notices, revoked, counts } = publishSetup()
+test('publicar envía el borrador, refresca el catálogo y limpia el formulario', async () => {
+  const { presenter, submissions, notices, counts } = publishSetup()
   presenter.setType('found')
+  presenter.setField('category', 'object')
+  presenter.setField('title', '  Mochila azul  ')
+  presenter.setField('description', 'La encontré en un minibús de la línea 2.')
+  presenter.setField('zone', ' Miraflores ')
+  presenter.setField('incidentDate', '2026-10-20')
+  presenter.setField('phone', '+591 70123456')
+  assert.equal(await presenter.submit(), true)
+  assert.deepEqual(submissions, [
+    {
+      type: 'found',
+      category: 'object',
+      title: '  Mochila azul  ',
+      description: 'La encontré en un minibús de la línea 2.',
+      city: 'La Paz',
+      zone: ' Miraflores ',
+      incidentDate: '2026-10-20',
+      phone: '+591 70123456',
+    },
+  ])
+  assert.deepEqual(counts(), { resets: 1, published: 1 })
+  assert.deepEqual(notices, ['Tu reporte se publicó y ya aparece en el catálogo.'])
+  assert.equal(presenter.getSnapshot().draft.title, '')
+})
+
+test('un envío pendiente bloquea duplicados y conserva el borrador si falla', async () => {
+  let reject!: (error: Error) => void
+  const request = new Promise<void>((_resolve, fail) => {
+    reject = fail
+  })
+  const { presenter, submissions } = publishSetup(() => request)
   presenter.setField('category', 'object')
   presenter.setField('title', 'Mochila azul')
   presenter.setField('description', 'La encontré en un minibús de la línea 2.')
   presenter.setField('zone', 'Miraflores')
-  presenter.choosePhoto({ type: 'image/png', size: 10 })
-  assert.equal(presenter.submit(), true)
-  assert.deepEqual(added, [
-    {
-      id: 'demo-new',
-      source: 'demo',
-      type: 'found',
-      state: 'active',
-      category: 'object',
-      title: 'Mochila azul',
-      description: 'La encontré en un minibús de la línea 2.',
-      city: 'La Paz',
-      zone: 'Miraflores',
-      incidentDate: '2026-10-20',
-      createdAt: '2026-10-20T15:00:00.000Z',
-      imageUrls: ['blob:image/png'],
-      author: { id: demoOwner.id, displayName: demoOwner.displayName },
-      phone: demoOwner.phone,
-      position: { top: '48%', left: '48%' },
-    },
-  ])
-  assert.deepEqual(counts(), { resets: 1, published: 1 })
-  assert.deepEqual(notices, [
-    'Tu reporte ya está publicado. Puedes gestionarlo desde Mis reportes.',
-  ])
-  assert.deepEqual(revoked, [], 'la foto publicada sigue en uso')
-  assert.equal(presenter.getSnapshot().draft.title, '')
-  assert.equal(presenter.getSnapshot().imagePreview, '')
+  presenter.setField('incidentDate', '2026-10-20')
+  presenter.setField('phone', '+591 70123456')
+
+  const first = presenter.submit()
+  assert.equal(await presenter.submit(), false)
+  assert.equal(presenter.getSnapshot().pending, true)
+  assert.equal(submissions.length, 1)
+  reject(new Error('red'))
+  assert.equal(await first, false)
+  assert.equal(presenter.getSnapshot().pending, false)
+  assert.equal(presenter.getSnapshot().draft.title, 'Mochila azul')
+  assert.equal(
+    presenter.getSnapshot().message,
+    'No se pudo publicar el reporte. Intenta nuevamente.',
+  )
 })
 
 test('un aviso nuevo reemplaza al anterior y se cierra solo tras su duración', () => {
