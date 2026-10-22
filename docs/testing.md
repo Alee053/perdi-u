@@ -34,6 +34,8 @@ Los tests de caracterización de comportamiento existente pueden pasar desde el 
 | Verificadores del repositorio       | Unitarias, `scripts/test`                        | Detectar documentos/skills inválidos y admitir los válidos.                                                                                                                                                                                                                                |
 | Documentación y skills              | Check local y revisión                           | Frontmatter y destinos locales válidos; revisar manualmente exactitud, ejemplos e impacto.                                                                                                                                                                                                 |
 
+Para S1-08, las unitarias de `catalog` y `apps/web` prueban historial, identidad, filtros y confirmación con cancelación/error/reintento. `apps/api/test/own-reports.integration.ts` verifica `GET /me/reports` y `PATCH /reports/:id/resolve` con tokens firmados, PostgreSQL real, nombres iguales, permisos, fallos de BD, reinicio e idempotencia por fila/`xmin`. `pnpm test:auth --with-browser` integra GoTrue/Mailpit con publicación, búsqueda, detalle/contacto y cierre en móvil/escritorio; solo intercepta el destino de WhatsApp y los errores HTTP deliberados. La evidencia de ciclos está en [S1-08](validation/s1-08.md).
+
 ## Comandos
 
 Usar la versión de [`.node-version`](../.node-version) y pnpm de [`packageManager`](../package.json). Desde un clone limpio, instalar con `pnpm install --frozen-lockfile`. Los imports entre workspaces resuelven `dist`: el build de dependencias debe preceder a una prueba focalizada. `pnpm test` y `pnpm test:unit` preparan ese build. `.npmrc` habilita los módulos ESM de Jest tanto para pnpm como para el `npx jest` del hook original; conservar pnpm 10.29.2 y Node 24.
@@ -52,6 +54,7 @@ pnpm test:integration --test-name-pattern='catálogo HTTP'
 pnpm test:integration --test-name-pattern='cerrar sesión en la API'
 pnpm test:integration --test-name-pattern='publicar un reporte'
 pnpm test:integration --test-name-pattern='el detalle HTTP|el contacto HTTP'
+pnpm test:integration --test-name-pattern='mis reportes HTTP|resolver HTTP|un fallo real de PostgreSQL'
 
 # Integración completa o aceptación completa (esta última ya incluye integración/build).
 pnpm test:integration
@@ -59,6 +62,7 @@ pnpm test:e2e
 
 # Supabase Auth real en un proyecto Compose desechable (requiere Docker).
 pnpm test:auth
+pnpm test:auth --with-browser
 
 # Calidad rápida utilizada en CI.
 pnpm verify

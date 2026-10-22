@@ -33,4 +33,6 @@ La API combina `ListReports`, `GetReport` y `GetReportContact` con `openDatabase
 5. El runner conocía solamente `001_catalog.sql`; ahora descubre versiones ordenadas y conserva el registro existente.
 6. `App.tsx` concentraba estado, reglas demo, navegación y efectos del navegador; ahora la web sigue MVP con presenters por responsabilidad. Consultar [la arquitectura MVP](architecture/mvp.md).
 
-El dashboard conserva flujos demo de resumen, mapa y mis reportes en memoria, con presenters y reglas en `models/reports`. La publicación ya usa un puerto del Model, un presenter y un adapter HTTP para persistir el reporte sin fotos; la asociación de medios queda para S1-06.
+`ListOwnReports` y `ResolveReport` consumen el puerto `OwnReportsRepository` de `catalog` a través de `openDatabase().reports`. El caso de uso filtra la identidad y aplica la proyección compartida; el adapter SQL restringe la consulta y comprueba propietario/estado en la propia escritura para asegurar idempotencia concurrente. La API traduce sus resultados a HTTP sin aceptar identidad del cliente. No se añaden tablas ni dependencias.
+
+El dashboard conserva datos demo de resumen y mapa. La publicación, el detalle y «Mis reportes» usan puertos del Model, presenters y adapters HTTP; el historial sigue la sesión verificada y descarta respuestas anteriores al cambiar de cuenta. Tras un cierre confirmado, la composición actualiza historial, detalle, guardados y catálogo conservando la consulta. La publicación sin fotos persiste reporte y contacto; la asociación de medios queda para S1-06.

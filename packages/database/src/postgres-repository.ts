@@ -1,10 +1,17 @@
 import type { Pool } from 'pg'
-import { REPORT_RESULT_LIMIT, type CreateReportInput, type ReportQuery } from '@perdiu/contracts'
+import {
+  REPORT_RESULT_LIMIT,
+  type CreateReportInput,
+  type OwnReportQuery,
+  type ReportQuery,
+} from '@perdiu/contracts'
 import type {
+  OwnReportsRepository,
   ReportDetailRepository,
   ReportPublisher,
   ReportRecord,
   ReportRepository,
+  ResolveReportResult,
 } from '@perdiu/catalog'
 
 // Public columns plus the owner ID; contact and storage tables are never joined here.
@@ -19,9 +26,37 @@ const reportColumns = `
 `
 
 export class PostgresReportRepository
-  implements ReportRepository, ReportDetailRepository, ReportPublisher
+  implements ReportRepository, ReportDetailRepository, ReportPublisher, OwnReportsRepository
 {
   constructor(private readonly pool: Pool) {}
+
+  async resolveOwned(id: string, ownerId: string): Promise<ResolveReportResult> {
+    // Ownership and active state belong in the write, including concurrent retries.
+    const updated = await this.pool.query(
+      "UPDATE reports SET state = 'resolved' WHERE id = $1 AND owner_id = $2 AND state = 'active' RETURNING id",
+      [id, ownerId],
+    )
+    if (updated.rowCount) return 'resolved'
+    // An authorized repeat returns success without writing the row or its history again.
+    const existing = await this.pool.query<{ ownerId: string }>(
+      'SELECT owner_id AS "ownerId" FROM reports WHERE id = $1',
+      [id],
+    )
+    const report = existing.rows[0]
+    if (!report) return 'not_found'
+    return report.ownerId === ownerId ? 'resolved' : 'forbidden'
+  }
+
+  async listOwned(ownerId: string, query: OwnReportQuery = {}): Promise<ReportRecord[]> {
+    const result = await this.pool.query<ReportRecord>(
+      `SELECT ${reportColumns}
+       FROM reports r JOIN profiles p ON p.id = r.owner_id
+       WHERE r.owner_id = $1 AND ($2::text IS NULL OR r.state = $2)
+       ORDER BY r.created_at DESC, r.id ASC`,
+      [ownerId, query.state ?? null],
+    )
+    return result.rows
+  }
 
   async create(ownerId: string, draft: CreateReportInput): Promise<ReportRecord> {
     const client = await this.pool.connect()

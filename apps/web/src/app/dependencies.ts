@@ -7,6 +7,7 @@ import {
   createReportsClient,
 } from '../infrastructure/http/catalog-client.js'
 import { createReportPublisher } from '../infrastructure/http/publish-client.js'
+import { createOwnReportsClient } from '../infrastructure/http/own-reports-client.js'
 import { NoticePresenter } from '../presenters/app/notice.presenter.js'
 import { ShellPresenter } from '../presenters/app/shell.presenter.js'
 import { AuthPresenter } from '../presenters/auth/auth.presenter.js'
@@ -15,6 +16,7 @@ import { FiltersPresenter } from '../presenters/catalog/filters.presenter.js'
 import { PublishPresenter } from '../presenters/reports/publish.presenter.js'
 import { ReportDetailPresenter } from '../presenters/reports/report-detail.presenter.js'
 import { ReportsPresenter } from '../presenters/reports/reports.presenter.js'
+import { OwnReportsPresenter } from '../presenters/reports/own-reports.presenter.js'
 
 /**
  * Composition root: the only module that knows the concrete adapters. It builds the
@@ -28,6 +30,23 @@ export function createPresenters(env = import.meta.env) {
   const notices = new NoticePresenter(browserEffects)
   const catalog = new CatalogPresenter(createReportsClient(apiUrl))
   const filters = new FiltersPresenter((selection) => void catalog.load(selection))
+  const own: OwnReportsPresenter = new OwnReportsPresenter(
+    createOwnReportsClient(apiUrl, accessToken),
+    {
+      notices,
+      onSessionRejected: () => auth.requireSignIn(),
+      onOwnerChanged: () => {
+        reports.clearPrivateData()
+        publish.reset()
+      },
+      onResolved: (report) => {
+        reports.markResolved(report.id)
+        reportDetail.markResolved(report.id)
+        catalog.removeResolved(report.id)
+        void catalog.load()
+      },
+    },
+  )
   const reports: ReportsPresenter = new ReportsPresenter(
     demoReports,
     {
@@ -45,12 +64,16 @@ export function createPresenters(env = import.meta.env) {
     effects: browserEffects,
     onLoginRequired: () => shell.openAuth('login'),
     isSaved: (id) => reports.isSaved(id),
+    canResolve: (id) => own.find(id)?.state === 'active',
   })
   const publish = new PublishPresenter({
     publisher: createReportPublisher(apiUrl, accessToken),
     filters,
     notices,
-    onPublished: () => shell.navigate('explore'),
+    onPublished: () => {
+      void own.load()
+      shell.navigate('explore')
+    },
   })
   const shell: ShellPresenter = new ShellPresenter({
     auth,
@@ -61,7 +84,7 @@ export function createPresenters(env = import.meta.env) {
       publish.reset()
     },
   })
-  return { auth, notices, catalog, filters, reports, reportDetail, publish, shell }
+  return { auth, notices, catalog, filters, reports, own, reportDetail, publish, shell }
 }
 
 export type Presenters = ReturnType<typeof createPresenters>

@@ -10,6 +10,11 @@ export interface ReportQuery {
   city?: string
 }
 
+/** Private history of the verified subject, including resolved reports. */
+export interface OwnReportQuery {
+  state?: ReportState
+}
+
 /** Input accepted by the authenticated report publication endpoint. */
 export interface CreateReportInput {
   type: ReportType

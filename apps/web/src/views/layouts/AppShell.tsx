@@ -1,6 +1,7 @@
 import { LoaderCircle } from 'lucide-react'
 import type { AppView } from '../../presenters/app/useApp'
 import { ReportDetail } from '../components/ReportDetail'
+import { ResolveConfirmation } from '../components/ResolveConfirmation'
 import { Toast } from '../components/Toast'
 import { AuthPage } from '../pages/AuthPage'
 import { ExplorePage } from '../pages/ExplorePage'
@@ -92,9 +93,9 @@ export function AppShell({ app }: { app: AppView }) {
           {shell.section === 'my-reports' && shell.access === 'allow' && (
             <MyReportsPage
               myReports={app.myReports}
-              onFilter={reports.setOwnFilter}
-              onResolve={reports.resolve}
-              onRemove={reports.remove}
+              onFilter={actions.own.setFilter}
+              onResolve={actions.own.requestResolve}
+              onRetry={() => void actions.own.load()}
               onOpen={reports.open}
               onNavigate={actions.navigate}
             />
@@ -125,7 +126,7 @@ export function AppShell({ app }: { app: AppView }) {
           view={{ status: 'ready', detail, contacting: false }}
           onSave={() => reports.toggleSaved(detail.card.id)}
           onContact={() => reports.contact(detail.card.id)}
-          onResolve={() => reports.resolve(detail.card.id)}
+          onResolve={() => actions.own.requestResolve(detail.card.id)}
           onClose={reports.close}
         />
       )}
@@ -136,9 +137,18 @@ export function AppShell({ app }: { app: AppView }) {
             reportLink.status === 'ready' && reports.toggleSaved(reportLink.detail.card.id)
           }
           onContact={actions.reportLink.contact}
-          onResolve={() => {}}
+          onResolve={() =>
+            reportLink.status === 'ready' && actions.own.requestResolve(reportLink.detail.card.id)
+          }
           onRetry={actions.reportLink.retry}
           onClose={actions.reportLink.close}
+        />
+      )}
+      {app.myReports.confirmation && (
+        <ResolveConfirmation
+          confirmation={app.myReports.confirmation}
+          onConfirm={() => void actions.own.confirmResolve()}
+          onCancel={actions.own.cancelResolve}
         />
       )}
     </div>

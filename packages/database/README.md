@@ -22,6 +22,10 @@ pnpm db:seed
 
 Turbo compila las dependencias antes del mantenimiento, propaga `DATABASE_URL`/`NODE_ENV` y nunca cachea mutaciones. Compose sigue en la raíz: PostgreSQL 17, puerto local 5433 y volumen persistente. `pnpm db:down` conserva el volumen.
 
+## Historial propio y cierre
+
+`PostgresReportRepository` también implementa `OwnReportsRepository`, expuesto por `openDatabase().reports`. `listOwned` aplica propietario y estado opcional antes de ordenar y no limita el historial a los 50 resultados públicos. `resolveOwned` cambia solo `state` con los predicados `id`, `owner_id` y `state = active` en la escritura. Si no actualiza, distingue inexistente, ajeno y repetición autorizada; esta última devuelve éxito sin otra escritura. Conserva tipo, fechas, contacto e imágenes. Las pruebas HTTP comparan la fila completa y `xmin` y comprueban persistencia tras reiniciar la API. El esquema actual basta: no se modifica ninguna migración aplicada.
+
 ## Base de Auth
 
 [`auth/bootstrap.sql`](auth/bootstrap.sql) prepara el mismo cluster para Supabase Auth: rol `perdiu_auth` sin privilegios administrativos, base `perdiu_auth` con su esquema `auth` y el rol `postgres` `NOLOGIN` que exigen las migraciones de GoTrue. Lo ejecuta el servicio Compose `auth-db-init` en cada `pnpm db:up`; es idempotente y no toca `perdiu_dev`. El esquema `auth` pertenece a GoTrue: sus migraciones corren al iniciar Auth y no se versionan aquí. Ver la [guía de Auth](../../docs/auth.md).

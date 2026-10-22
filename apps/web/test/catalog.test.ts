@@ -3,6 +3,32 @@ import { expect, test } from '@jest/globals'
 import type { ReportSummary } from '@perdiu/contracts'
 import { CatalogPresenter } from '../src/presenters/catalog/catalog.presenter.js'
 import { createReportsClient } from '../src/infrastructure/http/catalog-client.js'
+import { defaultSelection } from '../src/presenters/catalog/filters.presenter.js'
+
+test('el cierre retira el reporte y descarta respuestas anteriores conservando la búsqueda', async () => {
+  let complete!: (reports: ReportSummary[]) => void
+  let calls = 0
+  const queries: unknown[] = []
+  const presenter = new CatalogPresenter({
+    list: async (_signal, query) => {
+      queries.push(query)
+      if (++calls === 2)
+        return new Promise((resolve) => {
+          complete = resolve
+        })
+      return calls === 1 ? [summary] : []
+    },
+  })
+  await presenter.load({ ...defaultSelection, search: 'Mochila' })
+  const old = presenter.load()
+  presenter.removeResolved(summary.id)
+  complete([summary])
+  await old
+  assert.equal(presenter.find(summary.id), undefined)
+  assert.deepEqual(presenter.getSnapshot(), { status: 'ready', reports: [] })
+  await presenter.load()
+  assert.deepEqual(queries, [{ q: 'Mochila' }, { q: 'Mochila' }, { q: 'Mochila' }])
+})
 
 const summary: ReportSummary = {
   id: '20000000-0000-0000-0000-000000000001',

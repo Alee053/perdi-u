@@ -60,7 +60,7 @@ function fakeHistory(initial: string) {
   }
 }
 
-function setup(options: { path?: string; session?: AuthState } = {}) {
+function setup(options: { path?: string; session?: AuthState; allowResolve?: boolean } = {}) {
   const session = new Session(options.session ?? { status: 'anonymous' })
   const api = {
     find: async (_id: string, _signal: AbortSignal): Promise<ReportSummary | undefined> => report,
@@ -79,11 +79,75 @@ function setup(options: { path?: string; session?: AuthState } = {}) {
     },
     onLoginRequired: () => logins.push('login'),
     isSaved: (id) => id === report.id,
+    canResolve: () => options.allowResolve === true,
   })
   return { presenter, api, session, opened, logins, history }
 }
 
 const settle = () => new Promise((resolve) => setTimeout(resolve, 0))
+
+test('un contacto pendiente de otra sesión no restaura el detalle activo tras el cierre', async () => {
+  for (const fails of [false, true]) {
+    const { presenter, api, session, opened } = setup({
+      session: {
+        status: 'authenticated',
+        user: { id: 'viewer-1', email: 'visitante@example.test' },
+      },
+      allowResolve: true,
+    })
+    const stop = presenter.start()
+    await presenter.open(report.id)
+    let finish!: () => void
+    api.contact = () =>
+      new Promise((resolve, reject) => {
+        finish = () =>
+          fails
+            ? reject(new Error('private-details'))
+            : resolve({ available: true, whatsapp: '59170000001' })
+      })
+    const contact = presenter.contact()
+    session.set({
+      status: 'authenticated',
+      user: { id: report.author.id, email: 'autora@example.test' },
+    })
+    await settle()
+    presenter.markResolved(report.id)
+    finish()
+    await contact
+    const closed = presenter.view()
+    assert.ok(closed?.status === 'ready' && closed.detail.card.resolved)
+    assert.deepEqual(opened, [], 'un contacto anterior no abre un chat para la cuenta actual')
+    stop()
+  }
+})
+
+test('el cierre confirmado actualiza el detalle propio y descarta una recarga activa anterior', async () => {
+  const { presenter, api } = setup({
+    session: {
+      status: 'authenticated',
+      user: { id: report.author.id, email: 'autora@example.test' },
+    },
+    allowResolve: true,
+  })
+  await presenter.open(report.id)
+  const own = presenter.view()
+  assert.ok(own?.status === 'ready' && own.detail.canResolve)
+  let complete!: (value: ReportSummary) => void
+  api.find = () =>
+    new Promise((resolve) => {
+      complete = resolve
+    })
+  const refresh = presenter.retry()
+  presenter.markResolved(report.id)
+  complete(report)
+  await refresh
+  const closed = presenter.view()
+  assert.ok(closed?.status === 'ready')
+  assert.equal(closed.detail.card.badge, 'Resuelto')
+  assert.equal(closed.detail.card.status, 'Perdido')
+  assert.equal(closed.detail.canResolve, false)
+  assert.equal(closed.detail.canContact, false)
+})
 
 test('abrir un reporte pasa de carga a su ficha pública con imagen genérica si no tiene fotos', async () => {
   const { presenter, api } = setup()

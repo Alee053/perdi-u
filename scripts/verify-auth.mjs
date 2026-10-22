@@ -146,20 +146,28 @@ try {
   )
 
   const apiPort = await freePort()
-  api = spawn(process.execPath, ['apps/api/dist/main.js'], {
-    cwd: root,
-    env: {
-      ...process.env,
-      DATABASE_URL: databaseUrl,
-      PORT: String(apiPort),
-      HOST: '127.0.0.1',
-      AUTH_JWKS_URL: `http://127.0.0.1:${authPort}/.well-known/jwks.json`,
-      AUTH_JWT_ISSUER: publicUrl,
-    },
-    stdio: 'ignore',
-  })
   const apiUrl = `http://127.0.0.1:${apiPort}`
-  await until(async () => (await fetch(`${apiUrl}/reports`)).ok, 'La API no inició.')
+  const restartApi = async () => {
+    if (api && api.exitCode === null) {
+      const exited = new Promise((resolve) => api.once('exit', resolve))
+      api.kill()
+      await exited
+    }
+    api = spawn(process.execPath, ['apps/api/dist/main.js'], {
+      cwd: root,
+      env: {
+        ...process.env,
+        DATABASE_URL: databaseUrl,
+        PORT: String(apiPort),
+        HOST: '127.0.0.1',
+        AUTH_JWKS_URL: `http://127.0.0.1:${authPort}/.well-known/jwks.json`,
+        AUTH_JWT_ISSUER: publicUrl,
+      },
+      stdio: 'ignore',
+    })
+    await until(async () => (await fetch(`${apiUrl}/reports`)).ok, 'La API no inició.')
+  }
+  await restartApi()
 
   const auth = `http://127.0.0.1:${authPort}`
   const post = (path, body, headers = {}) =>
@@ -180,19 +188,22 @@ try {
   assert.equal((await unconfirmed.json()).error_code, 'email_not_confirmed')
   console.log('✓ registro: usuario creado en Auth y pendiente de confirmar su correo')
 
-  const link = await until(async () => {
-    const list = await (await fetch(`http://127.0.0.1:${mailPort}/api/v1/messages`)).json()
-    const message = list.messages.find((item) => item.To[0].Address === email)
-    if (!message) return undefined
-    const detail = await (
-      await fetch(`http://127.0.0.1:${mailPort}/api/v1/message/${message.ID}`)
-    ).json()
-    return detail.Text.match(/https?:\/\/[^\s)]+/)?.[0]
-  }, 'No llegó el correo de confirmación.')
-  assert.ok(link.startsWith(`${publicUrl}/verify?`), 'el enlace usa la URL pública de Auth')
-  const verified = await fetch(link.replace(publicUrl, auth), { redirect: 'manual' })
-  assert.equal(verified.status, 303)
-  assert.equal(new URL(verified.headers.get('location')).origin, `http://127.0.0.1:${webPort}`)
+  const confirmEmail = async (address) => {
+    const link = await until(async () => {
+      const list = await (await fetch(`http://127.0.0.1:${mailPort}/api/v1/messages`)).json()
+      const message = list.messages.find((item) => item.To[0].Address === address)
+      if (!message) return undefined
+      const detail = await (
+        await fetch(`http://127.0.0.1:${mailPort}/api/v1/message/${message.ID}`)
+      ).json()
+      return detail.Text.match(/https?:\/\/[^\s)]+/)?.[0]
+    }, 'No llegó el correo de confirmación.')
+    assert.ok(link.startsWith(`${publicUrl}/verify?`), 'el enlace usa la URL pública de Auth')
+    const verified = await fetch(link.replace(publicUrl, auth), { redirect: 'manual' })
+    assert.equal(verified.status, 303)
+    assert.equal(new URL(verified.headers.get('location')).origin, `http://127.0.0.1:${webPort}`)
+  }
+  await confirmEmail(email)
   console.log('✓ el enlace de Mailpit confirma el correo y redirige al sitio permitido')
 
   const wrong = await post('/token?grant_type=password', { email, password: `${password}-x` })
@@ -221,6 +232,39 @@ try {
   assert.equal((await me()).status, 401)
   assert.equal((await me(`${session.access_token.slice(0, -4)}AAAA`)).status, 401)
   console.log('✓ API: GET /me acepta el token real de Auth y rechaza ausente o adulterado')
+
+  if (process.argv.includes('--with-browser')) {
+    const otherEmail = `acceptance-other-${randomBytes(4).toString('hex')}@example.test`
+    const otherPassword = `Clave-${randomBytes(6).toString('hex')}`
+    assert.equal(
+      (await post('/signup', { email: otherEmail, password: otherPassword })).status,
+      200,
+    )
+    await confirmEmail(otherEmail)
+    const otherLogin = await post('/token?grant_type=password', {
+      email: otherEmail,
+      password: otherPassword,
+    })
+    assert.equal(otherLogin.status, 200)
+    const otherSession = await otherLogin.json()
+    const browserPool = createPool(databaseUrl)
+    try {
+      const { verifyOwnReportsBrowser } = await import('./browser-own-reports.mjs')
+      await verifyOwnReportsBrowser({
+        apiUrl,
+        authUrl: auth,
+        webPort,
+        pool: browserPool,
+        restartApi,
+        accounts: [
+          { id: body.id, email, password },
+          { id: otherSession.user.id, email: otherEmail, password: otherPassword },
+        ],
+      })
+    } finally {
+      await browserPool.end()
+    }
+  }
 
   const refresh = (token) => post('/token?grant_type=refresh_token', { refresh_token: token })
   const renewed = await (await refresh(session.refresh_token)).json()

@@ -893,12 +893,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "9c83fa4558b09d3b89d4082288fee0e48053e60e",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-22T03:59:56.000Z",
       "message": "fix(catalog): aceptar el formato internacional del contacto publicado (#7)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/9c83fa4558b09d3b89d4082288fee0e48053e60e"
     },
     "stats": {
       "total": 65,
@@ -908,6 +908,82 @@
     },
     "coverage": 89.54,
     "test_count": 107,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "f7fa75c819bbbea061952f4ba106abe92b5a863e",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-22T04:28:00.000Z",
+      "message": "feat(catalog): consultar y resolver reportes por propietario verificado (#8)",
+      "url": "https://github.com/Alee053/perdi-u/commit/f7fa75c819bbbea061952f4ba106abe92b5a863e"
+    },
+    "stats": {
+      "total": 152,
+      "additions": 145,
+      "deletions": 7,
+      "date": "2026-10-22"
+    },
+    "coverage": 89.57,
+    "test_count": 110,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "9eb336a11f4c698b6233f99070bbf943e2b34c66",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-22T04:31:30.000Z",
+      "message": "feat(api): persistir historial y cierre autorizado de reportes (#8)",
+      "url": "https://github.com/Alee053/perdi-u/commit/9eb336a11f4c698b6233f99070bbf943e2b34c66"
+    },
+    "stats": {
+      "total": 337,
+      "additions": 330,
+      "deletions": 7,
+      "date": "2026-10-22"
+    },
+    "coverage": 89.61,
+    "test_count": 111,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "8e85077002132fcac96d5b1425aad1988a081ca3",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-22T04:42:18.000Z",
+      "message": "feat(web): gestionar reportes propios con confirmación y reintento (#8)",
+      "url": "https://github.com/Alee053/perdi-u/commit/8e85077002132fcac96d5b1425aad1988a081ca3"
+    },
+    "stats": {
+      "total": 1071,
+      "additions": 918,
+      "deletions": 153,
+      "date": "2026-10-22"
+    },
+    "coverage": 90.19,
+    "test_count": 122,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-22T04:51:07.000Z",
+      "message": "test(reports): aceptar el cierre integrado y documentar S1-08 (#8)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 639,
+      "additions": 584,
+      "deletions": 55,
+      "date": "2026-10-22"
+    },
+    "coverage": 90.31,
+    "test_count": 123,
     "failed_tests": 0,
     "conclusion": "success"
   }

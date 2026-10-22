@@ -396,6 +396,10 @@ async function verifyReportLink(size, viewport) {
         body: JSON.stringify({ id: session.user.id, email: session.user.email }),
       }),
     )
+    // This scenario doubles Auth; the private history is checked with real Auth separately.
+    await page.route('**/api/me/reports', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    )
     // The fake token cannot pass the API's guard; the active report is public anyway.
     await page.route(`**/api/reports/${bag}`, (route) => {
       const { authorization: _authorization, ...headers } = route.request().headers()

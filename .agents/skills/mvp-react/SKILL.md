@@ -45,7 +45,7 @@ Buscar en `views/`: cálculos (`filter`, conteos, fechas), `new FormData`, `wind
 
 ## Reglas que suelen romperse
 
-- La propiedad se compara por `author.id` (`isOwnedBy`), nunca por nombre visible.
+- Para historial y cierre, comparar `author.id` con la sesión verificada mediante `selectOwnReports`; los helpers de la demo no conceden permisos. Seguir el [flujo persistente](../../../docs/architecture/mvp.md#71-historial-propio-y-cierre) para confirmación y sincronización.
 - La View no importa `@perdiu/contracts`: recibe `ReportCard`, `AccountView` u otros view models.
 - Los mensajes para la persona los escribe el Presenter; el Model devuelve códigos (`'too_short'`, `'invalid'`).
 - No crear un presenter para todo: uno por responsabilidad (`ShellPresenter` navegación, `CatalogPresenter` catálogo, `PublishPresenter` formulario…). Tampoco interfaces sin un segundo implementador o un doble de prueba que las justifique.

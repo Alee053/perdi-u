@@ -40,6 +40,8 @@ interface Dependencies {
   /** Opens the login screen; the report stays open behind it to return to after signing in. */
   onLoginRequired: () => void
   isSaved: (id: string) => boolean
+  /** Whether the private history has loaded this report for resolving it. */
+  canResolve?: (id: string) => boolean
 }
 
 const unavailable = 'Reporte no disponible.'
@@ -157,17 +159,20 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
     if (report.status !== 'ready' || report.contacting || !this.canContact()) return
     const { auth, repository, effects, onLoginRequired } = this.dependencies
     if (auth.getSnapshot().status !== 'authenticated') return onLoginRequired()
+    const request = this.request
     this.setState({ ...report, contacting: true, contactMessage: undefined })
     let contact
     try {
       contact = await repository.contact(report.id)
     } catch (error) {
+      if (request !== this.request) return
       this.setState({ ...report, contacting: false, contactMessage: contactFailed })
       // The API rejected the session: signing in again gives access to the contact.
       if (error instanceof SessionRejected) onLoginRequired()
       return
     }
-    if (this.state.status !== 'ready' || this.state.id !== report.id) return
+    if (request !== this.request || this.state.status !== 'ready' || this.state.id !== report.id)
+      return
     if (!contact) {
       this.setState({ status: 'unavailable', id: report.id, message: unavailable })
       return
@@ -195,8 +200,7 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
         card: state.card,
         saved: this.dependencies.isSaved(state.id),
         canContact: this.canContact(),
-        // Closing a case belongs to «Mis reportes» (S1-08).
-        canResolve: false,
+        canResolve: this.canResolve(),
       },
       contacting: state.contacting,
       ...(state.contactMessage && { contactMessage: state.contactMessage }),
@@ -218,8 +222,35 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
     )
   }
 
+  private canResolve() {
+    const { state } = this
+    const session = this.dependencies.auth.getSnapshot()
+    return (
+      state.status === 'ready' &&
+      state.active &&
+      session.status === 'authenticated' &&
+      session.user.id === state.authorId &&
+      this.dependencies.canResolve?.(state.id) === true
+    )
+  }
+
   /** Loads the open report again, for example after a failure. */
   retry = async () => {
     if (this.state.status !== 'closed') await this.load(this.state.id)
+  }
+
+  /** Applied after the server's acknowledgement, before refreshing any public query. */
+  markResolved = (id: string) => {
+    if (this.state.status === 'closed' || this.state.id !== id || this.loaded?.id !== id) return
+    this.cancel()
+    this.loaded = { ...this.loaded, state: 'resolved' }
+    this.setState({
+      status: 'ready',
+      id,
+      card: toReportCard(this.loaded),
+      authorId: this.loaded.author.id,
+      active: false,
+      contacting: false,
+    })
   }
 }

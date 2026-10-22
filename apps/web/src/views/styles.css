@@ -841,6 +841,22 @@ nav {
 }
 
 /* Overlays */
+.resolve-dialog {
+  width: min(460px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+}
+.resolve-dialog::backdrop {
+  background: rgba(20, 26, 21, 0.5);
+}
+.resolve-dialog p {
+  margin-top: var(--space-3);
+}
 .modal-backdrop {
   position: fixed;
   z-index: 45;

@@ -34,10 +34,10 @@ flowchart LR
   end
   subgraph Model["Model (models/)"]
     Rules["Reglas y entidades<br/>filters, publication, contact, credentials"]
-    Ports["Puertos<br/>ReportsRepository, ReportDetailRepository, AuthGateway, AccountClient"]
+    Ports["Puertos<br/>ReportsRepository, OwnReportsRepository, ReportDetailRepository, AuthGateway, AccountClient"]
   end
   subgraph Infra["Infrastructure (infrastructure/)"]
-    Http["HTTP: catalog-client, publish-client, account-client"]
+    Http["HTTP: catalog-client, own-reports-client, publish-client, account-client"]
     Auth["Supabase Auth"]
     Browser["browser-effects, datos demo"]
   end
@@ -65,7 +65,7 @@ apps/web/src/
 ├── models/                   Model (sin React ni navegador)
 │   ├── auth/credentials.ts   Reglas de correo y contraseña
 │   ├── auth/session.ts       Puertos AuthGateway y AccountClient
-│   └── reports/              report, filters, stats, publication, contact, reports-repository
+│   └── reports/              report, filters, stats, publication, contact, own-reports y puertos
 ├── presenters/               Presenter
 │   ├── store.ts              Estado observable compartido
 │   ├── useStore.ts           Adaptador React genérico
@@ -73,7 +73,7 @@ apps/web/src/
 │   ├── app/                  shell (navegación), notice (avisos), useApp
 │   ├── auth/                 auth (sesión), auth-form (formulario), useAuthForm
 │   ├── catalog/              catalog (consulta), filters (selección)
-│   └── reports/              reports (demo), report-detail y report-route (enlace), publish, report-card
+│   └── reports/              reports (demo/guardados), own-reports, report-detail y report-route, publish, report-card
 ├── views/                    View
 │   ├── layouts/              AppShell, Sidebar, AppHeader
 │   ├── pages/                Una página por sección
@@ -117,6 +117,14 @@ La View nunca filtra ni formatea; el Model nunca sabe qué texto se mostrará.
 
 La publicación inicial no adjunta fotos; S1-06 agregará medios al mismo flujo.
 
+### 7.1 Historial propio y cierre
+
+`OwnReportsPresenter` sigue la cuenta verificada por `AuthPresenter` y usa `OwnReportsRepository` (`own-reports-client.ts`) para leer el historial completo. `selectOwnReports` compara `author.id` con esa cuenta y filtra estado; ni `demoOwner` ni el nombre visible conceden permisos. La View recibe tarjetas, conteos y mensajes ya preparados, con título, tipo y estado separados.
+
+`requestResolve` abre la confirmación sin escribir. `confirmResolve` bloquea duplicados, espera el `204` y conserva estado/diálogo con un error seguro si falla. Al cambiar de cuenta se abortan solicitudes y se descartan tanto éxitos como fallos tardíos. Un `401` oculta datos privados y solicita ingresar nuevamente.
+
+Tras el éxito, `app/dependencies.ts` sincroniza historial, detalle y guardados, invalida consultas anteriores del catálogo y refresca la misma búsqueda. `ReportDetailPresenter` ofrece resolver solo al autor de un activo que ya está en su historial; el SQL vuelve a comprobar propiedad/estado. `ResolveConfirmation` usa un diálogo nativo para foco y teclado. No existen controles de eliminación demo. Resumen y mapa siguen siendo ilustrativos.
+
 ## 8. Papel de React y Vite
 
 - React renderiza la View y aporta el ciclo de vida. Los hooks `use*.ts` del Presenter son el único punto de contacto: `useStore` usa `useSyncExternalStore` para suscribirse al estado del núcleo, y `useApp` arranca y limpia la sesión y el catálogo con `useEffect`.
@@ -137,15 +145,15 @@ Los ciclos rojo-verde de esta migración están en [su evidencia](../validation/
 
 ## 10. Diferencias con la arquitectura anterior
 
-| Antes                                                                         | Ahora                                                                                     |
-| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `App.tsx` (424 líneas) con 17 `useState`, reglas, navegación y `window`.      | `app/App.tsx` (11 líneas); estado en presenters por responsabilidad.                      |
-| Filtrado, conteos y creación del reporte dentro de componentes.               | `models/reports/*` con pruebas propias.                                                   |
-| Propiedad demo por nombre (`person === 'Santiago Demo'`).                     | Propiedad por identificador (`isOwnedBy`, `demoOwner.id`).                                |
-| `AuthPresenter` con validaciones y puertos mezclados.                         | Reglas en `models/auth/credentials.ts`, puertos en `session.ts`, presenter solo presenta. |
-| `AuthPage` manejaba envío, errores y reenvío.                                 | `AuthFormPresenter` + `useAuthForm`; la página solo renderiza.                            |
-| Formulario de publicación validado por atributos HTML y leído con `FormData`. | Campos controlados por `PublishPresenter`, validación del Model y errores por campo.      |
-| Sin comprobación automática de capas.                                         | `check:boundaries` falla si una View importa el Model o un núcleo importa React.          |
+| Antes                                                                         | Ahora                                                                                                 |
+| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `App.tsx` (424 líneas) con 17 `useState`, reglas, navegación y `window`.      | `app/App.tsx` (11 líneas); estado en presenters por responsabilidad.                                  |
+| Filtrado, conteos y creación del reporte dentro de componentes.               | `models/reports/*` con pruebas propias.                                                               |
+| Propiedad demo por nombre (`person === 'Santiago Demo'`).                     | Historial por `author.id` y sesión verificada (`selectOwnReports`), con autorización en la API y SQL. |
+| `AuthPresenter` con validaciones y puertos mezclados.                         | Reglas en `models/auth/credentials.ts`, puertos en `session.ts`, presenter solo presenta.             |
+| `AuthPage` manejaba envío, errores y reenvío.                                 | `AuthFormPresenter` + `useAuthForm`; la página solo renderiza.                                        |
+| Formulario de publicación validado por atributos HTML y leído con `FormData`. | Campos controlados por `PublishPresenter`, validación del Model y errores por campo.                  |
+| Sin comprobación automática de capas.                                         | `check:boundaries` falla si una View importa el Model o un núcleo importa React.                      |
 
 La interfaz también se simplificó: se quitaron elementos que no funcionaban (gráfico con datos inventados, tendencias «+12 %», atajo `⌘ K`, campana y selector de ciudad sin acción, botón de centrar mapa), el panel con degradado del ingreso, el desenfoque del encabezado y del modal, las animaciones de entrada y las elevaciones al pasar el cursor. En una segunda pasada se dejó una presentación sobria: tipografía del sistema en lugar de Google Fonts, navegación y botones solo con texto (los íconos quedan donde cumplen una función: guardar, cerrar, menú, mostrar contraseña y carga), estado como texto de color, resumen en listas sin tarjetas ni barras, bordes finos sin sombras y radio de 4 px. Los colores, radios y espacios son variables de `views/styles.css` (de 3.364 a unas 1.000 líneas).
 

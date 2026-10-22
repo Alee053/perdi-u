@@ -1194,9 +1194,305 @@
     "testId": 40
   },
   {
-    "commitId": "HEAD",
+    "commitId": "9c83fa4558b09d3b89d4082288fee0e48053e60e",
     "commitName": "fix(catalog): aceptar el formato internacional del contacto publicado (#7)",
     "commitTimestamp": 1792641598061,
     "testId": 40
+  },
+  {
+    "numPassedTests": 107,
+    "failedTests": 1,
+    "numTotalTests": 108,
+    "timestamp": 1792643135608,
+    "success": false,
+    "testId": 41
+  },
+  {
+    "numPassedTests": 108,
+    "failedTests": 0,
+    "numTotalTests": 108,
+    "timestamp": 1792643162813,
+    "success": true,
+    "testId": 41
+  },
+  {
+    "numPassedTests": 108,
+    "failedTests": 1,
+    "numTotalTests": 109,
+    "timestamp": 1792643187642,
+    "success": false,
+    "testId": 41
+  },
+  {
+    "numPassedTests": 109,
+    "failedTests": 0,
+    "numTotalTests": 109,
+    "timestamp": 1792643209178,
+    "success": true,
+    "testId": 41
+  },
+  {
+    "numPassedTests": 109,
+    "failedTests": 1,
+    "numTotalTests": 110,
+    "timestamp": 1792643234361,
+    "success": false,
+    "testId": 41
+  },
+  {
+    "numPassedTests": 110,
+    "failedTests": 0,
+    "numTotalTests": 110,
+    "timestamp": 1792643258493,
+    "success": true,
+    "testId": 41
+  },
+  {
+    "commitId": "f7fa75c819bbbea061952f4ba106abe92b5a863e",
+    "commitName": "feat(catalog): consultar y resolver reportes por propietario verificado (#8)",
+    "commitTimestamp": 1792643280487,
+    "testId": 41
+  },
+  {
+    "numPassedTests": 110,
+    "failedTests": 1,
+    "numTotalTests": 111,
+    "timestamp": 1792643308818,
+    "success": false,
+    "testId": 42
+  },
+  {
+    "numPassedTests": 111,
+    "failedTests": 0,
+    "numTotalTests": 111,
+    "timestamp": 1792643329163,
+    "success": true,
+    "testId": 42
+  },
+  {
+    "numPassedTests": 111,
+    "failedTests": 0,
+    "numTotalTests": 111,
+    "timestamp": 1792643454178,
+    "success": true,
+    "testId": 42
+  },
+  {
+    "commitId": "9eb336a11f4c698b6233f99070bbf943e2b34c66",
+    "commitName": "feat(api): persistir historial y cierre autorizado de reportes (#8)",
+    "commitTimestamp": 1792643490325,
+    "testId": 42
+  },
+  {
+    "numPassedTests": 111,
+    "failedTests": 1,
+    "numTotalTests": 112,
+    "timestamp": 1792643521494,
+    "success": false,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 112,
+    "failedTests": 0,
+    "numTotalTests": 112,
+    "timestamp": 1792643540059,
+    "success": true,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 112,
+    "failedTests": 1,
+    "numTotalTests": 113,
+    "timestamp": 1792643563538,
+    "success": false,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 113,
+    "failedTests": 0,
+    "numTotalTests": 113,
+    "timestamp": 1792643586426,
+    "success": true,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 113,
+    "failedTests": 1,
+    "numTotalTests": 114,
+    "timestamp": 1792643604998,
+    "success": false,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 114,
+    "failedTests": 0,
+    "numTotalTests": 114,
+    "timestamp": 1792643625335,
+    "success": true,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 114,
+    "failedTests": 1,
+    "numTotalTests": 115,
+    "timestamp": 1792643658235,
+    "success": false,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 115,
+    "failedTests": 0,
+    "numTotalTests": 115,
+    "timestamp": 1792643680225,
+    "success": true,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 115,
+    "failedTests": 1,
+    "numTotalTests": 116,
+    "timestamp": 1792643702654,
+    "success": false,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 116,
+    "failedTests": 0,
+    "numTotalTests": 116,
+    "timestamp": 1792643721168,
+    "success": true,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 116,
+    "failedTests": 1,
+    "numTotalTests": 117,
+    "timestamp": 1792643741069,
+    "success": false,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 117,
+    "failedTests": 0,
+    "numTotalTests": 117,
+    "timestamp": 1792643761285,
+    "success": true,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 119,
+    "failedTests": 1,
+    "numTotalTests": 120,
+    "timestamp": 1792643807817,
+    "success": false,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 120,
+    "failedTests": 0,
+    "numTotalTests": 120,
+    "timestamp": 1792643823669,
+    "success": true,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 120,
+    "failedTests": 1,
+    "numTotalTests": 121,
+    "timestamp": 1792643859295,
+    "success": false,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 121,
+    "failedTests": 0,
+    "numTotalTests": 121,
+    "timestamp": 1792643882469,
+    "success": true,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 121,
+    "failedTests": 1,
+    "numTotalTests": 122,
+    "timestamp": 1792643903801,
+    "success": false,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 122,
+    "failedTests": 0,
+    "numTotalTests": 122,
+    "timestamp": 1792643922010,
+    "success": true,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 122,
+    "failedTests": 1,
+    "numTotalTests": 123,
+    "timestamp": 1792643951059,
+    "success": false,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 123,
+    "failedTests": 0,
+    "numTotalTests": 123,
+    "timestamp": 1792643969950,
+    "success": true,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 122,
+    "failedTests": 1,
+    "numTotalTests": 123,
+    "timestamp": 1792643995081,
+    "success": false,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 122,
+    "failedTests": 0,
+    "numTotalTests": 122,
+    "timestamp": 1792644011070,
+    "success": true,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 122,
+    "failedTests": 0,
+    "numTotalTests": 122,
+    "timestamp": 1792644071315,
+    "success": true,
+    "testId": 43
+  },
+  {
+    "commitId": "8e85077002132fcac96d5b1425aad1988a081ca3",
+    "commitName": "feat(web): gestionar reportes propios con confirmación y reintento (#8)",
+    "commitTimestamp": 1792644138826,
+    "testId": 43
+  },
+  {
+    "numPassedTests": 122,
+    "failedTests": 1,
+    "numTotalTests": 123,
+    "timestamp": 1792644336931,
+    "success": false,
+    "testId": 44
+  },
+  {
+    "numPassedTests": 123,
+    "failedTests": 0,
+    "numTotalTests": 123,
+    "timestamp": 1792644360726,
+    "success": true,
+    "testId": 44
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(reports): aceptar el cierre integrado y documentar S1-08 (#8)",
+    "commitTimestamp": 1792644668104,
+    "testId": 44
   }
 ]

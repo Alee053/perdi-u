@@ -82,7 +82,16 @@ test('guardar un reporte del catálogo lo conserva aunque cambien los resultados
   )
 })
 
-test('el detalle ofrece contacto en reportes ajenos y resolver en los propios', () => {
+test('un cierre confirmado retira el reporte persistido de guardados', () => {
+  const { presenter } = setup()
+  presenter.toggleSaved(catalogReport.id)
+  assert.equal(presenter.saved().length, 1)
+  presenter.markResolved(catalogReport.id)
+  assert.deepEqual(presenter.saved(), [])
+  assert.equal(presenter.counts().saved, 0)
+})
+
+test('el detalle demo ofrece contacto y deja el cierre a los reportes persistidos', () => {
   const { presenter, opened, links } = setup([demo('demo-1'), own('demo-2')])
   presenter.open('demo-1')
   assert.deepEqual(
@@ -95,7 +104,7 @@ test('el detalle ofrece contacto en reportes ajenos y resolver en los propios', 
       encodeURIComponent('Hola, vi tu reporte "Reporte demo-1" en PerdiU. ¿Podemos coordinar?'),
   ])
   presenter.open('demo-2')
-  assert.equal(presenter.detail()?.canResolve, true)
+  assert.equal(presenter.detail()?.canResolve, false)
   presenter.close()
   assert.equal(presenter.detail(), null)
   // Catalog reports open through their stable link, which the API keeps up to date.
@@ -105,41 +114,6 @@ test('el detalle ofrece contacto en reportes ajenos y resolver en los propios', 
   presenter.open('demo-1')
   presenter.close()
   assert.equal(presenter.detail(), null)
-})
-
-test('resolver y eliminar solo afectan reportes propios y actualizan resumen, mapa y listas', () => {
-  const { presenter, notices } = setup(
-    [own('demo-1'), demo('demo-2', { type: 'found', city: 'Cochabamba' })],
-    ['demo-1'],
-  )
-  presenter.open('demo-1')
-  presenter.resolve('demo-1')
-  presenter.resolve('demo-2')
-  assert.equal(presenter.detail()?.card.badge, 'Resuelto')
-  assert.deepEqual(
-    presenter.overview().metrics.map(({ value }) => value),
-    [1, 0, 1, 1],
-  )
-  assert.equal(presenter.mapView(defaultSelection).count, 1)
-  assert.deepEqual(presenter.saved(), [], 'un resuelto deja de mostrarse en guardados')
-  presenter.setOwnFilter('Resueltos')
-  assert.deepEqual(
-    presenter.myReports().cards.map(({ id }) => id),
-    ['demo-1'],
-  )
-  presenter.remove('demo-1')
-  presenter.remove('demo-2')
-  assert.deepEqual(presenter.myReports().total, 0)
-  assert.equal(presenter.myReports().empty.title, 'Todavía no tienes reportes resueltos')
-  assert.equal(presenter.counts().saved, 0)
-  assert.equal(presenter.detail(), null)
-  assert.deepEqual(
-    notices.map(({ message }) => message),
-    [
-      'Marcaste el reporte como resuelto; ya no aparecerá en las búsquedas.',
-      'El reporte se quitó de la lista.',
-    ],
-  )
 })
 
 test('el mapa aplica la selección visible y numera los puntos', () => {
@@ -171,7 +145,7 @@ test('cerrar sesión borra los datos privados del dispositivo', () => {
   presenter.toggleSaved(catalogReport.id)
   presenter.open('demo-1')
   presenter.clearPrivateData()
-  assert.deepEqual(presenter.counts(), { own: 0, saved: 0 })
+  assert.deepEqual(presenter.counts(), { saved: 0 })
   assert.equal(presenter.detail(), null)
 })
 
