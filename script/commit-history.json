@@ -893,12 +893,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "9c83fa4558b09d3b89d4082288fee0e48053e60e",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-22T03:59:56.000Z",
       "message": "fix(catalog): aceptar el formato internacional del contacto publicado (#7)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/9c83fa4558b09d3b89d4082288fee0e48053e60e"
     },
     "stats": {
       "total": 65,
@@ -908,6 +908,25 @@
     },
     "coverage": 89.54,
     "test_count": 107,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-22T04:28:00.000Z",
+      "message": "feat(catalog): consultar y resolver reportes por propietario verificado (#8)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 152,
+      "additions": 145,
+      "deletions": 7,
+      "date": "2026-10-22"
+    },
+    "coverage": 89.57,
+    "test_count": 110,
     "failed_tests": 0,
     "conclusion": "success"
   }

@@ -1,4 +1,10 @@
-import type { CreateReportInput, PublicProfile, ReportData, ReportQuery } from '@perdiu/contracts'
+import type {
+  CreateReportInput,
+  OwnReportQuery,
+  PublicProfile,
+  ReportData,
+  ReportQuery,
+} from '@perdiu/contracts'
 
 export interface ReportRecord extends ReportData {
   author: PublicProfile
@@ -23,4 +29,13 @@ export interface ReportDetailRepository {
 /** Write port kept separate from the public catalog query. */
 export interface ReportPublisher {
   create(ownerId: string, draft: CreateReportInput): Promise<ReportRecord>
+}
+
+export type ResolveReportResult = 'resolved' | 'forbidden' | 'not_found'
+
+/** Private history and atomic closure, always scoped to the verified subject. */
+export interface OwnReportsRepository {
+  listOwned(ownerId: string, query?: OwnReportQuery): Promise<ReportRecord[]>
+  /** Change only active state; authorized repeats succeed without another write. */
+  resolveOwned(id: string, ownerId: string): Promise<ResolveReportResult>
 }

@@ -1194,9 +1194,63 @@
     "testId": 40
   },
   {
-    "commitId": "HEAD",
+    "commitId": "9c83fa4558b09d3b89d4082288fee0e48053e60e",
     "commitName": "fix(catalog): aceptar el formato internacional del contacto publicado (#7)",
     "commitTimestamp": 1792641598061,
     "testId": 40
+  },
+  {
+    "numPassedTests": 107,
+    "failedTests": 1,
+    "numTotalTests": 108,
+    "timestamp": 1792643135608,
+    "success": false,
+    "testId": 41
+  },
+  {
+    "numPassedTests": 108,
+    "failedTests": 0,
+    "numTotalTests": 108,
+    "timestamp": 1792643162813,
+    "success": true,
+    "testId": 41
+  },
+  {
+    "numPassedTests": 108,
+    "failedTests": 1,
+    "numTotalTests": 109,
+    "timestamp": 1792643187642,
+    "success": false,
+    "testId": 41
+  },
+  {
+    "numPassedTests": 109,
+    "failedTests": 0,
+    "numTotalTests": 109,
+    "timestamp": 1792643209178,
+    "success": true,
+    "testId": 41
+  },
+  {
+    "numPassedTests": 109,
+    "failedTests": 1,
+    "numTotalTests": 110,
+    "timestamp": 1792643234361,
+    "success": false,
+    "testId": 41
+  },
+  {
+    "numPassedTests": 110,
+    "failedTests": 0,
+    "numTotalTests": 110,
+    "timestamp": 1792643258493,
+    "success": true,
+    "testId": 41
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(catalog): consultar y resolver reportes por propietario verificado (#8)",
+    "commitTimestamp": 1792643280487,
+    "testId": 41
   }
 ]
