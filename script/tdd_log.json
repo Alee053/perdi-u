@@ -686,9 +686,15 @@
     "testId": 24
   },
   {
-    "commitId": "HEAD",
+    "commitId": "15dc8fa49c966fc094163f3348e3855eb7b3a05a",
     "commitName": "build(api): preparar demo manual en VPS y Vercel",
     "commitTimestamp": 1792636716843,
     "testId": 25
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(api): registrar verificación HTTPS de la demo",
+    "commitTimestamp": 1792636952952,
+    "testId": 26
   }
 ]

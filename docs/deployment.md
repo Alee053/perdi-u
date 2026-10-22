@@ -116,6 +116,8 @@ curl -i https://perdi-u.vercel.app/api/me
 
 Esperar catálogo `200` con array JSON, Auth `200` y `/me` sin token `401`. Confirmar que el dominio de Vercel devuelve JSON en `/api/reports`, no el HTML de la SPA. El catálogo sembrado no debe exponer contactos privados ni claves de almacenamiento. Un stack saludable en Docker no demuestra todavía que DNS, certificado o rewrites estén correctos; probar ambos dominios y una sesión real.
 
+La [verificación inicial](validation/deployment.md) incluye HTTPS y Auth públicos aprobados después de configurar NPM. También registra el 1010 que Cloudflare entrega a `Python-urllib`; para repetir las comprobaciones anteriores, curl funciona con la configuración actual.
+
 La implementación de `main` solo persiste los recorridos que tenga integrados. Este despliegue no añade publicación ni gestión de reportes que sigan siendo demo en el frontend; consultar el [README](../README.md).
 
 ## Parar, respaldar y retirar

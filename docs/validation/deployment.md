@@ -18,12 +18,16 @@ Fecha: 2026-10-21 (America/La_Paz). Código de aplicación desplegado desde `mai
 | Aislamiento y secretos en VPS                                        | API/Auth/Postgres sin puertos de host; Mailpit solo `127.0.0.1:18025`; gateway en `proxy-net`; roles/secretos independientes; carpeta modo 700 y `.env` modo 600, fuera del clon.                                                                                                            |
 | Servicios existentes                                                 | Pulso y NPM mantuvieron sus IDs y arranques anteriores; no se recrearon.                                                                                                                                                                                                                     |
 
-La comprobación HTTP se ejecutó con un cliente Node efímero dentro de la red del stack. No se imprimieron contraseñas, tokens, cuerpos de correo ni enlaces de confirmación. Las cuentas de prueba no envían correo real. Los contenedores y el volumen usados para la comprobación local son desechables; el stack del VPS queda levantado.
+La comprobación HTTP interna se ejecutó con un cliente Node efímero dentro de la red del stack. No se imprimieron contraseñas, tokens, cuerpos de correo ni enlaces de confirmación. Las cuentas de prueba no envían correo real. Los contenedores, volumen, red de proxy y `.env` usados para la comprobación local se eliminaron al terminar; el stack del VPS queda levantado.
+
+Después de configurar DNS y NPM se verificó también HTTPS público en `perdi-u-api.alecastro.dev`: catálogo 200 con dos reportes, filtro combinado 200 con uno, `/api/me` anónimo 401, `/auth/health` 200 y JWKS 200 con una clave pública y ninguna privada. Todos con `Cache-Control: no-store`. El certificado fue aceptado por clientes con validación TLS normal, también contra NPM directo. Se repitió el flujo completo de registro, confirmación, login ES256, refresh y cierre contra el dominio HTTPS a través de Cloudflare y NPM: aprobado.
+
+La firma predeterminada de `Python-urllib` recibió 403 con código 1010 de Cloudflare; curl, Node y una firma de navegador recibieron las respuestas esperadas. El [código 1010 corresponde al bloqueo por firma del cliente](https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-1xxx-errors/error-1010/). Se conservó la configuración de seguridad de Cloudflare.
 
 No cambió comportamiento de aplicación ni se añadieron tests unitarios que reproduzcan el Compose. La verificación es caracterización de la aplicación existente y aceptación operativa del artefacto/stack real; no se presenta como un ciclo rojo/verde de funcionalidad nueva.
 
-## Pendientes externos
+## Pendientes del frontend
 
-Al comprobarlos inicialmente, `perdi-u-api.alecastro.dev` todavía no resolvía y `/api/reports` en el frontend no devolvía el JSON del catálogo. Por tanto, los healthchecks y la aceptación interna **no certifican el recorrido público completo**. Falta configurar DNS/Proxy Host/certificado en NPM, integrar `vercel.json`, publicar las rewrites y verificar ambos dominios y una sesión de navegador desde Vercel.
+El backend público ya está verificado con DNS, NPM y TLS. `/api/reports` en `perdi-u.vercel.app` todavía devolvía 404 al comprobarlo. Falta integrar `vercel.json`, configurar la raíz del monorepo en Vercel, publicar las rewrites y verificar el catálogo y una sesión de navegador desde el frontend. La aceptación del backend **no certifica todavía ese recorrido desde Vercel**.
 
 SMTP real, Google OAuth y las funcionalidades que no estén integradas en `main` no se habilitan por este despliegue. Mailpit permanece privado y la confirmación es obligatoria.

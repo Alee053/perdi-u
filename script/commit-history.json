@@ -475,17 +475,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "15dc8fa49c966fc094163f3348e3855eb7b3a05a",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-10-22T02:38:36.000Z",
       "message": "build(api): preparar demo manual en VPS y Vercel",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/15dc8fa49c966fc094163f3348e3855eb7b3a05a"
     },
     "stats": {
       "total": 582,
       "additions": 567,
       "deletions": 15,
+      "date": "2026-10-22"
+    },
+    "coverage": 92.17,
+    "test_count": 78,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-22T02:42:32.000Z",
+      "message": "docs(api): registrar verificación HTTPS de la demo",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 12,
+      "additions": 9,
+      "deletions": 3,
       "date": "2026-10-22"
     },
     "coverage": 92.17,
