@@ -894,9 +894,39 @@
     "testId": 33
   },
   {
-    "commitId": "HEAD",
+    "commitId": "cd66f2acf72cb1aafb78a10b290a48bc99c2d384",
     "commitName": "feat(web): consultar el detalle y el contacto de un reporte por HTTP (#7)",
     "commitTimestamp": 1792638492751,
     "testId": 33
+  },
+  {
+    "numPassedTests": 90,
+    "failedTests": 3,
+    "numTotalTests": 93,
+    "timestamp": 1792638570206,
+    "success": false,
+    "testId": 34
+  },
+  {
+    "numPassedTests": 90,
+    "failedTests": 3,
+    "numTotalTests": 93,
+    "timestamp": 1792638638611,
+    "success": false,
+    "testId": 34
+  },
+  {
+    "numPassedTests": 93,
+    "failedTests": 0,
+    "numTotalTests": 93,
+    "timestamp": 1792638716005,
+    "success": true,
+    "testId": 34
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): presentar la carga, ausencia y error del detalle de un reporte (#7)",
+    "commitTimestamp": 1792638748399,
+    "testId": 34
   }
 ]
