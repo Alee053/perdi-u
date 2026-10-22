@@ -692,9 +692,15 @@
     "testId": 25
   },
   {
-    "commitId": "HEAD",
+    "commitId": "a344d65335336e8f6c639c7d67504455e581793d",
     "commitName": "docs(api): registrar verificación HTTPS de la demo",
     "commitTimestamp": 1792636952952,
     "testId": 26
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "fix(api): ajustar dominio y registro directo de la demo",
+    "commitTimestamp": 1792638608416,
+    "testId": 27
   }
 ]
