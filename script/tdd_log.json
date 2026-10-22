@@ -856,9 +856,47 @@
     "testId": 32
   },
   {
-    "commitId": "HEAD",
+    "commitId": "be821f035c9e937d605b63ca28e94e3b2395ab59",
     "commitName": "feat(web): construir el enlace de WhatsApp sin destinos arbitrarios (#7)",
     "commitTimestamp": 1792638209341,
     "testId": 32
+  },
+  {
+    "numPassedTests": 88,
+    "failedTests": 3,
+    "numTotalTests": 91,
+    "timestamp": 1792638299588,
+    "success": false,
+    "testId": 33
+  },
+  {
+    "numPassedTests": 87,
+    "failedTests": 4,
+    "numTotalTests": 91,
+    "timestamp": 1792638349609,
+    "success": false,
+    "testId": 33
+  },
+  {
+    "numPassedTests": 90,
+    "failedTests": 1,
+    "numTotalTests": 91,
+    "timestamp": 1792638404273,
+    "success": false,
+    "testId": 33
+  },
+  {
+    "numPassedTests": 91,
+    "failedTests": 0,
+    "numTotalTests": 91,
+    "timestamp": 1792638453190,
+    "success": true,
+    "testId": 33
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): consultar el detalle y el contacto de un reporte por HTTP (#7)",
+    "commitTimestamp": 1792638492751,
+    "testId": 33
   }
 ]

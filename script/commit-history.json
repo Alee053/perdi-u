@@ -608,12 +608,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "be821f035c9e937d605b63ca28e94e3b2395ab59",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-22T03:03:28.000Z",
       "message": "feat(web): construir el enlace de WhatsApp sin destinos arbitrarios (#7)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/be821f035c9e937d605b63ca28e94e3b2395ab59"
     },
     "stats": {
       "total": 44,
@@ -623,6 +623,25 @@
     },
     "coverage": 89.79,
     "test_count": 88,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T03:08:11.000Z",
+      "message": "feat(web): consultar el detalle y el contacto de un reporte por HTTP (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 184,
+      "additions": 175,
+      "deletions": 9,
+      "date": "2026-10-22"
+    },
+    "coverage": 90.07,
+    "test_count": 91,
     "failed_tests": 0,
     "conclusion": "success"
   }
