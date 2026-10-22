@@ -1022,9 +1022,15 @@
     "testId": 37
   },
   {
-    "commitId": "HEAD",
+    "commitId": "ff5bee34eae9b40327b5041c22bbd013dfac853a",
     "commitName": "feat(web): integrar el detalle por enlace en la vista y verificarlo en el navegador (#7)",
     "commitTimestamp": 1792640145267,
     "testId": 37
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(repo): documentar el detalle por enlace y el contacto por WhatsApp (#7)",
+    "commitTimestamp": 1792640368114,
+    "testId": 38
   }
 ]

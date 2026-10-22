@@ -27,10 +27,17 @@ Rutas relativas a `apps/web/src`.
 - Presenter `presenters/reports/publish.presenter.ts` valida con `validateDraft`, muestra mensajes por campo, pide la vista previa a `Effects`, crea el reporte con `publishDemoReport` y coordina: `reports.add`, `filters.reset`, `onPublished` (navegar) y el aviso.
 - Model `models/reports/publication.ts`: reglas del borrador, foto aceptada, creación y permisos de resolver/eliminar.
 
+## 4. Abrir un reporte por su enlace y contactar por WhatsApp
+
+- View `views/components/ReportDetail.tsx` renderiza `ReportLinkView` (carga, no disponible, error con «Reintentar», ficha) y delega `onContact`, `onRetry`, `onClose`.
+- Presenter `presenters/reports/report-detail.presenter.ts`: sigue la dirección (`/reportes/<id>`, rutas en `report-route.ts`) y la sesión, descarta respuestas obsoletas, pide ingresar a un visitante y nunca guarda el teléfono en su estado. La dirección, «Atrás» y la apertura del chat son `Effects`.
+- Model `models/reports/contact.ts` construye el enlace `wa.me` solo para un número válido; `models/reports/reports-repository.ts` declara el puerto `ReportDetailRepository`.
+- Infrastructure `infrastructure/http/catalog-client.ts` (`createReportDetailClient`) valida el DTO y traduce 400/404 a «no disponible» y 401 a `SessionRejected`; `infrastructure/browser/browser-effects.ts` usa `history` y `window.open`.
+
 ## Receta: añadir «Marcar como encontrado» a un reporte propio
 
 1. Model: `markFound(reports, id, ownerId)` en `models/reports/publication.ts` usando `isOwnedBy`; prueba en `test/models/reports.test.ts`.
 2. Presenter: método `markFound = (id) => …` en `ReportsPresenter` que llama al Model y muestra el aviso; `detail()` expone `canMarkFound`. Prueba en `test/presenters/reports.test.ts`.
-3. View: en `views/components/ReportDetail.tsx`, `{detail.canMarkFound && <button onClick={onMarkFound}>…</button>}`; `AppShell` pasa `onMarkFound={() => reports.markFound(detail.card.id)}`.
+3. View: en `ReadyDetail` de `views/components/ReportDetail.tsx`, `{view.detail.canMarkFound && <button onClick={onMarkFound}>…</button>}`; `AppShell` pasa `onMarkFound={() => reports.markFound(detail.card.id)}`.
 
 Incorrecto: comprobar `report.person === …` o cambiar el array dentro del componente.

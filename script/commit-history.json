@@ -703,17 +703,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "ff5bee34eae9b40327b5041c22bbd013dfac853a",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-22T03:35:43.000Z",
       "message": "feat(web): integrar el detalle por enlace en la vista y verificarlo en el navegador (#7)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/ff5bee34eae9b40327b5041c22bbd013dfac853a"
     },
     "stats": {
       "total": 480,
       "additions": 430,
       "deletions": 50,
+      "date": "2026-10-22"
+    },
+    "coverage": 90.96,
+    "test_count": 98,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T03:39:26.000Z",
+      "message": "docs(repo): documentar el detalle por enlace y el contacto por WhatsApp (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 106,
+      "additions": 62,
+      "deletions": 44,
       "date": "2026-10-22"
     },
     "coverage": 90.96,
