@@ -79,6 +79,8 @@ La interfaz (formularios, redirecciones, recarga y cierre de sesión en móvil/e
 
 ## Producción y límites
 
+La [demo del VPS](deployment.md) conserva estas garantías con rewrites de Vercel, gateway privado y Mailpit accesible solo por túnel SSH. No entrega correos reales ni habilita autoconfirmación; SMTP público queda pendiente. La guía distingue esta base aislada de un despliegue de producción.
+
 - Servir web, `/auth` y `/api` por HTTPS desde el mismo origen mediante un proxy inverso. Así no se necesita CORS. Cambia las URLs públicas a `https://` y usa un SMTP real con SPF/DKIM.
 - No publicar los puertos 9999/8025 ni PostgreSQL. Gestionar `AUTH_JWT_KEYS` en un gestor de secretos y rotarla añadiendo la clave nueva antes de retirar la anterior.
 - La API rechaza de inmediato los tokens de una sesión cerrada desde PerdiU. Un cierre hecho fuera de la web (otra herramienta llamando solo a GoTrue) no pasa por la API: ese access token sigue siendo válido hasta su `exp` (15 minutos). El cierre en todos los dispositivos no está implementado.

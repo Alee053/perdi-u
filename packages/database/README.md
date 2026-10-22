@@ -10,6 +10,8 @@
 
 El CLI carga el `.env` ignorado de la raíz respetando variables de entorno ya definidas. No requiere `PORT`. Valida la URL y limita mutaciones a localhost, bases `perdiu_*dev`/`perdiu_*test`, sin parámetros de URL ni fragmento, fuera de `NODE_ENV=production`. Los consumidores programáticos de mantenimiento deben validar el destino antes de entregar un pool; las pruebas exigen además el indicador de contenedor aislado.
 
+La [demo aislada del VPS](../../docs/deployment.md) conserva este guard: el servicio de mantenimiento comparte la red del contenedor PostgreSQL y accede a su loopback, con una base propia `perdiu_demo_dev`. El runtime de API usa otro rol sin permisos de esquema. No se ha añadido una excepción para migrar bases compartidas o de producción.
+
 Desde la raíz:
 
 ```bash

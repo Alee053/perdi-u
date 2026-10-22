@@ -37,4 +37,6 @@ Requiere PostgreSQL con codificación UTF8 (incluida en el contenedor del proyec
 
 Sigue el README de la raíz para preparar PostgreSQL y ejecutar `pnpm dev`. `pnpm --filter @perdiu/api start` ejecuta el build existente; `pnpm --filter @perdiu/api test` prueba configuración HTTP. Las reglas de catálogo se prueban en `@perdiu/catalog`, y configuración/migraciones en `@perdiu/database`. Usa los comandos raíz para que Turbo compile las dependencias antes de pruebas y desarrollo.
 
+La [demo en VPS](../../docs/deployment.md) ejecuta este mismo build en un contenedor sin privilegios, detrás de NPM/gateway y las rewrites de Vercel; no cambia rutas HTTP ni habilita CORS. El healthcheck consulta el catálogo real para comprobar también PostgreSQL.
+
 `pnpm test:integration` crea un contenedor PostgreSQL desechable con puerto y contraseña efímeros, verifica migraciones, catálogo y el guard de `GET /me` con un JWKS local, y elimina únicamente ese contenedor. `pnpm test:auth` repite el recorrido de sesión contra Supabase Auth real. No requiere una cuenta externa ni modifica la BD de desarrollo. Los comandos raíz de migraciones/seed pertenecen a `@perdiu/database`; sus restricciones y evolución se documentan en [su guía](../../packages/database/README.md).

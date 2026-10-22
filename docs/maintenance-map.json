@@ -5,6 +5,7 @@
       "apps/",
       "packages/",
       "compose.yaml",
+      "deploy/",
       "pnpm-workspace.yaml",
       "scripts/check-boundaries.mjs"
     ],
@@ -52,9 +53,15 @@
   },
   {
     "area": "Servicios y configuración",
-    "prefixes": ["compose.yaml", ".env.example", "docs/services.md"],
+    "prefixes": ["compose.yaml", "deploy/", "vercel.json", ".env.example", "docs/services.md"],
     "contains": ["/.env.example", "/config.ts", "/vite.config.ts"],
-    "review": ["docs/services.md", "README.md", ".env.example", "apps/web/.env.example"]
+    "review": [
+      "docs/services.md",
+      "docs/deployment.md",
+      "README.md",
+      ".env.example",
+      "apps/web/.env.example"
+    ]
   },
   {
     "area": "Instrucciones y skills",
