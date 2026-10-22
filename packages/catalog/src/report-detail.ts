@@ -1,7 +1,7 @@
 import type { ReportContact, ReportSummary } from '@perdiu/contracts'
 import type { ReportDetailRepository, ReportRecord } from './model.js'
 import { toWhatsAppNumber } from './contact.js'
-import { toPublicReport } from './projection.js'
+import { toPublicReport } from './catalog.js'
 
 /**
  * Active reports are public; a resolved one stays reachable only for its owner, identified by the

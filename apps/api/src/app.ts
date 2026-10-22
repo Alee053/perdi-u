@@ -1,5 +1,7 @@
 import 'reflect-metadata'
 import {
+  BadRequestException,
+  Body,
   Controller,
   Get,
   Header,
@@ -15,7 +17,13 @@ import {
 } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { openDatabase, type Database, type PostgresProfileRepository } from '@perdiu/database'
-import { GetReport, GetReportContact, ListReports } from '@perdiu/catalog'
+import {
+  CreateReport,
+  GetReport,
+  GetReportContact,
+  ListReports,
+  ReportValidationError,
+} from '@perdiu/catalog'
 import type { AccountIdentity, ReportContact, ReportSummary } from '@perdiu/contracts'
 import {
   withSessionRevocation,
@@ -30,6 +38,7 @@ import { parseReportId, parseReportQuery } from './reports/query.js'
 class ReportsController {
   constructor(
     @Inject(ListReports) private readonly catalog: ListReports,
+    @Inject(CreateReport) private readonly publisher: CreateReport,
     @Inject(GetReport) private readonly detail: GetReport,
     @Inject(GetReportContact) private readonly contacts: GetReportContact,
   ) {}
@@ -41,6 +50,18 @@ class ReportsController {
       return await this.catalog.execute(query)
     } catch {
       throw new ServiceUnavailableException('No se pudo cargar el catálogo. Intenta nuevamente.')
+    }
+  }
+
+  @Post()
+  @UseGuards(AuthGuard)
+  async publish(@CurrentUser() user: AuthenticatedUser, @Body() input: unknown) {
+    try {
+      return await this.publisher.execute(user.id, input)
+    } catch (error) {
+      if (error instanceof ReportValidationError)
+        throw new BadRequestException({ fieldErrors: error.errors })
+      throw new ServiceUnavailableException('No se pudo publicar el reporte. Intenta nuevamente.')
     }
   }
 
@@ -143,6 +164,7 @@ export async function createApplication(databaseUrl: string, verifier: AccessTok
         controllers: [ReportsController, AccountController],
         providers: [
           { provide: ListReports, useValue: new ListReports(database.reports) },
+          { provide: CreateReport, useValue: new CreateReport(database.publisher) },
           { provide: GetReport, useValue: new GetReport(database.reports) },
           { provide: GetReportContact, useValue: new GetReportContact(database.reports) },
           { provide: SESSION_REVOCATIONS, useValue: database.sessions },

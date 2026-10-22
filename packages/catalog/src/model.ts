@@ -1,4 +1,4 @@
-import type { PublicProfile, ReportData, ReportQuery } from '@perdiu/contracts'
+import type { CreateReportInput, PublicProfile, ReportData, ReportQuery } from '@perdiu/contracts'
 
 export interface ReportRecord extends ReportData {
   author: PublicProfile
@@ -18,4 +18,9 @@ export interface ReportDetailRepository {
   find(id: string): Promise<ReportRecord | undefined>
   /** Private contact phone as stored; read only after the case of use has checked access. */
   findContactPhone(reportId: string): Promise<string | undefined>
+}
+
+/** Write port kept separate from the public catalog query. */
+export interface ReportPublisher {
+  create(ownerId: string, draft: CreateReportInput): Promise<ReportRecord>
 }

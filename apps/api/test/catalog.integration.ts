@@ -3,7 +3,11 @@ import { spawn } from 'node:child_process'
 import { readFile } from 'node:fs/promises'
 import { expect, test } from '@jest/globals'
 import { createApplication } from '../src/app.js'
-import { createAccessTokenVerifier } from '../src/auth/access-token.js'
+import {
+  createAccessTokenVerifier,
+  InvalidAccessToken,
+  type AccessTokenVerifier,
+} from '../src/auth/access-token.js'
 import { createPool, PostgresReportRepository } from '@perdiu/database'
 import { migrate, seed } from '@perdiu/database/maintenance'
 import { assertLocalDatabase } from '@perdiu/database/config'
@@ -15,6 +19,14 @@ const noSessions = createAccessTokenVerifier(
   },
   { issuer: 'http://localhost/auth', audience: 'authenticated' },
 )
+const publisherId = 'b4c2e551-3c4b-4cce-8e79-883c862bd75f'
+const publisherSession = '1cc8c2d5-1524-4221-8585-442fc53de052'
+const publishVerifier: AccessTokenVerifier = {
+  async verify(token) {
+    if (token !== 'verified-publication-token') throw new InvalidAccessToken()
+    return { id: publisherId, email: 'privado@example.test', sessionId: publisherSession }
+  },
+}
 
 async function resetCatalog(pool: ReturnType<typeof createPool>) {
   assert.equal(
@@ -150,6 +162,106 @@ test('catálogo HTTP y repositorio conservan datos reales tras reiniciar, sin in
     console.log(
       'PostgreSQL: migración/seed repetibles, activos, orden, privacidad, vacío, error y reinicio verificados.',
     )
+  } finally {
+    await app?.close()
+    await pool.end()
+  }
+})
+
+test('POST /reports exige sesión, persiste el reporte y conserva privado el WhatsApp', async () => {
+  assert.equal(process.env.PERDIU_TEST_CONTAINER, '1')
+  const databaseUrl = process.env.TEST_DATABASE_URL
+  assert.ok(databaseUrl)
+  assertLocalDatabase(databaseUrl)
+  const pool = createPool(databaseUrl)
+  let app: Awaited<ReturnType<typeof createApplication>> | undefined
+  try {
+    await resetCatalog(pool)
+    app = await createApplication(databaseUrl, publishVerifier)
+    await app.listen(0, '127.0.0.1')
+    const endpoint = `${await app.getUrl()}/reports`
+    const draft = {
+      type: 'found',
+      category: 'pet',
+      petSpecies: ' Perro ',
+      title: '  Luna  ',
+      description: '  Perrita café vista cerca del mercado.  ',
+      city: ' La Paz ',
+      zone: ' Sopocachi ',
+      incidentDate: '2026-10-20',
+      phone: '+591 70000000',
+      ownerId: 'attacker',
+      state: 'resolved',
+    }
+    const unauthenticated = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(draft),
+    })
+    assert.equal(unauthenticated.status, 401)
+
+    const invalid = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        authorization: 'Bearer verified-publication-token',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({ ...draft, description: 'Corta.' }),
+    })
+    assert.equal(invalid.status, 400)
+    assert.equal((await pool.query('SELECT id FROM reports')).rowCount, 0)
+
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        authorization: 'Bearer verified-publication-token',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(draft),
+    })
+    assert.equal(response.status, 201)
+    const published = JSON.parse(await response.text())
+    assert.deepEqual(Object.keys(published).sort(), [
+      'author',
+      'category',
+      'city',
+      'createdAt',
+      'description',
+      'id',
+      'imageUrls',
+      'incidentDate',
+      'petSpecies',
+      'state',
+      'title',
+      'type',
+      'zone',
+    ])
+    assert.equal(published.ownerId, undefined)
+    assert.deepEqual(
+      await pool
+        .query(
+          `SELECT r.owner_id AS "ownerId", r.state, r.title, r.pet_species AS "petSpecies", c.phone
+         FROM reports r JOIN report_contacts c ON c.report_id = r.id WHERE r.id = $1`,
+          [published.id],
+        )
+        .then((result) => result.rows[0]),
+      {
+        ownerId: publisherId,
+        state: 'active',
+        title: 'Luna',
+        petSpecies: 'Perro',
+        phone: '+59170000000',
+      },
+    )
+    assert.ok(!JSON.stringify(published).includes('+59170000000'))
+    await app.close()
+    app = undefined
+
+    app = await createApplication(databaseUrl, noSessions)
+    await app.listen(0, '127.0.0.1')
+    const catalog = await fetch(`${await app.getUrl()}/reports`)
+    assert.equal(catalog.status, 200)
+    assert.deepEqual(JSON.parse(await catalog.text()), [published])
   } finally {
     await app?.close()
     await pool.end()

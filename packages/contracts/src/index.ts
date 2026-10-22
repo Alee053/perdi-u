@@ -10,6 +10,23 @@ export interface ReportQuery {
   city?: string
 }
 
+/** Input accepted by the authenticated report publication endpoint. */
+export interface CreateReportInput {
+  type: ReportType
+  category: ReportCategory
+  title: string
+  description: string
+  city: string
+  zone: string
+  incidentDate: string
+  phone: string
+  petSpecies?: string
+}
+
+export type CreateReportField = keyof CreateReportInput
+export type ReportValidationIssue = 'required' | 'too_short' | 'too_long' | 'invalid'
+export type ReportValidationErrors = Partial<Record<CreateReportField, ReportValidationIssue>>
+
 export const REPORT_RESULT_LIMIT = 50
 
 export interface ReportData {
@@ -20,6 +37,7 @@ export interface ReportData {
   type: ReportType
   state: ReportState
   category: ReportCategory
+  petSpecies?: string
   city: string
   zone: string
   incidentDate: string

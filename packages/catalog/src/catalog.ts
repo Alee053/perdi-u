@@ -1,7 +1,6 @@
 import type { ReportQuery, ReportSummary } from '@perdiu/contracts'
 import { REPORT_RESULT_LIMIT } from '@perdiu/contracts'
-import type { ReportRepository } from './model.js'
-import { toPublicReport } from './projection.js'
+import type { ReportRecord, ReportRepository } from './model.js'
 
 function microsecondRemainder(timestamp: string) {
   const fraction = timestamp.match(/\.(\d+)(?:Z|[+-]\d{2}:\d{2})$/)?.[1] ?? ''
@@ -22,5 +21,27 @@ export class ListReports {
       )
       .slice(0, REPORT_RESULT_LIMIT)
       .map(toPublicReport)
+  }
+}
+
+export function toPublicReport(report: ReportRecord): ReportSummary {
+  return {
+    id: report.id,
+    title: report.title,
+    description: report.description,
+    type: report.type,
+    state: report.state,
+    category: report.category,
+    ...(report.petSpecies ? { petSpecies: report.petSpecies } : {}),
+    city: report.city,
+    zone: report.zone,
+    incidentDate: report.incidentDate,
+    createdAt: report.createdAt,
+    author: {
+      id: report.author.id,
+      displayName: report.author.displayName,
+      ...(report.author.photoUrl ? { photoUrl: report.author.photoUrl } : {}),
+    },
+    imageUrls: [...report.imageUrls],
   }
 }

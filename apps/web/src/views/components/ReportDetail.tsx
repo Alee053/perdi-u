@@ -84,6 +84,7 @@ function ReadyDetail({
           Publicado el {report.posted}
         </span>
         <h2 id="detail-title">{report.title}</h2>
+        {report.petSpecies && <p className="card-meta">Especie: {report.petSpecies}</p>}
         <p>{report.description}</p>
         <p className="card-meta">
           {report.zone}, {report.city} · {report.date} · {report.person}

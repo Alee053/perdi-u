@@ -10,7 +10,7 @@ Navegador ──/auth──▶ Vite proxy ──▶ GoTrue :9999 ──▶ Postg
     └──/api + Bearer──▶ API NestJS ─────┘ verifica con /.well-known/jwks.json
 ```
 
-1. Registro: correo, contraseña (8–72 caracteres) y confirmación. GoTrue guarda el usuario en `perdiu_auth.auth.users` con hash bcrypt y envía el enlace de confirmación. En desarrollo, Mailpit lo captura y nunca sale de tu equipo.
+1. Registro por defecto: correo, contraseña (8–72 caracteres) y confirmación. GoTrue guarda el usuario en `perdiu_auth.auth.users` con hash bcrypt y envía el enlace de confirmación. En desarrollo, Mailpit lo captura y nunca sale de tu equipo. La demo aislada tiene una excepción explícita de autoconfirmación descrita más abajo.
 2. El enlace pasa por `/auth/verify`, confirma el correo y vuelve al sitio con un código PKCE de un solo uso. El SDK lo canjea por una sesión en ese navegador. Si se abre en otro, el correo queda confirmado y se pide iniciar sesión. El código se elimina de la URL.
 3. Inicio de sesión: GoTrue devuelve un access token ES256 de 15 minutos y un refresh token rotativo. El SDK los persiste en `localStorage` (`perdiu-auth`) y renueva el access token automáticamente.
 4. La web solo considera autenticada la sesión cuando `GET /api/me` la acepta. Un 401 elimina la sesión local y pide ingresar nuevamente.
@@ -78,6 +78,8 @@ pnpm dev              # web http://localhost:5173, API http://127.0.0.1:3000
 La interfaz (formularios, redirecciones, recarga y cierre de sesión en móvil/escritorio) se comprobó manualmente con Playwright contra este stack. `pnpm test:e2e` solo cubre que una visita anónima a «Publicar» o «Mi perfil» lleva al login.
 
 ## Producción y límites
+
+La [demo del VPS](deployment.md) usa `https://perdi-u-chi.vercel.app` y habilita expresamente `AUTH_MAILER_AUTOCONFIRM=true`, autorizado por el propietario para registrarse sin SMTP. El usuario recibe sesión al registrarse; la identidad de la cuenta sigue siendo el `sub` firmado, pero el correo ya no demuestra control de la casilla. La configuración por defecto de Compose/desarrollo sigue exigiendo confirmación. Mailpit permanece accesible solo por túnel SSH y no entrega correos reales. La guía distingue esta base aislada de un despliegue de producción y explica cómo volver a exigir confirmación.
 
 - Servir web, `/auth` y `/api` por HTTPS desde el mismo origen mediante un proxy inverso. Así no se necesita CORS. Cambia las URLs públicas a `https://` y usa un SMTP real con SPF/DKIM.
 - No publicar los puertos 9999/8025 ni PostgreSQL. Gestionar `AUTH_JWT_KEYS` en un gestor de secretos y rotarla añadiendo la clave nueva antes de retirar la anterior.

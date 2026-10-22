@@ -6,7 +6,9 @@ NestJS con PostgreSQL independiente y consultas parametrizadas mediante `pg`. El
 
 `GET /reports` devuelve un array de `ReportSummary` de `@perdiu/contracts`: solo activos, ordenados por `createdAt` descendente e ID ascendente en empates. `type` distingue pérdida/hallazgo y `state` distingue activo/resuelto. `incidentDate` usa `YYYY-MM-DD`; `createdAt` usa ISO UTC con seis decimales, conserva los microsegundos y se genera en PostgreSQL.
 
-El autor público tiene ID (sujeto de Auth), nombre y foto opcional. Los contactos están en tablas privadas; ni esos datos ni claves de almacenamiento se consultan para el catálogo. Una lista vacía devuelve `200 []`; fallos de consulta devuelven `503` con mensaje seguro en español. El catálogo es público y no tiene endpoints de escritura.
+El autor público tiene ID (sujeto de Auth), nombre y foto opcional. Los contactos están en tablas privadas; ni esos datos ni claves de almacenamiento se consultan para el catálogo. Una lista vacía devuelve `200 []`; fallos de consulta devuelven `503` con mensaje seguro en español.
+
+`POST /reports` requiere `Authorization: Bearer <access token>`. El cuerpo lleva tipo, categoría, título, descripción, ciudad, zona, fecha del hecho y WhatsApp; para mascotas también especie. El servidor toma el autor de la identidad verificada, genera ID/fecha de creación/estado activo y guarda el contacto normalizado en `report_contacts`. Responde con el reporte público y sin el número; los errores de entrada devuelven `400` con `fieldErrors`, una sesión ausente o inválida devuelve `401`, y los fallos de persistencia devuelven `503`. En esta entrega la publicación no adjunta fotos; la asociación de medios corresponde a S1-06.
 
 ## Detalle y contacto de un reporte
 
@@ -40,5 +42,7 @@ Requiere PostgreSQL con codificación UTF8 (incluida en el contenedor del proyec
 ## Desarrollo y validación
 
 Sigue el README de la raíz para preparar PostgreSQL y ejecutar `pnpm dev`. `pnpm --filter @perdiu/api start` ejecuta el build existente; `pnpm --filter @perdiu/api test` prueba configuración HTTP. Las reglas de catálogo se prueban en `@perdiu/catalog`, y configuración/migraciones en `@perdiu/database`. Usa los comandos raíz para que Turbo compile las dependencias antes de pruebas y desarrollo.
+
+La [demo en VPS](../../docs/deployment.md) ejecuta este mismo build en un contenedor sin privilegios, detrás de NPM/gateway y las rewrites de Vercel; no cambia rutas HTTP ni habilita CORS. El healthcheck consulta el catálogo real para comprobar también PostgreSQL.
 
 `pnpm test:integration` crea un contenedor PostgreSQL desechable con puerto y contraseña efímeros, verifica migraciones, catálogo y el guard de `GET /me` con un JWKS local, y elimina únicamente ese contenedor. `pnpm test:auth` repite el recorrido de sesión contra Supabase Auth real. No requiere una cuenta externa ni modifica la BD de desarrollo. Los comandos raíz de migraciones/seed pertenecen a `@perdiu/database`; sus restricciones y evolución se documentan en [su guía](../../packages/database/README.md).

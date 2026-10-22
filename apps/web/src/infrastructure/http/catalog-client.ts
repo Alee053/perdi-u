@@ -28,7 +28,7 @@ function imageUrl(value: unknown): value is string {
 }
 
 /** The catalog only lists active reports; a detail may also be the owner's resolved one. */
-function readReport(value: unknown, states: readonly unknown[] = ['active']): ReportSummary {
+export function readReport(value: unknown, states: readonly unknown[] = ['active']): ReportSummary {
   if (
     !object(value) ||
     !text(value.id) ||
@@ -52,6 +52,7 @@ function readReport(value: unknown, states: readonly unknown[] = ['active']): Re
     !Array.isArray(value.imageUrls)
   )
     throw invalidResponse()
+  if (value.petSpecies !== undefined && !text(value.petSpecies)) throw invalidResponse()
   const imageUrls = value.imageUrls.map((url: unknown) => {
     if (!imageUrl(url)) throw invalidResponse()
     return url
@@ -61,6 +62,7 @@ function readReport(value: unknown, states: readonly unknown[] = ['active']): Re
     type: value.type,
     state: value.state as ReportState,
     category: value.category,
+    ...(value.petSpecies ? { petSpecies: value.petSpecies } : {}),
     title: value.title,
     description: value.description,
     city: value.city,

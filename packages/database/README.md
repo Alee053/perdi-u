@@ -4,11 +4,13 @@
 
 ## Uso
 
-- `@perdiu/database`: `openDatabase(databaseUrl)` entrega `reports`, `profiles` (nombre y foto de un perfil, sin contactos), `sessions` (revocaciones de sesión persistidas) y `close()`. También exporta `createPool`, `PostgresReportRepository`, `PostgresProfileRepository` y `PostgresSessionRevocations` para integración y herramientas de BD.
+- `@perdiu/database`: `openDatabase(databaseUrl)` entrega `reports` (lectura y publicación), `publisher`, `profiles` (nombre y foto de un perfil, sin contactos), `sessions` (revocaciones de sesión persistidas) y `close()`. También exporta `createPool`, `PostgresReportRepository`, `PostgresProfileRepository` y `PostgresSessionRevocations` para integración y herramientas de BD.
 - `@perdiu/database/config`: validación de `DATABASE_URL`, error de configuración seguro y `assertLocalDatabase`.
 - `@perdiu/database/maintenance`: `migrate(pool)` y `seed(pool)` para bases aisladas; no se ejecutan al iniciar la API.
 
 El CLI carga el `.env` ignorado de la raíz respetando variables de entorno ya definidas. No requiere `PORT`. Valida la URL y limita mutaciones a localhost, bases `perdiu_*dev`/`perdiu_*test`, sin parámetros de URL ni fragmento, fuera de `NODE_ENV=production`. Los consumidores programáticos de mantenimiento deben validar el destino antes de entregar un pool; las pruebas exigen además el indicador de contenedor aislado.
+
+La [demo aislada del VPS](../../docs/deployment.md) conserva este guard: el servicio de mantenimiento comparte la red del contenedor PostgreSQL y accede a su loopback, con una base propia `perdiu_demo_dev`. El runtime de API usa otro rol sin permisos de esquema. No se ha añadido una excepción para migrar bases compartidas o de producción.
 
 Desde la raíz:
 
@@ -30,7 +32,7 @@ Los archivos viven en `migrations/`, con nombres como `001_catalog.sql` y `002_n
 
 El runner mantiene `schema_migrations`, adquiere el mismo bloqueo transaccional del runner anterior, omite versiones aplicadas y ejecuta las pendientes en una transacción. Un fallo revierte sus cambios y registros; una segunda ejecución puede volver a intentarlas. Rechaza nombres SQL inválidos, versiones duplicadas y archivos ausentes de versiones registradas. No detecta ediciones del contenido de archivos ya aplicados: conservarlos intactos y añadir una versión nueva para cada evolución.
 
-`002_session_revocations.sql` añade `session_revocations` (`session_id` de Auth revocado y fecha), sin claves foráneas hacia la base de Auth. `001_catalog.sql` y el registro de versión 1 se conservan sin cambios en la extracción; no se necesita recrear la base ni borrar volúmenes. El seed ficticio está en `seeds/development.sql`, conserva IDs fijos y no sobrescribe registros existentes.
+`002_session_revocations.sql` añade `session_revocations` (`session_id` de Auth revocado y fecha), sin claves foráneas hacia la base de Auth. `003_report_pet_species.sql` añade la especie opcional para reportes de mascotas. `001_catalog.sql` y el registro de versión 1 se conservan sin cambios en la extracción; no se necesita recrear la base ni borrar volúmenes. El seed ficticio está en `seeds/development.sql`, conserva IDs fijos y no sobrescribe registros existentes.
 
 ## Verificación
 

@@ -6,6 +6,7 @@ import {
   createReportDetailClient,
   createReportsClient,
 } from '../infrastructure/http/catalog-client.js'
+import { createReportPublisher } from '../infrastructure/http/publish-client.js'
 import { NoticePresenter } from '../presenters/app/notice.presenter.js'
 import { ShellPresenter } from '../presenters/app/shell.presenter.js'
 import { AuthPresenter } from '../presenters/auth/auth.presenter.js'
@@ -46,11 +47,10 @@ export function createPresenters(env = import.meta.env) {
     isSaved: (id) => reports.isSaved(id),
   })
   const publish = new PublishPresenter({
-    reports,
+    publisher: createReportPublisher(apiUrl, accessToken),
     filters,
     notices,
-    effects: browserEffects,
-    onPublished: () => shell.navigate('my-reports'),
+    onPublished: () => shell.navigate('explore'),
   })
   const shell: ShellPresenter = new ShellPresenter({
     auth,

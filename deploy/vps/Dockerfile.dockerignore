@@ -1,0 +1,25 @@
+# Allow only build inputs, including when this Dockerfile lives outside the clone.
+**
+!package.json
+!pnpm-lock.yaml
+!pnpm-workspace.yaml
+!turbo.json
+!.npmrc
+!apps/
+!apps/api/
+!apps/api/package.json
+!apps/api/tsconfig.json
+!apps/api/src/
+!apps/api/src/**
+!apps/web/
+!apps/web/package.json
+!packages/
+!packages/*/
+!packages/*/package.json
+!packages/*/tsconfig.json
+!packages/*/src/
+!packages/*/src/**
+!packages/database/migrations/
+!packages/database/migrations/**
+!packages/database/seeds/
+!packages/database/seeds/**

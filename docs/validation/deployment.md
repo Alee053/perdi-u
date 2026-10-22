@@ -1,0 +1,49 @@
+# Verificación del despliegue de demo
+
+Fecha: 2026-10-21 (America/La_Paz). Código de aplicación desplegado desde `main`: `ffdb6be0a1c4d67e6693f099656c800201db88e5`. La infraestructura se preparó en un worktree independiente; no se incorporaron los cambios en curso de S1-08. Operación y configuración en la [guía de despliegue](../deployment.md).
+
+## Comprobaciones realizadas
+
+| Comprobación                                                         | Resultado observado                                                                                                                                                                                                                                                                          |
+| -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm verify`, con Node 24.22.0                                      | Formato, documentos, límites de arquitectura, tipos, 14 suites/78 tests y build de los cinco workspaces aprobados.                                                                                                                                                                           |
+| Build Docker desde el checkout limpio de `main`                      | JS de API y dependencias internas compilados; runtime autocontenido con usuario UID 1000. Build local y build independiente en el VPS aprobados.                                                                                                                                             |
+| `docker compose config --quiet`                                      | Configuración válida sin imprimir secretos, local y VPS.                                                                                                                                                                                                                                     |
+| `docker compose up -d --wait --wait-timeout 180`                     | PostgreSQL, Mailpit, GoTrue, API y gateway saludables; migración y bootstrap finalizaron con código 0.                                                                                                                                                                                       |
+| Repetir `up` y recrear todos los contenedores con `--force-recreate` | Migraciones/bootstrap idempotentes. En local sobrevivieron tres reportes (dos activos) y las revocaciones; volumen conservado. VPS recreado sin errores.                                                                                                                                     |
+| HTTP del gateway, local y VPS                                        | `/api/reports` 200 con dos reportes activos ficticios, filtros combinados correctos, filtro inválido 400, sin contactos ni claves de almacenamiento; `Cache-Control: no-store`. `/api/me` anónimo 401; `/auth/health` 200.                                                                   |
+| Auth real a través del gateway, local y VPS                          | Registro sin sesión hasta confirmar, correo capturado por Mailpit, enlace con URL pública/retorno correctos, login ES256, `/me` 200 con identidad propia, token adulterado 401, refresh rotativo, cierre en API y Auth, token/refresh revocados rechazados. Solo cuentas técnicas ficticias. |
+| Permisos de BD                                                       | `perdiu_app` y `perdiu_auth` sin superusuario, creación de roles o bases. API puede leer reportes, no crear en `public` ni actualizar `schema_migrations`.                                                                                                                                   |
+| Acceso desde el contenedor NPM                                       | `http://perdi-u-gateway:8080/api/reports` devolvió 200.                                                                                                                                                                                                                                      |
+| Aislamiento y secretos en VPS                                        | API/Auth/Postgres sin puertos de host; Mailpit solo `127.0.0.1:18025`; gateway en `proxy-net`; roles/secretos independientes; carpeta modo 700 y `.env` modo 600, fuera del clon.                                                                                                            |
+| Servicios existentes                                                 | Pulso y NPM mantuvieron sus IDs y arranques anteriores; no se recrearon.                                                                                                                                                                                                                     |
+
+La comprobación HTTP interna se ejecutó con un cliente Node efímero dentro de la red del stack. No se imprimieron contraseñas, tokens, cuerpos de correo ni enlaces de confirmación. Las cuentas de prueba no envían correo real. Los contenedores, volumen, red de proxy y `.env` usados para la comprobación local se eliminaron al terminar; el stack del VPS queda levantado.
+
+Después de configurar DNS y NPM se verificó también HTTPS público en `perdi-u-api.alecastro.dev`: catálogo 200 con dos reportes, filtro combinado 200 con uno, `/api/me` anónimo 401, `/auth/health` 200 y JWKS 200 con una clave pública y ninguna privada. Todos con `Cache-Control: no-store`. El certificado fue aceptado por clientes con validación TLS normal, también contra NPM directo. Se repitió el flujo completo de registro, confirmación, login ES256, refresh y cierre contra el dominio HTTPS a través de Cloudflare y NPM: aprobado.
+
+La firma predeterminada de `Python-urllib` recibió 403 con código 1010 de Cloudflare; curl, Node y una firma de navegador recibieron las respuestas esperadas. El [código 1010 corresponde al bloqueo por firma del cliente](https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-1xxx-errors/error-1010/). Se conservó la configuración de seguridad de Cloudflare.
+
+No cambió comportamiento de aplicación ni se añadieron tests unitarios que reproduzcan el Compose. La verificación es caracterización de la aplicación existente y aceptación operativa del artefacto/stack real; no se presenta como un ciclo rojo/verde de funcionalidad nueva.
+
+## Pendientes del frontend
+
+El backend público ya está verificado con DNS, NPM y TLS. `/api/reports` en `perdi-u.vercel.app` todavía devolvía 404 al comprobarlo. Falta integrar `vercel.json`, configurar la raíz del monorepo en Vercel, publicar las rewrites y verificar el catálogo y una sesión de navegador desde el frontend. La aceptación del backend **no certifica todavía ese recorrido desde Vercel**.
+
+SMTP real, Google OAuth y las funcionalidades que no estén integradas en `main` no se habilitan por este despliegue. Mailpit permanece privado y la confirmación es obligatoria.
+
+## Actualización: dominio definitivo y registro directo
+
+El 2026-10-21, el frontend quedó desplegado en `https://perdi-u-chi.vercel.app`. Se corrigieron en el VPS `AUTH_SITE_URL`, el issuer de Auth/API y las redirecciones permitidas. El propietario autorizó `AUTH_MAILER_AUTOCONFIRM=true` para usar la demo sin SMTP ni enlaces de confirmación. Esta configuración sustituye el modo de confirmación descrito en la verificación inicial anterior; el Compose local y el valor por defecto del Compose del VPS siguen exigiendo confirmación.
+
+Antes del cambio, el nuevo frontend devolvía catálogo y salud de Auth con 200, pero `/auth/settings` indicaba `mailer_autoconfirm=false` y registrar una cuenta ficticia devolvía 200 sin sesión. Después de cambiar la configuración:
+
+- `/auth/settings` indicó autoconfirmación activa. Una cuenta nueva recibió sesión inmediatamente, con JWT ES256 e issuer `https://perdi-u-chi.vercel.app/auth`, aceptado por `/api/me`.
+- La cuenta ficticia pendiente siguió recibiendo `email_not_confirmed` al intentar login; repetir el registro con su mismo correo y contraseña original la confirmó y entregó sesión. El cambio de configuración por sí solo no confirma retroactivamente cuentas existentes.
+- Para ambas cuentas se comprobaron login con contraseña, rechazo de contraseña/token incorrectos, renovación rotativa, revocación en API y cierre en Auth. No se generaron nuevos mensajes de confirmación en Mailpit.
+- En Chromium real contra el frontend público, el registro inició sesión sin pantalla de confirmación, la sesión sobrevivió a una recarga, el perfil mostró la identidad propia y el cierre volvió al estado anónimo.
+- `docker compose config` comprobó el valor por defecto `false` y la activación explícita con `true`. Pasaron formato, documentos y límites de arquitectura.
+
+Solo se recrearon Auth y API. Se verificó que PostgreSQL, Pulso y NPM conservaron sus arranques y que los secretos existentes no cambiaron. Se guardó una copia privada de la configuración previa. Las credenciales ficticias temporales de la comprobación se eliminaron; no se imprimieron secretos, enlaces ni correos de usuarios reales.
+
+La demo acepta el correo declarado sin comprobar control de la casilla. SMTP y recuperación de contraseña por correo siguen fuera de este despliegue; para volver a exigir confirmación, seguir la [guía de operación vigente](../deployment.md).

@@ -1,4 +1,4 @@
-import type { ReportDetailRepository, ReportRepository } from '@perdiu/catalog'
+import type { ReportDetailRepository, ReportPublisher, ReportRepository } from '@perdiu/catalog'
 import { createPool } from './pool.js'
 import { PostgresReportRepository } from './postgres-repository.js'
 import { PostgresProfileRepository } from './profiles.js'
@@ -6,6 +6,7 @@ import { PostgresSessionRevocations } from './session-revocations.js'
 
 export interface Database {
   reports: ReportRepository & ReportDetailRepository
+  publisher: ReportPublisher
   profiles: PostgresProfileRepository
   sessions: PostgresSessionRevocations
   close(): Promise<void>
@@ -16,8 +17,10 @@ export async function openDatabase(databaseUrl: string): Promise<Database> {
   const pool = createPool(databaseUrl)
   try {
     await pool.query('SELECT 1')
+    const reports = new PostgresReportRepository(pool)
     return {
-      reports: new PostgresReportRepository(pool),
+      reports,
+      publisher: reports,
       profiles: new PostgresProfileRepository(pool),
       sessions: new PostgresSessionRevocations(pool),
       close: () => pool.end(),

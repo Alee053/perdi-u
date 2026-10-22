@@ -1,0 +1,205 @@
+name: perdi-u
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: '5m'
+    max-file: '3'
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: perdiu
+      POSTGRES_DB: perdiu_demo_dev
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks: [backend]
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U perdiu -d perdiu_demo_dev']
+      interval: 3s
+      timeout: 3s
+      retries: 30
+    mem_limit: 512m
+    logging: *logging
+
+  # A dedicated disposable demo DB, accessed through the PostgreSQL container's
+  # loopback interface. The existing local-only maintenance guard stays enabled.
+  migrate:
+    image: perdi-u-api:demo
+    network_mode: service:postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://perdiu:${POSTGRES_PASSWORD}@127.0.0.1:5432/perdiu_demo_dev
+    command: ['node', 'node_modules/@perdiu/database/dist/cli.js', 'migrate']
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 256m
+    logging: *logging
+
+  database-init:
+    image: postgres:17-alpine
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      PGHOST: postgres
+      PGUSER: perdiu
+      PGDATABASE: perdiu_demo_dev
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      AUTH_DB_PASSWORD: ${AUTH_DB_PASSWORD:?Set AUTH_DB_PASSWORD in .env}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD:?Set APP_DB_PASSWORD in .env}
+    volumes:
+      - ${PERDIU_SOURCE_DIR:-../..}/packages/database/auth/bootstrap.sql:/auth-bootstrap.sql:ro
+      - ./database-init.sql:/app-bootstrap.sql:ro
+    command:
+      - sh
+      - -ec
+      - |
+        psql --quiet --set=auth_password="$$AUTH_DB_PASSWORD" --file=/auth-bootstrap.sql
+        psql --quiet --set=app_password="$$APP_DB_PASSWORD" --file=/app-bootstrap.sql
+    networks: [backend]
+    mem_limit: 128m
+    logging: *logging
+
+  auth:
+    image: supabase/gotrue:v2.197.0
+    restart: unless-stopped
+    depends_on:
+      database-init:
+        condition: service_completed_successfully
+      mail:
+        condition: service_healthy
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      PORT: 9999
+      API_EXTERNAL_URL: ${AUTH_SITE_URL:?Set AUTH_SITE_URL in .env}/auth
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://perdiu_auth:${AUTH_DB_PASSWORD}@postgres:5432/perdiu_auth?sslmode=disable
+      GOTRUE_SITE_URL: ${AUTH_SITE_URL}
+      GOTRUE_URI_ALLOW_LIST: ${AUTH_SITE_URL}/**
+      GOTRUE_DISABLE_SIGNUP: 'false'
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: 'true'
+      GOTRUE_EXTERNAL_PHONE_ENABLED: 'false'
+      GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED: 'false'
+      GOTRUE_PASSWORD_MIN_LENGTH: 8
+      GOTRUE_JWT_SECRET: ${AUTH_JWT_SECRET:?Generate a fresh Auth secret}
+      GOTRUE_JWT_KEYS: ${AUTH_JWT_KEYS:?Generate a fresh ES256 signing key}
+      GOTRUE_JWT_ISSUER: ${AUTH_SITE_URL}/auth
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_JWT_EXP: 900
+      GOTRUE_SECURITY_REFRESH_TOKEN_ROTATION_ENABLED: 'true'
+      GOTRUE_SECURITY_REFRESH_TOKEN_REUSE_INTERVAL: 10
+      GOTRUE_MAILER_AUTOCONFIRM: ${AUTH_MAILER_AUTOCONFIRM:-false}
+      GOTRUE_MAILER_URLPATHS_CONFIRMATION: /auth/verify
+      GOTRUE_MAILER_URLPATHS_RECOVERY: /auth/verify
+      GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE: /auth/verify
+      GOTRUE_SMTP_HOST: mail
+      GOTRUE_SMTP_PORT: 1025
+      GOTRUE_SMTP_ADMIN_EMAIL: no-reply@perdiu.localhost
+      GOTRUE_SMTP_SENDER_NAME: PerdiU Demo
+    networks:
+      backend:
+        aliases: [perdi-u-auth]
+    healthcheck:
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:9999/health']
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    mem_limit: 256m
+    logging: *logging
+
+  mail:
+    image: axllent/mailpit:v1.31.3
+    restart: unless-stopped
+    ports:
+      - '127.0.0.1:${MAILPIT_PORT:-18025}:8025'
+    networks: [backend]
+    healthcheck:
+      test: ['CMD', '/mailpit', 'readyz']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    mem_limit: 128m
+    logging: *logging
+
+  api:
+    image: perdi-u-api:demo
+    build:
+      context: ${PERDIU_SOURCE_DIR:-../..}
+      dockerfile: ${PERDIU_DOCKERFILE:-deploy/vps/Dockerfile}
+    restart: unless-stopped
+    init: true
+    depends_on:
+      database-init:
+        condition: service_completed_successfully
+      auth:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://perdiu_app:${APP_DB_PASSWORD}@postgres:5432/perdiu_demo_dev
+      AUTH_JWKS_URL: http://auth:9999/.well-known/jwks.json
+      AUTH_JWT_ISSUER: ${AUTH_SITE_URL}/auth
+    networks:
+      backend:
+        aliases: [perdi-u-api]
+    read_only: true
+    tmpfs: ['/tmp']
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - fetch('http://127.0.0.1:3000/reports').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    mem_limit: 384m
+    pids_limit: 128
+    logging: *logging
+
+  gateway:
+    image: nginx:1.28-alpine
+    restart: unless-stopped
+    user: '101:101'
+    entrypoint: ['nginx']
+    command: ['-g', 'daemon off;']
+    depends_on:
+      api:
+        condition: service_healthy
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      backend:
+      proxy-net:
+        aliases: [perdi-u-gateway]
+    read_only: true
+    tmpfs: ['/tmp']
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      test: ['CMD', 'wget', '-q', '-O', '/dev/null', 'http://127.0.0.1:8080/api/reports']
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    mem_limit: 64m
+    pids_limit: 64
+    logging: *logging
+
+networks:
+  backend:
+  proxy-net:
+    external: true
+    name: ${PROXY_NETWORK:-proxy-net}
+
+volumes:
+  postgres-data:

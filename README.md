@@ -37,6 +37,8 @@ La web corre en `http://localhost:5173` y la API en `http://127.0.0.1:3000`. `pn
 
 Registro, inicio y cierre de sesión con correo y contraseña mediante Supabase Auth (GoTrue) self-hosted sobre el mismo PostgreSQL, en la base separada `perdiu_auth`. La API valida los JWT ES256 con las claves públicas de Auth, expone `GET /me` y revoca la sesión actual con `POST /me/logout`; «Publicar reporte», «Mis reportes» y «Mi perfil» requieren sesión. Consulta la [guía de Auth](docs/auth.md) para el flujo, la configuración, la seguridad y cómo probarlo.
 
+La [guía de despliegue de la demo](docs/deployment.md) describe el frontend en Vercel y el backend manual en `tars-vps:/opt/stacks/perdi-u`, con API, PostgreSQL, GoTrue y gateway para NPM. El Compose raíz sigue siendo exclusivamente local; el stack desechable usa [`deploy/vps/compose.yaml`](deploy/vps/compose.yaml).
+
 `pnpm build` y `pnpm typecheck` recorren los workspaces con Turbo, compilando primero sus dependencias. `pnpm test` ejecuta las pruebas con Jest y registra cada ejecución mediante TDDLab. Los hooks se instalan automáticamente con `pnpm install --frozen-lockfile`. `pnpm verify` reúne formato, documentación/skills, arquitectura, tipos, unitarias y build. La caché de builds es local; las pruebas se ejecutan realmente en cada invocación, sin reutilizar resultados de Turbo.
 
 La interfaz abre directamente en un dashboard. La barra lateral separa Resumen, Explorar reportes, Mapa, Publicar reporte, Mis reportes, Guardados y Seguridad y privacidad.
@@ -65,7 +67,7 @@ La [guía de arquitectura](docs/architecture.md) define responsabilidades y depe
 
 Cada reporte del catálogo tiene un enlace estable, `/reportes/<id>`, que funciona desde la tarjeta, por acceso directo y al recargar; «Atrás» vuelve a la pantalla anterior. El detalle se consulta con `GET /reports/:id`, muestra solo datos públicos y distingue «Reporte no disponible» de un error con reintento. «Contactar por WhatsApp» pide iniciar sesión y conserva el reporte abierto; con sesión, `GET /reports/:id/contact` entrega el número normalizado y la web abre `wa.me` con un mensaje que menciona el título y el enlace. Un hosting estático debe servir `index.html` para `/reportes/*`; Vite ya lo hace en `pnpm dev` y `pnpm preview`.
 
-Resumen, Publicar, Mis reportes y Guardados conservan sus flujos de demostración: el encabezado muestra la cuenta autenticada, pero aún no hay escrituras persistentes desde la web. Los guardados solo viven en memoria. Los reportes/telefonía demo y el seed son ficticios; el seed incluye un autor «Santiago Demo» para comprobar que su nombre no concede permisos. Las fotos y tipografías demo usan Unsplash y Google Fonts.
+Publicar envía reportes sin fotos a la API y los conserva en PostgreSQL; exige una sesión y mantiene privado el número de WhatsApp. La carga de fotos corresponde a S1-06. Resumen, Mis reportes y Guardados conservan sus flujos de demostración, y los guardados solo viven en memoria. Los reportes/telefonía demo y el seed son ficticios; el seed incluye un autor «Santiago Demo» para comprobar que su nombre no concede permisos. Las fotos de demostración usan Unsplash.
 
 ## Seguimiento TDD
 

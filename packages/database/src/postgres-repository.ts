@@ -1,10 +1,16 @@
 import type { Pool } from 'pg'
-import { REPORT_RESULT_LIMIT, type ReportQuery } from '@perdiu/contracts'
-import type { ReportDetailRepository, ReportRecord, ReportRepository } from '@perdiu/catalog'
+import { REPORT_RESULT_LIMIT, type CreateReportInput, type ReportQuery } from '@perdiu/contracts'
+import type {
+  ReportDetailRepository,
+  ReportPublisher,
+  ReportRecord,
+  ReportRepository,
+} from '@perdiu/catalog'
 
 // Public columns plus the owner ID; contact and storage tables are never joined here.
 const reportColumns = `
   r.id, r.owner_id AS "ownerId", r.type, r.state, r.category,
+  r.pet_species AS "petSpecies",
   r.title, r.description, r.city, r.zone,
   to_char(r.incident_date, 'YYYY-MM-DD') AS "incidentDate",
   to_char(r.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS "createdAt",
@@ -12,8 +18,60 @@ const reportColumns = `
   ARRAY(SELECT i.public_url FROM report_images i WHERE i.report_id = r.id ORDER BY i.position) AS "imageUrls"
 `
 
-export class PostgresReportRepository implements ReportRepository, ReportDetailRepository {
+export class PostgresReportRepository
+  implements ReportRepository, ReportDetailRepository, ReportPublisher
+{
   constructor(private readonly pool: Pool) {}
+
+  async create(ownerId: string, draft: CreateReportInput): Promise<ReportRecord> {
+    const client = await this.pool.connect()
+    try {
+      await client.query('BEGIN')
+      await client.query(
+        `INSERT INTO profiles (id, display_name) VALUES ($1, 'Usuario') ON CONFLICT (id) DO NOTHING`,
+        [ownerId],
+      )
+      const inserted = await client.query<{ id: string }>(
+        `INSERT INTO reports
+          (owner_id, type, state, category, pet_species, title, description, city, zone, incident_date)
+         VALUES ($1, $2, 'active', $3, $4, $5, $6, $7, $8, $9)
+         RETURNING id`,
+        [
+          ownerId,
+          draft.type,
+          draft.category,
+          draft.category === 'pet' ? draft.petSpecies : null,
+          draft.title,
+          draft.description,
+          draft.city,
+          draft.zone,
+          draft.incidentDate,
+        ],
+      )
+      const id = inserted.rows[0]!.id
+      await client.query('INSERT INTO report_contacts (report_id, phone) VALUES ($1, $2)', [
+        id,
+        draft.phone,
+      ])
+      const created = await client.query<ReportRecord>(
+        `SELECT r.id, r.owner_id AS "ownerId", r.type, r.state, r.category,
+          r.pet_species AS "petSpecies", r.title, r.description, r.city, r.zone,
+          to_char(r.incident_date, 'YYYY-MM-DD') AS "incidentDate",
+          to_char(r.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS "createdAt",
+          jsonb_strip_nulls(jsonb_build_object('id', p.id, 'displayName', p.display_name, 'photoUrl', p.photo_url)) AS author,
+          ARRAY(SELECT i.public_url FROM report_images i WHERE i.report_id = r.id ORDER BY i.position) AS "imageUrls"
+         FROM reports r JOIN profiles p ON p.id = r.owner_id WHERE r.id = $1`,
+        [id],
+      )
+      await client.query('COMMIT')
+      return created.rows[0]!
+    } catch (error) {
+      await client.query('ROLLBACK')
+      throw error
+    } finally {
+      client.release()
+    }
+  }
 
   async list(query: ReportQuery = {}): Promise<ReportRecord[]> {
     // SQL restricts work; the case of use also enforces catalog invariants for other adapters.

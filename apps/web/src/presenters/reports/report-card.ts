@@ -8,6 +8,7 @@ export interface ReportCard {
   title: string
   description: string
   category: string
+  petSpecies?: string
   /** Type of report: «Perdido» or «Encontrado». */
   status: string
   /** Badge over the photo: the type, or «Resuelto» once it is closed. */
@@ -48,6 +49,7 @@ export function toReportCard(report: Report): ReportCard {
     title: report.title,
     description: report.description,
     category: categoryLabels[report.category],
+    ...(report.petSpecies ? { petSpecies: report.petSpecies } : {}),
     status: typeLabels[report.type],
     badge: resolved ? 'Resuelto' : typeLabels[report.type],
     tone: report.type,
