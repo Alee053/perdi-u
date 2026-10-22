@@ -798,9 +798,23 @@
     "testId": 29
   },
   {
-    "commitId": "HEAD",
+    "commitId": "7c91de08e5541c5c87f70f8f908d4466630e9653",
     "commitName": "feat(api): consultar el detalle de un reporte con GET /reports/:id (#7)",
     "commitTimestamp": 1792637583575,
     "testId": 29
+  },
+  {
+    "numPassedTests": 86,
+    "failedTests": 0,
+    "numTotalTests": 86,
+    "timestamp": 1792637709462,
+    "success": true,
+    "testId": 30
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "refactor(database): conservar los escapes Unicode de la búsqueda (#7)",
+    "commitTimestamp": 1792637750437,
+    "testId": 30
   }
 ]

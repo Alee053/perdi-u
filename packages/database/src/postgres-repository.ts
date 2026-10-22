@@ -25,8 +25,8 @@ export class PostgresReportRepository
       FROM reports r JOIN profiles p ON p.id = r.owner_id
       WHERE r.state = $1
         AND ($2 = '' OR
-          position($2 in lower(regexp_replace(normalize(r.title, NFD), '[̀-ͯ]', '', 'g'))) > 0 OR
-          position($2 in lower(regexp_replace(normalize(r.description, NFD), '[̀-ͯ]', '', 'g'))) > 0)
+          position($2 in lower(regexp_replace(normalize(r.title, NFD), '[\u0300-\u036f]', '', 'g'))) > 0 OR
+          position($2 in lower(regexp_replace(normalize(r.description, NFD), '[\u0300-\u036f]', '', 'g'))) > 0)
         AND ($3::text IS NULL OR r.type = $3)
         AND ($4::text IS NULL OR r.category = $4)
         AND ($5::text IS NULL OR r.city = $5)
@@ -35,7 +35,11 @@ export class PostgresReportRepository
     `,
       [
         'active',
-        (query.q ?? '').trim().normalize('NFD').replace(/[̀-ͯ]/g, '').toLocaleLowerCase('es'),
+        (query.q ?? '')
+          .trim()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLocaleLowerCase('es'),
         query.type ?? null,
         query.category ?? null,
         query.city ?? null,
