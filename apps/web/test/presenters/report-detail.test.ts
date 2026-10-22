@@ -86,6 +86,41 @@ function setup(options: { path?: string; session?: AuthState; allowResolve?: boo
 
 const settle = () => new Promise((resolve) => setTimeout(resolve, 0))
 
+test('un contacto pendiente de otra sesión no restaura el detalle activo tras el cierre', async () => {
+  for (const fails of [false, true]) {
+    const { presenter, api, session, opened } = setup({
+      session: {
+        status: 'authenticated',
+        user: { id: 'viewer-1', email: 'visitante@example.test' },
+      },
+      allowResolve: true,
+    })
+    const stop = presenter.start()
+    await presenter.open(report.id)
+    let finish!: () => void
+    api.contact = () =>
+      new Promise((resolve, reject) => {
+        finish = () =>
+          fails
+            ? reject(new Error('private-details'))
+            : resolve({ available: true, whatsapp: '59170000001' })
+      })
+    const contact = presenter.contact()
+    session.set({
+      status: 'authenticated',
+      user: { id: report.author.id, email: 'autora@example.test' },
+    })
+    await settle()
+    presenter.markResolved(report.id)
+    finish()
+    await contact
+    const closed = presenter.view()
+    assert.ok(closed?.status === 'ready' && closed.detail.card.resolved)
+    assert.deepEqual(opened, [], 'un contacto anterior no abre un chat para la cuenta actual')
+    stop()
+  }
+})
+
 test('el cierre confirmado actualiza el detalle propio y descarta una recarga activa anterior', async () => {
   const { presenter, api } = setup({
     session: {

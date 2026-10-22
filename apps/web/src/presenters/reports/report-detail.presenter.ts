@@ -159,17 +159,20 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
     if (report.status !== 'ready' || report.contacting || !this.canContact()) return
     const { auth, repository, effects, onLoginRequired } = this.dependencies
     if (auth.getSnapshot().status !== 'authenticated') return onLoginRequired()
+    const request = this.request
     this.setState({ ...report, contacting: true, contactMessage: undefined })
     let contact
     try {
       contact = await repository.contact(report.id)
     } catch (error) {
+      if (request !== this.request) return
       this.setState({ ...report, contacting: false, contactMessage: contactFailed })
       // The API rejected the session: signing in again gives access to the contact.
       if (error instanceof SessionRejected) onLoginRequired()
       return
     }
-    if (this.state.status !== 'ready' || this.state.id !== report.id) return
+    if (request !== this.request || this.state.status !== 'ready' || this.state.id !== report.id)
+      return
     if (!contact) {
       this.setState({ status: 'unavailable', id: report.id, message: unavailable })
       return

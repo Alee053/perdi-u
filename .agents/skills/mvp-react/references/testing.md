@@ -17,3 +17,5 @@ Patrones útiles ya presentes:
 - Temporizador doblado con `schedule` que devuelve su cancelación (`NoticePresenter`).
 
 Jest transforma TypeScript con Babel y no compila JSX: por eso las Views se verifican en el navegador real y no con renderizado en Jest.
+
+Para historial/cierre: `test/models/own-reports.test.ts` comprueba identidad y filtros, `test/presenters/own-reports.test.ts` confirmación/cancelación/error y cambio de cuenta, y `test/own-reports-client.test.ts` DTO y permisos HTTP. `pnpm test:auth --with-browser` añade `scripts/browser-own-reports.mjs` con GoTrue, Mailpit, PostgreSQL y API reales, publicación desde el formulario y WhatsApp interceptado. Las respuestas 503 intencionales del navegador son dobles; el fallo real de BD se verifica en la integración HTTP.

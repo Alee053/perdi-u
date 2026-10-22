@@ -1468,9 +1468,31 @@
     "testId": 43
   },
   {
-    "commitId": "HEAD",
+    "commitId": "8e85077002132fcac96d5b1425aad1988a081ca3",
     "commitName": "feat(web): gestionar reportes propios con confirmación y reintento (#8)",
     "commitTimestamp": 1792644138826,
     "testId": 43
+  },
+  {
+    "numPassedTests": 122,
+    "failedTests": 1,
+    "numTotalTests": 123,
+    "timestamp": 1792644336931,
+    "success": false,
+    "testId": 44
+  },
+  {
+    "numPassedTests": 123,
+    "failedTests": 0,
+    "numTotalTests": 123,
+    "timestamp": 1792644360726,
+    "success": true,
+    "testId": 44
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(reports): aceptar el cierre integrado y documentar S1-08 (#8)",
+    "commitTimestamp": 1792644668104,
+    "testId": 44
   }
 ]

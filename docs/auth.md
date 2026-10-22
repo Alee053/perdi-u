@@ -20,6 +20,8 @@ Navegador ──/auth──▶ Vite proxy ──▶ GoTrue :9999 ──▶ Postg
 
 La identidad es siempre el `sub` verificado: un nombre visible o un ID enviado por el cliente nunca concede propiedad. `Publicar reporte`, `Mis reportes` y `Mi perfil` requieren sesión en la web; el catálogo, el mapa, los guardados del dispositivo y la seguridad siguen siendo públicos.
 
+`GET /me/reports` y `PATCH /reports/:id/resolve` usan el mismo guard con revocación por sesión. El historial privado sigue la identidad de `GET /me`; al cambiar de cuenta se borran sus datos y se descartan respuestas tardías. Un `401` de estas rutas vuelve a pedir ingreso. Los permisos y respuestas se describen en [la API](../apps/api/README.md#historial-propio-y-cierre).
+
 ## Datos y permisos en PostgreSQL
 
 [`bootstrap.sql`](../packages/database/auth/bootstrap.sql) lo ejecuta el servicio de un solo uso `auth-db-init` en cada `pnpm db:up`. Es idempotente y no lee ni modifica `perdiu_dev`; funciona también sobre un volumen existente sin recrearlo.
@@ -75,7 +77,7 @@ pnpm dev              # web http://localhost:5173, API http://127.0.0.1:3000
 | `pnpm test:integration` | `GET /me` sobre PostgreSQL aislado con un JWKS HTTP local: 200 con identidad y perfil propio, 401 uniforme, 503 si no hay claves; `POST /me/logout` y reutilización del token antes y después de reiniciar la API; catálogo público.             |
 | `pnpm test:auth`        | Proveedor real: levanta este `compose.yaml` como proyecto desechable, registra, confirma vía Mailpit, inicia sesión, llama `/me`, renueva, revoca en la API (el mismo token recibe 401) y en Auth. Elimina contenedores y volúmenes al terminar. |
 
-La interfaz (formularios, redirecciones, recarga y cierre de sesión en móvil/escritorio) se comprobó manualmente con Playwright contra este stack. `pnpm test:e2e` solo cubre que una visita anónima a «Publicar» o «Mi perfil» lleva al login.
+`pnpm test:auth --with-browser` añade el recorrido reproducible en Chromium con dos cuentas confirmadas y el mismo nombre público: entrar, publicar por formulario, buscar, abrir detalle/contacto, confirmar/cancelar/reintentar el cierre, recargar desde perfil y reiniciar la API. También comprueba filtros, vacío, cambio de cuenta y móvil/escritorio. Solo se doblan los 503 deliberados y el destino externo de WhatsApp; no se envían mensajes. `pnpm test:e2e` cubre catálogo/detalle públicos y dobla la sesión del escenario de contacto; la aceptación autenticada usa el proveedor real.
 
 ## Producción y límites
 

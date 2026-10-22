@@ -67,7 +67,11 @@ La [guía de arquitectura](docs/architecture.md) define responsabilidades y depe
 
 Cada reporte del catálogo tiene un enlace estable, `/reportes/<id>`, que funciona desde la tarjeta, por acceso directo y al recargar; «Atrás» vuelve a la pantalla anterior. El detalle se consulta con `GET /reports/:id`, muestra solo datos públicos y distingue «Reporte no disponible» de un error con reintento. «Contactar por WhatsApp» pide iniciar sesión y conserva el reporte abierto; con sesión, `GET /reports/:id/contact` entrega el número normalizado y la web abre `wa.me` con un mensaje que menciona el título y el enlace. La recarga necesita que el hosting sirva `index.html` para `/reportes/*`: Vite lo hace en `pnpm dev` y `pnpm preview`, y el fallback de [`vercel.json`](vercel.json) en el despliegue.
 
-Publicar envía reportes sin fotos a la API y los conserva en PostgreSQL; exige una sesión y mantiene privado el número de WhatsApp. La carga de fotos corresponde a S1-06. Resumen, Mis reportes y Guardados conservan sus flujos de demostración, y los guardados solo viven en memoria. Los reportes/telefonía demo y el seed son ficticios; el seed incluye un autor «Santiago Demo» para comprobar que su nombre no concede permisos. Las fotos de demostración usan Unsplash.
+Publicar envía reportes sin fotos a la API y los conserva en PostgreSQL; exige una sesión y mantiene privado el número de WhatsApp. La carga de fotos corresponde a S1-06.
+
+«Mis reportes» consulta `GET /me/reports` para la cuenta verificada y muestra título, tipo y estado con filtros Todos/Activos/Resueltos. «Marcar como resuelto» exige confirmación; al aceptar, `PATCH /reports/:id/resolve` persiste únicamente el estado. El reporte conserva si fue Perdido o Encontrado, sale del catálogo y permanece en el historial y desde «Mi perfil» tras recargar. Cancelar no escribe y un fallo conserva el estado para reintentar. Repetir un cierre autorizado no vuelve a modificar la fila. No se ofrece eliminación simulada.
+
+Resumen y mapa conservan datos de demostración; los guardados solo viven en memoria. Los reportes/telefonía demo y el seed son ficticios; el seed incluye un autor «Santiago Demo» para comprobar que su nombre no concede permisos. Las fotos de demostración usan Unsplash.
 
 ## Seguimiento TDD
 
@@ -87,11 +91,12 @@ Ejecutar `pnpm test` en rojo y en verde durante cada ciclo. Los scripts original
 pnpm verify
 pnpm test:integration
 pnpm test:e2e
+pnpm test:auth --with-browser
 ```
 
-La [guía de TDD y pruebas](docs/testing.md) explica selección de interfaces, ciclos red/green y comandos focalizados. `test:e2e` ya incluye integración/build: no hace falta ejecutar ambos íntegros en cada entrega. `pnpm test:auth` comprueba registro, confirmación, sesión y `GET /me` contra Supabase Auth real en un proyecto Compose desechable. `pnpm format` aplica el estilo; `pnpm format:check` lo verifica. Jest 29.7 es el ejecutor compartido con la instrumentación original de TDDLab.
+La [guía de TDD y pruebas](docs/testing.md) explica selección de interfaces, ciclos red/green y comandos focalizados. `test:e2e` ya incluye integración/build: no hace falta ejecutar ambos íntegros en cada entrega. `pnpm test:auth` comprueba registro, confirmación, sesión y `GET /me` contra Supabase Auth real en un proyecto Compose desechable. Con `--with-browser` también verifica publicación, búsqueda, contacto WhatsApp interceptado, historial y cierre con dos cuentas, recarga desde perfil y reinicio de la API en móvil/escritorio. Ver [la evidencia de S1-08](docs/validation/s1-08.md). `pnpm format` aplica el estilo; `pnpm format:check` lo verifica. Jest 29.7 es el ejecutor compartido con la instrumentación original de TDDLab.
 
-Las dos últimas órdenes crean y eliminan un PostgreSQL aislado con credenciales efímeras, sin requerir `.env` ni modificar la base de desarrollo. `test:e2e` también inicia API/web en puertos libres y usa Chromium para comprobar carga, búsqueda sin tildes, filtros combinados, limpieza, límite, privacidad, error/reintento, vacío, reinicio y recorridos de móvil/escritorio. Usa Chromium del sistema (`/usr/bin/chromium`) o define `CHROMIUM_PATH`; si no tienes uno, instala el navegador local de Playwright con `pnpm exec playwright install chromium`. Las capturas quedan en `test-results/`, ignorado por Git.
+Las pruebas de integración, E2E y Auth crean y eliminan un PostgreSQL aislado con credenciales efímeras, sin requerir `.env` ni modificar la base de desarrollo. `test:e2e` también inicia API/web en puertos libres y usa Chromium para comprobar carga, búsqueda sin tildes, filtros combinados, limpieza, límite, privacidad, error/reintento, vacío, reinicio y recorridos de móvil/escritorio. Usa Chromium del sistema (`/usr/bin/chromium`) o define `CHROMIUM_PATH`; si no tienes uno, instala el navegador local de Playwright con `pnpm exec playwright install chromium`. Las capturas quedan en `test-results/`, ignorado por Git.
 
 Consulta [la API](apps/api/README.md), [la evidencia de S1-01](docs/validation/s1-01.md) y [la de S1-02](docs/validation/s1-02.md).
 
