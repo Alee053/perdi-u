@@ -589,12 +589,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "d2b8fccd1e0305cb7950bbd995c6aeccf2d2d37b",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-22T02:59:53.000Z",
       "message": "feat(api): entregar el contacto privado con GET /reports/:id/contact (#7)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/d2b8fccd1e0305cb7950bbd995c6aeccf2d2d37b"
     },
     "stats": {
       "total": 97,
@@ -604,6 +604,25 @@
     },
     "coverage": 89.73,
     "test_count": 86,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T03:03:28.000Z",
+      "message": "feat(web): construir el enlace de WhatsApp sin destinos arbitrarios (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 44,
+      "additions": 44,
+      "deletions": 0,
+      "date": "2026-10-22"
+    },
+    "coverage": 89.79,
+    "test_count": 88,
     "failed_tests": 0,
     "conclusion": "success"
   }
