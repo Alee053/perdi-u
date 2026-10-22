@@ -88,7 +88,7 @@ export function AppShell({ app }: { app: AppView }) {
             />
           )}
           {shell.section === 'publish' && shell.access === 'allow' && (
-            <PublishPage form={app.publish} actions={actions.publish} />
+            <PublishPage presenter={actions.publish} />
           )}
           {shell.section === 'my-reports' && shell.access === 'allow' && (
             <MyReportsPage

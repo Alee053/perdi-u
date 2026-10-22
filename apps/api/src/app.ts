@@ -25,8 +25,11 @@ import {
   GetReportContact,
   ListOwnReports,
   ListReports,
+  MediaAssociationError,
+  ReportMediaService,
   ReportValidationError,
   ResolveReport,
+  type ReportMediaStorage,
 } from '@perdiu/catalog'
 import type { AccountIdentity, ReportContact, ReportSummary } from '@perdiu/contracts'
 import {
@@ -36,6 +39,7 @@ import {
   type SessionRevocations,
 } from './auth/access-token.js'
 import { ACCESS_TOKEN_VERIFIER, AuthGuard, CurrentUser, OptionalAuthGuard } from './auth/guard.js'
+import { MediaController, REPORT_MEDIA_SERVICE } from './media/controller.js'
 import { parseOwnReportQuery, parseReportId, parseReportQuery } from './reports/query.js'
 
 @Controller('reports')
@@ -83,6 +87,8 @@ class ReportsController {
     } catch (error) {
       if (error instanceof ReportValidationError)
         throw new BadRequestException({ fieldErrors: error.errors })
+      if (error instanceof MediaAssociationError)
+        throw new BadRequestException({ fieldErrors: { mediaIds: 'invalid' } })
       throw new ServiceUnavailableException('No se pudo publicar el reporte. Intenta nuevamente.')
     }
   }
@@ -191,14 +197,18 @@ class AccountController {
 @Module({})
 class AppModule {}
 
-export async function createApplication(databaseUrl: string, verifier: AccessTokenVerifier) {
+export async function createApplication(
+  databaseUrl: string,
+  verifier: AccessTokenVerifier,
+  options: { mediaStorage?: ReportMediaStorage } = {},
+) {
   let database: Database | undefined
   try {
     database = await openDatabase(databaseUrl)
     const app = await NestFactory.create(
       {
         module: AppModule,
-        controllers: [ReportsController, AccountController],
+        controllers: [ReportsController, MediaController, AccountController],
         providers: [
           { provide: ListReports, useValue: new ListReports(database.reports) },
           { provide: ListOwnReports, useValue: new ListOwnReports(database.reports) },
@@ -206,6 +216,10 @@ export async function createApplication(databaseUrl: string, verifier: AccessTok
           { provide: CreateReport, useValue: new CreateReport(database.publisher) },
           { provide: GetReport, useValue: new GetReport(database.reports) },
           { provide: GetReportContact, useValue: new GetReportContact(database.reports) },
+          {
+            provide: REPORT_MEDIA_SERVICE,
+            useValue: new ReportMediaService(database.media, options.mediaStorage),
+          },
           { provide: SESSION_REVOCATIONS, useValue: database.sessions },
           { provide: PROFILES, useValue: database.profiles },
           // Every private route passes the guard, so every one rejects revoked sessions.
@@ -216,6 +230,10 @@ export async function createApplication(databaseUrl: string, verifier: AccessTok
           AuthGuard,
           OptionalAuthGuard,
           { provide: 'DATABASE_LIFECYCLE', useValue: { onModuleDestroy: database.close } },
+          {
+            provide: 'MEDIA_STORAGE_LIFECYCLE',
+            useValue: { onModuleDestroy: () => options.mediaStorage?.close?.() },
+          },
         ],
       },
       { logger: false, abortOnError: false },

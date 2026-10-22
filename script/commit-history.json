@@ -817,6 +817,25 @@
     "conclusion": "success"
   },
   {
+    "sha": "7ee4f4b87a6a81fae986d4f3aded16bd5a2c121d",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-10-22T03:28:39.000Z",
+      "message": "feat(repo): adjuntar fotos a reportes (#6)",
+      "url": "https://github.com/Alee053/perdi-u/commit/7ee4f4b87a6a81fae986d4f3aded16bd5a2c121d"
+    },
+    "stats": {
+      "total": 1622,
+      "additions": 1535,
+      "deletions": 87,
+      "date": "2026-10-22"
+    },
+    "coverage": 84.75,
+    "test_count": 94,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
     "sha": "7b28a852edea7f992e8fc209f02d2baadf0adb69",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
@@ -832,6 +851,44 @@
     },
     "coverage": 90.16,
     "test_count": 85,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "82ed746586f8ef2fd8d6af7c5f0bac13ec917c59",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-10-22T03:33:53.000Z",
+      "message": "Merge feat/s1-05-publicacion-persistente into feat/s1-06-adjuntar-fotos",
+      "url": "https://github.com/Alee053/perdi-u/commit/82ed746586f8ef2fd8d6af7c5f0bac13ec917c59"
+    },
+    "stats": {
+      "total": 57,
+      "additions": 44,
+      "deletions": 13,
+      "date": "2026-10-22"
+    },
+    "coverage": 84.75,
+    "test_count": 94,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "921045b9390f1b66c5400f5420927150659c0131",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-10-22T03:34:45.000Z",
+      "message": "docs(repo): formatear tabla de servicios",
+      "url": "https://github.com/Alee053/perdi-u/commit/921045b9390f1b66c5400f5420927150659c0131"
+    },
+    "stats": {
+      "total": 2,
+      "additions": 1,
+      "deletions": 1,
+      "date": "2026-10-22"
+    },
+    "coverage": 84.75,
+    "test_count": 94,
     "failed_tests": 0,
     "conclusion": "success"
   },
@@ -969,12 +1026,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "25a5491f88e2465587959f228b465e043f3c6d98",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-10-22T04:51:07.000Z",
       "message": "test(reports): aceptar el cierre integrado y documentar S1-08 (#8)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/25a5491f88e2465587959f228b465e043f3c6d98"
     },
     "stats": {
       "total": 639,
@@ -984,6 +1041,25 @@
     },
     "coverage": 90.31,
     "test_count": 123,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T05:58:50.000Z",
+      "message": "fix(repo): integrar en main la carga de fotos de S1-06 (#6)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 1659,
+      "additions": 1574,
+      "deletions": 85,
+      "date": "2026-10-22"
+    },
+    "coverage": 86.32,
+    "test_count": 133,
     "failed_tests": 0,
     "conclusion": "success"
   }

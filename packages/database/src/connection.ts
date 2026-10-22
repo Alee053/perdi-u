@@ -8,12 +8,14 @@ import { createPool } from './pool.js'
 import { PostgresReportRepository } from './postgres-repository.js'
 import { PostgresProfileRepository } from './profiles.js'
 import { PostgresSessionRevocations } from './session-revocations.js'
+import { PostgresMediaRepository } from './postgres-media-repository.js'
 
 export interface Database {
   reports: ReportRepository & ReportDetailRepository & OwnReportsRepository
   publisher: ReportPublisher
   profiles: PostgresProfileRepository
   sessions: PostgresSessionRevocations
+  media: PostgresMediaRepository
   close(): Promise<void>
 }
 
@@ -28,6 +30,7 @@ export async function openDatabase(databaseUrl: string): Promise<Database> {
       publisher: reports,
       profiles: new PostgresProfileRepository(pool),
       sessions: new PostgresSessionRevocations(pool),
+      media: new PostgresMediaRepository(pool),
       close: () => pool.end(),
     }
   } catch (error) {

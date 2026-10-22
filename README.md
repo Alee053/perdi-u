@@ -22,7 +22,7 @@ pnpm install --frozen-lockfile
 cp .env.example .env
 ```
 
-En `.env`, define una contraseña local en `POSTGRES_PASSWORD` y una `DATABASE_URL` con el formato `postgresql://perdiu:<contraseña-codificada>@127.0.0.1:5433/perdiu_dev`. Codifica los caracteres especiales de la contraseña para la URL. Ejecuta `pnpm auth:keys` y copia sus tres líneas (`AUTH_DB_PASSWORD`, `AUTH_JWT_SECRET`, `AUTH_JWT_KEYS`) al mismo archivo. El archivo está ignorado por Git; las credenciales de BD y las claves de Auth pertenecen a procesos de servidor. La [guía de servicios](docs/services.md) detalla configuración actual y proveedores pendientes; no necesitas R2 para el catálogo.
+En `.env`, define una contraseña local en `POSTGRES_PASSWORD` y una `DATABASE_URL` con el formato `postgresql://perdiu:<contraseña-codificada>@127.0.0.1:5433/perdiu_dev`. Codifica los caracteres especiales de la contraseña para la URL. Ejecuta `pnpm auth:keys` y copia sus tres líneas (`AUTH_DB_PASSWORD`, `AUTH_JWT_SECRET`, `AUTH_JWT_KEYS`) al mismo archivo. El archivo está ignorado por Git; las credenciales de BD y las claves de Auth pertenecen a procesos de servidor. La [guía de servicios](docs/services.md) detalla configuración actual y proveedores pendientes; no necesitas R2 para iniciar el proyecto ni consultar el catálogo. La carga de fotos requiere un bucket R2 autorizado y sus cuatro variables opcionales.
 
 ```bash
 pnpm db:up
@@ -58,8 +58,8 @@ La aplicación web sigue Model–View–Presenter; la [guía MVP](docs/architect
 - `apps/web`: interfaz React/TypeScript/Vite con catálogo real y otras secciones de demostración.
 - `apps/api`: catálogo público NestJS con persistencia en PostgreSQL independiente.
 - `packages/contracts`: tipos compartidos para los reportes y perfiles públicos.
-- `packages/catalog`: modelo, puerto de repositorio y caso de uso del catálogo, independientes de frameworks y de la base de datos.
-- `packages/database`: PostgreSQL, conexión, adapter SQL, migraciones, seed y CLI local. Consulta su [guía](packages/database/README.md).
+- `packages/catalog`: modelo, puertos y casos de uso del catálogo, publicación y fotos, independientes de frameworks y proveedores.
+- `packages/database`: PostgreSQL, conexión, adapters SQL, metadatos de medios, migraciones, seed y CLI local. Consulta su [guía](packages/database/README.md).
 
 La [guía de arquitectura](docs/architecture.md) define responsabilidades y dependencias. `pnpm check:boundaries` comprueba imports entre workspaces y sus exports públicos. Los paquetes compartidos se recompilan en modo watch con `pnpm dev`.
 
@@ -67,7 +67,7 @@ La [guía de arquitectura](docs/architecture.md) define responsabilidades y depe
 
 Cada reporte del catálogo tiene un enlace estable, `/reportes/<id>`, que funciona desde la tarjeta, por acceso directo y al recargar; «Atrás» vuelve a la pantalla anterior. El detalle se consulta con `GET /reports/:id`, muestra solo datos públicos y distingue «Reporte no disponible» de un error con reintento. «Contactar por WhatsApp» pide iniciar sesión y conserva el reporte abierto; con sesión, `GET /reports/:id/contact` entrega el número normalizado y la web abre `wa.me` con un mensaje que menciona el título y el enlace. La recarga necesita que el hosting sirva `index.html` para `/reportes/*`: Vite lo hace en `pnpm dev` y `pnpm preview`, y el fallback de [`vercel.json`](vercel.json) en el despliegue.
 
-Publicar envía reportes sin fotos a la API y los conserva en PostgreSQL; exige una sesión y mantiene privado el número de WhatsApp. La carga de fotos corresponde a S1-06.
+Publicar envía reportes a la API y los conserva en PostgreSQL; admite hasta tres fotos JPG/PNG cuando R2 está configurado, exige una sesión y mantiene privado el número de WhatsApp. Sin R2, la API puede arrancar y se pueden publicar reportes sin fotos.
 
 «Mis reportes» consulta `GET /me/reports` para la cuenta verificada y muestra título, tipo y estado con filtros Todos/Activos/Resueltos. «Marcar como resuelto» exige confirmación; al aceptar, `PATCH /reports/:id/resolve` persiste únicamente el estado. El reporte conserva si fue Perdido o Encontrado, sale del catálogo y permanece en el historial y desde «Mi perfil» tras recargar. Cancelar no escribe y un fallo conserva el estado para reintentar. Repetir un cierre autorizado no vuelve a modificar la fila. No se ofrece eliminación simulada.
 

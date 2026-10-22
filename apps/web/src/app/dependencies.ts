@@ -7,6 +7,7 @@ import {
   createReportsClient,
 } from '../infrastructure/http/catalog-client.js'
 import { createReportPublisher } from '../infrastructure/http/publish-client.js'
+import { createReportMediaClient } from '../infrastructure/http/media-client.js'
 import { createOwnReportsClient } from '../infrastructure/http/own-reports-client.js'
 import { NoticePresenter } from '../presenters/app/notice.presenter.js'
 import { ShellPresenter } from '../presenters/app/shell.presenter.js'
@@ -68,6 +69,8 @@ export function createPresenters(env = import.meta.env) {
   })
   const publish = new PublishPresenter({
     publisher: createReportPublisher(apiUrl, accessToken),
+    media: createReportMediaClient(apiUrl, accessToken),
+    effects: browserEffects,
     filters,
     notices,
     onPublished: () => {

@@ -111,10 +111,12 @@ test('publicar exige fecha válida, WhatsApp internacional y especie para mascot
   )
 })
 
-test('solo se aceptan fotos JPG o PNG de hasta 5 MB', () => {
+test('solo se aceptan hasta tres fotos JPG o PNG de hasta 5 MB', () => {
   assert.equal(isAcceptedPhoto({ type: 'image/png', size: 5 * 1024 * 1024 }), true)
   assert.equal(isAcceptedPhoto({ type: 'image/jpeg', size: 5 * 1024 * 1024 + 1 }), false)
   assert.equal(isAcceptedPhoto({ type: 'image/gif', size: 10 }), false)
+  assert.equal(isAcceptedPhoto({ type: 'image/jpeg', size: 10 }, 2), true)
+  assert.equal(isAcceptedPhoto({ type: 'image/jpeg', size: 10 }, 3), false)
 })
 
 test('publicar crea un reporte activo del dueño con texto limpio y la fecha de hoy si falta', () => {
