@@ -456,18 +456,37 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "ffdb6be0a1c4d67e6693f099656c800201db88e5",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-10-20T15:40:29.000Z",
       "message": "refactor(web): integrar vistas MVP, navegación y límites con verificación progresiva",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/ffdb6be0a1c4d67e6693f099656c800201db88e5"
     },
     "stats": {
       "total": 10008,
       "additions": 3469,
       "deletions": 6539,
       "date": "2026-10-20"
+    },
+    "coverage": 92.17,
+    "test_count": 78,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-22T02:38:36.000Z",
+      "message": "build(api): preparar demo manual en VPS y Vercel",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 582,
+      "additions": 567,
+      "deletions": 15,
+      "date": "2026-10-22"
     },
     "coverage": 92.17,
     "test_count": 78,

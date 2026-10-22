@@ -680,9 +680,15 @@
     "testId": 24
   },
   {
-    "commitId": "HEAD",
+    "commitId": "ffdb6be0a1c4d67e6693f099656c800201db88e5",
     "commitName": "refactor(web): integrar vistas MVP, navegación y límites con verificación progresiva",
     "commitTimestamp": 1792510829000,
     "testId": 24
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "build(api): preparar demo manual en VPS y Vercel",
+    "commitTimestamp": 1792636716843,
+    "testId": 25
   }
 ]

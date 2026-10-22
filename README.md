@@ -37,6 +37,8 @@ La web corre en `http://localhost:5173` y la API en `http://127.0.0.1:3000`. `pn
 
 Registro, inicio y cierre de sesión con correo y contraseña mediante Supabase Auth (GoTrue) self-hosted sobre el mismo PostgreSQL, en la base separada `perdiu_auth`. La API valida los JWT ES256 con las claves públicas de Auth, expone `GET /me` y revoca la sesión actual con `POST /me/logout`; «Publicar reporte», «Mis reportes» y «Mi perfil» requieren sesión. Consulta la [guía de Auth](docs/auth.md) para el flujo, la configuración, la seguridad y cómo probarlo.
 
+La [guía de despliegue de la demo](docs/deployment.md) describe el frontend en Vercel y el backend manual en `tars-vps:/opt/stacks/perdi-u`, con API, PostgreSQL, GoTrue y gateway para NPM. El Compose raíz sigue siendo exclusivamente local; el stack desechable usa [`deploy/vps/compose.yaml`](deploy/vps/compose.yaml).
+
 `pnpm build` y `pnpm typecheck` recorren los workspaces con Turbo, compilando primero sus dependencias. `pnpm test` ejecuta las pruebas con Jest y registra cada ejecución mediante TDDLab. Los hooks se instalan automáticamente con `pnpm install --frozen-lockfile`. `pnpm verify` reúne formato, documentación/skills, arquitectura, tipos, unitarias y build. La caché de builds es local; las pruebas se ejecutan realmente en cada invocación, sin reutilizar resultados de Turbo.
 
 La interfaz abre directamente en un dashboard. La barra lateral separa Resumen, Explorar reportes, Mapa, Publicar reporte, Mis reportes, Guardados y Seguridad y privacidad.
