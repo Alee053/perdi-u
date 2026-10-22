@@ -40,3 +40,24 @@ test('la verificación de sesiones exige claves públicas y emisor de Auth sin a
     'perdiu',
   )
 })
+
+test('R2 acepta configuración completa y rechaza variables parciales', () => {
+  const r2 = {
+    R2_ACCOUNT_ID: 'account-id',
+    R2_BUCKET_NAME: 'perdiu-test',
+    R2_ACCESS_KEY_ID: 'access-key',
+    R2_SECRET_ACCESS_KEY: 'secret-key',
+  }
+  assert.deepEqual(readConfig({ DATABASE_URL: databaseUrl, ...auth, ...r2 }).r2, {
+    accountId: 'account-id',
+    bucketName: 'perdiu-test',
+    accessKeyId: 'access-key',
+    secretAccessKey: 'secret-key',
+  })
+  assert.throws(
+    () => readConfig({ DATABASE_URL: databaseUrl, ...auth, R2_ACCOUNT_ID: 'account' }),
+    {
+      message: 'Configura todas las variables de R2 para habilitar las fotos.',
+    },
+  )
+})

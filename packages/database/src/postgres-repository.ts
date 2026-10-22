@@ -1,6 +1,7 @@
 import type { Pool } from 'pg'
 import { REPORT_RESULT_LIMIT, type CreateReportInput, type ReportQuery } from '@perdiu/contracts'
 import type { ReportPublisher, ReportRecord, ReportRepository } from '@perdiu/catalog'
+import { MediaAssociationError } from '@perdiu/catalog'
 
 export class PostgresReportRepository implements ReportRepository, ReportPublisher {
   constructor(private readonly pool: Pool) {}
@@ -35,13 +36,29 @@ export class PostgresReportRepository implements ReportRepository, ReportPublish
         id,
         draft.phone,
       ])
+      if (draft.mediaIds?.length) {
+        const attached = await client.query(
+          `UPDATE report_media AS media
+           SET report_id = $1, position = (requested.position - 1)::smallint
+           FROM unnest($3::uuid[]) WITH ORDINALITY AS requested(id, position)
+           WHERE media.id = requested.id AND media.owner_id = $2
+             AND media.status = 'available' AND media.report_id IS NULL
+           RETURNING media.id`,
+          [id, ownerId, draft.mediaIds],
+        )
+        if (attached.rowCount !== draft.mediaIds.length) throw new MediaAssociationError()
+      }
       const created = await client.query<ReportRecord>(
         `SELECT r.id, r.owner_id AS "ownerId", r.type, r.state, r.category,
           r.pet_species AS "petSpecies", r.title, r.description, r.city, r.zone,
           to_char(r.incident_date, 'YYYY-MM-DD') AS "incidentDate",
           to_char(r.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS "createdAt",
           jsonb_strip_nulls(jsonb_build_object('id', p.id, 'displayName', p.display_name, 'photoUrl', p.photo_url)) AS author,
-          ARRAY(SELECT i.public_url FROM report_images i WHERE i.report_id = r.id ORDER BY i.position) AS "imageUrls"
+          CASE WHEN EXISTS (SELECT 1 FROM report_media m WHERE m.report_id = r.id AND m.status = 'available')
+            THEN ARRAY(SELECT '/api/media/' || m.id::text FROM report_media m
+              WHERE m.report_id = r.id AND m.status = 'available' ORDER BY m.position)
+            ELSE ARRAY(SELECT i.public_url FROM report_images i WHERE i.report_id = r.id ORDER BY i.position)
+          END AS "imageUrls"
          FROM reports r JOIN profiles p ON p.id = r.owner_id WHERE r.id = $1`,
         [id],
       )
@@ -65,7 +82,11 @@ export class PostgresReportRepository implements ReportRepository, ReportPublish
         to_char(r.incident_date, 'YYYY-MM-DD') AS "incidentDate",
         to_char(r.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS "createdAt",
         jsonb_strip_nulls(jsonb_build_object('id', p.id, 'displayName', p.display_name, 'photoUrl', p.photo_url)) AS author,
-        ARRAY(SELECT i.public_url FROM report_images i WHERE i.report_id = r.id ORDER BY i.position) AS "imageUrls"
+        CASE WHEN EXISTS (SELECT 1 FROM report_media m WHERE m.report_id = r.id AND m.status = 'available')
+          THEN ARRAY(SELECT '/api/media/' || m.id::text FROM report_media m
+            WHERE m.report_id = r.id AND m.status = 'available' ORDER BY m.position)
+          ELSE ARRAY(SELECT i.public_url FROM report_images i WHERE i.report_id = r.id ORDER BY i.position)
+        END AS "imageUrls"
       FROM reports r JOIN profiles p ON p.id = r.owner_id
       WHERE r.state = $1
         AND ($2 = '' OR

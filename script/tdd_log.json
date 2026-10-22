@@ -810,9 +810,171 @@
     "testId": 27
   },
   {
-    "commitId": "HEAD",
+    "commitId": "7b28a852edea7f992e8fc209f02d2baadf0adb69",
     "commitName": "Merge origin/main into feat/s1-05-publicacion-persistente",
     "commitTimestamp": 1792639880744,
     "testId": 28
+  },
+  {
+    "numPassedTests": 84,
+    "failedTests": 1,
+    "numTotalTests": 85,
+    "timestamp": 1792638686059,
+    "success": false,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 85,
+    "failedTests": 0,
+    "numTotalTests": 85,
+    "timestamp": 1792638696171,
+    "success": true,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 85,
+    "failedTests": 1,
+    "numTotalTests": 86,
+    "timestamp": 1792638781746,
+    "success": false,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 86,
+    "failedTests": 0,
+    "numTotalTests": 86,
+    "timestamp": 1792638867436,
+    "success": true,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 86,
+    "failedTests": 1,
+    "numTotalTests": 87,
+    "timestamp": 1792638910532,
+    "success": false,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 86,
+    "failedTests": 1,
+    "numTotalTests": 87,
+    "timestamp": 1792638920395,
+    "success": false,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 87,
+    "failedTests": 0,
+    "numTotalTests": 87,
+    "timestamp": 1792638937780,
+    "success": true,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 87,
+    "failedTests": 1,
+    "numTotalTests": 88,
+    "timestamp": 1792638966049,
+    "success": false,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 88,
+    "failedTests": 0,
+    "numTotalTests": 88,
+    "timestamp": 1792639001524,
+    "success": false,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 89,
+    "failedTests": 0,
+    "numTotalTests": 89,
+    "timestamp": 1792639012431,
+    "success": true,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 89,
+    "failedTests": 0,
+    "numTotalTests": 89,
+    "timestamp": 1792639028302,
+    "success": false,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 90,
+    "failedTests": 0,
+    "numTotalTests": 90,
+    "timestamp": 1792639045584,
+    "success": true,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 90,
+    "failedTests": 1,
+    "numTotalTests": 91,
+    "timestamp": 1792639060044,
+    "success": false,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 91,
+    "failedTests": 0,
+    "numTotalTests": 91,
+    "timestamp": 1792639075122,
+    "success": true,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 91,
+    "failedTests": 0,
+    "numTotalTests": 91,
+    "timestamp": 1792639154164,
+    "success": true,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 92,
+    "failedTests": 0,
+    "numTotalTests": 92,
+    "timestamp": 1792639219497,
+    "success": true,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 92,
+    "failedTests": 1,
+    "numTotalTests": 93,
+    "timestamp": 1792639354770,
+    "success": false,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 93,
+    "failedTests": 0,
+    "numTotalTests": 93,
+    "timestamp": 1792639366669,
+    "success": true,
+    "testId": 29
+  },
+  {
+    "commitId": "7ee4f4b87a6a81fae986d4f3aded16bd5a2c121d",
+    "commitName": "feat(repo): adjuntar fotos a reportes (#6)",
+    "commitTimestamp": 1792639719320,
+    "testId": 29
+  },
+  {
+    "commitId": "82ed746586f8ef2fd8d6af7c5f0bac13ec917c59",
+    "commitName": "Merge feat/s1-05-publicacion-persistente into feat/s1-06-adjuntar-fotos",
+    "commitTimestamp": 1792640033338,
+    "testId": 30
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(repo): formatear tabla de servicios",
+    "commitTimestamp": 1792640085225,
+    "testId": 31
   }
 ]
