@@ -702,9 +702,31 @@
     "testId": 25
   },
   {
-    "commitId": "HEAD",
+    "commitId": "e69c2f27e011785dc7281546320bbb2048838879",
     "commitName": "feat(catalog): consultar el detalle público de un reporte por ID (#7)",
     "commitTimestamp": 1792636737949,
     "testId": 25
+  },
+  {
+    "numPassedTests": 79,
+    "failedTests": 1,
+    "numTotalTests": 80,
+    "timestamp": 1792636782674,
+    "success": false,
+    "testId": 26
+  },
+  {
+    "numPassedTests": 80,
+    "failedTests": 0,
+    "numTotalTests": 80,
+    "timestamp": 1792636823614,
+    "success": true,
+    "testId": 26
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(catalog): limitar los reportes resueltos a su propietario (#7)",
+    "commitTimestamp": 1792636864967,
+    "testId": 26
   }
 ]

@@ -475,12 +475,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "e69c2f27e011785dc7281546320bbb2048838879",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-22T02:38:56.000Z",
       "message": "feat(catalog): consultar el detalle público de un reporte por ID (#7)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/e69c2f27e011785dc7281546320bbb2048838879"
     },
     "stats": {
       "total": 117,
@@ -490,6 +490,25 @@
     },
     "coverage": 92.21,
     "test_count": 79,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T02:41:02.000Z",
+      "message": "feat(catalog): limitar los reportes resueltos a su propietario (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 23,
+      "additions": 20,
+      "deletions": 3,
+      "date": "2026-10-22"
+    },
+    "coverage": 92.23,
+    "test_count": 80,
     "failed_tests": 0,
     "conclusion": "success"
   }

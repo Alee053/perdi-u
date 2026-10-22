@@ -51,3 +51,12 @@ test('el detalle de un reporte activo entrega su proyección pública por ID', a
   assert.equal(await detail.execute('missing'), undefined)
   assert.deepEqual(requested, ['report-1', 'missing'])
 })
+
+test('un reporte resuelto solo se entrega a su propietario verificado', async () => {
+  const detail = new GetReport({ find: async () => record({ state: 'resolved' }) })
+  assert.equal(await detail.execute('report-1'), undefined, 'visitante sin sesión')
+  assert.equal(await detail.execute('report-1', 'other-user'), undefined, 'otra cuenta')
+  assert.equal((await detail.execute('report-1', 'owner-1'))?.state, 'resolved')
+  const active = new GetReport({ find: async () => record() })
+  assert.equal((await active.execute('report-1', 'other-user'))?.state, 'active')
+})
