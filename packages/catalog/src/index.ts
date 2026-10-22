@@ -1,2 +1,8 @@
 export { ListReports } from './catalog.js'
-export type { ReportRecord, ReportRepository } from './model.js'
+export { ListOwnReports, ResolveReport } from './own-reports.js'
+export type {
+  OwnReportsRepository,
+  ReportRecord,
+  ReportRepository,
+  ResolveReportResult,
+} from './model.js'

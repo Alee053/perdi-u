@@ -1,4 +1,4 @@
-import type { PublicProfile, ReportData, ReportQuery } from '@perdiu/contracts'
+import type { OwnReportQuery, PublicProfile, ReportData, ReportQuery } from '@perdiu/contracts'
 
 export interface ReportRecord extends ReportData {
   author: PublicProfile
@@ -10,4 +10,12 @@ export interface ReportRepository {
    * ListReports additionally enforces active state, stable order, result limit and public projection.
    */
   list(query?: ReportQuery): Promise<ReportRecord[]>
+}
+
+export type ResolveReportResult = 'resolved' | 'forbidden' | 'not_found'
+
+export interface OwnReportsRepository {
+  listOwned(ownerId: string, query: OwnReportQuery): Promise<ReportRecord[]>
+  /** Atomically checks ownership and transitions active to resolved; repeats never write. */
+  resolveOwned(id: string, ownerId: string): Promise<ResolveReportResult>
 }

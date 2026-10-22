@@ -3,6 +3,11 @@ export type ReportType = 'lost' | 'found'
 export type ReportState = 'active' | 'resolved'
 export type ReportCategory = 'pet' | 'object' | 'document'
 
+/** Private list: the owner always comes from the verified session. */
+export interface OwnReportQuery {
+  state?: ReportState
+}
+
 export interface ReportQuery {
   q?: string
   type?: ReportType

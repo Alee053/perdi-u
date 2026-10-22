@@ -680,9 +680,87 @@
     "testId": 24
   },
   {
-    "commitId": "HEAD",
+    "commitId": "ffdb6be0a1c4d67e6693f099656c800201db88e5",
     "commitName": "refactor(web): integrar vistas MVP, navegación y límites con verificación progresiva",
     "commitTimestamp": 1792510829000,
     "testId": 24
+  },
+  {
+    "numPassedTests": 78,
+    "failedTests": 0,
+    "numTotalTests": 78,
+    "timestamp": 1792635813765,
+    "success": true,
+    "testId": 25
+  },
+  {
+    "numPassedTests": 78,
+    "failedTests": 1,
+    "numTotalTests": 79,
+    "timestamp": 1792635864908,
+    "success": false,
+    "testId": 25
+  },
+  {
+    "numPassedTests": 79,
+    "failedTests": 0,
+    "numTotalTests": 79,
+    "timestamp": 1792635895704,
+    "success": true,
+    "testId": 25
+  },
+  {
+    "numPassedTests": 79,
+    "failedTests": 1,
+    "numTotalTests": 80,
+    "timestamp": 1792635930035,
+    "success": false,
+    "testId": 25
+  },
+  {
+    "numPassedTests": 80,
+    "failedTests": 0,
+    "numTotalTests": 80,
+    "timestamp": 1792635954545,
+    "success": true,
+    "testId": 25
+  },
+  {
+    "numPassedTests": 80,
+    "failedTests": 1,
+    "numTotalTests": 81,
+    "timestamp": 1792635983414,
+    "success": false,
+    "testId": 25
+  },
+  {
+    "numPassedTests": 80,
+    "failedTests": 1,
+    "numTotalTests": 81,
+    "timestamp": 1792636006157,
+    "success": false,
+    "testId": 25
+  },
+  {
+    "numPassedTests": 81,
+    "failedTests": 0,
+    "numTotalTests": 81,
+    "timestamp": 1792636029156,
+    "success": true,
+    "testId": 25
+  },
+  {
+    "numPassedTests": 81,
+    "failedTests": 0,
+    "numTotalTests": 81,
+    "timestamp": 1792636056899,
+    "success": true,
+    "testId": 25
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(catalog): consultar y resolver reportes propios por identidad (#8)",
+    "commitTimestamp": 1792636074679,
+    "testId": 25
   }
 ]
