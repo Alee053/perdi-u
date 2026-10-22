@@ -18,7 +18,7 @@ La API combina `ListReports` con `openDatabase().reports` y llama `close` al apa
 - Colocar SQL de producción, migraciones y seeds en `database`. Los SQL de preparación/verificación en pruebas de integración son parte de la prueba; no se incorporan al runtime de la API.
 - Mantener la configuración HTTP en la API y `DATABASE_URL`/protección de mutaciones en `database`. El CLI de migraciones funciona sin un puerto HTTP válido y sin iniciar NestJS.
 - Poner pruebas unitarias junto al workspace que posee el comportamiento. Mantener pruebas del recorrido HTTP en la API y orquestación E2E en `scripts/`.
-- Mantener Compose en la raíz, donde se orquesta el entorno local completo. Los contenedores desechables de aceptación también se orquestan desde la raíz.
+- Mantener Compose local en la raíz, donde se orquesta el entorno de desarrollo completo. Los contenedores desechables de aceptación también se orquestan desde la raíz. La demo aislada del VPS tiene su Compose independiente en `deploy/vps`, descrito en [despliegue](deployment.md); no cambia el entorno local ni las capas de aplicación.
 - Los paquetes compartidos se compilan en watch durante `pnpm dev`; el watcher de la API incluye sus builds para reiniciar cuando cambia una dependencia.
 - Crear otro paquete cuando tenga una responsabilidad y consumidores claros. Una carpeta o función pequeña dentro de su dueño actual no requiere otro workspace.
 

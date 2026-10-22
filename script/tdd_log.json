@@ -680,9 +680,21 @@
     "testId": 24
   },
   {
-    "commitId": "HEAD",
+    "commitId": "ffdb6be0a1c4d67e6693f099656c800201db88e5",
     "commitName": "refactor(web): integrar vistas MVP, navegación y límites con verificación progresiva",
     "commitTimestamp": 1792510829000,
     "testId": 24
+  },
+  {
+    "commitId": "15dc8fa49c966fc094163f3348e3855eb7b3a05a",
+    "commitName": "build(api): preparar demo manual en VPS y Vercel",
+    "commitTimestamp": 1792636716843,
+    "testId": 25
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(api): registrar verificación HTTPS de la demo",
+    "commitTimestamp": 1792636952952,
+    "testId": 26
   }
 ]
