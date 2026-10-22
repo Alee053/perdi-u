@@ -14,6 +14,7 @@ export interface ReportCard {
   badge: string
   tone: ReportType
   resolved: boolean
+  stateLabel: string
   city: string
   zone: string
   date: string
@@ -52,6 +53,7 @@ export function toReportCard(report: Report): ReportCard {
     badge: resolved ? 'Resuelto' : typeLabels[report.type],
     tone: report.type,
     resolved,
+    stateLabel: resolved ? 'Resuelto' : 'Activo',
     city: report.city,
     zone: report.zone,
     date: incidentDay.format(new Date(report.incidentDate + 'T00:00:00Z')),

@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict'
 import { test } from '@jest/globals'
-import { demoOwner, type CatalogReport, type DemoReport } from '../../src/models/reports/report.js'
+import {
+  demoOwner,
+  type CatalogReport,
+  type DemoReport,
+  type OwnReport,
+} from '../../src/models/reports/report.js'
 import { defaultSelection } from '../../src/presenters/catalog/filters.presenter.js'
 import { NoticePresenter } from '../../src/presenters/app/notice.presenter.js'
 import { PublishPresenter } from '../../src/presenters/reports/publish.presenter.js'
@@ -39,7 +44,7 @@ const catalogReport: CatalogReport = {
   author: { id: 'owner-1', displayName: 'Santiago Demo' },
 }
 
-function setup(reports: DemoReport[] = [], saved: string[] = []) {
+function setup(reports: DemoReport[] = [], saved: string[] = [], owned: OwnReport[] = []) {
   const notices: { message: string; error: boolean }[] = []
   const opened: [string, string][] = []
   const catalog = { find: (id: string) => (id === catalogReport.id ? catalogReport : undefined) }
@@ -47,6 +52,7 @@ function setup(reports: DemoReport[] = [], saved: string[] = []) {
     reports,
     {
       catalog,
+      own: { find: (id: string) => owned.find((report) => report.id === id) },
       notices: { show: (message: string, error = false) => notices.push({ message, error }) },
       effects: { openWhatsApp: (phone: string, message: string) => opened.push([phone, message]) },
     },
@@ -79,7 +85,7 @@ test('guardar un reporte del catálogo lo conserva aunque cambien los resultados
   )
 })
 
-test('el detalle ofrece contacto en reportes ajenos y resolver en los propios', () => {
+test('el detalle demo ofrece contacto sin controles de cierre persistente', () => {
   const { presenter, opened } = setup([demo('demo-1'), own('demo-2')])
   presenter.open('demo-1')
   assert.deepEqual(
@@ -91,7 +97,7 @@ test('el detalle ofrece contacto en reportes ajenos y resolver en los propios', 
     ['59170000001', 'Hola, vi tu reporte "Reporte demo-1" en PerdiU. ¿Podemos coordinar?'],
   ])
   presenter.open('demo-2')
-  assert.equal(presenter.detail()?.canResolve, true)
+  assert.equal(presenter.detail()?.canResolve, false)
   presenter.open(catalogReport.id)
   assert.deepEqual(
     { ...presenter.detail(), card: undefined },
@@ -102,39 +108,21 @@ test('el detalle ofrece contacto en reportes ajenos y resolver en los propios', 
   assert.equal(presenter.detail(), null)
 })
 
-test('resolver y eliminar solo afectan reportes propios y actualizan resumen, mapa y listas', () => {
-  const { presenter, notices } = setup(
-    [own('demo-1'), demo('demo-2', { type: 'found', city: 'Cochabamba' })],
-    ['demo-1'],
-  )
-  presenter.open('demo-1')
-  presenter.resolve('demo-1')
-  presenter.resolve('demo-2')
+test('el cierre confirmado actualiza detalle y guardados de un reporte propio real', () => {
+  const owned: OwnReport[] = [{ ...catalogReport, id: 'own-1', source: 'own' }]
+  const { presenter } = setup([], [], owned)
+  presenter.open('own-1')
+  assert.equal(presenter.detail()?.canResolve, true)
+  presenter.toggleSaved('own-1')
+  assert.equal(presenter.saved().length, 1)
+  owned[0] = { ...owned[0]!, state: 'resolved' }
+  presenter.markResolved('own-1')
   assert.equal(presenter.detail()?.card.badge, 'Resuelto')
-  assert.deepEqual(
-    presenter.overview().metrics.map(({ value }) => value),
-    [1, 0, 1, 1],
-  )
-  assert.equal(presenter.mapView(defaultSelection).count, 1)
-  assert.deepEqual(presenter.saved(), [], 'un resuelto deja de mostrarse en guardados')
-  presenter.setOwnFilter('Resueltos')
-  assert.deepEqual(
-    presenter.myReports().cards.map(({ id }) => id),
-    ['demo-1'],
-  )
-  presenter.remove('demo-1')
-  presenter.remove('demo-2')
-  assert.deepEqual(presenter.myReports().total, 0)
-  assert.equal(presenter.myReports().empty.title, 'Todavía no tienes reportes resueltos')
-  assert.equal(presenter.counts().saved, 0)
+  assert.equal(presenter.detail()?.card.status, 'Encontrado')
+  assert.equal(presenter.detail()?.canResolve, false)
+  assert.deepEqual(presenter.saved(), [])
+  presenter.clearPrivateData()
   assert.equal(presenter.detail(), null)
-  assert.deepEqual(
-    notices.map(({ message }) => message),
-    [
-      'Marcaste el reporte como resuelto; ya no aparecerá en las búsquedas.',
-      'El reporte se quitó de la lista.',
-    ],
-  )
 })
 
 test('el mapa aplica la selección visible y numera los puntos', () => {
@@ -166,7 +154,7 @@ test('cerrar sesión borra los datos privados del dispositivo', () => {
   presenter.toggleSaved(catalogReport.id)
   presenter.open('demo-1')
   presenter.clearPrivateData()
-  assert.deepEqual(presenter.counts(), { own: 0, saved: 0 })
+  assert.deepEqual(presenter.counts(), { saved: 0 })
   assert.equal(presenter.detail(), null)
 })
 
@@ -247,7 +235,7 @@ test('publicar un borrador válido crea el reporte del dueño, limpia filtros y 
   ])
   assert.deepEqual(counts(), { resets: 1, published: 1 })
   assert.deepEqual(notices, [
-    'Tu reporte ya está publicado. Puedes gestionarlo desde Mis reportes.',
+    'Reporte de demostración creado. Puedes verlo en el resumen durante esta sesión.',
   ])
   assert.deepEqual(revoked, [], 'la foto publicada sigue en uso')
   assert.equal(presenter.getSnapshot().draft.title, '')

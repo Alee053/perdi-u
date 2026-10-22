@@ -104,7 +104,7 @@ export class PublishPresenter extends Store<PublishState> {
     this.setState({ draft: emptyDraft, imagePreview: '', errors: {} })
     filters.reset()
     onPublished()
-    notices.show('Tu reporte ya está publicado. Puedes gestionarlo desde Mis reportes.')
+    notices.show('Reporte de demostración creado. Puedes verlo en el resumen durante esta sesión.')
     return true
   }
 

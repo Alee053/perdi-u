@@ -70,6 +70,14 @@ test('iniciar sesión valida campos, autentica con Auth y usa la identidad verif
   assert.deepEqual(presenter.getSnapshot(), { status: 'authenticated', user: identity })
 })
 
+test('un rechazo de una ruta privada invalida la vista de sesión y vuelve a solicitar ingreso', async () => {
+  const { presenter } = doubles()
+  await presenter.signIn({ email: identity.email, password: 'Correcta-123' })
+  presenter.requireSignIn()
+  assert.equal(presenter.getSnapshot().status, 'anonymous')
+  assert.equal(presenter.access('my-reports'), 'login')
+})
+
 test('credenciales incorrectas o Auth caído muestran mensajes seguros sin autenticar', async () => {
   for (const [reason, message] of [
     ['invalid_credentials', 'Correo o contraseña incorrectos.'],

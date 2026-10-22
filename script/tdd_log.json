@@ -788,9 +788,119 @@
     "testId": 26
   },
   {
-    "commitId": "HEAD",
+    "commitId": "aef4b37ef16b2471b2e5427a35d7ed1ed522d9e6",
     "commitName": "feat(api): persistir consulta y cierre autorizado de reportes (#8)",
     "commitTimestamp": 1792636310966,
     "testId": 26
+  },
+  {
+    "numPassedTests": 82,
+    "failedTests": 1,
+    "numTotalTests": 83,
+    "timestamp": 1792636355558,
+    "success": false,
+    "testId": 27
+  },
+  {
+    "numPassedTests": 82,
+    "failedTests": 1,
+    "numTotalTests": 83,
+    "timestamp": 1792636390440,
+    "success": false,
+    "testId": 27
+  },
+  {
+    "numPassedTests": 83,
+    "failedTests": 0,
+    "numTotalTests": 83,
+    "timestamp": 1792636421095,
+    "success": true,
+    "testId": 27
+  },
+  {
+    "numPassedTests": 83,
+    "failedTests": 1,
+    "numTotalTests": 84,
+    "timestamp": 1792636463302,
+    "success": false,
+    "testId": 27
+  },
+  {
+    "numPassedTests": 86,
+    "failedTests": 0,
+    "numTotalTests": 86,
+    "timestamp": 1792636494417,
+    "success": true,
+    "testId": 27
+  },
+  {
+    "numPassedTests": 86,
+    "failedTests": 1,
+    "numTotalTests": 87,
+    "timestamp": 1792636524801,
+    "success": false,
+    "testId": 27
+  },
+  {
+    "numPassedTests": 87,
+    "failedTests": 0,
+    "numTotalTests": 87,
+    "timestamp": 1792636558205,
+    "success": true,
+    "testId": 27
+  },
+  {
+    "numPassedTests": 87,
+    "failedTests": 1,
+    "numTotalTests": 88,
+    "timestamp": 1792636595154,
+    "success": false,
+    "testId": 27
+  },
+  {
+    "numPassedTests": 88,
+    "failedTests": 0,
+    "numTotalTests": 88,
+    "timestamp": 1792636617632,
+    "success": true,
+    "testId": 27
+  },
+  {
+    "numPassedTests": 85,
+    "failedTests": 3,
+    "numTotalTests": 88,
+    "timestamp": 1792636655285,
+    "success": false,
+    "testId": 27
+  },
+  {
+    "numPassedTests": 88,
+    "failedTests": 0,
+    "numTotalTests": 88,
+    "timestamp": 1792636689535,
+    "success": true,
+    "testId": 27
+  },
+  {
+    "numPassedTests": 87,
+    "failedTests": 1,
+    "numTotalTests": 88,
+    "timestamp": 1792636717961,
+    "success": false,
+    "testId": 27
+  },
+  {
+    "numPassedTests": 91,
+    "failedTests": 0,
+    "numTotalTests": 91,
+    "timestamp": 1792636751578,
+    "success": true,
+    "testId": 27
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): gestionar reportes propios con confirmación y reintento (#8)",
+    "commitTimestamp": 1792636817753,
+    "testId": 27
   }
 ]

@@ -4,6 +4,7 @@ import type { CatalogPresenter } from '../catalog/catalog.presenter.js'
 import type { FiltersPresenter } from '../catalog/filters.presenter.js'
 import type { PublishPresenter } from '../reports/publish.presenter.js'
 import type { ReportsPresenter } from '../reports/reports.presenter.js'
+import type { OwnReportsPresenter } from '../reports/own-reports.presenter.js'
 import { useStore } from '../useStore.js'
 import type { NoticePresenter } from './notice.presenter.js'
 import type { ShellPresenter } from './shell.presenter.js'
@@ -14,6 +15,7 @@ export interface AppPresenters {
   catalog: CatalogPresenter
   filters: FiltersPresenter
   reports: ReportsPresenter
+  own: OwnReportsPresenter
   publish: PublishPresenter
   shell: ShellPresenter
 }
@@ -23,16 +25,18 @@ export interface AppPresenters {
  * start/cleanup to the component lifecycle and hands the view ready-to-render data and actions.
  */
 export function useApp(presenters: AppPresenters) {
-  const { auth, notices, catalog, filters, reports, publish, shell } = presenters
+  const { auth, notices, catalog, filters, reports, own, publish, shell } = presenters
   const shellState = useStore(shell)
   // Subscriptions only: their data is read below through shell.view() and the reports selectors.
   useStore(auth)
   useStore(reports)
+  useStore(own)
   const notice = useStore(notices)
   const catalogState = useStore(catalog)
   const selection = useStore(filters)
   const publishState = useStore(publish)
 
+  useEffect(() => own.start(auth), [own, auth])
   useEffect(() => shell.start(), [shell])
   useEffect(() => {
     void catalog.load(filters.getSnapshot())
@@ -46,12 +50,13 @@ export function useApp(presenters: AppPresenters) {
     counts: {
       active: catalogState.status === 'ready' ? catalogState.reports.length : 0,
       ...counts,
+      own: own.view().total,
     },
     catalog: { ...catalogState, ...catalog.summary() },
     selection,
     overview: reports.overview(),
     map: reports.mapView(selection),
-    myReports: reports.myReports(),
+    myReports: own.view(),
     saved: reports.saved(),
     detail: reports.detail(),
     publish: publishState,
@@ -69,6 +74,7 @@ export function useApp(presenters: AppPresenters) {
       retryCatalog: () => void catalog.load(),
       filters,
       reports,
+      own,
       publish,
     },
   }

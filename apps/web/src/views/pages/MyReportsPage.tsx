@@ -1,6 +1,6 @@
 import type { Section } from '../../presenters/app/sections'
 import type { AppView } from '../../presenters/app/useApp'
-import type { OwnFilter } from '../../presenters/reports/reports.presenter'
+import type { OwnFilter } from '../../presenters/reports/own-reports.presenter'
 import { EmptyState } from '../components/EmptyState'
 import { PageHeading } from '../components/PageHeading'
 import { StatusTabs } from '../components/StatusTabs'
@@ -9,7 +9,7 @@ type MyReportsPageProps = {
   myReports: AppView['myReports']
   onFilter: (filter: OwnFilter) => void
   onResolve: (id: string) => void
-  onRemove: (id: string) => void
+  onRetry: () => void
   onOpen: (id: string) => void
   onNavigate: (section: Section) => void
 }
@@ -24,7 +24,7 @@ export function MyReportsPage({
   myReports,
   onFilter,
   onResolve,
-  onRemove,
+  onRetry,
   onOpen,
   onNavigate,
 }: MyReportsPageProps) {
@@ -50,50 +50,62 @@ export function MyReportsPage({
           <b>{myReports.cards.length}</b> resultados
         </span>
       </div>
-      <div className="managed-list">
-        {myReports.cards.map((report) => (
-          <article className="managed-report" key={report.id}>
-            <button className="managed-image" onClick={() => onOpen(report.id)}>
-              <img src={report.image} alt="" />
-            </button>
-            <div>
-              <span className="card-meta">
-                <span className={'status-text ' + report.tone}>{report.badge}</span> ·{' '}
-                {report.category} · {report.posted}
-              </span>
-              <button className="card-title" onClick={() => onOpen(report.id)}>
-                {report.title}
-              </button>
-              <p className="card-description">{report.description}</p>
-              <span className="card-meta">
-                {report.zone}, {report.city}
-              </span>
-            </div>
-            <div className="managed-actions">
-              {!report.resolved && (
-                <button className="secondary-button" onClick={() => onResolve(report.id)}>
-                  Marcar resuelto
-                </button>
-              )}
+      {(myReports.status === 'idle' || myReports.status === 'loading') && (
+        <p className="catalog-state" role="status">
+          Cargando tus reportes…
+        </p>
+      )}
+      {myReports.status === 'error' && (
+        <div className="catalog-state" role="alert">
+          <p>{myReports.message}</p>
+          <button className="secondary-button" onClick={onRetry}>
+            Reintentar
+          </button>
+        </div>
+      )}
+      {myReports.status === 'ready' && (
+        <div className="managed-list">
+          {myReports.cards.map((report) => (
+            <article className="managed-report" key={report.id}>
               <button
-                className="text-button danger"
-                onClick={() => onRemove(report.id)}
-                aria-label="Eliminar reporte"
+                className="managed-image"
+                aria-label={'Ver ' + report.title}
+                onClick={() => onOpen(report.id)}
               >
-                Eliminar
+                <img src={report.image} alt="" />
               </button>
-            </div>
-          </article>
-        ))}
-        {myReports.cards.length === 0 && (
-          <EmptyState
-            title={myReports.empty.title}
-            description="Cuando publiques algo, podrás seguirlo y gestionarlo desde aquí."
-            action="Publicar mi primer reporte"
-            onAction={() => onNavigate('publish')}
-          />
-        )}
-      </div>
+              <div>
+                <span className="card-meta">
+                  <span className={'status-text ' + report.tone}>{report.status}</span> ·{' '}
+                  {report.stateLabel} · {report.category} · {report.posted}
+                </span>
+                <button className="card-title" onClick={() => onOpen(report.id)}>
+                  {report.title}
+                </button>
+                <p className="card-description">{report.description}</p>
+                <span className="card-meta">
+                  {report.zone}, {report.city}
+                </span>
+              </div>
+              <div className="managed-actions">
+                {!report.resolved && (
+                  <button className="secondary-button" onClick={() => onResolve(report.id)}>
+                    Marcar como resuelto
+                  </button>
+                )}
+              </div>
+            </article>
+          ))}
+          {myReports.cards.length === 0 && (
+            <EmptyState
+              title={myReports.empty.title}
+              description="Cuando publiques algo, podrás seguirlo y gestionarlo desde aquí."
+              action="Publicar mi primer reporte"
+              onAction={() => onNavigate('publish')}
+            />
+          )}
+        </div>
+      )}
     </>
   )
 }

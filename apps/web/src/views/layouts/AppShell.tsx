@@ -1,6 +1,7 @@
 import { LoaderCircle } from 'lucide-react'
 import type { AppView } from '../../presenters/app/useApp'
 import { ReportDetail } from '../components/ReportDetail'
+import { ResolveConfirmation } from '../components/ResolveConfirmation'
 import { Toast } from '../components/Toast'
 import { AuthPage } from '../pages/AuthPage'
 import { ExplorePage } from '../pages/ExplorePage'
@@ -92,9 +93,9 @@ export function AppShell({ app }: { app: AppView }) {
           {shell.section === 'my-reports' && shell.access === 'allow' && (
             <MyReportsPage
               myReports={app.myReports}
-              onFilter={reports.setOwnFilter}
-              onResolve={reports.resolve}
-              onRemove={reports.remove}
+              onFilter={actions.own.setFilter}
+              onResolve={actions.own.requestResolve}
+              onRetry={() => void actions.own.load()}
               onOpen={reports.open}
               onNavigate={actions.navigate}
             />
@@ -120,13 +121,20 @@ export function AppShell({ app }: { app: AppView }) {
         </footer>
       </div>
       {app.notice && <Toast notice={app.notice} onClose={actions.dismissNotice} />}
-      {detail && (
+      {detail && !app.myReports.confirmation && (
         <ReportDetail
           detail={detail}
           onSave={() => reports.toggleSaved(detail.card.id)}
           onContact={() => reports.contact(detail.card.id)}
-          onResolve={() => reports.resolve(detail.card.id)}
+          onResolve={() => actions.own.requestResolve(detail.card.id)}
           onClose={reports.close}
+        />
+      )}
+      {app.myReports.confirmation && (
+        <ResolveConfirmation
+          confirmation={app.myReports.confirmation}
+          onConfirm={() => void actions.own.confirmResolve()}
+          onCancel={actions.own.cancelResolve}
         />
       )}
     </div>

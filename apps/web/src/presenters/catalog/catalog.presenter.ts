@@ -58,6 +58,13 @@ export class CatalogPresenter extends Store<CatalogState> {
     return this.loaded.find((report) => report.id === id)
   }
 
+  /** Discard pre-close requests before refreshing the same public query. */
+  removeResolved(id: string) {
+    this.cancel()
+    this.loaded = this.loaded.filter((report) => report.id !== id)
+    this.setState({ status: 'ready', reports: this.loaded.map(toReportCard) })
+  }
+
   /** Texts for the empty state and the result limit; they depend on the active filters. */
   summary() {
     const { status, reports } = this.state
