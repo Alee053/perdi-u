@@ -16,4 +16,6 @@ export interface ReportRepository {
 export interface ReportDetailRepository {
   /** One report in any state, or undefined when the ID does not exist. */
   find(id: string): Promise<ReportRecord | undefined>
+  /** Private contact phone as stored; read only after the case of use has checked access. */
+  findContactPhone(reportId: string): Promise<string | undefined>
 }

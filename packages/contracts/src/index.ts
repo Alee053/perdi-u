@@ -32,6 +32,12 @@ export interface ReportSummary extends Omit<ReportData, 'ownerId'> {
   imageUrls: string[]
 }
 
+/**
+ * Private response of GET /reports/:id/contact, only for a verified session that may see the
+ * report. `whatsapp` holds digits only (591 + Bolivian mobile); it never appears in public DTOs.
+ */
+export type ReportContact = { available: true; whatsapp: string } | { available: false }
+
 export interface PublicProfile {
   id: string
   displayName: string
