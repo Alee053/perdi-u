@@ -494,12 +494,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "37b9524a378b38907a2926c35f9dcef258f10d4a",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-22T02:41:02.000Z",
       "message": "feat(catalog): limitar los reportes resueltos a su propietario (#7)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/37b9524a378b38907a2926c35f9dcef258f10d4a"
     },
     "stats": {
       "total": 23,
@@ -509,6 +509,25 @@
     },
     "coverage": 92.23,
     "test_count": 80,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T02:43:40.000Z",
+      "message": "feat(catalog): normalizar el celular de contacto para WhatsApp (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 46,
+      "additions": 46,
+      "deletions": 0,
+      "date": "2026-10-22"
+    },
+    "coverage": 92.27,
+    "test_count": 82,
     "failed_tests": 0,
     "conclusion": "success"
   }
