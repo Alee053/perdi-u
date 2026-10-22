@@ -158,7 +158,10 @@ export function PublishPage({ presenter }: { presenter: PublishPresenter }) {
 
         <section className="photo-field" aria-label="Fotos del reporte">
           <label className="upload-zone">
-            <span>Añade hasta 3 fotos JPG o PNG (máximo 5 MB cada una)</span>
+            <span>
+              Fotos (opcional): añade hasta 3 JPG o PNG de máximo 5 MB cada una. Puedes publicar sin
+              fotos.
+            </span>
             <input
               type="file"
               accept="image/jpeg,image/png"

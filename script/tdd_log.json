@@ -1674,9 +1674,15 @@
     "testId": 45
   },
   {
-    "commitId": "HEAD",
+    "commitId": "b6fff54a4664b8a0b1cdbba5d7ba1feae64d2519",
     "commitName": "fix(repo): integrar en main la carga de fotos de S1-06 (#6)",
     "commitTimestamp": 1792648732261,
     "testId": 45
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "fix(web): indicar que las fotos del reporte son opcionales (#6)",
+    "commitTimestamp": 1792648958255,
+    "testId": 46
   }
 ]

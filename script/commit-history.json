@@ -1045,17 +1045,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "b6fff54a4664b8a0b1cdbba5d7ba1feae64d2519",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-22T05:58:50.000Z",
       "message": "fix(repo): integrar en main la carga de fotos de S1-06 (#6)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/b6fff54a4664b8a0b1cdbba5d7ba1feae64d2519"
     },
     "stats": {
       "total": 1659,
       "additions": 1574,
       "deletions": 85,
+      "date": "2026-10-22"
+    },
+    "coverage": 86.32,
+    "test_count": 133,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T06:02:36.000Z",
+      "message": "fix(web): indicar que las fotos del reporte son opcionales (#6)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 5,
+      "additions": 4,
+      "deletions": 1,
       "date": "2026-10-22"
     },
     "coverage": 86.32,
