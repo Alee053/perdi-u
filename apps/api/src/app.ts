@@ -8,6 +8,8 @@ import {
   HttpCode,
   Inject,
   Module,
+  NotFoundException,
+  Param,
   Post,
   Query,
   ServiceUnavailableException,
@@ -15,22 +17,30 @@ import {
 } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { openDatabase, type Database, type PostgresProfileRepository } from '@perdiu/database'
-import { CreateReport, ListReports, ReportValidationError } from '@perdiu/catalog'
-import type { AccountIdentity } from '@perdiu/contracts'
+import {
+  CreateReport,
+  GetReport,
+  GetReportContact,
+  ListReports,
+  ReportValidationError,
+} from '@perdiu/catalog'
+import type { AccountIdentity, ReportContact, ReportSummary } from '@perdiu/contracts'
 import {
   withSessionRevocation,
   type AccessTokenVerifier,
   type AuthenticatedUser,
   type SessionRevocations,
 } from './auth/access-token.js'
-import { ACCESS_TOKEN_VERIFIER, AuthGuard, CurrentUser } from './auth/guard.js'
-import { parseReportQuery } from './reports/query.js'
+import { ACCESS_TOKEN_VERIFIER, AuthGuard, CurrentUser, OptionalAuthGuard } from './auth/guard.js'
+import { parseReportId, parseReportQuery } from './reports/query.js'
 
 @Controller('reports')
 class ReportsController {
   constructor(
     @Inject(ListReports) private readonly catalog: ListReports,
     @Inject(CreateReport) private readonly publisher: CreateReport,
+    @Inject(GetReport) private readonly detail: GetReport,
+    @Inject(GetReportContact) private readonly contacts: GetReportContact,
   ) {}
 
   @Get()
@@ -53,6 +63,48 @@ class ReportsController {
         throw new BadRequestException({ fieldErrors: error.errors })
       throw new ServiceUnavailableException('No se pudo publicar el reporte. Intenta nuevamente.')
     }
+  }
+
+  /**
+   * Public detail of an active report; a resolved one only for its verified owner. The answer
+   * depends on the session, so it is never cached.
+   */
+  @Get(':id')
+  @UseGuards(OptionalAuthGuard)
+  @Header('Cache-Control', 'no-store')
+  async get(
+    @Param('id') input: string,
+    @CurrentUser() user: AuthenticatedUser | undefined,
+  ): Promise<ReportSummary> {
+    const id = parseReportId(input)
+    let report
+    try {
+      report = await this.detail.execute(id, user?.id)
+    } catch {
+      throw new ServiceUnavailableException('No se pudo cargar el reporte. Intenta nuevamente.')
+    }
+    // Missing and not visible answer the same, so a closed case does not reveal that it exists.
+    if (!report) throw new NotFoundException('Reporte no disponible.')
+    return report
+  }
+
+  /** Private contact: only a verified session that may see the report reaches the phone. */
+  @Get(':id/contact')
+  @UseGuards(AuthGuard)
+  @Header('Cache-Control', 'no-store')
+  async contact(
+    @Param('id') input: string,
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<ReportContact> {
+    const id = parseReportId(input)
+    let contact
+    try {
+      contact = await this.contacts.execute(id, user.id)
+    } catch {
+      throw new ServiceUnavailableException('No se pudo cargar el contacto. Intenta nuevamente.')
+    }
+    if (!contact) throw new NotFoundException('Reporte no disponible.')
+    return contact
   }
 }
 
@@ -113,6 +165,8 @@ export async function createApplication(databaseUrl: string, verifier: AccessTok
         providers: [
           { provide: ListReports, useValue: new ListReports(database.reports) },
           { provide: CreateReport, useValue: new CreateReport(database.publisher) },
+          { provide: GetReport, useValue: new GetReport(database.reports) },
+          { provide: GetReportContact, useValue: new GetReportContact(database.reports) },
           { provide: SESSION_REVOCATIONS, useValue: database.sessions },
           { provide: PROFILES, useValue: database.profiles },
           // Every private route passes the guard, so every one rejects revoked sessions.
@@ -121,6 +175,7 @@ export async function createApplication(databaseUrl: string, verifier: AccessTok
             useValue: withSessionRevocation(verifier, database.sessions),
           },
           AuthGuard,
+          OptionalAuthGuard,
           { provide: 'DATABASE_LIFECYCLE', useValue: { onModuleDestroy: database.close } },
         ],
       },

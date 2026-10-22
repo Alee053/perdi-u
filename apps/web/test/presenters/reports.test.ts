@@ -42,18 +42,20 @@ const catalogReport: CatalogReport = {
 
 function setup(reports: DemoReport[] = [], saved: string[] = []) {
   const notices: { message: string; error: boolean }[] = []
-  const opened: [string, string][] = []
+  const opened: string[] = []
+  const links: string[] = []
   const catalog = { find: (id: string) => (id === catalogReport.id ? catalogReport : undefined) }
   const presenter = new ReportsPresenter(
     reports,
     {
       catalog,
       notices: { show: (message: string, error = false) => notices.push({ message, error }) },
-      effects: { openWhatsApp: (phone: string, message: string) => opened.push([phone, message]) },
+      effects: { openWhatsApp: (url: string) => opened.push(url) },
+      links: { open: (id: string) => void links.push(id) },
     },
     saved,
   )
-  return { presenter, notices, opened }
+  return { presenter, notices, opened, links }
 }
 
 test('guardar un reporte del catálogo lo conserva aunque cambien los resultados, y quitarlo avisa', () => {
@@ -81,7 +83,7 @@ test('guardar un reporte del catálogo lo conserva aunque cambien los resultados
 })
 
 test('el detalle ofrece contacto en reportes ajenos y resolver en los propios', () => {
-  const { presenter, opened } = setup([demo('demo-1'), own('demo-2')])
+  const { presenter, opened, links } = setup([demo('demo-1'), own('demo-2')])
   presenter.open('demo-1')
   assert.deepEqual(
     { ...presenter.detail(), card: undefined },
@@ -89,16 +91,18 @@ test('el detalle ofrece contacto en reportes ajenos y resolver en los propios', 
   )
   presenter.contact('demo-1')
   assert.deepEqual(opened, [
-    ['59170000001', 'Hola, vi tu reporte "Reporte demo-1" en PerdiU. ¿Podemos coordinar?'],
+    'https://wa.me/59170000001?text=' +
+      encodeURIComponent('Hola, vi tu reporte "Reporte demo-1" en PerdiU. ¿Podemos coordinar?'),
   ])
   presenter.open('demo-2')
   assert.equal(presenter.detail()?.canResolve, true)
+  presenter.close()
+  assert.equal(presenter.detail(), null)
+  // Catalog reports open through their stable link, which the API keeps up to date.
   presenter.open(catalogReport.id)
-  assert.deepEqual(
-    { ...presenter.detail(), card: undefined },
-    { card: undefined, saved: false, canContact: false, canResolve: false },
-  )
-  assert.equal(presenter.detail()?.card.person, 'Santiago Demo')
+  assert.deepEqual(links, [catalogReport.id])
+  assert.equal(presenter.detail(), null)
+  presenter.open('demo-1')
   presenter.close()
   assert.equal(presenter.detail(), null)
 })

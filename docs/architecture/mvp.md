@@ -33,8 +33,8 @@ flowchart LR
     Core["Núcleos TypeScript<br/>*.presenter.ts (Store)"]
   end
   subgraph Model["Model (models/)"]
-    Rules["Reglas y entidades<br/>filters, publication, credentials"]
-    Ports["Puertos<br/>ReportsRepository, AuthGateway, AccountClient"]
+    Rules["Reglas y entidades<br/>filters, publication, contact, credentials"]
+    Ports["Puertos<br/>ReportsRepository, ReportDetailRepository, AuthGateway, AccountClient"]
   end
   subgraph Infra["Infrastructure (infrastructure/)"]
     Http["HTTP: catalog-client, publish-client, account-client"]
@@ -65,15 +65,15 @@ apps/web/src/
 ├── models/                   Model (sin React ni navegador)
 │   ├── auth/credentials.ts   Reglas de correo y contraseña
 │   ├── auth/session.ts       Puertos AuthGateway y AccountClient
-│   └── reports/              report, filters, stats, publication, reports-repository
+│   └── reports/              report, filters, stats, publication, contact, reports-repository
 ├── presenters/               Presenter
 │   ├── store.ts              Estado observable compartido
 │   ├── useStore.ts           Adaptador React genérico
-│   ├── effects.ts            Efectos que el presenter pide (temporizador, WhatsApp, foto…)
+│   ├── effects.ts            Efectos que el presenter pide (temporizador, dirección, WhatsApp, foto…)
 │   ├── app/                  shell (navegación), notice (avisos), useApp
 │   ├── auth/                 auth (sesión), auth-form (formulario), useAuthForm
 │   ├── catalog/              catalog (consulta), filters (selección)
-│   └── reports/              reports (demo y detalle), publish (formulario), report-card
+│   └── reports/              reports (demo), report-detail y report-route (enlace), publish, report-card
 ├── views/                    View
 │   ├── layouts/              AppShell, Sidebar, AppHeader
 │   ├── pages/                Una página por sección

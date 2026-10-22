@@ -494,6 +494,44 @@
     "conclusion": "success"
   },
   {
+    "sha": "e69c2f27e011785dc7281546320bbb2048838879",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T02:38:56.000Z",
+      "message": "feat(catalog): consultar el detalle público de un reporte por ID (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/e69c2f27e011785dc7281546320bbb2048838879"
+    },
+    "stats": {
+      "total": 117,
+      "additions": 98,
+      "deletions": 19,
+      "date": "2026-10-22"
+    },
+    "coverage": 92.21,
+    "test_count": 79,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "37b9524a378b38907a2926c35f9dcef258f10d4a",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T02:41:02.000Z",
+      "message": "feat(catalog): limitar los reportes resueltos a su propietario (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/37b9524a378b38907a2926c35f9dcef258f10d4a"
+    },
+    "stats": {
+      "total": 23,
+      "additions": 20,
+      "deletions": 3,
+      "date": "2026-10-22"
+    },
+    "coverage": 92.23,
+    "test_count": 80,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
     "sha": "4ea1fd1cb51284ca488cde2ddec2746428bbbf27",
     "author": "Alejandro Castro",
     "commit": {
@@ -532,6 +570,25 @@
     "conclusion": "success"
   },
   {
+    "sha": "f5900a0631830ae8160ede8d613044c8c2cc34ac",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T02:43:40.000Z",
+      "message": "feat(catalog): normalizar el celular de contacto para WhatsApp (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/f5900a0631830ae8160ede8d613044c8c2cc34ac"
+    },
+    "stats": {
+      "total": 46,
+      "additions": 46,
+      "deletions": 0,
+      "date": "2026-10-22"
+    },
+    "coverage": 92.27,
+    "test_count": 82,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
     "sha": "46a7ffffe3ddc9f16bd7a06afa97581a2e77cc6f",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
@@ -547,6 +604,82 @@
     },
     "coverage": 90.16,
     "test_count": 85,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "7fdb7e11acff76c8396f6357d6d536147312b4de",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T02:46:05.000Z",
+      "message": "feat(catalog): entregar el contacto de WhatsApp de un reporte accesible (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/7fdb7e11acff76c8396f6357d6d536147312b4de"
+    },
+    "stats": {
+      "total": 90,
+      "additions": 86,
+      "deletions": 4,
+      "date": "2026-10-22"
+    },
+    "coverage": 92.34,
+    "test_count": 85,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "7c91de08e5541c5c87f70f8f908d4466630e9653",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T02:53:01.000Z",
+      "message": "feat(api): consultar el detalle de un reporte con GET /reports/:id (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/7c91de08e5541c5c87f70f8f908d4466630e9653"
+    },
+    "stats": {
+      "total": 353,
+      "additions": 289,
+      "deletions": 64,
+      "date": "2026-10-22"
+    },
+    "coverage": 89.73,
+    "test_count": 86,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "48106e23131f556e632ecbf15f9e7f7193018a35",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T02:55:48.000Z",
+      "message": "refactor(database): conservar los escapes Unicode de la búsqueda (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/48106e23131f556e632ecbf15f9e7f7193018a35"
+    },
+    "stats": {
+      "total": 10,
+      "additions": 7,
+      "deletions": 3,
+      "date": "2026-10-22"
+    },
+    "coverage": 89.73,
+    "test_count": 86,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "d2b8fccd1e0305cb7950bbd995c6aeccf2d2d37b",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T02:59:53.000Z",
+      "message": "feat(api): entregar el contacto privado con GET /reports/:id/contact (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/d2b8fccd1e0305cb7950bbd995c6aeccf2d2d37b"
+    },
+    "stats": {
+      "total": 97,
+      "additions": 91,
+      "deletions": 6,
+      "date": "2026-10-22"
+    },
+    "coverage": 89.73,
+    "test_count": 86,
     "failed_tests": 0,
     "conclusion": "success"
   },
@@ -570,6 +703,44 @@
     "conclusion": "success"
   },
   {
+    "sha": "be821f035c9e937d605b63ca28e94e3b2395ab59",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T03:03:28.000Z",
+      "message": "feat(web): construir el enlace de WhatsApp sin destinos arbitrarios (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/be821f035c9e937d605b63ca28e94e3b2395ab59"
+    },
+    "stats": {
+      "total": 44,
+      "additions": 44,
+      "deletions": 0,
+      "date": "2026-10-22"
+    },
+    "coverage": 89.79,
+    "test_count": 88,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "cd66f2acf72cb1aafb78a10b290a48bc99c2d384",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T03:08:11.000Z",
+      "message": "feat(web): consultar el detalle y el contacto de un reporte por HTTP (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/cd66f2acf72cb1aafb78a10b290a48bc99c2d384"
+    },
+    "stats": {
+      "total": 184,
+      "additions": 175,
+      "deletions": 9,
+      "date": "2026-10-22"
+    },
+    "coverage": 90.07,
+    "test_count": 91,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
     "sha": "d9865625a2257166acd35330930e35adfe0ab748",
     "author": "Alejandro Castro",
     "commit": {
@@ -589,12 +760,69 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "3e33cda882391e0cb9ecd8646eb8b6bef46671cb",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T03:12:27.000Z",
+      "message": "feat(web): presentar la carga, ausencia y error del detalle de un reporte (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/3e33cda882391e0cb9ecd8646eb8b6bef46671cb"
+    },
+    "stats": {
+      "total": 150,
+      "additions": 150,
+      "deletions": 0,
+      "date": "2026-10-22"
+    },
+    "coverage": 90.3,
+    "test_count": 93,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "3a01c4316e9a83baea3f51ce63dcd3675c1f2d0d",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T03:16:42.000Z",
+      "message": "feat(web): contactar al autor por WhatsApp tras iniciar sesión (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/3a01c4316e9a83baea3f51ce63dcd3675c1f2d0d"
+    },
+    "stats": {
+      "total": 172,
+      "additions": 159,
+      "deletions": 13,
+      "date": "2026-10-22"
+    },
+    "coverage": 90.47,
+    "test_count": 95,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "5c0e8237a67b2f65a61995e95d59099e48176270",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T03:21:41.000Z",
+      "message": "feat(web): abrir un reporte desde su enlace estable y seguir la sesión (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/5c0e8237a67b2f65a61995e95d59099e48176270"
+    },
+    "stats": {
+      "total": 240,
+      "additions": 232,
+      "deletions": 8,
+      "date": "2026-10-22"
+    },
+    "coverage": 90.92,
+    "test_count": 97,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "7b28a852edea7f992e8fc209f02d2baadf0adb69",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-10-22T03:31:20.000Z",
       "message": "Merge origin/main into feat/s1-05-publicacion-persistente",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/7b28a852edea7f992e8fc209f02d2baadf0adb69"
     },
     "stats": {
       "total": 57,
@@ -604,6 +832,82 @@
     },
     "coverage": 90.16,
     "test_count": 85,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "ff5bee34eae9b40327b5041c22bbd013dfac853a",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T03:35:43.000Z",
+      "message": "feat(web): integrar el detalle por enlace en la vista y verificarlo en el navegador (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/ff5bee34eae9b40327b5041c22bbd013dfac853a"
+    },
+    "stats": {
+      "total": 480,
+      "additions": 430,
+      "deletions": 50,
+      "date": "2026-10-22"
+    },
+    "coverage": 90.96,
+    "test_count": 98,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "1a54b89ee5f61a1a4ba423c9d7b8d4a115ef8e14",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T03:39:26.000Z",
+      "message": "docs(repo): documentar el detalle por enlace y el contacto por WhatsApp (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/1a54b89ee5f61a1a4ba423c9d7b8d4a115ef8e14"
+    },
+    "stats": {
+      "total": 106,
+      "additions": 62,
+      "deletions": 44,
+      "date": "2026-10-22"
+    },
+    "coverage": 90.96,
+    "test_count": 98,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "afc7827fba9ee91f319ccda7407dfd23e5713580",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T03:53:28.000Z",
+      "message": "Merge origin/main into feat/s1-07-consultar-reporte-whatsapp",
+      "url": "https://github.com/Alee053/perdi-u/commit/afc7827fba9ee91f319ccda7407dfd23e5713580"
+    },
+    "stats": {
+      "total": 1733,
+      "additions": 1510,
+      "deletions": 223,
+      "date": "2026-10-22"
+    },
+    "coverage": 89.5,
+    "test_count": 105,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T03:59:56.000Z",
+      "message": "fix(catalog): aceptar el formato internacional del contacto publicado (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 65,
+      "additions": 51,
+      "deletions": 14,
+      "date": "2026-10-22"
+    },
+    "coverage": 89.54,
+    "test_count": 107,
     "failed_tests": 0,
     "conclusion": "success"
   }

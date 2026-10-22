@@ -1,8 +1,26 @@
 import type { Pool } from 'pg'
 import { REPORT_RESULT_LIMIT, type CreateReportInput, type ReportQuery } from '@perdiu/contracts'
-import type { ReportPublisher, ReportRecord, ReportRepository } from '@perdiu/catalog'
+import type {
+  ReportDetailRepository,
+  ReportPublisher,
+  ReportRecord,
+  ReportRepository,
+} from '@perdiu/catalog'
 
-export class PostgresReportRepository implements ReportRepository, ReportPublisher {
+// Public columns plus the owner ID; contact and storage tables are never joined here.
+const reportColumns = `
+  r.id, r.owner_id AS "ownerId", r.type, r.state, r.category,
+  r.pet_species AS "petSpecies",
+  r.title, r.description, r.city, r.zone,
+  to_char(r.incident_date, 'YYYY-MM-DD') AS "incidentDate",
+  to_char(r.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS "createdAt",
+  jsonb_strip_nulls(jsonb_build_object('id', p.id, 'displayName', p.display_name, 'photoUrl', p.photo_url)) AS author,
+  ARRAY(SELECT i.public_url FROM report_images i WHERE i.report_id = r.id ORDER BY i.position) AS "imageUrls"
+`
+
+export class PostgresReportRepository
+  implements ReportRepository, ReportDetailRepository, ReportPublisher
+{
   constructor(private readonly pool: Pool) {}
 
   async create(ownerId: string, draft: CreateReportInput): Promise<ReportRecord> {
@@ -59,13 +77,7 @@ export class PostgresReportRepository implements ReportRepository, ReportPublish
     // SQL restricts work; the case of use also enforces catalog invariants for other adapters.
     const result = await this.pool.query<ReportRecord>(
       `
-      SELECT r.id, r.owner_id AS "ownerId", r.type, r.state, r.category,
-        r.pet_species AS "petSpecies",
-        r.title, r.description, r.city, r.zone,
-        to_char(r.incident_date, 'YYYY-MM-DD') AS "incidentDate",
-        to_char(r.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS "createdAt",
-        jsonb_strip_nulls(jsonb_build_object('id', p.id, 'displayName', p.display_name, 'photoUrl', p.photo_url)) AS author,
-        ARRAY(SELECT i.public_url FROM report_images i WHERE i.report_id = r.id ORDER BY i.position) AS "imageUrls"
+      SELECT ${reportColumns}
       FROM reports r JOIN profiles p ON p.id = r.owner_id
       WHERE r.state = $1
         AND ($2 = '' OR
@@ -91,5 +103,23 @@ export class PostgresReportRepository implements ReportRepository, ReportPublish
       ],
     )
     return result.rows
+  }
+
+  /** Any state: the case of use decides who may see a resolved report. */
+  async find(id: string): Promise<ReportRecord | undefined> {
+    const result = await this.pool.query<ReportRecord>(
+      `SELECT ${reportColumns} FROM reports r JOIN profiles p ON p.id = r.owner_id WHERE r.id = $1`,
+      [id],
+    )
+    return result.rows[0]
+  }
+
+  /** Private phone of the report; the API asks for it only after checking access. */
+  async findContactPhone(reportId: string): Promise<string | undefined> {
+    const result = await this.pool.query<{ phone: string | null }>(
+      'SELECT phone FROM report_contacts WHERE report_id = $1',
+      [reportId],
+    )
+    return result.rows[0]?.phone ?? undefined
   }
 }

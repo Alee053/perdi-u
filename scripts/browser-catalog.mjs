@@ -279,6 +279,174 @@ async function verifySearch(page, size) {
   await page.screenshot({ path: `test-results/search-${size}.png`, fullPage: true })
 }
 
+const bag = '20000000-0000-0000-0000-000000000001'
+const cat = '20000000-0000-0000-0000-000000000002'
+const closedCase = '20000000-0000-0000-0000-000000000003'
+const privateData = /59170000001|fictional@example\.invalid|fixture-private-storage-key|ownerId/
+
+/** Unsigned token with the shape of an Auth session; only the browser doubles below read it. */
+function fakeSession() {
+  const encode = (value) => Buffer.from(JSON.stringify(value)).toString('base64url')
+  const now = Math.floor(Date.now() / 1000)
+  const user = {
+    id: '66068112-224a-4d11-a6cd-c18bdd1ffb1b',
+    aud: 'authenticated',
+    role: 'authenticated',
+    email: 'persona@example.test',
+    app_metadata: {},
+    user_metadata: {},
+    created_at: new Date().toISOString(),
+  }
+  const claims = { sub: user.id, email: user.email, role: user.role, exp: now + 3600, iat: now }
+  return {
+    access_token: `${encode({ alg: 'ES256', typ: 'JWT' })}.${encode(claims)}.firma-de-prueba`,
+    token_type: 'bearer',
+    expires_in: 3600,
+    expires_at: now + 3600,
+    refresh_token: 'refresh-de-prueba',
+    user,
+  }
+}
+
+/**
+ * Stable report link: direct access, reload, «Atrás», unavailable/error, login return and the
+ * WhatsApp chat. Auth and the private contact are doubled here because this browser run has no
+ * Auth service; the HTTP integration verifies the real guard and the private phone.
+ */
+async function verifyReportLink(size, viewport) {
+  const context = await browser.newContext({ viewport })
+  const page = await context.newPage()
+  page.on('pageerror', (error) => pageErrors.push(error.message))
+  const bodies = []
+  page.on('response', async (response) => {
+    // Public detail only: /contact is the private answer for a signed-in person.
+    if (/^\/api\/reports\/[^/]+$/.test(new URL(response.url()).pathname))
+      bodies.push(await response.text().catch(() => ''))
+  })
+  const dialog = page.getByRole('dialog')
+  const contact = dialog.getByRole('button', { name: 'Contactar por WhatsApp', exact: true })
+  try {
+    await page.goto(`${webUrl}/reportes/${bag}`)
+    await dialog.getByRole('heading', { name: 'Mochila azul encontrada', exact: true }).waitFor()
+    const text = await dialog.textContent()
+    for (const field of ['Encontrado', 'Objeto', 'Miraflores', 'La Paz', 'Santiago Demo'])
+      assert.match(text, new RegExp(field), field)
+    assert.equal(await dialog.getByRole('img').getAttribute('src'), '/images/object.svg')
+    await page.reload()
+    await dialog.getByRole('heading', { name: 'Mochila azul encontrada', exact: true }).waitFor()
+    assert.ok(!privateData.test(await page.content()), 'el HTML no contiene datos privados')
+
+    await page.goto(`${webUrl}/reportes/${cat}`)
+    await dialog.getByRole('heading', { name: 'Gato de prueba perdido', exact: true }).waitFor()
+    assert.equal(await dialog.getByRole('img').getAttribute('src'), '/images/pet.svg')
+    for (const id of [closedCase, 'no-existe', '30000000-0000-0000-0000-00000000ffff']) {
+      await page.goto(`${webUrl}/reportes/${id}`)
+      await dialog.getByText('Reporte no disponible.', { exact: true }).waitFor()
+      assert.equal(await contact.count(), 0, id)
+    }
+
+    let failOnce = true
+    await page.route(`**/api/reports/${bag}`, async (route) => {
+      if (!failOnce) return route.continue()
+      failOnce = false
+      await route.fulfill({ status: 503, contentType: 'application/json', body: '{}' })
+    })
+    await page.goto(`${webUrl}/reportes/${bag}`)
+    await dialog.getByRole('alert').waitFor()
+    await dialog.getByRole('button', { name: 'Reintentar', exact: true }).click()
+    await dialog.getByRole('heading', { name: 'Mochila azul encontrada', exact: true }).waitFor()
+    await page.unroute(`**/api/reports/${bag}`)
+
+    // From the catalog the card gets its own address and «Atrás» returns to the list.
+    await dialog.getByRole('button', { name: 'Cerrar', exact: true }).click()
+    assert.equal(new URL(page.url()).pathname, '/')
+    if (size === 'mobile') await page.getByRole('button', { name: 'Abrir menú' }).click()
+    await page
+      .getByRole('navigation')
+      .getByRole('button', { name: /^Explorar reportes/ })
+      .click()
+    await page.getByRole('button', { name: 'Gato de prueba perdido', exact: true }).click()
+    await dialog.getByRole('heading', { name: 'Gato de prueba perdido', exact: true }).waitFor()
+    assert.equal(new URL(page.url()).pathname, `/reportes/${cat}`)
+    await page.goBack()
+    await dialog.waitFor({ state: 'detached' })
+    await page.locator('.report-card').first().waitFor()
+    await page.goForward()
+    await dialog.getByRole('heading', { name: 'Gato de prueba perdido', exact: true }).waitFor()
+
+    // A visitor is asked to sign in and comes back to the same report.
+    await page.goto(`${webUrl}/reportes/${bag}`)
+    await contact.click()
+    await page.getByRole('heading', { name: 'Iniciar sesión', exact: true }).waitFor()
+    await page.getByRole('button', { name: 'Volver al catálogo', exact: true }).click()
+    await dialog.getByRole('heading', { name: 'Mochila azul encontrada', exact: true }).waitFor()
+
+    const session = fakeSession()
+    await page.route('**/auth/token?grant_type=password', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(session),
+      }),
+    )
+    await page.route('**/api/me', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ id: session.user.id, email: session.user.email }),
+      }),
+    )
+    // The fake token cannot pass the API's guard; the active report is public anyway.
+    await page.route(`**/api/reports/${bag}`, (route) => {
+      const { authorization: _authorization, ...headers } = route.request().headers()
+      return route.continue({ headers })
+    })
+    let available = true
+    const contactRequests = []
+    await page.route(`**/api/reports/${bag}/contact`, (route) => {
+      contactRequests.push(route.request().headers().authorization)
+      return route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(available ? { available, whatsapp: '59170000001' } : { available }),
+      })
+    })
+    await context.route('https://wa.me/**', (route) =>
+      route.fulfill({ status: 200, contentType: 'text/html', body: '<title>WhatsApp</title>' }),
+    )
+    await contact.click()
+    await page.getByLabel('Correo electrónico').fill(session.user.email)
+    await page.locator('input[name="password"]').fill('clave-de-prueba')
+    await page.getByRole('button', { name: 'Iniciar sesión', exact: true }).click()
+    await dialog.getByRole('heading', { name: 'Mochila azul encontrada', exact: true }).waitFor()
+    assert.equal(new URL(page.url()).pathname, `/reportes/${bag}`, 'vuelve al mismo reporte')
+    const [chat] = await Promise.all([context.waitForEvent('page'), contact.click()])
+    const chatUrl = new URL(chat.url())
+    assert.equal(chatUrl.origin, 'https://wa.me')
+    assert.equal(chatUrl.pathname, '/59170000001')
+    assert.equal(
+      chatUrl.searchParams.get('text'),
+      `Hola, vi tu reporte "Mochila azul encontrada" en PerdiU y quiero coordinar contigo: ${webUrl}/reportes/${bag}`,
+    )
+    assert.deepEqual(contactRequests, [`Bearer ${session.access_token}`])
+    await chat.close()
+
+    available = false
+    await contact.click()
+    await dialog
+      .getByText('La persona que publicó este reporte no tiene un WhatsApp disponible.')
+      .waitFor()
+    assert.equal(context.pages().length, 1, 'sin contacto no se abre otra conversación')
+    assert.ok(!bodies.some((body) => privateData.test(body)), 'el JSON público no expone contacto')
+    assert.ok(
+      await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1),
+    )
+    await page.screenshot({ path: `test-results/report-link-${size}.png`, fullPage: true })
+  } finally {
+    await context.close()
+  }
+}
+
 try {
   api = startApi()
   await waitFor(`${apiUrl}/reports`, api)
@@ -339,11 +507,13 @@ try {
 
   await page.getByRole('button', { name: 'Mochila azul encontrada', exact: true }).click()
   const dialog = page.getByRole('dialog')
-  await dialog.waitFor()
+  await dialog.getByRole('heading', { name: 'Mochila azul encontrada', exact: true }).waitFor()
+  // A visitor sees the contact action, but the phone is only requested after signing in.
   assert.equal(
-    await dialog.getByRole('button', { name: /WhatsApp|Marcar como resuelto/ }).count(),
-    0,
+    await dialog.getByRole('button', { name: 'Contactar por WhatsApp', exact: true }).count(),
+    1,
   )
+  assert.equal(await dialog.getByRole('button', { name: 'Marcar como resuelto' }).count(), 0)
   assert.match(await dialog.textContent(), /Santiago Demo/)
   await dialog.getByRole('button', { name: 'Cerrar', exact: true }).click()
 
@@ -385,6 +555,9 @@ try {
     ),
   )
   await page.screenshot({ path: 'test-results/catalog-mobile.png', fullPage: true })
+
+  await verifyReportLink('desktop', { width: 1440, height: 1000 })
+  await verifyReportLink('mobile', { width: 390, height: 844 })
 
   await pool.query(
     await readFile(
@@ -437,7 +610,7 @@ try {
   assert.equal(await page.locator('.report-card').count(), 0)
   assert.deepEqual(pageErrors, [])
   console.log(
-    'Navegador: catálogo real, privacidad, búsqueda sin tildes, filtros combinados, limpieza, publicación desde vacío, cambios rápidos, error/reintento con filtros, límite de 50, reinicio y móvil/escritorio verificados.',
+    'Navegador: catálogo real, enlace directo/recarga/Atrás del detalle, ingreso y retorno, WhatsApp sin envío, privacidad, búsqueda sin tildes, filtros combinados, limpieza, publicación desde vacío, cambios rápidos, error/reintento con filtros, límite de 50, reinicio y móvil/escritorio verificados.',
   )
 } finally {
   await browser?.close()

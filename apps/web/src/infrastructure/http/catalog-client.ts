@@ -1,5 +1,10 @@
-import type { ReportCategory, ReportSummary, ReportType } from '@perdiu/contracts'
-import type { ReportsRepository } from '../../models/reports/reports-repository.js'
+import type { ReportCategory, ReportState, ReportSummary, ReportType } from '@perdiu/contracts'
+import { SessionRejected } from '../../models/auth/session.js'
+import { isWhatsAppNumber } from '../../models/reports/contact.js'
+import type {
+  ReportDetailRepository,
+  ReportsRepository,
+} from '../../models/reports/reports-repository.js'
 
 const invalidResponse = () => new Error('La respuesta del catálogo no es válida.')
 const object = (value: unknown): value is Record<string, unknown> =>
@@ -9,6 +14,7 @@ const text = (value: unknown): value is string =>
 const category = (value: unknown): value is ReportCategory =>
   value === 'pet' || value === 'object' || value === 'document'
 const type = (value: unknown): value is ReportType => value === 'lost' || value === 'found'
+const detailStates: readonly unknown[] = ['active', 'resolved'] satisfies ReportState[]
 
 function imageUrl(value: unknown): value is string {
   if (typeof value !== 'string') return false
@@ -21,7 +27,8 @@ function imageUrl(value: unknown): value is string {
   }
 }
 
-export function readReport(value: unknown): ReportSummary {
+/** The catalog only lists active reports; a detail may also be the owner's resolved one. */
+export function readReport(value: unknown, states: readonly unknown[] = ['active']): ReportSummary {
   if (
     !object(value) ||
     !text(value.id) ||
@@ -31,7 +38,7 @@ export function readReport(value: unknown): ReportSummary {
     !text(value.zone) ||
     !category(value.category) ||
     !type(value.type) ||
-    value.state !== 'active' ||
+    !states.includes(value.state) ||
     !text(value.incidentDate) ||
     !/^\d{4}-\d{2}-\d{2}$/.test(value.incidentDate) ||
     !Number.isFinite(Date.parse(value.incidentDate)) ||
@@ -53,7 +60,7 @@ export function readReport(value: unknown): ReportSummary {
   return {
     id: value.id,
     type: value.type,
-    state: value.state,
+    state: value.state as ReportState,
     category: value.category,
     ...(value.petSpecies ? { petSpecies: value.petSpecies } : {}),
     title: value.title,
@@ -90,7 +97,51 @@ export function createReportsClient(
       if (!response.ok) throw new Error('No se pudo consultar el catálogo.')
       const data: unknown = await response.json()
       if (!Array.isArray(data)) throw invalidResponse()
-      return data.map(readReport)
+      return data.map((item) => readReport(item))
+    },
+  }
+}
+
+/** GET /reports/:id and /reports/:id/contact; the access token is sent only when there is one. */
+export function createReportDetailClient(
+  baseUrl: string,
+  accessToken: () => Promise<string | undefined>,
+  fetcher: typeof fetch = fetch,
+): ReportDetailRepository {
+  const base = baseUrl.replace(/\/$/, '')
+  return {
+    async find(id, signal) {
+      const token = await accessToken()
+      const response = await fetcher(`${base}/reports/${encodeURIComponent(id)}`, {
+        signal,
+        credentials: 'omit',
+        cache: 'no-store',
+        headers: {
+          Accept: 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      })
+      // 400 (malformed link) and 404 (missing or not visible) mean the same for the person.
+      if (response.status === 400 || response.status === 404) return undefined
+      if (!response.ok) throw new Error('No se pudo consultar el reporte.')
+      return readReport(await response.json(), detailStates)
+    },
+    async contact(id) {
+      const token = await accessToken()
+      if (!token) throw new SessionRejected()
+      const response = await fetcher(`${base}/reports/${encodeURIComponent(id)}/contact`, {
+        credentials: 'omit',
+        cache: 'no-store',
+        headers: { Accept: 'application/json', Authorization: `Bearer ${token}` },
+      })
+      if (response.status === 401) throw new SessionRejected()
+      if (response.status === 400 || response.status === 404) return undefined
+      if (!response.ok) throw new Error('No se pudo consultar el contacto.')
+      const data: unknown = await response.json()
+      if (object(data) && data.available === false) return { available: false }
+      if (object(data) && data.available === true && typeof data.whatsapp === 'string')
+        if (isWhatsAppNumber(data.whatsapp)) return { available: true, whatsapp: data.whatsapp }
+      throw new Error('La respuesta del contacto no es válida.')
     },
   }
 }

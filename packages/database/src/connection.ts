@@ -1,11 +1,11 @@
-import type { ReportPublisher, ReportRepository } from '@perdiu/catalog'
+import type { ReportDetailRepository, ReportPublisher, ReportRepository } from '@perdiu/catalog'
 import { createPool } from './pool.js'
 import { PostgresReportRepository } from './postgres-repository.js'
 import { PostgresProfileRepository } from './profiles.js'
 import { PostgresSessionRevocations } from './session-revocations.js'
 
 export interface Database {
-  reports: ReportRepository
+  reports: ReportRepository & ReportDetailRepository
   publisher: ReportPublisher
   profiles: PostgresProfileRepository
   sessions: PostgresSessionRevocations

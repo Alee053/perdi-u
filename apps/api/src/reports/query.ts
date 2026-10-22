@@ -33,3 +33,10 @@ export function parseReportQuery(input: Record<string, unknown>): ReportQuery {
     ...(values.city ? { city: values.city } : {}),
   }
 }
+
+/** Report IDs are UUIDs; anything else is rejected before it reaches PostgreSQL. */
+export function parseReportId(input: string): string {
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(input))
+    throw new BadRequestException('Identificador de reporte inválido.')
+  return input.toLowerCase()
+}

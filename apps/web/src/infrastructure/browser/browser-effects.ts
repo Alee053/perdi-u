@@ -20,12 +20,28 @@ export const browserEffects = {
   reload() {
     window.location.reload()
   },
-  openWhatsApp(phone: string, message: string) {
-    window.open(
-      'https://wa.me/' + phone + '?text=' + encodeURIComponent(message),
-      '_blank',
-      'noopener,noreferrer',
-    )
+  openWhatsApp(url: string) {
+    // `noopener` makes window.open return null, so a blocked popup cannot be told apart; the
+    // link opens in a new tab as before.
+    window.open(url, '_blank', 'noopener,noreferrer')
+  },
+  currentPath() {
+    return window.location.pathname
+  },
+  showPath(path: string, mode: 'push' | 'replace') {
+    if (mode === 'push') window.history.pushState(null, '', path)
+    else window.history.replaceState(null, '', path)
+  },
+  onPathChange(listener: (path: string) => void) {
+    const handle = () => listener(window.location.pathname)
+    window.addEventListener('popstate', handle)
+    return () => window.removeEventListener('popstate', handle)
+  },
+  back() {
+    window.history.back()
+  },
+  absoluteUrl(path: string) {
+    return new URL(path, window.location.origin).href
   },
   /** The presenter receives a `File` from the input; it is a `Blob` for the browser. */
   createPreview(file: { type: string; size: number }) {

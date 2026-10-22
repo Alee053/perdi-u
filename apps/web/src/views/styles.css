@@ -890,6 +890,25 @@ nav {
   gap: var(--space-2);
   margin-top: var(--space-2);
 }
+.detail-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-6) var(--space-5);
+  color: var(--muted);
+  text-align: center;
+}
+.detail-state h2 {
+  color: var(--ink);
+  font-size: 18px;
+}
+.detail-notice {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius);
+  background: var(--danger-soft);
+  color: var(--danger);
+}
 .toast {
   position: fixed;
   z-index: 50;

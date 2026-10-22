@@ -12,6 +12,14 @@ export interface ReportRepository {
   list(query?: ReportQuery): Promise<ReportRecord[]>
 }
 
+/** Port of the report detail; access rules and public projection belong to the cases of use. */
+export interface ReportDetailRepository {
+  /** One report in any state, or undefined when the ID does not exist. */
+  find(id: string): Promise<ReportRecord | undefined>
+  /** Private contact phone as stored; read only after the case of use has checked access. */
+  findContactPhone(reportId: string): Promise<string | undefined>
+}
+
 /** Write port kept separate from the public catalog query. */
 export interface ReportPublisher {
   create(ownerId: string, draft: CreateReportInput): Promise<ReportRecord>
