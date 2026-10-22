@@ -5,7 +5,7 @@ import { PostgresProfileRepository } from './profiles.js'
 import { PostgresSessionRevocations } from './session-revocations.js'
 
 export interface Database {
-  reports: ReportRepository & Pick<ReportDetailRepository, 'find'>
+  reports: ReportRepository & ReportDetailRepository
   profiles: PostgresProfileRepository
   sessions: PostgresSessionRevocations
   close(): Promise<void>

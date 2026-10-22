@@ -15,8 +15,8 @@ import {
 } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { openDatabase, type Database, type PostgresProfileRepository } from '@perdiu/database'
-import { GetReport, ListReports } from '@perdiu/catalog'
-import type { AccountIdentity, ReportSummary } from '@perdiu/contracts'
+import { GetReport, GetReportContact, ListReports } from '@perdiu/catalog'
+import type { AccountIdentity, ReportContact, ReportSummary } from '@perdiu/contracts'
 import {
   withSessionRevocation,
   type AccessTokenVerifier,
@@ -31,6 +31,7 @@ class ReportsController {
   constructor(
     @Inject(ListReports) private readonly catalog: ListReports,
     @Inject(GetReport) private readonly detail: GetReport,
+    @Inject(GetReportContact) private readonly contacts: GetReportContact,
   ) {}
 
   @Get()
@@ -64,6 +65,25 @@ class ReportsController {
     // Missing and not visible answer the same, so a closed case does not reveal that it exists.
     if (!report) throw new NotFoundException('Reporte no disponible.')
     return report
+  }
+
+  /** Private contact: only a verified session that may see the report reaches the phone. */
+  @Get(':id/contact')
+  @UseGuards(AuthGuard)
+  @Header('Cache-Control', 'no-store')
+  async contact(
+    @Param('id') input: string,
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<ReportContact> {
+    const id = parseReportId(input)
+    let contact
+    try {
+      contact = await this.contacts.execute(id, user.id)
+    } catch {
+      throw new ServiceUnavailableException('No se pudo cargar el contacto. Intenta nuevamente.')
+    }
+    if (!contact) throw new NotFoundException('Reporte no disponible.')
+    return contact
   }
 }
 
@@ -124,6 +144,7 @@ export async function createApplication(databaseUrl: string, verifier: AccessTok
         providers: [
           { provide: ListReports, useValue: new ListReports(database.reports) },
           { provide: GetReport, useValue: new GetReport(database.reports) },
+          { provide: GetReportContact, useValue: new GetReportContact(database.reports) },
           { provide: SESSION_REVOCATIONS, useValue: database.sessions },
           { provide: PROFILES, useValue: database.profiles },
           // Every private route passes the guard, so every one rejects revoked sessions.

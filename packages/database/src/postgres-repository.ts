@@ -12,9 +12,7 @@ const reportColumns = `
   ARRAY(SELECT i.public_url FROM report_images i WHERE i.report_id = r.id ORDER BY i.position) AS "imageUrls"
 `
 
-export class PostgresReportRepository
-  implements ReportRepository, Pick<ReportDetailRepository, 'find'>
-{
+export class PostgresReportRepository implements ReportRepository, ReportDetailRepository {
   constructor(private readonly pool: Pool) {}
 
   async list(query: ReportQuery = {}): Promise<ReportRecord[]> {
@@ -56,5 +54,14 @@ export class PostgresReportRepository
       [id],
     )
     return result.rows[0]
+  }
+
+  /** Private phone of the report; the API asks for it only after checking access. */
+  async findContactPhone(reportId: string): Promise<string | undefined> {
+    const result = await this.pool.query<{ phone: string | null }>(
+      'SELECT phone FROM report_contacts WHERE report_id = $1',
+      [reportId],
+    )
+    return result.rows[0]?.phone ?? undefined
   }
 }

@@ -126,3 +126,60 @@ test('el detalle HTTP distingue inexistente, resuelto ajeno, ID inválido y fall
     }
   })
 })
+
+test('el contacto HTTP exige sesión y entrega solo el número de WhatsApp normalizado', async () => {
+  await withCatalog(async (url, sign) => {
+    const visitor = await request(url, `/reports/${withPhoto}/contact`)
+    assert.equal(visitor.status, 401, 'ocultar el botón no basta: la API exige sesión')
+    assert.equal(visitor.headers.get('www-authenticate'), 'Bearer')
+    assert.ok(!/59170000001/.test(await visitor.text()))
+
+    const token = await sign(resolvedOwner)
+    const contact = await request(url, `/reports/${withPhoto}/contact`, token)
+    assert.equal(contact.status, 200)
+    assert.equal(contact.headers.get('cache-control'), 'no-store')
+    assert.deepEqual(JSON.parse(await contact.text()), {
+      available: true,
+      whatsapp: '59170000001',
+    })
+
+    const missing = await request(url, `/reports/${withoutPhoto}/contact`, token)
+    assert.equal(missing.status, 200)
+    assert.deepEqual(JSON.parse(await missing.text()), { available: false })
+  })
+})
+
+test('el contacto HTTP no se entrega para un resuelto ajeno y distingue ID inválido y fallo', async () => {
+  await withCatalog(async (url, sign) => {
+    const other = await request(url, `/reports/${resolved}/contact`, await sign(otherAccount))
+    assert.equal(other.status, 404, 'un tercero no obtiene el contacto de un caso cerrado')
+    assert.equal(JSON.parse(await other.text()).message, 'Reporte no disponible.')
+    const unknown = await request(
+      url,
+      `/reports/${crypto.randomUUID()}/contact`,
+      await sign(otherAccount),
+    )
+    assert.equal(unknown.status, 404)
+
+    const own = await request(url, `/reports/${resolved}/contact`, await sign(resolvedOwner))
+    assert.equal(own.status, 200, 'el propietario conserva el acceso a su caso')
+    assert.deepEqual(JSON.parse(await own.text()), { available: false })
+
+    const invalid = await request(url, '/reports/reporte-1/contact', await sign(otherAccount))
+    assert.equal(invalid.status, 400)
+
+    const pool = createPool(process.env.TEST_DATABASE_URL!)
+    await pool.query('ALTER TABLE report_contacts RENAME TO unavailable_contacts')
+    try {
+      const failed = await request(url, `/reports/${withPhoto}/contact`, await sign(otherAccount))
+      assert.equal(failed.status, 503)
+      assert.equal(
+        JSON.parse(await failed.text()).message,
+        'No se pudo cargar el contacto. Intenta nuevamente.',
+      )
+    } finally {
+      await pool.query('ALTER TABLE unavailable_contacts RENAME TO report_contacts')
+      await pool.end()
+    }
+  })
+})

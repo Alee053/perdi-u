@@ -570,17 +570,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "48106e23131f556e632ecbf15f9e7f7193018a35",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-22T02:55:48.000Z",
       "message": "refactor(database): conservar los escapes Unicode de la búsqueda (#7)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/48106e23131f556e632ecbf15f9e7f7193018a35"
     },
     "stats": {
       "total": 10,
       "additions": 7,
       "deletions": 3,
+      "date": "2026-10-22"
+    },
+    "coverage": 89.73,
+    "test_count": 86,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T02:59:53.000Z",
+      "message": "feat(api): entregar el contacto privado con GET /reports/:id/contact (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 97,
+      "additions": 91,
+      "deletions": 6,
       "date": "2026-10-22"
     },
     "coverage": 89.73,
