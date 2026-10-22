@@ -627,17 +627,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "82ed746586f8ef2fd8d6af7c5f0bac13ec917c59",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-10-22T03:33:53.000Z",
       "message": "Merge feat/s1-05-publicacion-persistente into feat/s1-06-adjuntar-fotos",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/82ed746586f8ef2fd8d6af7c5f0bac13ec917c59"
     },
     "stats": {
       "total": 57,
       "additions": 44,
       "deletions": 13,
+      "date": "2026-10-22"
+    },
+    "coverage": 84.75,
+    "test_count": 94,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-10-22T03:34:45.000Z",
+      "message": "docs(repo): formatear tabla de servicios",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 2,
+      "additions": 1,
+      "deletions": 1,
       "date": "2026-10-22"
     },
     "coverage": 84.75,

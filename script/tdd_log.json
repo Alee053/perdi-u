@@ -966,9 +966,15 @@
     "testId": 29
   },
   {
-    "commitId": "HEAD",
+    "commitId": "82ed746586f8ef2fd8d6af7c5f0bac13ec917c59",
     "commitName": "Merge feat/s1-05-publicacion-persistente into feat/s1-06-adjuntar-fotos",
     "commitTimestamp": 1792640033338,
     "testId": 30
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(repo): formatear tabla de servicios",
+    "commitTimestamp": 1792640085225,
+    "testId": 31
   }
 ]
