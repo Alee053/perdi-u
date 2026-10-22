@@ -78,6 +78,7 @@ function setup(options: { path?: string; session?: AuthState } = {}) {
       absoluteUrl: (path) => 'https://perdiu.test' + path,
     },
     onLoginRequired: () => logins.push('login'),
+    isSaved: (id) => id === report.id,
   })
   return { presenter, api, session, opened, logins, history }
 }
@@ -286,4 +287,44 @@ test('el detalle espera la sesión, se recarga al cambiarla e ignora respuestas 
   await old
   const state = presenter.getSnapshot()
   assert.ok(state.status === 'ready' && state.id === report.id && state.card.title === report.title)
+})
+
+test('la vista del detalle indica qué acciones ofrecer y permite guardar el reporte abierto', async () => {
+  const { presenter, api, session } = setup()
+  assert.equal(presenter.view(), null, 'cerrado no muestra nada')
+  api.find = async () => {
+    throw new Error('network')
+  }
+  await presenter.open(report.id)
+  assert.deepEqual(presenter.view(), {
+    status: 'error',
+    message: 'No se pudo cargar el reporte. Intenta nuevamente.',
+    canRetry: true,
+  })
+  api.find = async () => undefined
+  await presenter.retry()
+  assert.deepEqual(presenter.view(), {
+    status: 'unavailable',
+    message: 'Reporte no disponible.',
+    canRetry: false,
+  })
+
+  api.find = async () => report
+  await presenter.retry()
+  const view = presenter.view()
+  assert.ok(view?.status === 'ready')
+  assert.deepEqual(
+    { ...view, detail: { ...view.detail, card: view.detail.card.id } },
+    {
+      status: 'ready',
+      detail: { card: report.id, saved: true, canContact: true, canResolve: false },
+      contacting: false,
+    },
+  )
+  assert.deepEqual(presenter.find(report.id), { ...report, source: 'catalog' })
+  assert.equal(presenter.find('other'), undefined)
+
+  session.set({ status: 'authenticated', user: { id: report.author.id, email: 'a@example.test' } })
+  const own = presenter.view()
+  assert.ok(own?.status === 'ready' && !own.detail.canContact, 'la autora no ve contactar')
 })

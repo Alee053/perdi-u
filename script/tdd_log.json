@@ -984,9 +984,47 @@
     "testId": 36
   },
   {
-    "commitId": "HEAD",
+    "commitId": "5c0e8237a67b2f65a61995e95d59099e48176270",
     "commitName": "feat(web): abrir un reporte desde su enlace estable y seguir la sesión (#7)",
     "commitTimestamp": 1792639302919,
     "testId": 36
+  },
+  {
+    "numPassedTests": 96,
+    "failedTests": 2,
+    "numTotalTests": 98,
+    "timestamp": 1792639425763,
+    "success": false,
+    "testId": 37
+  },
+  {
+    "numPassedTests": 97,
+    "failedTests": 1,
+    "numTotalTests": 98,
+    "timestamp": 1792639470652,
+    "success": false,
+    "testId": 37
+  },
+  {
+    "numPassedTests": 98,
+    "failedTests": 0,
+    "numTotalTests": 98,
+    "timestamp": 1792639576244,
+    "success": true,
+    "testId": 37
+  },
+  {
+    "numPassedTests": 98,
+    "failedTests": 0,
+    "numTotalTests": 98,
+    "timestamp": 1792640099633,
+    "success": true,
+    "testId": 37
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): integrar el detalle por enlace en la vista y verificarlo en el navegador (#7)",
+    "commitTimestamp": 1792640145267,
+    "testId": 37
   }
 ]

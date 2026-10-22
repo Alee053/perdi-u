@@ -1,11 +1,13 @@
 import { SessionRejected } from '../../models/auth/session.js'
 import { whatsAppUrl } from '../../models/reports/contact.js'
+import type { CatalogReport } from '../../models/reports/report.js'
 import type { ReportDetailRepository } from '../../models/reports/reports-repository.js'
 import type { AuthPresenter } from '../auth/auth.presenter.js'
 import type { Effects } from '../effects.js'
 import { Store } from '../store.js'
 import { toReportCard, type ReportCard } from './report-card.js'
 import { parseReportPath, reportPath } from './report-route.js'
+import type { ReportDetailView } from './reports.presenter.js'
 
 export type ReportDetailState =
   | { status: 'closed' }
@@ -22,6 +24,12 @@ export type ReportDetailState =
     }
   | { status: 'unavailable' | 'error'; id: string; message: string }
 
+/** What the detail dialog shows for each state. */
+export type ReportLinkView =
+  | { status: 'loading' }
+  | { status: 'unavailable' | 'error'; message: string; canRetry: boolean }
+  | { status: 'ready'; detail: ReportDetailView; contacting: boolean; contactMessage?: string }
+
 interface Dependencies {
   repository: ReportDetailRepository
   auth: Pick<AuthPresenter, 'getSnapshot' | 'subscribe'>
@@ -31,6 +39,7 @@ interface Dependencies {
   >
   /** Opens the login screen; the report stays open behind it to return to after signing in. */
   onLoginRequired: () => void
+  isSaved: (id: string) => boolean
 }
 
 const unavailable = 'Reporte no disponible.'
@@ -46,6 +55,8 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
   private controller?: AbortController
   /** Who the shown report was loaded for: an account ID, null for a visitor. */
   private loadedFor?: string | null
+  /** Public DTO of the shown report; it never holds contact data. */
+  private loaded?: CatalogReport
   constructor(private readonly dependencies: Dependencies) {
     super({ status: 'closed' })
   }
@@ -129,10 +140,11 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
       this.setState({ status: 'unavailable', id, message: unavailable })
       return
     }
+    this.loaded = { ...report, source: 'catalog' }
     this.setState({
       status: 'ready',
       id,
-      card: toReportCard({ ...report, source: 'catalog' }),
+      card: toReportCard(this.loaded),
       authorId: report.author.id,
       active: report.state === 'active',
       contacting: false,
@@ -170,6 +182,30 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
     this.setState({ ...report, contacting: false, ...(!url && { contactMessage: noContact }) })
     if (url) effects.openWhatsApp(url)
   }
+
+  view = (): ReportLinkView | null => {
+    const { state } = this
+    if (state.status === 'closed') return null
+    if (state.status === 'loading') return { status: 'loading' }
+    if (state.status !== 'ready')
+      return { status: state.status, message: state.message, canRetry: state.status === 'error' }
+    return {
+      status: 'ready',
+      detail: {
+        card: state.card,
+        saved: this.dependencies.isSaved(state.id),
+        canContact: this.canContact(),
+        // Closing a case belongs to «Mis reportes» (S1-08).
+        canResolve: false,
+      },
+      contacting: state.contacting,
+      ...(state.contactMessage && { contactMessage: state.contactMessage }),
+    }
+  }
+
+  /** Entity of the open report, so it can be saved like a catalog card. */
+  find = (id: string): CatalogReport | undefined =>
+    this.state.status === 'ready' && this.loaded?.id === id ? this.loaded : undefined
 
   /** Active reports of another person; the author does not contact themselves. */
   canContact = () => {

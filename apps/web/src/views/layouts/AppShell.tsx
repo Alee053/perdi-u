@@ -16,7 +16,7 @@ import { Sidebar } from './Sidebar'
 
 /** Dashboard frame: shows the section chosen by the shell presenter and its shared overlays. */
 export function AppShell({ app }: { app: AppView }) {
-  const { shell, actions, detail } = app
+  const { shell, actions, detail, reportLink } = app
   const { reports } = actions
   const cards = { isSaved: app.isSaved, onSave: reports.toggleSaved, onOpen: reports.open }
 
@@ -122,11 +122,23 @@ export function AppShell({ app }: { app: AppView }) {
       {app.notice && <Toast notice={app.notice} onClose={actions.dismissNotice} />}
       {detail && (
         <ReportDetail
-          detail={detail}
+          view={{ status: 'ready', detail, contacting: false }}
           onSave={() => reports.toggleSaved(detail.card.id)}
           onContact={() => reports.contact(detail.card.id)}
           onResolve={() => reports.resolve(detail.card.id)}
           onClose={reports.close}
+        />
+      )}
+      {reportLink && (
+        <ReportDetail
+          view={reportLink}
+          onSave={() =>
+            reportLink.status === 'ready' && reports.toggleSaved(reportLink.detail.card.id)
+          }
+          onContact={actions.reportLink.contact}
+          onResolve={() => {}}
+          onRetry={actions.reportLink.retry}
+          onClose={actions.reportLink.close}
         />
       )}
     </div>

@@ -46,6 +46,8 @@ interface Dependencies {
   catalog: { find(id: string): CatalogReport | undefined }
   notices: Pick<NoticePresenter, 'show'>
   effects: Pick<Effects, 'openWhatsApp'>
+  /** Opens a catalog report through its stable link. */
+  links: { open(id: string): void }
 }
 
 const isActive = (report: Report) => report.state === 'active'
@@ -98,7 +100,12 @@ export class ReportsPresenter extends Store<ReportsState> {
     )
   }
 
-  open = (id: string) => this.update({ selected: this.find(id) ?? null })
+  /** Demo reports keep the local detail; catalog reports open through their stable link. */
+  open = (id: string) => {
+    const report = this.find(id)
+    if (report?.source === 'demo') this.update({ selected: report })
+    else this.dependencies.links.open(id)
+  }
   close = () => this.update({ selected: null })
 
   resolve = (id: string) => {
