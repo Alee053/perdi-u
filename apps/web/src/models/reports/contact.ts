@@ -1,5 +1,5 @@
-/** Normalized Bolivian mobile as the API returns it: 591 followed by 8 digits starting with 6 or 7. */
-export const isWhatsAppNumber = (phone: string) => /^591[67]\d{7}$/.test(phone)
+/** International number as the API returns it: country code and number, 8 to 15 digits only. */
+export const isWhatsAppNumber = (phone: string) => /^[1-9]\d{7,14}$/.test(phone)
 
 /**
  * WhatsApp chat link with a prepared message, or undefined when the number is not valid. Only

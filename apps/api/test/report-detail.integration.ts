@@ -143,6 +143,23 @@ test('el contacto HTTP exige sesión y entrega solo el número de WhatsApp norma
       whatsapp: '59170000001',
     })
 
+    const pool = createPool(process.env.TEST_DATABASE_URL!)
+    try {
+      // As publishing (S1-05) stores it: international format with its country code.
+      await pool.query('INSERT INTO report_contacts (report_id, phone) VALUES ($1, $2)', [
+        withoutPhoto,
+        '+5491112345678',
+      ])
+      const abroad = await request(url, `/reports/${withoutPhoto}/contact`, token)
+      assert.deepEqual(JSON.parse(await abroad.text()), {
+        available: true,
+        whatsapp: '5491112345678',
+      })
+      await pool.query('DELETE FROM report_contacts WHERE report_id = $1', [withoutPhoto])
+    } finally {
+      await pool.end()
+    }
+
     const missing = await request(url, `/reports/${withoutPhoto}/contact`, token)
     assert.equal(missing.status, 200)
     assert.deepEqual(JSON.parse(await missing.text()), { available: false })

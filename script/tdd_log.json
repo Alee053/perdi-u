@@ -1164,9 +1164,39 @@
     "testId": 38
   },
   {
-    "commitId": "HEAD",
+    "commitId": "afc7827fba9ee91f319ccda7407dfd23e5713580",
     "commitName": "Merge origin/main into feat/s1-07-consultar-reporte-whatsapp",
     "commitTimestamp": 1792641209215,
     "testId": 39
+  },
+  {
+    "numPassedTests": 105,
+    "failedTests": 2,
+    "numTotalTests": 107,
+    "timestamp": 1792641323351,
+    "success": false,
+    "testId": 40
+  },
+  {
+    "numPassedTests": 106,
+    "failedTests": 1,
+    "numTotalTests": 107,
+    "timestamp": 1792641387457,
+    "success": false,
+    "testId": 40
+  },
+  {
+    "numPassedTests": 107,
+    "failedTests": 0,
+    "numTotalTests": 107,
+    "timestamp": 1792641442114,
+    "success": true,
+    "testId": 40
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "fix(catalog): aceptar el formato internacional del contacto publicado (#7)",
+    "commitTimestamp": 1792641598061,
+    "testId": 40
   }
 ]

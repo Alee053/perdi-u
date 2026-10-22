@@ -52,7 +52,7 @@ export interface ReportSummary extends Omit<ReportData, 'ownerId'> {
 
 /**
  * Private response of GET /reports/:id/contact, only for a verified session that may see the
- * report. `whatsapp` holds digits only (591 + Bolivian mobile); it never appears in public DTOs.
+ * report. `whatsapp` holds digits only (country code and number); it never appears in public DTOs.
  */
 export type ReportContact = { available: true; whatsapp: string } | { available: false }
 

@@ -17,13 +17,19 @@ test('el enlace de WhatsApp abre el chat del número con el mensaje codificado',
   assert.equal(parsed.searchParams.get('text'), text)
 })
 
-test('un número que no es un celular boliviano normalizado no produce destino', () => {
+test('un número internacional normalizado por la API también abre su chat', () => {
+  assert.equal(whatsAppUrl('5491112345678', 'Hola'), 'https://wa.me/5491112345678?text=Hola')
+  assert.equal(whatsAppUrl('14155552671', 'Hola'), 'https://wa.me/14155552671?text=Hola')
+})
+
+test('un valor que no son solo los dígitos de un número internacional no produce destino', () => {
   for (const phone of [
     '',
-    '70000001',
     '+59170000001',
-    '59122123456',
-    '5917000000',
+    '059170000001',
+    '1234567',
+    '1234567890123456',
+    '59170000001 ',
     '59170000001/evil',
     '59170000001?text=otro',
     'evil.example/59170000001',

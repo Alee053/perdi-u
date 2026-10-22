@@ -16,7 +16,14 @@ test('un celular boliviano se normaliza al número internacional de WhatsApp', (
   assert.equal(toWhatsAppNumber('61234567'), '59161234567')
 })
 
-test('un teléfono ausente, fijo, extranjero o con otros caracteres no es un destino válido', () => {
+test('un número internacional como lo guarda la publicación (S1-05) conserva su país', () => {
+  assert.equal(toWhatsAppNumber('+5491112345678'), '5491112345678')
+  assert.equal(toWhatsAppNumber('+54 9 11 1234-5678'), '5491112345678')
+  assert.equal(toWhatsAppNumber('+1 (415) 555-2671'), '14155552671')
+  assert.equal(toWhatsAppNumber('+59170000001'), '59170000001')
+})
+
+test('un teléfono ausente, fijo local, incompleto o con otros caracteres no es un destino válido', () => {
   for (const phone of [
     '',
     '   ',
@@ -25,7 +32,11 @@ test('un teléfono ausente, fijo, extranjero o con otros caracteres no es un des
     '7000000',
     '700000011',
     '5917000000123',
-    '+54 9 11 1234 5678',
+    '5491112345678',
+    '+0591700000001',
+    '+1234567',
+    '+1234567890123456',
+    '++59170000001',
     '7000000a',
     '70000001?text=hola',
     '70000001/../evil',

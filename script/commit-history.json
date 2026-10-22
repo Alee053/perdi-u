@@ -874,12 +874,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "afc7827fba9ee91f319ccda7407dfd23e5713580",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-10-22T03:53:28.000Z",
       "message": "Merge origin/main into feat/s1-07-consultar-reporte-whatsapp",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/afc7827fba9ee91f319ccda7407dfd23e5713580"
     },
     "stats": {
       "total": 1733,
@@ -889,6 +889,25 @@
     },
     "coverage": 89.5,
     "test_count": 105,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-10-22T03:59:56.000Z",
+      "message": "fix(catalog): aceptar el formato internacional del contacto publicado (#7)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 65,
+      "additions": 51,
+      "deletions": 14,
+      "date": "2026-10-22"
+    },
+    "coverage": 89.54,
+    "test_count": 107,
     "failed_tests": 0,
     "conclusion": "success"
   }
