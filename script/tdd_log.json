@@ -680,9 +680,103 @@
     "testId": 24
   },
   {
-    "commitId": "HEAD",
+    "commitId": "ffdb6be0a1c4d67e6693f099656c800201db88e5",
     "commitName": "refactor(web): integrar vistas MVP, navegación y límites con verificación progresiva",
     "commitTimestamp": 1792510829000,
     "testId": 24
+  },
+  {
+    "numPassedTests": 78,
+    "failedTests": 0,
+    "numTotalTests": 78,
+    "timestamp": 1792636276495,
+    "success": false,
+    "testId": 25
+  },
+  {
+    "numPassedTests": 79,
+    "failedTests": 0,
+    "numTotalTests": 79,
+    "timestamp": 1792636308996,
+    "success": true,
+    "testId": 25
+  },
+  {
+    "numPassedTests": 80,
+    "failedTests": 1,
+    "numTotalTests": 81,
+    "timestamp": 1792636329323,
+    "success": false,
+    "testId": 25
+  },
+  {
+    "numPassedTests": 81,
+    "failedTests": 0,
+    "numTotalTests": 81,
+    "timestamp": 1792636355522,
+    "success": true,
+    "testId": 25
+  },
+  {
+    "numPassedTests": 78,
+    "failedTests": 0,
+    "numTotalTests": 78,
+    "timestamp": 1792636382974,
+    "success": false,
+    "testId": 25
+  },
+  {
+    "numPassedTests": 82,
+    "failedTests": 0,
+    "numTotalTests": 82,
+    "timestamp": 1792636420021,
+    "success": true,
+    "testId": 25
+  },
+  {
+    "numPassedTests": 82,
+    "failedTests": 1,
+    "numTotalTests": 83,
+    "timestamp": 1792636554527,
+    "success": false,
+    "testId": 25
+  },
+  {
+    "numPassedTests": 79,
+    "failedTests": 4,
+    "numTotalTests": 83,
+    "timestamp": 1792636633997,
+    "success": false,
+    "testId": 25
+  },
+  {
+    "numPassedTests": 79,
+    "failedTests": 4,
+    "numTotalTests": 83,
+    "timestamp": 1792636659444,
+    "success": false,
+    "testId": 25
+  },
+  {
+    "numPassedTests": 84,
+    "failedTests": 1,
+    "numTotalTests": 85,
+    "timestamp": 1792636729014,
+    "success": false,
+    "testId": 25
+  },
+  {
+    "numPassedTests": 85,
+    "failedTests": 0,
+    "numTotalTests": 85,
+    "timestamp": 1792636741855,
+    "success": true,
+    "testId": 25
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(repo): publicar reportes persistentes (#5)",
+    "commitTimestamp": 1792637038106,
+    "testId": 25
   }
 ]

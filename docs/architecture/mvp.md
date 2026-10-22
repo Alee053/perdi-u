@@ -37,7 +37,7 @@ flowchart LR
     Ports["Puertos<br/>ReportsRepository, AuthGateway, AccountClient"]
   end
   subgraph Infra["Infrastructure (infrastructure/)"]
-    Http["HTTP: catalog-client, account-client"]
+    Http["HTTP: catalog-client, publish-client, account-client"]
     Auth["Supabase Auth"]
     Browser["browser-effects, datos demo"]
   end
@@ -80,7 +80,7 @@ apps/web/src/
 │   ├── components/           Tarjetas, filtros, detalle, mapa, estados vacíos
 │   └── styles.css
 └── infrastructure/           Adapters
-    ├── http/                 Clientes de la API con validación del DTO
+    ├── http/                 Clientes de catálogo, publicación y cuenta con validación del DTO
     ├── auth/                 Supabase Auth (PKCE)
     ├── browser/              window, temporizadores, vistas previas de fotos
     └── demo/                 Reportes de demostración en memoria
@@ -108,25 +108,34 @@ apps/web/src/
 
 La View nunca filtra ni formatea; el Model nunca sabe qué texto se mostrará.
 
-## 7. Papel de React y Vite
+## 7. Flujo de publicación persistente
+
+1. **View** — `views/pages/PublishPage.tsx` entrega al Presenter los cambios de campos y el envío; no contiene reglas ni accede a la red.
+2. **Presenter** — `presenters/reports/publish.presenter.ts` valida, bloquea envíos concurrentes, conserva el borrador si falla y coordina el aviso y la vuelta al catálogo.
+3. **Model** — `models/reports/publication.ts` valida el borrador y define `ReportPublisher`; `infrastructure/http/publish-client.ts` implementa ese puerto con el token de sesión.
+4. **API y persistencia** — `POST /reports` toma el propietario del token verificado, `CreateReport` valida de nuevo y el adapter de base guarda reporte y contacto privado en una transacción. La respuesta es una proyección pública.
+
+La publicación inicial no adjunta fotos; S1-06 agregará medios al mismo flujo.
+
+## 8. Papel de React y Vite
 
 - React renderiza la View y aporta el ciclo de vida. Los hooks `use*.ts` del Presenter son el único punto de contacto: `useStore` usa `useSyncExternalStore` para suscribirse al estado del núcleo, y `useApp` arranca y limpia la sesión y el catálogo con `useEffect`.
 - Los núcleos (`*.presenter.ts`) no importan React: se prueban instanciando la clase.
 - Vite compila, sirve la SPA y hace de proxy de `/api` y `/auth` en desarrollo. Las variables `VITE_*` son públicas; ningún secreto llega al navegador.
 
-## 8. Cómo se prueba cada capa
+## 9. Cómo se prueba cada capa
 
 | Capa           | Pruebas                                                                                                             | Herramienta                  |
 | -------------- | ------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | Model          | `apps/web/test/models/` — reglas, límites, datos inválidos.                                                         | Jest                         |
 | Presenter      | `apps/web/test/presenters/`, `auth.test.ts`, `catalog.test.ts` — eventos, estados, errores, navegación, con dobles. | Jest                         |
-| Infrastructure | Clientes HTTP con `fetch` doblado (`catalog.test.ts`, `auth.test.ts`).                                              | Jest                         |
+| Infrastructure | Clientes HTTP con `fetch` doblado (`catalog.test.ts`, `publish.test.ts`, `auth.test.ts`).                           | Jest                         |
 | View           | Recorridos en Chromium de escritorio y móvil (`scripts/browser-catalog.mjs`).                                       | Playwright (`pnpm test:e2e`) |
 | Arquitectura   | Imports permitidos por capa (`scripts/test/web-layers.test.mjs`, `pnpm check:boundaries`).                          | Jest + script                |
 
 Los ciclos rojo-verde de esta migración están en [su evidencia](../validation/mvp-refactor.md).
 
-## 9. Diferencias con la arquitectura anterior
+## 10. Diferencias con la arquitectura anterior
 
 | Antes                                                                         | Ahora                                                                                     |
 | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
@@ -140,10 +149,10 @@ Los ciclos rojo-verde de esta migración están en [su evidencia](../validation/
 
 La interfaz también se simplificó: se quitaron elementos que no funcionaban (gráfico con datos inventados, tendencias «+12 %», atajo `⌘ K`, campana y selector de ciudad sin acción, botón de centrar mapa), el panel con degradado del ingreso, el desenfoque del encabezado y del modal, las animaciones de entrada y las elevaciones al pasar el cursor. En una segunda pasada se dejó una presentación sobria: tipografía del sistema en lugar de Google Fonts, navegación y botones solo con texto (los íconos quedan donde cumplen una función: guardar, cerrar, menú, mostrar contraseña y carga), estado como texto de color, resumen en listas sin tarjetas ni barras, bordes finos sin sombras y radio de 4 px. Los colores, radios y espacios son variables de `views/styles.css` (de 3.364 a unas 1.000 líneas).
 
-## 10. Archivos para mostrar en la presentación
+## 11. Archivos para mostrar en la presentación
 
 1. `src/models/reports/publication.ts` y `test/models/reports.test.ts`: reglas puras y su prueba.
-2. `src/presenters/reports/publish.presenter.ts` y `test/presenters/reports.test.ts`: el Presenter coordina validación, foto, publicación, navegación y aviso con dobles.
+2. `src/presenters/reports/publish.presenter.ts` y `test/presenters/reports.test.ts`: el Presenter coordina validación, publicación, navegación y aviso con dobles.
 3. `src/views/pages/PublishPage.tsx`: la View solo muestra y delega.
 4. `src/app/dependencies.ts`: dónde se conectan las capas.
 5. `scripts/lib/web-layers.mjs`: la regla de capas convertida en verificación automática.

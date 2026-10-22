@@ -21,7 +21,7 @@ function imageUrl(value: unknown): value is string {
   }
 }
 
-function readReport(value: unknown): ReportSummary {
+export function readReport(value: unknown): ReportSummary {
   if (
     !object(value) ||
     !text(value.id) ||
@@ -45,6 +45,7 @@ function readReport(value: unknown): ReportSummary {
     !Array.isArray(value.imageUrls)
   )
     throw invalidResponse()
+  if (value.petSpecies !== undefined && !text(value.petSpecies)) throw invalidResponse()
   const imageUrls = value.imageUrls.map((url: unknown) => {
     if (!imageUrl(url)) throw invalidResponse()
     return url
@@ -54,6 +55,7 @@ function readReport(value: unknown): ReportSummary {
     type: value.type,
     state: value.state,
     category: value.category,
+    ...(value.petSpecies ? { petSpecies: value.petSpecies } : {}),
     title: value.title,
     description: value.description,
     city: value.city,

@@ -6,7 +6,9 @@ NestJS con PostgreSQL independiente y consultas parametrizadas mediante `pg`. El
 
 `GET /reports` devuelve un array de `ReportSummary` de `@perdiu/contracts`: solo activos, ordenados por `createdAt` descendente e ID ascendente en empates. `type` distingue pérdida/hallazgo y `state` distingue activo/resuelto. `incidentDate` usa `YYYY-MM-DD`; `createdAt` usa ISO UTC con seis decimales, conserva los microsegundos y se genera en PostgreSQL.
 
-El autor público tiene ID (sujeto de Auth), nombre y foto opcional. Los contactos están en tablas privadas; ni esos datos ni claves de almacenamiento se consultan para el catálogo. Una lista vacía devuelve `200 []`; fallos de consulta devuelven `503` con mensaje seguro en español. El catálogo es público y no tiene endpoints de escritura.
+El autor público tiene ID (sujeto de Auth), nombre y foto opcional. Los contactos están en tablas privadas; ni esos datos ni claves de almacenamiento se consultan para el catálogo. Una lista vacía devuelve `200 []`; fallos de consulta devuelven `503` con mensaje seguro en español.
+
+`POST /reports` requiere `Authorization: Bearer <access token>`. El cuerpo lleva tipo, categoría, título, descripción, ciudad, zona, fecha del hecho y WhatsApp; para mascotas también especie. El servidor toma el autor de la identidad verificada, genera ID/fecha de creación/estado activo y guarda el contacto normalizado en `report_contacts`. Responde con el reporte público y sin el número; los errores de entrada devuelven `400` con `fieldErrors`, una sesión ausente o inválida devuelve `401`, y los fallos de persistencia devuelven `503`. En esta entrega la publicación no adjunta fotos; la asociación de medios corresponde a S1-06.
 
 ## Cuenta autenticada
 

@@ -43,7 +43,8 @@ const draft: ReportDraft = {
   description: '  La encontré en un minibús de la línea 2.  ',
   city: 'La Paz',
   zone: ' Miraflores ',
-  incidentDate: '',
+  incidentDate: '2026-10-06',
+  phone: '+591 70000000',
 }
 
 test('los filtros se traducen a la consulta pública sin texto vacío ni criterios ausentes', () => {
@@ -86,8 +87,8 @@ test('el resumen cuenta activos por tipo y ciudad y aparte los resueltos', () =>
 
 test('un borrador exige título, descripción suficiente y zona', () => {
   assert.deepEqual(validateDraft(draft), {})
-  assert.deepEqual(validateDraft({ ...draft, title: ' a ', description: 'corta', zone: '  ' }), {
-    title: 'too_short',
+  assert.deepEqual(validateDraft({ ...draft, title: '  ', description: 'corta', zone: '  ' }), {
+    title: 'required',
     description: 'too_short',
     zone: 'required',
   })
@@ -95,6 +96,19 @@ test('un borrador exige título, descripción suficiente y zona', () => {
     title: 'required',
     description: 'required',
   })
+})
+
+test('publicar exige fecha válida, WhatsApp internacional y especie para mascotas', () => {
+  assert.deepEqual(
+    validateDraft({
+      ...draft,
+      category: 'pet',
+      incidentDate: '2026-02-30',
+      phone: '59170000000',
+      petSpecies: ' ',
+    } as ReportDraft),
+    { incidentDate: 'invalid', phone: 'invalid', petSpecies: 'required' },
+  )
 })
 
 test('solo se aceptan fotos JPG o PNG de hasta 5 MB', () => {
@@ -106,7 +120,7 @@ test('solo se aceptan fotos JPG o PNG de hasta 5 MB', () => {
 test('publicar crea un reporte activo del dueño con texto limpio y la fecha de hoy si falta', () => {
   const now = new Date('2026-10-21T02:30:00.000Z') // 20 de octubre, 22:30 en La Paz
   const published = publishDemoReport(
-    { ...draft, imageUrl: 'blob:preview' },
+    { ...draft, incidentDate: '', imageUrl: 'blob:preview' },
     { id: 'demo-9', now, owner: demoOwner },
   )
   assert.deepEqual(published, {

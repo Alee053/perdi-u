@@ -1,4 +1,4 @@
-import type { PublicProfile, ReportData, ReportQuery } from '@perdiu/contracts'
+import type { CreateReportInput, PublicProfile, ReportData, ReportQuery } from '@perdiu/contracts'
 
 export interface ReportRecord extends ReportData {
   author: PublicProfile
@@ -10,4 +10,9 @@ export interface ReportRepository {
    * ListReports additionally enforces active state, stable order, result limit and public projection.
    */
   list(query?: ReportQuery): Promise<ReportRecord[]>
+}
+
+/** Write port kept separate from the public catalog query. */
+export interface ReportPublisher {
+  create(ownerId: string, draft: CreateReportInput): Promise<ReportRecord>
 }
