@@ -680,9 +680,31 @@
     "testId": 24
   },
   {
-    "commitId": "HEAD",
+    "commitId": "ffdb6be0a1c4d67e6693f099656c800201db88e5",
     "commitName": "refactor(web): integrar vistas MVP, navegación y límites con verificación progresiva",
     "commitTimestamp": 1792510829000,
     "testId": 24
+  },
+  {
+    "numPassedTests": 78,
+    "failedTests": 1,
+    "numTotalTests": 79,
+    "timestamp": 1792636607405,
+    "success": false,
+    "testId": 25
+  },
+  {
+    "numPassedTests": 79,
+    "failedTests": 0,
+    "numTotalTests": 79,
+    "timestamp": 1792636668916,
+    "success": true,
+    "testId": 25
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(catalog): consultar el detalle público de un reporte por ID (#7)",
+    "commitTimestamp": 1792636737949,
+    "testId": 25
   }
 ]

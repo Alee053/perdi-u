@@ -1,2 +1,3 @@
 export { ListReports } from './catalog.js'
-export type { ReportRecord, ReportRepository } from './model.js'
+export { GetReport } from './report-detail.js'
+export type { ReportDetailRepository, ReportRecord, ReportRepository } from './model.js'
