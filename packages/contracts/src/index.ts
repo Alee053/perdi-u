@@ -21,6 +21,7 @@ export interface CreateReportInput {
   incidentDate: string
   phone: string
   petSpecies?: string
+  mediaIds?: string[]
 }
 
 export type CreateReportField = keyof CreateReportInput

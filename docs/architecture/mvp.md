@@ -73,14 +73,14 @@ apps/web/src/
 │   ├── app/                  shell (navegación), notice (avisos), useApp
 │   ├── auth/                 auth (sesión), auth-form (formulario), useAuthForm
 │   ├── catalog/              catalog (consulta), filters (selección)
-│   └── reports/              reports (demo y detalle), publish (formulario), report-card
+│   └── reports/              reports (demo y detalle), publish (formulario), usePublishPage (limpieza de vistas previas), report-card
 ├── views/                    View
 │   ├── layouts/              AppShell, Sidebar, AppHeader
 │   ├── pages/                Una página por sección
 │   ├── components/           Tarjetas, filtros, detalle, mapa, estados vacíos
 │   └── styles.css
 └── infrastructure/           Adapters
-    ├── http/                 Clientes de catálogo, publicación y cuenta con validación del DTO
+    ├── http/                 Clientes de catálogo, publicación, fotos y cuenta con validación del DTO
     ├── auth/                 Supabase Auth (PKCE)
     ├── browser/              window, temporizadores, vistas previas de fotos
     └── demo/                 Reportes de demostración en memoria
@@ -108,18 +108,16 @@ apps/web/src/
 
 La View nunca filtra ni formatea; el Model nunca sabe qué texto se mostrará.
 
-## 7. Flujo de publicación persistente
+## 7. Flujo de publicación y fotos privadas
 
-1. **View** — `views/pages/PublishPage.tsx` entrega al Presenter los cambios de campos y el envío; no contiene reglas ni accede a la red.
-2. **Presenter** — `presenters/reports/publish.presenter.ts` valida, bloquea envíos concurrentes, conserva el borrador si falla y coordina el aviso y la vuelta al catálogo.
-3. **Model** — `models/reports/publication.ts` valida el borrador y define `ReportPublisher`; `infrastructure/http/publish-client.ts` implementa ese puerto con el token de sesión.
-4. **API y persistencia** — `POST /reports` toma el propietario del token verificado, `CreateReport` valida de nuevo y el adapter de base guarda reporte y contacto privado en una transacción. La respuesta es una proyección pública.
-
-La publicación inicial no adjunta fotos; S1-06 agregará medios al mismo flujo.
+1. **View** — `views/pages/PublishPage.tsx` entrega archivos y cambios al Presenter y muestra sus vistas previas; no valida contenido ni accede a la red. `usePublishPage` mantiene la suscripción y libera URLs `blob:` al desmontar.
+2. **Presenter** — `presenters/reports/publish.presenter.ts` valida el borrador y fotos, bloquea envíos concurrentes, conserva el estado al fallar y coordina el aviso y la vuelta al catálogo.
+3. **Model** — `models/reports/publication.ts` define las reglas y los puertos `ReportPublisher` y `ReportMediaClient`; los adapters HTTP envían formulario y archivos con el token de sesión.
+4. **API y persistencia** — `POST /media` comprueba las firmas de archivo y entrega el contenido al caso de uso. `POST /reports` valida los IDs del dueño y asocia todas las fotos en la transacción del reporte. El API responde solo con URLs de medios ya asociados; `/media/:id` sirve bytes desde el bucket privado.
 
 ## 8. Papel de React y Vite
 
-- React renderiza la View y aporta el ciclo de vida. Los hooks `use*.ts` del Presenter son el único punto de contacto: `useStore` usa `useSyncExternalStore` para suscribirse al estado del núcleo, y `useApp` arranca y limpia la sesión y el catálogo con `useEffect`.
+- React renderiza la View y aporta el ciclo de vida. Los hooks `use*.ts` del Presenter son el único punto de contacto: `useStore` usa `useSyncExternalStore` para suscribirse al estado del núcleo; `useApp` arranca y limpia la sesión y el catálogo, y `usePublishPage` libera vistas previas al desmontar la página.
 - Los núcleos (`*.presenter.ts`) no importan React: se prueban instanciando la clase.
 - Vite compila, sirve la SPA y hace de proxy de `/api` y `/auth` en desarrollo. Las variables `VITE_*` son públicas; ningún secreto llega al navegador.
 

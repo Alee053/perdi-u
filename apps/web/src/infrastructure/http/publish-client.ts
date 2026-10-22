@@ -16,6 +16,7 @@ const fields = new Set<CreateReportField>([
   'incidentDate',
   'phone',
   'petSpecies',
+  'mediaIds',
 ])
 const issues = new Set(['required', 'too_short', 'too_long', 'invalid'])
 

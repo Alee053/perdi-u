@@ -22,7 +22,7 @@ pnpm install --frozen-lockfile
 cp .env.example .env
 ```
 
-En `.env`, define una contraseña local en `POSTGRES_PASSWORD` y una `DATABASE_URL` con el formato `postgresql://perdiu:<contraseña-codificada>@127.0.0.1:5433/perdiu_dev`. Codifica los caracteres especiales de la contraseña para la URL. Ejecuta `pnpm auth:keys` y copia sus tres líneas (`AUTH_DB_PASSWORD`, `AUTH_JWT_SECRET`, `AUTH_JWT_KEYS`) al mismo archivo. El archivo está ignorado por Git; las credenciales de BD y las claves de Auth pertenecen a procesos de servidor. La [guía de servicios](docs/services.md) detalla configuración actual y proveedores pendientes; no necesitas R2 para el catálogo.
+En `.env`, define una contraseña local en `POSTGRES_PASSWORD` y una `DATABASE_URL` con el formato `postgresql://perdiu:<contraseña-codificada>@127.0.0.1:5433/perdiu_dev`. Codifica los caracteres especiales de la contraseña para la URL. Ejecuta `pnpm auth:keys` y copia sus tres líneas (`AUTH_DB_PASSWORD`, `AUTH_JWT_SECRET`, `AUTH_JWT_KEYS`) al mismo archivo. El archivo está ignorado por Git; las credenciales de BD y las claves de Auth pertenecen a procesos de servidor. La [guía de servicios](docs/services.md) detalla configuración actual y proveedores pendientes; no necesitas R2 para iniciar el proyecto ni consultar el catálogo. La carga de fotos requiere un bucket R2 autorizado y sus cuatro variables opcionales.
 
 ```bash
 pnpm db:up
@@ -58,14 +58,14 @@ La aplicación web sigue Model–View–Presenter; la [guía MVP](docs/architect
 - `apps/web`: interfaz React/TypeScript/Vite con catálogo real y otras secciones de demostración.
 - `apps/api`: catálogo público NestJS con persistencia en PostgreSQL independiente.
 - `packages/contracts`: tipos compartidos para los reportes y perfiles públicos.
-- `packages/catalog`: modelo, puerto de repositorio y caso de uso del catálogo, independientes de frameworks y de la base de datos.
-- `packages/database`: PostgreSQL, conexión, adapter SQL, migraciones, seed y CLI local. Consulta su [guía](packages/database/README.md).
+- `packages/catalog`: modelo, puertos y casos de uso del catálogo, publicación y fotos, independientes de frameworks y proveedores.
+- `packages/database`: PostgreSQL, conexión, adapters SQL, metadatos de medios, migraciones, seed y CLI local. Consulta su [guía](packages/database/README.md).
 
 La [guía de arquitectura](docs/architecture.md) define responsabilidades y dependencias. `pnpm check:boundaries` comprueba imports entre workspaces y sus exports públicos. Los paquetes compartidos se recompilan en modo watch con `pnpm dev`.
 
 «Explorar reportes» consulta `GET /reports` de PostgreSQL a través del proxy `/api` de Vite. La búsqueda por título/descripción ignora mayúsculas y tildes y se combina en el servidor con tipo, categoría y ciudad. Cada consulta devuelve hasta 50 reportes activos, del más reciente al más antiguo; al alcanzar el límite, la interfaz sugiere ajustar los filtros. «Limpiar filtros» restablece el catálogo y los controles; las consultas anteriores se cancelan y sus respuestas se descartan. Distingue carga, error con reintento de la misma búsqueda, catálogo vacío y búsqueda sin coincidencias con acceso a publicación. No usa datos demo como fallback. El detalle abierto desde este catálogo muestra únicamente datos públicos, sin contacto ni controles de propietario. Las imágenes ausentes usan SVG locales por categoría; el mapa ilustrativo pertenece a la demo.
 
-Publicar envía reportes sin fotos a la API y los conserva en PostgreSQL; exige una sesión y mantiene privado el número de WhatsApp. La carga de fotos corresponde a S1-06. Resumen, Mis reportes y Guardados conservan sus flujos de demostración, y los guardados solo viven en memoria. Los reportes/telefonía demo y el seed son ficticios; el seed incluye un autor «Santiago Demo» para comprobar que su nombre no concede permisos. Las fotos de demostración usan Unsplash.
+Publicar envía reportes a la API y los conserva en PostgreSQL; admite hasta tres fotos JPG/PNG cuando R2 está configurado, exige una sesión y mantiene privado el número de WhatsApp. Sin R2, la API puede arrancar y se pueden publicar reportes sin fotos. Resumen, Mis reportes y Guardados conservan sus flujos de demostración, y los guardados solo viven en memoria. Los reportes/telefonía demo y el seed son ficticios; el seed incluye un autor «Santiago Demo» para comprobar que su nombre no concede permisos. Las fotos de demostración usan Unsplash.
 
 ## Seguimiento TDD
 

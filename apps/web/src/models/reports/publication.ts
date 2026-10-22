@@ -14,6 +14,18 @@ export interface ReportPublisher {
   publish(draft: ReportDraft): Promise<void>
 }
 
+export interface ReportPhotoFile {
+  name: string
+  type: string
+  size: number
+  arrayBuffer(): Promise<ArrayBuffer>
+}
+
+export interface ReportMediaClient {
+  upload(file: ReportPhotoFile): Promise<string>
+  remove(id: string): Promise<void>
+}
+
 export class ReportPublishFailure extends Error {
   constructor(
     readonly reason: 'validation' | 'unauthorized' | 'unavailable',
@@ -68,9 +80,10 @@ export function validateDraft(draft: ReportDraft): Partial<Record<DraftField, Dr
 
 export const photoTypes = ['image/jpeg', 'image/png']
 export const maxPhotoBytes = 5 * 1024 * 1024
+export const maxPhotoCount = 3
 
-export const isAcceptedPhoto = (file: { type: string; size: number }) =>
-  photoTypes.includes(file.type) && file.size <= maxPhotoBytes
+export const isAcceptedPhoto = (file: Pick<ReportPhotoFile, 'type' | 'size'>, currentCount = 0) =>
+  currentCount < maxPhotoCount && photoTypes.includes(file.type) && file.size <= maxPhotoBytes
 
 /** Calendar day in Bolivia, which is the day the person sees when publishing. */
 const localDay = (now: Date) =>

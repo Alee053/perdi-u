@@ -12,6 +12,14 @@ export interface ApiConfig {
   port: number
   host: string
   auth: AuthConfig
+  r2?: R2Config
+}
+
+export interface R2Config {
+  accountId: string
+  bucketName: string
+  accessKeyId: string
+  secretAccessKey: string
 }
 
 export class ConfigurationError extends Error {}
@@ -49,5 +57,28 @@ export function readConfig(env: NodeJS.ProcessEnv): ApiConfig {
   const port = Number(env.PORT ?? 3000)
   if (!Number.isInteger(port) || port < 1 || port > 65535)
     throw new ConfigurationError('PORT debe ser un entero entre 1 y 65535.')
-  return { databaseUrl, port, host: env.HOST || '127.0.0.1', auth: readAuthConfig(env) }
+  const r2Values = [
+    env.R2_ACCOUNT_ID,
+    env.R2_BUCKET_NAME,
+    env.R2_ACCESS_KEY_ID,
+    env.R2_SECRET_ACCESS_KEY,
+  ]
+  const hasR2Config = r2Values.some((value) => value !== undefined && value !== '')
+  if (hasR2Config && r2Values.some((value) => !value?.trim()))
+    throw new ConfigurationError('Configura todas las variables de R2 para habilitar las fotos.')
+  const r2 = hasR2Config
+    ? {
+        accountId: env.R2_ACCOUNT_ID!.trim(),
+        bucketName: env.R2_BUCKET_NAME!.trim(),
+        accessKeyId: env.R2_ACCESS_KEY_ID!.trim(),
+        secretAccessKey: env.R2_SECRET_ACCESS_KEY!.trim(),
+      }
+    : undefined
+  return {
+    databaseUrl,
+    port,
+    host: env.HOST || '127.0.0.1',
+    auth: readAuthConfig(env),
+    ...(r2 && { r2 }),
+  }
 }

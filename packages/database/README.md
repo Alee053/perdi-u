@@ -4,7 +4,7 @@
 
 ## Uso
 
-- `@perdiu/database`: `openDatabase(databaseUrl)` entrega `reports` (lectura y publicación), `publisher`, `profiles` (nombre y foto de un perfil, sin contactos), `sessions` (revocaciones de sesión persistidas) y `close()`. También exporta `createPool`, `PostgresReportRepository`, `PostgresProfileRepository` y `PostgresSessionRevocations` para integración y herramientas de BD.
+- `@perdiu/database`: `openDatabase(databaseUrl)` entrega `reports` (lectura y publicación), `publisher`, `media` (metadatos de fotos privadas), `profiles` (nombre y foto de un perfil, sin contactos), `sessions` (revocaciones de sesión persistidas) y `close()`. También exporta `createPool`, `PostgresReportRepository`, `PostgresMediaRepository`, `PostgresProfileRepository` y `PostgresSessionRevocations` para integración y herramientas de BD.
 - `@perdiu/database/config`: validación de `DATABASE_URL`, error de configuración seguro y `assertLocalDatabase`.
 - `@perdiu/database/maintenance`: `migrate(pool)` y `seed(pool)` para bases aisladas; no se ejecutan al iniciar la API.
 
@@ -32,7 +32,7 @@ Los archivos viven en `migrations/`, con nombres como `001_catalog.sql` y `002_n
 
 El runner mantiene `schema_migrations`, adquiere el mismo bloqueo transaccional del runner anterior, omite versiones aplicadas y ejecuta las pendientes en una transacción. Un fallo revierte sus cambios y registros; una segunda ejecución puede volver a intentarlas. Rechaza nombres SQL inválidos, versiones duplicadas y archivos ausentes de versiones registradas. No detecta ediciones del contenido de archivos ya aplicados: conservarlos intactos y añadir una versión nueva para cada evolución.
 
-`002_session_revocations.sql` añade `session_revocations` (`session_id` de Auth revocado y fecha), sin claves foráneas hacia la base de Auth. `003_report_pet_species.sql` añade la especie opcional para reportes de mascotas. `001_catalog.sql` y el registro de versión 1 se conservan sin cambios en la extracción; no se necesita recrear la base ni borrar volúmenes. El seed ficticio está en `seeds/development.sql`, conserva IDs fijos y no sobrescribe registros existentes.
+`002_session_revocations.sql` añade `session_revocations` (`session_id` de Auth revocado y fecha), sin claves foráneas hacia la base de Auth. `003_report_pet_species.sql` añade la especie opcional para reportes de mascotas. `004_report_media.sql` guarda dueño, clave privada, tipo, tamaño y asociación de fotos; las claves nunca salen en los DTO públicos. Las fotos asociadas reciben una posición única por reporte y las no asociadas se pueden borrar por su dueño. `001_catalog.sql` y el registro de versión 1 se conservan sin cambios en la extracción; no se necesita recrear la base ni borrar volúmenes. El seed ficticio está en `seeds/development.sql`, conserva IDs fijos y no sobrescribe registros existentes.
 
 ## Verificación
 

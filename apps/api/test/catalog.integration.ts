@@ -21,10 +21,24 @@ const noSessions = createAccessTokenVerifier(
 )
 const publisherId = 'b4c2e551-3c4b-4cce-8e79-883c862bd75f'
 const publisherSession = '1cc8c2d5-1524-4221-8585-442fc53de052'
+const secondPublisherId = 'd4c2e551-3c4b-4cce-8e79-883c862bd75f'
 const publishVerifier: AccessTokenVerifier = {
   async verify(token) {
     if (token !== 'verified-publication-token') throw new InvalidAccessToken()
     return { id: publisherId, email: 'privado@example.test', sessionId: publisherSession }
+  },
+}
+const mediaVerifier: AccessTokenVerifier = {
+  async verify(token) {
+    if (token === 'verified-publication-token')
+      return { id: publisherId, email: 'privado@example.test', sessionId: publisherSession }
+    if (token === 'verified-second-publication-token')
+      return {
+        id: secondPublisherId,
+        email: 'otro@example.test',
+        sessionId: '2cc8c2d5-1524-4221-8585-442fc53de052',
+      }
+    throw new InvalidAccessToken()
   },
 }
 
@@ -262,6 +276,150 @@ test('POST /reports exige sesión, persiste el reporte y conserva privado el Wha
     const catalog = await fetch(`${await app.getUrl()}/reports`)
     assert.equal(catalog.status, 200)
     assert.deepEqual(JSON.parse(await catalog.text()), [published])
+  } finally {
+    await app?.close()
+    await pool.end()
+  }
+})
+
+test('el recorrido de medios privado valida, asocia en transacción y sirve solo fotos publicadas', async () => {
+  assert.equal(process.env.PERDIU_TEST_CONTAINER, '1')
+  const databaseUrl = process.env.TEST_DATABASE_URL
+  assert.ok(databaseUrl)
+  assertLocalDatabase(databaseUrl)
+  const pool = createPool(databaseUrl)
+  const objects = new Map<string, { contentType: string; bytes: Uint8Array }>()
+  const mediaStorage = {
+    async put(key: string, contentType: string, bytes: Uint8Array) {
+      objects.set(key, { contentType, bytes: new Uint8Array(bytes) })
+    },
+    async get(key: string) {
+      return objects.get(key)?.bytes
+    },
+    async delete(key: string) {
+      objects.delete(key)
+    },
+  }
+  let app: Awaited<ReturnType<typeof createApplication>> | undefined
+  try {
+    await resetCatalog(pool)
+    app = await createApplication(databaseUrl, mediaVerifier, { mediaStorage })
+    await app.listen(0, '127.0.0.1')
+    const base = await app.getUrl()
+
+    const upload = async (token: string, name = 'foto.txt') => {
+      const form = new FormData()
+      form.append(
+        'file',
+        new Blob([Uint8Array.from([137, 80, 78, 71, 13, 10, 26, 10])], {
+          type: 'text/plain',
+        }),
+        name,
+      )
+      return fetch(`${base}/media`, {
+        method: 'POST',
+        headers: { authorization: `Bearer ${token}` },
+        body: form,
+      })
+    }
+    const unauthorized = new FormData()
+    unauthorized.append('file', new Blob(['not authorized']), 'foto.png')
+    assert.equal((await fetch(`${base}/media`, { method: 'POST', body: unauthorized })).status, 401)
+
+    const uploaded = await upload('verified-publication-token')
+    assert.equal(uploaded.status, 201)
+    const mediaBody = await uploaded.json()
+    assert.deepEqual(Object.keys(mediaBody), ['id'])
+    const mediaId = mediaBody.id as string
+    assert.equal(objects.size, 1)
+    assert.equal((await fetch(`${base}/media/${mediaId}`)).status, 404)
+
+    const reportDraft = {
+      type: 'found',
+      category: 'object',
+      title: 'Mochila azul',
+      description: 'Mochila azul encontrada cerca del mercado central.',
+      city: 'La Paz',
+      zone: 'Sopocachi',
+      incidentDate: '2026-10-20',
+      phone: '+591 70000000',
+      mediaIds: [mediaId],
+    }
+    const crossOwner = await fetch(`${base}/reports`, {
+      method: 'POST',
+      headers: {
+        authorization: 'Bearer verified-second-publication-token',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(reportDraft),
+    })
+    assert.equal(crossOwner.status, 400)
+    const rejectedFields = (await crossOwner.json()).fieldErrors
+    assert.equal(rejectedFields.mediaIds, 'invalid')
+    assert.equal(Object.keys(rejectedFields).length, 1)
+    assert.equal(await pool.query('SELECT id FROM reports').then(({ rowCount }) => rowCount), 0)
+
+    const response = await fetch(`${base}/reports`, {
+      method: 'POST',
+      headers: {
+        authorization: 'Bearer verified-publication-token',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(reportDraft),
+    })
+    assert.equal(response.status, 201)
+    const published = await response.json()
+    assert.equal(published.imageUrls.length, 1)
+    assert.equal(published.imageUrls[0], `/api/media/${mediaId}`)
+    assert.ok(!JSON.stringify(published).includes('report-media/'))
+    const image = await fetch(`${base}/media/${mediaId}`)
+    assert.equal(image.status, 200)
+    assert.equal(image.headers.get('content-type'), 'image/png')
+    assert.equal(
+      Array.from(new Uint8Array(await image.arrayBuffer())).join(','),
+      '137,80,78,71,13,10,26,10',
+    )
+
+    const reused = await fetch(`${base}/reports`, {
+      method: 'POST',
+      headers: {
+        authorization: 'Bearer verified-publication-token',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(reportDraft),
+    })
+    assert.equal(reused.status, 400)
+    assert.equal(await pool.query('SELECT id FROM reports').then(({ rowCount }) => rowCount), 1)
+
+    const unattached = await Promise.all([
+      upload('verified-publication-token', 'one.png'),
+      upload('verified-publication-token', 'two.png'),
+      upload('verified-publication-token', 'three.png'),
+    ])
+    for (const uploadedMedia of unattached) assert.equal(uploadedMedia.status, 201)
+    const overLimit = await upload('verified-publication-token', 'four.png')
+    assert.equal(overLimit.status, 400)
+    assert.equal(objects.size, 4, 'el objeto del upload rechazado se elimina')
+    const unattachedId = (await unattached[0]!.json()).id as string
+    assert.equal(
+      (
+        await fetch(`${base}/media/${unattachedId}`, {
+          method: 'DELETE',
+          headers: { authorization: 'Bearer verified-second-publication-token' },
+        })
+      ).status,
+      404,
+    )
+    assert.equal(
+      (
+        await fetch(`${base}/media/${unattachedId}`, {
+          method: 'DELETE',
+          headers: { authorization: 'Bearer verified-publication-token' },
+        })
+      ).status,
+      204,
+    )
+    assert.equal(objects.size, 3)
   } finally {
     await app?.close()
     await pool.end()
