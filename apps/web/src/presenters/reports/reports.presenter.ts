@@ -1,20 +1,12 @@
 import { whatsAppUrl } from '../../models/reports/contact.js'
 import { matchesFilters } from '../../models/reports/filters.js'
-import { removeReport, resolveReport } from '../../models/reports/publication.js'
-import {
-  demoOwner,
-  isOwnedBy,
-  type CatalogReport,
-  type Report,
-} from '../../models/reports/report.js'
+import type { CatalogReport, Report } from '../../models/reports/report.js'
 import { summarizeReports } from '../../models/reports/stats.js'
 import type { NoticePresenter } from '../app/notice.presenter.js'
 import { toReportFilters, type FilterSelection } from '../catalog/filters.presenter.js'
 import type { Effects } from '../effects.js'
 import { Store } from '../store.js'
 import { toReportCard, type ReportCard } from './report-card.js'
-
-export type OwnFilter = 'Todos' | 'Activos' | 'Resueltos'
 
 export interface ReportsState {
   /** Demo reports, including the ones published in this session. */
@@ -23,7 +15,6 @@ export interface ReportsState {
   /** Saved catalog reports, kept so they stay visible after the search changes. */
   savedCatalog: CatalogReport[]
   selected: Report | null
-  ownFilter: OwnFilter
 }
 
 export interface ReportDetailView {
@@ -53,7 +44,7 @@ interface Dependencies {
 const isActive = (report: Report) => report.state === 'active'
 
 /**
- * Community reports outside the public catalog (overview, map, own reports and saved list) and the
+ * Community reports outside the public catalog (overview, map and saved list) and the
  * report detail. The rules come from the model; this class decides what each screen shows.
  */
 export class ReportsPresenter extends Store<ReportsState> {
@@ -62,7 +53,7 @@ export class ReportsPresenter extends Store<ReportsState> {
     private readonly dependencies: Dependencies,
     saved: string[] = [],
   ) {
-    super({ reports, saved, savedCatalog: [], selected: null, ownFilter: 'Todos' })
+    super({ reports, saved, savedCatalog: [], selected: null })
   }
 
   private update(patch: Partial<ReportsState>) {
@@ -76,10 +67,6 @@ export class ReportsPresenter extends Store<ReportsState> {
       savedCatalog.find((report) => report.id === id) ??
       this.dependencies.catalog.find(id)
     )
-  }
-
-  private own() {
-    return this.state.reports.filter((report) => isOwnedBy(report, demoOwner.id))
   }
 
   toggleSaved = (id: string) => {
@@ -108,26 +95,11 @@ export class ReportsPresenter extends Store<ReportsState> {
   }
   close = () => this.update({ selected: null })
 
-  resolve = (id: string) => {
-    const reports = resolveReport(this.state.reports, id, demoOwner.id)
-    if (reports === this.state.reports) return
-    this.update({ reports })
-    this.dependencies.notices.show(
-      'Marcaste el reporte como resuelto; ya no aparecerá en las búsquedas.',
-    )
-  }
-
-  remove = (id: string) => {
-    const reports = removeReport(this.state.reports, id, demoOwner.id)
-    if (reports === this.state.reports) return
-    const { saved, selected } = this.state
+  markResolved = (id: string) =>
     this.update({
-      reports,
-      saved: saved.filter((item) => item !== id),
-      selected: selected?.id === id ? null : selected,
+      saved: this.state.saved.filter((saved) => saved !== id),
+      savedCatalog: this.state.savedCatalog.filter((report) => report.id !== id),
     })
-    this.dependencies.notices.show('El reporte se quitó de la lista.')
-  }
 
   contact = (id: string) => {
     const report = this.find(id)
@@ -140,7 +112,6 @@ export class ReportsPresenter extends Store<ReportsState> {
   }
 
   add = (report: Report) => this.update({ reports: [report, ...this.state.reports] })
-  setOwnFilter = (ownFilter: OwnFilter) => this.update({ ownFilter })
   /** Private, per-account state must not survive the session. */
   clearPrivateData = () => this.update({ saved: [], savedCatalog: [], selected: null })
 
@@ -153,14 +124,14 @@ export class ReportsPresenter extends Store<ReportsState> {
       .map(toReportCard)
   }
 
-  counts = () => ({ own: this.own().length, saved: this.state.saved.length })
+  counts = () => ({ saved: this.state.saved.length })
 
   detail = (): ReportDetailView | null => {
     const { selected } = this.state
     // A demo report may have changed (resolved) since it was opened.
     const report = selected && (this.find(selected.id) ?? selected)
     if (!report) return null
-    const canResolve = isOwnedBy(report, demoOwner.id) && isActive(report)
+    const canResolve = false
     return {
       card: toReportCard(report),
       saved: this.isSaved(report.id),
@@ -198,26 +169,5 @@ export class ReportsPresenter extends Store<ReportsState> {
         number: index + 1,
       }))
     return { count: visible.length, pins, list: visible.slice(0, 7).map(toReportCard) }
-  }
-
-  myReports = () => {
-    const { ownFilter: filter } = this.state
-    const own = this.own()
-    const visible = own.filter(
-      (report) =>
-        filter === 'Todos' || (filter === 'Activos' ? isActive(report) : !isActive(report)),
-    )
-    return {
-      filter,
-      total: own.length,
-      active: own.filter(isActive).length,
-      cards: visible.map(toReportCard),
-      empty: {
-        title:
-          filter === 'Resueltos'
-            ? 'Todavía no tienes reportes resueltos'
-            : 'Aún no publicaste reportes',
-      },
-    }
   }
 }

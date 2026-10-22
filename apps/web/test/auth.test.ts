@@ -51,6 +51,14 @@ function doubles(
   return { presenter, calls, expire: () => signedOut?.() }
 }
 
+test('un rechazo de una ruta privada invalida la vista de sesión y vuelve a solicitar ingreso', async () => {
+  const { presenter } = doubles()
+  await presenter.signIn({ email: identity.email, password: 'Correcta-123' })
+  presenter.requireSignIn()
+  assert.equal(presenter.getSnapshot().status, 'anonymous')
+  assert.equal(presenter.access('my-reports'), 'login')
+})
+
 test('iniciar sesión valida campos, autentica con Auth y usa la identidad verificada por la API', async () => {
   const { presenter, calls } = doubles()
   assert.deepEqual(await presenter.signIn({ email: 'no-es-correo', password: '' }), {

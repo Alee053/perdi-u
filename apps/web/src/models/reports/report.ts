@@ -2,6 +2,8 @@ import type { PublicProfile, ReportSummary } from '@perdiu/contracts'
 
 /** Report of the public catalog: exactly the public DTO returned by the API. */
 export type CatalogReport = ReportSummary & { source: 'catalog' }
+/** Report loaded from the verified account's private history. */
+export type OwnReport = ReportSummary & { source: 'own' }
 
 /**
  * Local demonstration report. Besides the public fields it keeps a contact phone and a position on
@@ -13,7 +15,7 @@ export type DemoReport = ReportSummary & {
   position: { top: string; left: string }
 }
 
-export type Report = CatalogReport | DemoReport
+export type Report = CatalogReport | DemoReport | OwnReport
 
 export const cities = ['La Paz', 'Cochabamba', 'Santa Cruz'] as const
 

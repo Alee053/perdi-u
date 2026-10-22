@@ -931,12 +931,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "9eb336a11f4c698b6233f99070bbf943e2b34c66",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-10-22T04:31:30.000Z",
       "message": "feat(api): persistir historial y cierre autorizado de reportes (#8)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/9eb336a11f4c698b6233f99070bbf943e2b34c66"
     },
     "stats": {
       "total": 337,
@@ -946,6 +946,25 @@
     },
     "coverage": 89.61,
     "test_count": 111,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-10-22T04:42:18.000Z",
+      "message": "feat(web): gestionar reportes propios con confirmación y reintento (#8)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 1071,
+      "additions": 918,
+      "deletions": 153,
+      "date": "2026-10-22"
+    },
+    "coverage": 90.19,
+    "test_count": 122,
     "failed_tests": 0,
     "conclusion": "success"
   }

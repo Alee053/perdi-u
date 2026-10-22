@@ -113,6 +113,9 @@ export class AuthPresenter extends Store<AuthState> {
     return this.state.status === 'restoring' ? 'wait' : 'login'
   }
 
+  /** A private request rejected the session: stop presenting this account as verified. */
+  requireSignIn = () => this.setState({ status: 'anonymous', notice: expired })
+
   /**
    * Revokes the session in the API before closing it in Auth: discarding the JWT in the browser
    * does not invalidate it. A retry after a partial failure succeeds because the API answers 401.

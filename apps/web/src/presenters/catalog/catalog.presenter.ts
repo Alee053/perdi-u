@@ -58,6 +58,13 @@ export class CatalogPresenter extends Store<CatalogState> {
     return this.loaded.find((report) => report.id === id)
   }
 
+  /** A confirmed close invalidates even a query that began before the server changed the row. */
+  removeResolved(id: string) {
+    this.cancel()
+    this.loaded = this.loaded.filter((report) => report.id !== id)
+    this.setState({ status: 'ready', reports: this.loaded.map(toReportCard) })
+  }
+
   /** Texts for the empty state and the result limit; they depend on the active filters. */
   summary() {
     const { status, reports } = this.state
