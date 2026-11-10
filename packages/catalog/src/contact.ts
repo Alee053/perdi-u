@@ -10,7 +10,7 @@ export function normalizeReportPhone(phone: string) {
  * without 591). Only digits are returned, so a stored value can never turn into a URL fragment.
  */
 export function toWhatsAppNumber(phone: string): string | undefined {
-  const digits = phone.trim().replace(/[\s().-]/g, '')
+  const digits = normalizeReportPhone(phone)
   const international = /^\+([1-9]\d{7,14})$/.exec(digits)?.[1]
   if (international) return international
   const mobile = /^(?:591)?([67]\d{7})$/.exec(digits)?.[1]

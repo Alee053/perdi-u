@@ -1121,17 +1121,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "328dc87f88dba419411163b8c4aa43be59897a40",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-10T13:53:27.000Z",
       "message": "refactor(catalog): mover normalizeReportPhone al módulo de contacto",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/328dc87f88dba419411163b8c4aa43be59897a40"
     },
     "stats": {
       "total": 10,
       "additions": 6,
       "deletions": 4,
+      "date": "2026-11-10"
+    },
+    "coverage": 87.97,
+    "test_count": 141,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-10T13:54:38.000Z",
+      "message": "refactor(catalog): reutilizar normalizeReportPhone en toWhatsAppNumber",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 2,
+      "additions": 1,
+      "deletions": 1,
       "date": "2026-11-10"
     },
     "coverage": 87.97,

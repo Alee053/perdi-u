@@ -1810,9 +1810,23 @@
     "testId": 49
   },
   {
-    "commitId": "HEAD",
+    "commitId": "328dc87f88dba419411163b8c4aa43be59897a40",
     "commitName": "refactor(catalog): mover normalizeReportPhone al módulo de contacto",
     "commitTimestamp": 1794318808681,
     "testId": 49
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794318848263,
+    "success": true,
+    "testId": 50
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "refactor(catalog): reutilizar normalizeReportPhone en toWhatsAppNumber",
+    "commitTimestamp": 1794318880848,
+    "testId": 50
   }
 ]
