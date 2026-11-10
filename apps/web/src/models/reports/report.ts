@@ -20,8 +20,8 @@ export type Report = CatalogReport | DemoReport | OwnReport
 export const cities = ['La Paz', 'Cochabamba', 'Santa Cruz'] as const
 
 /**
- * Owner of the demo flows until publishing uses the API. Ownership is compared by id: a display
- * name is presentation only and never proves who owns a report.
+ * Author of the fictional demo reports shown in the overview and map. It grants no permission:
+ * ownership of persisted reports comes from the verified session, never from a display name.
  */
 export const demoOwner: PublicProfile & { phone: string } = {
   id: 'demo-owner',

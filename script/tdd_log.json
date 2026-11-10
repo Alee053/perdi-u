@@ -1846,9 +1846,23 @@
     "testId": 51
   },
   {
-    "commitId": "HEAD",
+    "commitId": "be91e28930dd9b0f7dd24ae34ac2a470891a698d",
     "commitName": "refactor(web): eliminar isOwnedBy sin uso",
     "commitTimestamp": 1794318565641,
     "testId": 51
+  },
+  {
+    "numPassedTests": 139,
+    "failedTests": 0,
+    "numTotalTests": 139,
+    "timestamp": 1794318617352,
+    "success": true,
+    "testId": 52
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(web): describir demoOwner solo como autor de datos demo",
+    "commitTimestamp": 1794318648283,
+    "testId": 52
   }
 ]
