@@ -1140,17 +1140,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "eea2068b34cb3841c1f0d0a059a15c99f1738682",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-10T13:54:38.000Z",
       "message": "refactor(catalog): reutilizar normalizeReportPhone en toWhatsAppNumber",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/eea2068b34cb3841c1f0d0a059a15c99f1738682"
     },
     "stats": {
       "total": 2,
       "additions": 1,
       "deletions": 1,
+      "date": "2026-11-10"
+    },
+    "coverage": 87.97,
+    "test_count": 141,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-10T13:55:49.000Z",
+      "message": "refactor(catalog): renombrar digits a normalized en toWhatsAppNumber",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 6,
+      "additions": 3,
+      "deletions": 3,
       "date": "2026-11-10"
     },
     "coverage": 87.97,

@@ -1824,9 +1824,23 @@
     "testId": 50
   },
   {
-    "commitId": "HEAD",
+    "commitId": "eea2068b34cb3841c1f0d0a059a15c99f1738682",
     "commitName": "refactor(catalog): reutilizar normalizeReportPhone en toWhatsAppNumber",
     "commitTimestamp": 1794318880848,
     "testId": 50
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794318918543,
+    "success": true,
+    "testId": 51
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "refactor(catalog): renombrar digits a normalized en toWhatsAppNumber",
+    "commitTimestamp": 1794318950805,
+    "testId": 51
   }
 ]
