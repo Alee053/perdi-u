@@ -1,3 +1,8 @@
+/** Removes spaces, dots, dashes and parentheses, as people usually type a phone number. */
+export function normalizeReportPhone(phone: string) {
+  return phone.trim().replace(/[\s().-]/g, '')
+}
+
 /**
  * WhatsApp number of a stored contact phone, or undefined when it is not a valid destination.
  * Publishing (S1-05) stores international numbers (`+` and 8 to 15 digits, any country); older
