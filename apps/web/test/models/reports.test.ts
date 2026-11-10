@@ -9,8 +9,6 @@ import {
 import {
   isAcceptedPhoto,
   publishDemoReport,
-  removeReport,
-  resolveReport,
   validateDraft,
   type ReportDraft,
 } from '../../src/models/reports/publication.js'
@@ -148,20 +146,4 @@ test('publicar crea un reporte activo del dueño con texto limpio y la fecha de 
       .incidentDate,
     '2026-10-01',
   )
-})
-
-test('solo el dueño resuelve o elimina un reporte; el nombre visible no basta', () => {
-  const own = report({ id: 'own', author: { id: demoOwner.id, displayName: 'Otra persona' } })
-  const impostor = report({ id: 'other', author: { id: 'x', displayName: demoOwner.displayName } })
-  const reports = [own, impostor]
-  assert.deepEqual(
-    resolveReport(reports, 'own', demoOwner.id).map(({ state }) => state),
-    ['resolved', 'active'],
-  )
-  assert.equal(resolveReport(reports, 'other', demoOwner.id), reports)
-  assert.deepEqual(
-    removeReport(reports, 'own', demoOwner.id).map(({ id }) => id),
-    ['other'],
-  )
-  assert.equal(removeReport(reports, 'other', demoOwner.id), reports)
 })

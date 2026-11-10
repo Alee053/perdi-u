@@ -7,7 +7,7 @@ import type {
   ReportValidationErrors,
   ReportValidationIssue,
 } from '@perdiu/contracts'
-import { isOwnedBy, type DemoReport, type Report } from './report.js'
+import type { DemoReport } from './report.js'
 
 export type ReportDraft = CreateReportInput
 export interface ReportPublisher {
@@ -112,19 +112,4 @@ export function publishDemoReport(
     phone: owner.phone,
     position: { top: '48%', left: '48%' },
   }
-}
-
-/** Changes apply only to reports owned by `ownerId`; otherwise the same list is returned. */
-export function resolveReport(reports: Report[], id: string, ownerId: string) {
-  const target = reports.find((report) => report.id === id)
-  if (!target || !isOwnedBy(target, ownerId)) return reports
-  return reports.map((report) =>
-    report === target ? { ...report, state: 'resolved' as const } : report,
-  )
-}
-
-export function removeReport(reports: Report[], id: string, ownerId: string) {
-  const target = reports.find((report) => report.id === id)
-  if (!target || !isOwnedBy(target, ownerId)) return reports
-  return reports.filter((report) => report !== target)
 }
