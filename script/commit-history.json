@@ -1140,12 +1140,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "3b806dff056e7c8dafaa8515e2c075f14b5ecdab",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-10T13:48:12.000Z",
       "message": "refactor(web): eliminar publishDemoReport y DemoReportDraft sin uso",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/3b806dff056e7c8dafaa8515e2c075f14b5ecdab"
     },
     "stats": {
       "total": 78,
@@ -1154,6 +1154,25 @@
       "date": "2026-11-10"
     },
     "coverage": 87.74,
+    "test_count": 139,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-10T13:49:24.000Z",
+      "message": "refactor(web): eliminar isOwnedBy sin uso",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 3,
+      "additions": 0,
+      "deletions": 3,
+      "date": "2026-11-10"
+    },
+    "coverage": 87.8,
     "test_count": 139,
     "failed_tests": 0,
     "conclusion": "success"

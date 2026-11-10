@@ -1832,9 +1832,23 @@
     "testId": 50
   },
   {
-    "commitId": "HEAD",
+    "commitId": "3b806dff056e7c8dafaa8515e2c075f14b5ecdab",
     "commitName": "refactor(web): eliminar publishDemoReport y DemoReportDraft sin uso",
     "commitTimestamp": 1794318493726,
     "testId": 50
+  },
+  {
+    "numPassedTests": 139,
+    "failedTests": 0,
+    "numTotalTests": 139,
+    "timestamp": 1794318534376,
+    "success": true,
+    "testId": 51
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "refactor(web): eliminar isOwnedBy sin uso",
+    "commitTimestamp": 1794318565641,
+    "testId": 51
   }
 ]

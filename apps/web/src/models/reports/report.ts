@@ -28,6 +28,3 @@ export const demoOwner: PublicProfile & { phone: string } = {
   displayName: 'Santiago Demo',
   phone: '59170000000',
 }
-
-export const isOwnedBy = (report: Report, ownerId: string) =>
-  report.source === 'demo' && report.author.id === ownerId
