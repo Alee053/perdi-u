@@ -8,11 +8,10 @@ import {
 } from '../../src/models/reports/filters.js'
 import {
   isAcceptedPhoto,
-  publishDemoReport,
   validateDraft,
   type ReportDraft,
 } from '../../src/models/reports/publication.js'
-import { demoOwner, isOwnedBy, type DemoReport } from '../../src/models/reports/report.js'
+import type { DemoReport } from '../../src/models/reports/report.js'
 import { summarizeReports } from '../../src/models/reports/stats.js'
 
 const report = (overrides: Partial<DemoReport> = {}): DemoReport => ({
@@ -115,35 +114,4 @@ test('solo se aceptan hasta tres fotos JPG o PNG de hasta 5 MB', () => {
   assert.equal(isAcceptedPhoto({ type: 'image/gif', size: 10 }), false)
   assert.equal(isAcceptedPhoto({ type: 'image/jpeg', size: 10 }, 2), true)
   assert.equal(isAcceptedPhoto({ type: 'image/jpeg', size: 10 }, 3), false)
-})
-
-test('publicar crea un reporte activo del dueño con texto limpio y la fecha de hoy si falta', () => {
-  const now = new Date('2026-10-21T02:30:00.000Z') // 20 de octubre, 22:30 en La Paz
-  const published = publishDemoReport(
-    { ...draft, incidentDate: '', imageUrl: 'blob:preview' },
-    { id: 'demo-9', now, owner: demoOwner },
-  )
-  assert.deepEqual(published, {
-    id: 'demo-9',
-    source: 'demo',
-    type: 'found',
-    state: 'active',
-    category: 'object',
-    title: 'Mochila azul',
-    description: 'La encontré en un minibús de la línea 2.',
-    city: 'La Paz',
-    zone: 'Miraflores',
-    incidentDate: '2026-10-20',
-    createdAt: '2026-10-21T02:30:00.000Z',
-    imageUrls: ['blob:preview'],
-    author: { id: demoOwner.id, displayName: demoOwner.displayName },
-    phone: demoOwner.phone,
-    position: { top: '48%', left: '48%' },
-  })
-  assert.equal(isOwnedBy(published, demoOwner.id), true)
-  assert.equal(
-    publishDemoReport({ ...draft, incidentDate: '2026-10-01' }, { id: 'x', now, owner: demoOwner })
-      .incidentDate,
-    '2026-10-01',
-  )
 })

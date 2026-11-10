@@ -1,13 +1,9 @@
 import type {
   CreateReportField,
   CreateReportInput,
-  PublicProfile,
-  ReportCategory,
-  ReportType,
   ReportValidationErrors,
   ReportValidationIssue,
 } from '@perdiu/contracts'
-import type { DemoReport } from './report.js'
 
 export type ReportDraft = CreateReportInput
 export interface ReportPublisher {
@@ -33,17 +29,6 @@ export class ReportPublishFailure extends Error {
   ) {
     super(reason)
   }
-}
-
-export interface DemoReportDraft {
-  type: ReportType
-  category: ReportCategory
-  title: string
-  description: string
-  city: string
-  zone: string
-  incidentDate: string
-  imageUrl?: string
 }
 
 export type DraftField = CreateReportField
@@ -84,32 +69,3 @@ export const maxPhotoCount = 3
 
 export const isAcceptedPhoto = (file: Pick<ReportPhotoFile, 'type' | 'size'>, currentCount = 0) =>
   currentCount < maxPhotoCount && photoTypes.includes(file.type) && file.size <= maxPhotoBytes
-
-/** Calendar day in Bolivia, which is the day the person sees when publishing. */
-const localDay = (now: Date) =>
-  new Intl.DateTimeFormat('en-CA', { timeZone: 'America/La_Paz' }).format(now)
-
-export function publishDemoReport(
-  draft: DemoReportDraft,
-  context: { id: string; now: Date; owner: PublicProfile & { phone: string } },
-): DemoReport {
-  const { owner } = context
-  return {
-    id: context.id,
-    source: 'demo',
-    type: draft.type,
-    state: 'active',
-    category: draft.category,
-    title: draft.title.trim(),
-    description: draft.description.trim(),
-    city: draft.city,
-    zone: draft.zone.trim(),
-    incidentDate: draft.incidentDate || localDay(context.now),
-    createdAt: context.now.toISOString(),
-    imageUrls: draft.imageUrl ? [draft.imageUrl] : [],
-    // The public author never carries the contact phone.
-    author: { id: owner.id, displayName: owner.displayName },
-    phone: owner.phone,
-    position: { top: '48%', left: '48%' },
-  }
-}

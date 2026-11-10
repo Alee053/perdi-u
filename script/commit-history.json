@@ -1121,12 +1121,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "4ca1a48937a1a4abeefa186e0bb05e3e2ad39e50",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-10T13:46:29.000Z",
       "message": "refactor(web): eliminar resolveReport y removeReport sin uso",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/4ca1a48937a1a4abeefa186e0bb05e3e2ad39e50"
     },
     "stats": {
       "total": 35,
@@ -1136,6 +1136,25 @@
     },
     "coverage": 87.86,
     "test_count": 140,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-10T13:48:12.000Z",
+      "message": "refactor(web): eliminar publishDemoReport y DemoReportDraft sin uso",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 78,
+      "additions": 1,
+      "deletions": 77,
+      "date": "2026-11-10"
+    },
+    "coverage": 87.74,
+    "test_count": 139,
     "failed_tests": 0,
     "conclusion": "success"
   }

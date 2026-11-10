@@ -1818,9 +1818,23 @@
     "testId": 49
   },
   {
-    "commitId": "HEAD",
+    "commitId": "4ca1a48937a1a4abeefa186e0bb05e3e2ad39e50",
     "commitName": "refactor(web): eliminar resolveReport y removeReport sin uso",
     "commitTimestamp": 1794318391600,
     "testId": 49
+  },
+  {
+    "numPassedTests": 139,
+    "failedTests": 0,
+    "numTotalTests": 139,
+    "timestamp": 1794318458400,
+    "success": true,
+    "testId": 50
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "refactor(web): eliminar publishDemoReport y DemoReportDraft sin uso",
+    "commitTimestamp": 1794318493726,
+    "testId": 50
   }
 ]
