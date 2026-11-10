@@ -158,15 +158,14 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
     const { filter, status, message, confirmation, pending, resolveError } = this.state
     const own = selectOwnReports(this.state.reports, this.ownerId)
     const state = filter === 'Todos' ? undefined : filter === 'Activos' ? 'active' : 'resolved'
+    const visible = state === undefined ? own : own.filter((report) => report.state === state)
     return {
       status,
       message,
       filter,
       total: own.length,
-      active: selectOwnReports(own, this.ownerId, 'active').length,
-      cards: selectOwnReports(own, this.ownerId, state).map((report) =>
-        toReportCard({ ...report, source: 'own' }),
-      ),
+      active: own.filter((report) => report.state === 'active').length,
+      cards: visible.map((report) => toReportCard({ ...report, source: 'own' })),
       empty: {
         title:
           own.length === 0

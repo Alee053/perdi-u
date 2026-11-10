@@ -1102,12 +1102,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "d973c04780b7725b8d26e49892b57bba3c098fe6",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-10-22T06:48:38.000Z",
       "message": "docs(repo): registrar verificación real de R2 en el VPS (#6)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/d973c04780b7725b8d26e49892b57bba3c098fe6"
     },
     "stats": {
       "total": 36,
@@ -1116,6 +1116,25 @@
       "date": "2026-10-22"
     },
     "coverage": 87.97,
+    "test_count": 141,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "RocioChoque",
+    "commit": {
+      "date": "2026-11-10T14:20:19.000Z",
+      "message": "refactor(web): evitar filtros redundantes en reportes propios",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 18,
+      "additions": 14,
+      "deletions": 4,
+      "date": "2026-11-10"
+    },
+    "coverage": 88,
     "test_count": 141,
     "failed_tests": 0,
     "conclusion": "success"
