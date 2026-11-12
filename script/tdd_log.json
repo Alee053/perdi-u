@@ -1794,9 +1794,15 @@
     "testId": 48
   },
   {
-    "commitId": "HEAD",
+    "commitId": "0ae742f484bea4f0bf16756a6b170f3a9d90a12c",
     "commitName": "docs(repo): replicar en .claude todas las skills de .agents",
     "commitTimestamp": 1794490384797,
     "testId": 49
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(repo): incluir los accesos de .claude en README y mapa de impacto",
+    "commitTimestamp": 1794491008815,
+    "testId": 50
   }
 ]

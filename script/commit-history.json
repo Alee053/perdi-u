@@ -1121,17 +1121,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "0ae742f484bea4f0bf16756a6b170f3a9d90a12c",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-12T13:33:00.000Z",
       "message": "docs(repo): replicar en .claude todas las skills de .agents",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/0ae742f484bea4f0bf16756a6b170f3a9d90a12c"
     },
     "stats": {
       "total": 34,
       "additions": 33,
       "deletions": 1,
+      "date": "2026-11-12"
+    },
+    "coverage": 87.97,
+    "test_count": 141,
+    "failed_tests": 1,
+    "conclusion": "failure"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-12T13:43:23.000Z",
+      "message": "docs(repo): incluir los accesos de .claude en README y mapa de impacto",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 17,
+      "additions": 14,
+      "deletions": 3,
       "date": "2026-11-12"
     },
     "coverage": 87.97,
