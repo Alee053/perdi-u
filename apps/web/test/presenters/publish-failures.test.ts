@@ -78,3 +78,28 @@ test('los errores de campo del API se muestran junto a cada campo sin mensaje ge
   })
   assert.equal(presenter.getSnapshot().message, '')
 })
+
+for (const uploaded of [false, true]) {
+  for (const cancel of ['reset', 'releasePhotos'] as const) {
+    test(`${cancel} antes de publicar descarta el envío ${uploaded ? 'con fotos ya subidas' : 'sin fotos'}`, async () => {
+      const failures: { publish?: Error } = {}
+      const { presenter, submissions } = failingSetup(failures)
+      if (uploaded) {
+        presenter.addPhotos([photo])
+        failures.publish = new Error('red')
+        assert.equal(await presenter.submit(), false)
+        failures.publish = undefined
+      }
+      const previousSubmissions = submissions.length
+
+      const pending = presenter.submit()
+      presenter[cancel]()
+      presenter.setField('title', 'Otro formulario')
+      const state = presenter.getSnapshot()
+
+      assert.equal(await pending, false)
+      assert.equal(submissions.length, previousSubmissions, 'no se publica el borrador abandonado')
+      assert.deepEqual(presenter.getSnapshot(), state)
+    })
+  }
+}

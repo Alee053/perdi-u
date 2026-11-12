@@ -1910,9 +1910,31 @@
     "testId": 55
   },
   {
-    "commitId": "HEAD",
+    "commitId": "3fa40e7d7a4fc57f189ac4014265da9743bc73c9",
     "commitName": "refactor(web): extraer finishPublication de submit",
     "commitTimestamp": 1794454931186,
     "testId": 55
+  },
+  {
+    "numPassedTests": 144,
+    "failedTests": 4,
+    "numTotalTests": 148,
+    "timestamp": 1794491042202,
+    "success": false,
+    "testId": 56
+  },
+  {
+    "numPassedTests": 148,
+    "failedTests": 0,
+    "numTotalTests": 148,
+    "timestamp": 1794491075588,
+    "success": true,
+    "testId": 56
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "fix(web): descartar publicaciones canceladas antes del envío",
+    "commitTimestamp": 1794491137910,
+    "testId": 56
   }
 ]

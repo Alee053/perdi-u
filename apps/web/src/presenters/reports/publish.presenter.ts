@@ -245,7 +245,7 @@ export class PublishPresenter extends Store<PublishState> {
     } catch (error) {
       return this.showFailure(error, attempt, true)
     }
-    if (!mediaIds) return false
+    if (!mediaIds || attempt !== this.attempt) return false
     try {
       await this.dependencies.publisher.publish({
         ...(draft.category === 'pet' ? { ...draft, petSpecies } : draft),

@@ -1235,12 +1235,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "3fa40e7d7a4fc57f189ac4014265da9743bc73c9",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-12T03:42:10.000Z",
       "message": "refactor(web): extraer finishPublication de submit",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/3fa40e7d7a4fc57f189ac4014265da9743bc73c9"
     },
     "stats": {
       "total": 16,
@@ -1250,6 +1250,25 @@
     },
     "coverage": 88.09,
     "test_count": 144,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T13:45:37.000Z",
+      "message": "fix(web): descartar publicaciones canceladas antes del envío",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 27,
+      "additions": 26,
+      "deletions": 1,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.09,
+    "test_count": 148,
     "failed_tests": 0,
     "conclusion": "success"
   }
