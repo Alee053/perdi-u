@@ -14,7 +14,6 @@ import {
   Patch,
   Post,
   Query,
-  ServiceUnavailableException,
   UseGuards,
 } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
@@ -80,15 +79,16 @@ class ReportsController {
   @Post()
   @UseGuards(AuthGuard)
   async publish(@CurrentUser() user: AuthenticatedUser, @Body() input: unknown) {
-    try {
-      return await this.publisher.execute(user.id, input)
-    } catch (error) {
-      if (error instanceof ReportValidationError)
-        throw new BadRequestException({ fieldErrors: error.errors })
-      if (error instanceof MediaAssociationError)
-        throw new BadRequestException({ fieldErrors: { mediaIds: 'invalid' } })
-      throw new ServiceUnavailableException('No se pudo publicar el reporte. Intenta nuevamente.')
-    }
+    return orUnavailable(
+      () => this.publisher.execute(user.id, input),
+      'No se pudo publicar el reporte. Intenta nuevamente.',
+      (error) => {
+        if (error instanceof ReportValidationError)
+          throw new BadRequestException({ fieldErrors: error.errors })
+        if (error instanceof MediaAssociationError)
+          throw new BadRequestException({ fieldErrors: { mediaIds: 'invalid' } })
+      },
+    )
   }
 
   /**

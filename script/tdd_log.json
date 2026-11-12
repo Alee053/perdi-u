@@ -1862,9 +1862,31 @@
     "testId": 51
   },
   {
-    "commitId": "HEAD",
+    "commitId": "1452ee3983ed57a3103269d3d3cbcb4809e63ec8",
     "commitName": "refactor(api): reutilizar 503 compartido en la cuenta",
     "commitTimestamp": 1794459233639,
     "testId": 51
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794459262697,
+    "success": true,
+    "testId": 52
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794459303519,
+    "success": true,
+    "testId": 52
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "refactor(api): centralizar 503 de publicación",
+    "commitTimestamp": 1794459368452,
+    "testId": 52
   }
 ]
