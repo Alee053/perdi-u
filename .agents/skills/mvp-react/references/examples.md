@@ -25,7 +25,7 @@ Rutas relativas a `apps/web/src`.
 
 - View `views/pages/PublishPage.tsx` llama `actions.setField` y `actions.submit()`.
 - Presenter `presenters/reports/publish.presenter.ts` valida con `validateDraft`, muestra mensajes por campo y llama al puerto `ReportPublisher`. Tras la respuesta coordina catálogo, actualización del historial, navegación y aviso.
-- Model `models/reports/publication.ts`: reglas del borrador y puerto. Infrastructure `infrastructure/http/publish-client.ts` envía el borrador autenticado; la API guarda reporte/contacto en una transacción. No se usa `publishDemoReport` ni se envía identidad desde el formulario.
+- Model `models/reports/publication.ts`: reglas del borrador y puerto. Infrastructure `infrastructure/http/publish-client.ts` envía el borrador autenticado; la API guarda reporte/contacto en una transacción. El formulario nunca envía la identidad: la API la toma del token.
 
 ## 4. Abrir un reporte por su enlace y contactar por WhatsApp
 
