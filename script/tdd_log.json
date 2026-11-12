@@ -1868,9 +1868,23 @@
     "testId": 52
   },
   {
-    "commitId": "HEAD",
+    "commitId": "d58e4bb15a2b663a0c7733f1ea3f46cb8af2164c",
     "commitName": "refactor(web): extraer uploadPendingPhotos de submit",
     "commitTimestamp": 1794454697181,
     "testId": 52
+  },
+  {
+    "numPassedTests": 144,
+    "failedTests": 0,
+    "numTotalTests": 144,
+    "timestamp": 1794454751964,
+    "success": true,
+    "testId": 53
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "refactor(web): extraer showFailure del catch de submit",
+    "commitTimestamp": 1794454786630,
+    "testId": 53
   }
 ]

@@ -1178,12 +1178,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "d58e4bb15a2b663a0c7733f1ea3f46cb8af2164c",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-12T03:38:15.000Z",
       "message": "refactor(web): extraer uploadPendingPhotos de submit",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/d58e4bb15a2b663a0c7733f1ea3f46cb8af2164c"
     },
     "stats": {
       "total": 42,
@@ -1192,6 +1192,25 @@
       "date": "2026-11-12"
     },
     "coverage": 88.08,
+    "test_count": 144,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-12T03:39:45.000Z",
+      "message": "refactor(web): extraer showFailure del catch de submit",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 17,
+      "additions": 11,
+      "deletions": 6,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.09,
     "test_count": 144,
     "failed_tests": 0,
     "conclusion": "success"

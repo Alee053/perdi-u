@@ -258,13 +258,18 @@ export class PublishPresenter extends Store<PublishState> {
       this.dependencies.notices.show('Tu reporte se publicó y ya aparece en el catálogo.')
       return true
     } catch (error) {
-      if (attempt !== this.attempt) return false
-      const failure = error instanceof ReportPublishFailure ? error : undefined
-      const errors = failure?.reason === 'validation' ? fieldErrors(failure.errors) : {}
-      const message = failureMessage(failure, errors, uploadingMedia)
-      this.setState({ ...this.state, pending: false, errors, message })
-      return false
+      return this.showFailure(error, attempt, uploadingMedia)
     }
+  }
+
+  /** Explains why an attempt failed, unless the person already left the form. */
+  private showFailure(error: unknown, attempt: number, uploading: boolean) {
+    if (attempt !== this.attempt) return false
+    const failure = error instanceof ReportPublishFailure ? error : undefined
+    const errors = failure?.reason === 'validation' ? fieldErrors(failure.errors) : {}
+    const message = failureMessage(failure, errors, uploading)
+    this.setState({ ...this.state, pending: false, errors, message })
+    return false
   }
 
   reset = () => {
