@@ -1140,17 +1140,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "001e4ea754df256d7bbcb7405ae54b85f6aa7e79",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-11-12T04:52:24.000Z",
       "message": "refactor(api): usar 503 compartido en detalle y contacto",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/001e4ea754df256d7bbcb7405ae54b85f6aa7e79"
     },
     "stats": {
       "total": 20,
       "additions": 8,
       "deletions": 12,
+      "date": "2026-11-12"
+    },
+    "coverage": 87.97,
+    "test_count": 141,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-12T04:53:53.000Z",
+      "message": "refactor(api): reutilizar 503 compartido en la cuenta",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 28,
+      "additions": 12,
+      "deletions": 16,
       "date": "2026-11-12"
     },
     "coverage": 87.97,

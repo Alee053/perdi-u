@@ -149,23 +149,20 @@ class AccountController {
     @Query() input: Record<string, unknown>,
   ): Promise<ReportSummary[]> {
     const query = parseOwnReportQuery(input)
-    try {
-      return await this.reports.execute(user.id, query)
-    } catch {
-      throw new ServiceUnavailableException('No se pudo cargar tus reportes. Intenta nuevamente.')
-    }
+    return orUnavailable(
+      () => this.reports.execute(user.id, query),
+      'No se pudo cargar tus reportes. Intenta nuevamente.',
+    )
   }
 
   /** Private data never cached by the browser, so Back or reload cannot replay it. */
   @Get()
   @Header('Cache-Control', 'no-store')
   async me(@CurrentUser() user: AuthenticatedUser): Promise<AccountIdentity> {
-    let profile
-    try {
-      profile = await this.profiles.find(user.id)
-    } catch {
-      throw new ServiceUnavailableException('No se pudo cargar tu perfil. Intenta nuevamente.')
-    }
+    const profile = await orUnavailable(
+      () => this.profiles.find(user.id),
+      'No se pudo cargar tu perfil. Intenta nuevamente.',
+    )
     // Explicit allowlist: the profile of the verified subject, never its private contacts.
     return {
       id: user.id,
@@ -180,11 +177,10 @@ class AccountController {
   @HttpCode(204)
   @Header('Cache-Control', 'no-store')
   async logout(@CurrentUser() user: AuthenticatedUser) {
-    try {
-      await this.sessions.revoke(user.sessionId)
-    } catch {
-      throw new ServiceUnavailableException('No se pudo cerrar la sesión. Intenta nuevamente.')
-    }
+    await orUnavailable(
+      () => this.sessions.revoke(user.sessionId),
+      'No se pudo cerrar la sesión. Intenta nuevamente.',
+    )
   }
 }
 
