@@ -10,7 +10,7 @@ Las reglas del proyecto se versionan junto al código. Al abrir una sesión en e
 | `perdiu-testing`      | Cambiar comportamiento o estrategia/comandos de verificación.           | [TDD y pruebas](testing.md)                                             |
 | `perdiu-docs-sync`    | Antes de cerrar un cambio y preparar la PR.                             | [Mapa de impacto](maintenance-map.json)                                 |
 
-Claude Code descubre las skills en `.claude/skills/`. Para no mantener instrucciones divergentes, `.claude/skills/mvp-react/SKILL.md` solo repite el frontmatter y remite a la versión canónica de `.agents/skills/`; cualquier cambio de reglas se hace allí.
+Claude Code descubre las skills en `.claude/skills/`. Cada skill de `.agents/skills/` tiene ahí su acceso con el mismo nombre. Para no mantener instrucciones divergentes, cada `.claude/skills/<nombre>/SKILL.md` solo repite el frontmatter y remite a la versión canónica de `.agents/skills/`; cualquier cambio de reglas se hace allí. Al crear o renombrar una skill, o al cambiar su descripción, actualizar también su acceso en `.claude/skills/` sin variaciones.
 
 ## Actualizar dentro de la misma PR
 

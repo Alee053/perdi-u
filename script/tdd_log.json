@@ -1788,9 +1788,15 @@
     "testId": 47
   },
   {
-    "commitId": "HEAD",
+    "commitId": "d973c04780b7725b8d26e49892b57bba3c098fe6",
     "commitName": "docs(repo): registrar verificación real de R2 en el VPS (#6)",
     "commitTimestamp": 1792651719028,
     "testId": 48
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(repo): replicar en .claude todas las skills de .agents",
+    "commitTimestamp": 1794490384797,
+    "testId": 49
   }
 ]
