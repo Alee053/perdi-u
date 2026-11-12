@@ -686,18 +686,6 @@
     "testId": 24
   },
   {
-    "commitId": "15dc8fa49c966fc094163f3348e3855eb7b3a05a",
-    "commitName": "build(api): preparar demo manual en VPS y Vercel",
-    "commitTimestamp": 1792636716843,
-    "testId": 25
-  },
-  {
-    "commitId": "4ea1fd1cb51284ca488cde2ddec2746428bbbf27",
-    "commitName": "docs(api): registrar verificación HTTPS de la demo",
-    "commitTimestamp": 1792636952952,
-    "testId": 26
-  },
-  {
     "numPassedTests": 78,
     "failedTests": 0,
     "numTotalTests": 78,
@@ -754,6 +742,14 @@
     "testId": 27
   },
   {
+    "numPassedTests": 78,
+    "failedTests": 1,
+    "numTotalTests": 79,
+    "timestamp": 1792636607405,
+    "success": false,
+    "testId": 25
+  },
+  {
     "numPassedTests": 79,
     "failedTests": 4,
     "numTotalTests": 83,
@@ -770,60 +766,6 @@
     "testId": 27
   },
   {
-    "numPassedTests": 84,
-    "failedTests": 1,
-    "numTotalTests": 85,
-    "timestamp": 1792636729014,
-    "success": false,
-    "testId": 27
-  },
-  {
-    "numPassedTests": 85,
-    "failedTests": 0,
-    "numTotalTests": 85,
-    "timestamp": 1792636741855,
-    "success": true,
-    "testId": 27
-  },
-  {
-    "commitId": "46a7ffffe3ddc9f16bd7a06afa97581a2e77cc6f",
-    "commitName": "feat(repo): publicar reportes persistentes (#5)",
-    "commitTimestamp": 1792637038106,
-    "testId": 27
-  },
-  {
-    "commitId": "ffac0dd1a3131253afc8d756d4b610e6c2781518",
-    "commitName": "Merge remote-tracking branch 'origin/main' into feat/s1-05-publicacion-persistente\n\n# Conflicts:\n#\tscript/commit-history.json\n#\tscript/tdd_log.json",
-    "commitTimestamp": 1792638135864,
-    "testId": 28
-  },
-  {
-    "commitId": "a344d65335336e8f6c639c7d67504455e581793d",
-    "commitName": "docs(api): registrar verificación HTTPS de la demo",
-    "commitTimestamp": 1792636952952,
-    "testId": 26
-  },
-  {
-    "commitId": "d9865625a2257166acd35330930e35adfe0ab748",
-    "commitName": "fix(api): ajustar dominio y registro directo de la demo",
-    "commitTimestamp": 1792638608416,
-    "testId": 27
-  },
-  {
-    "commitId": "7b28a852edea7f992e8fc209f02d2baadf0adb69",
-    "commitName": "Merge origin/main into feat/s1-05-publicacion-persistente",
-    "commitTimestamp": 1792639880744,
-    "testId": 28
-  },
-  {
-    "numPassedTests": 78,
-    "failedTests": 1,
-    "numTotalTests": 79,
-    "timestamp": 1792636607405,
-    "success": false,
-    "testId": 25
-  },
-  {
     "numPassedTests": 79,
     "failedTests": 0,
     "numTotalTests": 79,
@@ -832,10 +774,32 @@
     "testId": 25
   },
   {
+    "commitId": "15dc8fa49c966fc094163f3348e3855eb7b3a05a",
+    "commitName": "build(api): preparar demo manual en VPS y Vercel",
+    "commitTimestamp": 1792636716843,
+    "testId": 25
+  },
+  {
+    "numPassedTests": 84,
+    "failedTests": 1,
+    "numTotalTests": 85,
+    "timestamp": 1792636729014,
+    "success": false,
+    "testId": 27
+  },
+  {
     "commitId": "e69c2f27e011785dc7281546320bbb2048838879",
     "commitName": "feat(catalog): consultar el detalle público de un reporte por ID (#7)",
     "commitTimestamp": 1792636737949,
     "testId": 25
+  },
+  {
+    "numPassedTests": 85,
+    "failedTests": 0,
+    "numTotalTests": 85,
+    "timestamp": 1792636741855,
+    "success": true,
+    "testId": 27
   },
   {
     "numPassedTests": 79,
@@ -868,6 +832,18 @@
     "testId": 27
   },
   {
+    "commitId": "4ea1fd1cb51284ca488cde2ddec2746428bbbf27",
+    "commitName": "docs(api): registrar verificación HTTPS de la demo",
+    "commitTimestamp": 1792636952952,
+    "testId": 26
+  },
+  {
+    "commitId": "a344d65335336e8f6c639c7d67504455e581793d",
+    "commitName": "docs(api): registrar verificación HTTPS de la demo",
+    "commitTimestamp": 1792636952952,
+    "testId": 26
+  },
+  {
     "numPassedTests": 82,
     "failedTests": 0,
     "numTotalTests": 82,
@@ -879,6 +855,12 @@
     "commitId": "f5900a0631830ae8160ede8d613044c8c2cc34ac",
     "commitName": "feat(catalog): normalizar el celular de contacto para WhatsApp (#7)",
     "commitTimestamp": 1792637022443,
+    "testId": 27
+  },
+  {
+    "commitId": "46a7ffffe3ddc9f16bd7a06afa97581a2e77cc6f",
+    "commitName": "feat(repo): publicar reportes persistentes (#5)",
+    "commitTimestamp": 1792637038106,
     "testId": 27
   },
   {
@@ -978,6 +960,12 @@
     "testId": 32
   },
   {
+    "commitId": "ffac0dd1a3131253afc8d756d4b610e6c2781518",
+    "commitName": "Merge remote-tracking branch 'origin/main' into feat/s1-05-publicacion-persistente\n\n# Conflicts:\n#\tscript/commit-history.json\n#\tscript/tdd_log.json",
+    "commitTimestamp": 1792638135864,
+    "testId": 28
+  },
+  {
     "numPassedTests": 88,
     "failedTests": 0,
     "numTotalTests": 88,
@@ -1038,12 +1026,34 @@
     "testId": 34
   },
   {
+    "commitId": "d9865625a2257166acd35330930e35adfe0ab748",
+    "commitName": "fix(api): ajustar dominio y registro directo de la demo",
+    "commitTimestamp": 1792638608416,
+    "testId": 27
+  },
+  {
     "numPassedTests": 90,
     "failedTests": 3,
     "numTotalTests": 93,
     "timestamp": 1792638638611,
     "success": false,
     "testId": 34
+  },
+  {
+    "numPassedTests": 84,
+    "failedTests": 1,
+    "numTotalTests": 85,
+    "timestamp": 1792638686059,
+    "success": false,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 85,
+    "failedTests": 0,
+    "numTotalTests": 85,
+    "timestamp": 1792638696171,
+    "success": true,
+    "testId": 29
   },
   {
     "numPassedTests": 93,
@@ -1060,12 +1070,44 @@
     "testId": 34
   },
   {
+    "numPassedTests": 85,
+    "failedTests": 1,
+    "numTotalTests": 86,
+    "timestamp": 1792638781746,
+    "success": false,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 86,
+    "failedTests": 0,
+    "numTotalTests": 86,
+    "timestamp": 1792638867436,
+    "success": true,
+    "testId": 29
+  },
+  {
     "numPassedTests": 93,
     "failedTests": 2,
     "numTotalTests": 95,
     "timestamp": 1792638877405,
     "success": false,
     "testId": 35
+  },
+  {
+    "numPassedTests": 86,
+    "failedTests": 1,
+    "numTotalTests": 87,
+    "timestamp": 1792638910532,
+    "success": false,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 86,
+    "failedTests": 1,
+    "numTotalTests": 87,
+    "timestamp": 1792638920395,
+    "success": false,
+    "testId": 29
   },
   {
     "numPassedTests": 94,
@@ -1076,6 +1118,22 @@
     "testId": 35
   },
   {
+    "numPassedTests": 87,
+    "failedTests": 0,
+    "numTotalTests": 87,
+    "timestamp": 1792638937780,
+    "success": true,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 87,
+    "failedTests": 1,
+    "numTotalTests": 88,
+    "timestamp": 1792638966049,
+    "success": false,
+    "testId": 29
+  },
+  {
     "numPassedTests": 95,
     "failedTests": 0,
     "numTotalTests": 95,
@@ -1084,10 +1142,58 @@
     "testId": 35
   },
   {
+    "numPassedTests": 88,
+    "failedTests": 0,
+    "numTotalTests": 88,
+    "timestamp": 1792639001524,
+    "success": false,
+    "testId": 29
+  },
+  {
     "commitId": "3a01c4316e9a83baea3f51ce63dcd3675c1f2d0d",
     "commitName": "feat(web): contactar al autor por WhatsApp tras iniciar sesión (#7)",
     "commitTimestamp": 1792639003753,
     "testId": 35
+  },
+  {
+    "numPassedTests": 89,
+    "failedTests": 0,
+    "numTotalTests": 89,
+    "timestamp": 1792639012431,
+    "success": true,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 89,
+    "failedTests": 0,
+    "numTotalTests": 89,
+    "timestamp": 1792639028302,
+    "success": false,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 90,
+    "failedTests": 0,
+    "numTotalTests": 90,
+    "timestamp": 1792639045584,
+    "success": true,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 90,
+    "failedTests": 1,
+    "numTotalTests": 91,
+    "timestamp": 1792639060044,
+    "success": false,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 91,
+    "failedTests": 0,
+    "numTotalTests": 91,
+    "timestamp": 1792639075122,
+    "success": true,
+    "testId": 29
   },
   {
     "numPassedTests": 95,
@@ -1098,12 +1204,28 @@
     "testId": 36
   },
   {
+    "numPassedTests": 91,
+    "failedTests": 0,
+    "numTotalTests": 91,
+    "timestamp": 1792639154164,
+    "success": true,
+    "testId": 29
+  },
+  {
     "numPassedTests": 95,
     "failedTests": 2,
     "numTotalTests": 97,
     "timestamp": 1792639187164,
     "success": false,
     "testId": 36
+  },
+  {
+    "numPassedTests": 92,
+    "failedTests": 0,
+    "numTotalTests": 92,
+    "timestamp": 1792639219497,
+    "success": true,
+    "testId": 29
   },
   {
     "numPassedTests": 97,
@@ -1118,6 +1240,22 @@
     "commitName": "feat(web): abrir un reporte desde su enlace estable y seguir la sesión (#7)",
     "commitTimestamp": 1792639302919,
     "testId": 36
+  },
+  {
+    "numPassedTests": 92,
+    "failedTests": 1,
+    "numTotalTests": 93,
+    "timestamp": 1792639354770,
+    "success": false,
+    "testId": 29
+  },
+  {
+    "numPassedTests": 93,
+    "failedTests": 0,
+    "numTotalTests": 93,
+    "timestamp": 1792639366669,
+    "success": true,
+    "testId": 29
   },
   {
     "numPassedTests": 96,
@@ -1142,6 +1280,30 @@
     "timestamp": 1792639576244,
     "success": true,
     "testId": 37
+  },
+  {
+    "commitId": "7ee4f4b87a6a81fae986d4f3aded16bd5a2c121d",
+    "commitName": "feat(repo): adjuntar fotos a reportes (#6)",
+    "commitTimestamp": 1792639719320,
+    "testId": 29
+  },
+  {
+    "commitId": "7b28a852edea7f992e8fc209f02d2baadf0adb69",
+    "commitName": "Merge origin/main into feat/s1-05-publicacion-persistente",
+    "commitTimestamp": 1792639880744,
+    "testId": 28
+  },
+  {
+    "commitId": "82ed746586f8ef2fd8d6af7c5f0bac13ec917c59",
+    "commitName": "Merge feat/s1-05-publicacion-persistente into feat/s1-06-adjuntar-fotos",
+    "commitTimestamp": 1792640033338,
+    "testId": 30
+  },
+  {
+    "commitId": "921045b9390f1b66c5400f5420927150659c0131",
+    "commitName": "docs(repo): formatear tabla de servicios",
+    "commitTimestamp": 1792640085225,
+    "testId": 31
   },
   {
     "numPassedTests": 98,
@@ -1496,168 +1658,6 @@
     "testId": 44
   },
   {
-    "numPassedTests": 84,
-    "failedTests": 1,
-    "numTotalTests": 85,
-    "timestamp": 1792638686059,
-    "success": false,
-    "testId": 29
-  },
-  {
-    "numPassedTests": 85,
-    "failedTests": 0,
-    "numTotalTests": 85,
-    "timestamp": 1792638696171,
-    "success": true,
-    "testId": 29
-  },
-  {
-    "numPassedTests": 85,
-    "failedTests": 1,
-    "numTotalTests": 86,
-    "timestamp": 1792638781746,
-    "success": false,
-    "testId": 29
-  },
-  {
-    "numPassedTests": 86,
-    "failedTests": 0,
-    "numTotalTests": 86,
-    "timestamp": 1792638867436,
-    "success": true,
-    "testId": 29
-  },
-  {
-    "numPassedTests": 86,
-    "failedTests": 1,
-    "numTotalTests": 87,
-    "timestamp": 1792638910532,
-    "success": false,
-    "testId": 29
-  },
-  {
-    "numPassedTests": 86,
-    "failedTests": 1,
-    "numTotalTests": 87,
-    "timestamp": 1792638920395,
-    "success": false,
-    "testId": 29
-  },
-  {
-    "numPassedTests": 87,
-    "failedTests": 0,
-    "numTotalTests": 87,
-    "timestamp": 1792638937780,
-    "success": true,
-    "testId": 29
-  },
-  {
-    "numPassedTests": 87,
-    "failedTests": 1,
-    "numTotalTests": 88,
-    "timestamp": 1792638966049,
-    "success": false,
-    "testId": 29
-  },
-  {
-    "numPassedTests": 88,
-    "failedTests": 0,
-    "numTotalTests": 88,
-    "timestamp": 1792639001524,
-    "success": false,
-    "testId": 29
-  },
-  {
-    "numPassedTests": 89,
-    "failedTests": 0,
-    "numTotalTests": 89,
-    "timestamp": 1792639012431,
-    "success": true,
-    "testId": 29
-  },
-  {
-    "numPassedTests": 89,
-    "failedTests": 0,
-    "numTotalTests": 89,
-    "timestamp": 1792639028302,
-    "success": false,
-    "testId": 29
-  },
-  {
-    "numPassedTests": 90,
-    "failedTests": 0,
-    "numTotalTests": 90,
-    "timestamp": 1792639045584,
-    "success": true,
-    "testId": 29
-  },
-  {
-    "numPassedTests": 90,
-    "failedTests": 1,
-    "numTotalTests": 91,
-    "timestamp": 1792639060044,
-    "success": false,
-    "testId": 29
-  },
-  {
-    "numPassedTests": 91,
-    "failedTests": 0,
-    "numTotalTests": 91,
-    "timestamp": 1792639075122,
-    "success": true,
-    "testId": 29
-  },
-  {
-    "numPassedTests": 91,
-    "failedTests": 0,
-    "numTotalTests": 91,
-    "timestamp": 1792639154164,
-    "success": true,
-    "testId": 29
-  },
-  {
-    "numPassedTests": 92,
-    "failedTests": 0,
-    "numTotalTests": 92,
-    "timestamp": 1792639219497,
-    "success": true,
-    "testId": 29
-  },
-  {
-    "numPassedTests": 92,
-    "failedTests": 1,
-    "numTotalTests": 93,
-    "timestamp": 1792639354770,
-    "success": false,
-    "testId": 29
-  },
-  {
-    "numPassedTests": 93,
-    "failedTests": 0,
-    "numTotalTests": 93,
-    "timestamp": 1792639366669,
-    "success": true,
-    "testId": 29
-  },
-  {
-    "commitId": "7ee4f4b87a6a81fae986d4f3aded16bd5a2c121d",
-    "commitName": "feat(repo): adjuntar fotos a reportes (#6)",
-    "commitTimestamp": 1792639719320,
-    "testId": 29
-  },
-  {
-    "commitId": "82ed746586f8ef2fd8d6af7c5f0bac13ec917c59",
-    "commitName": "Merge feat/s1-05-publicacion-persistente into feat/s1-06-adjuntar-fotos",
-    "commitTimestamp": 1792640033338,
-    "testId": 30
-  },
-  {
-    "commitId": "921045b9390f1b66c5400f5420927150659c0131",
-    "commitName": "docs(repo): formatear tabla de servicios",
-    "commitTimestamp": 1792640085225,
-    "testId": 31
-  },
-  {
     "numPassedTests": 122,
     "failedTests": 2,
     "numTotalTests": 124,
@@ -1794,6 +1794,78 @@
     "testId": 48
   },
   {
+    "numPassedTests": 140,
+    "failedTests": 1,
+    "numTotalTests": 141,
+    "timestamp": 1794318014927,
+    "success": false,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794318292285,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 140,
+    "failedTests": 0,
+    "numTotalTests": 140,
+    "timestamp": 1794318352596,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "commitId": "4ca1a48937a1a4abeefa186e0bb05e3e2ad39e50",
+    "commitName": "refactor(web): eliminar resolveReport y removeReport sin uso",
+    "commitTimestamp": 1794318391600,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 139,
+    "failedTests": 0,
+    "numTotalTests": 139,
+    "timestamp": 1794318458400,
+    "success": true,
+    "testId": 50
+  },
+  {
+    "commitId": "3b806dff056e7c8dafaa8515e2c075f14b5ecdab",
+    "commitName": "refactor(web): eliminar publishDemoReport y DemoReportDraft sin uso",
+    "commitTimestamp": 1794318493726,
+    "testId": 50
+  },
+  {
+    "numPassedTests": 139,
+    "failedTests": 0,
+    "numTotalTests": 139,
+    "timestamp": 1794318534376,
+    "success": true,
+    "testId": 51
+  },
+  {
+    "commitId": "be91e28930dd9b0f7dd24ae34ac2a470891a698d",
+    "commitName": "refactor(web): eliminar isOwnedBy sin uso",
+    "commitTimestamp": 1794318565641,
+    "testId": 51
+  },
+  {
+    "numPassedTests": 139,
+    "failedTests": 0,
+    "numTotalTests": 139,
+    "timestamp": 1794318617352,
+    "success": true,
+    "testId": 52
+  },
+  {
+    "commitId": "dfae7bea9b37a0d7a46341c518f1181678898091",
+    "commitName": "docs(web): describir demoOwner solo como autor de datos demo",
+    "commitTimestamp": 1794318648283,
+    "testId": 52
+  },
+  {
     "numPassedTests": 141,
     "failedTests": 0,
     "numTotalTests": 141,
@@ -1838,9 +1910,15 @@
     "testId": 51
   },
   {
-    "commitId": "HEAD",
+    "commitId": "41cfb63bb1d7c2001e76ca435017ff6ad152cffb",
     "commitName": "refactor(catalog): renombrar digits a normalized en toWhatsAppNumber",
     "commitTimestamp": 1794318950805,
     "testId": 51
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "chore(repo): resolver evidencia al actualizar normalización",
+    "commitTimestamp": 1794490995318,
+    "testId": 52
   }
 ]
