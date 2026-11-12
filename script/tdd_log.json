@@ -1832,9 +1832,23 @@
     "testId": 50
   },
   {
-    "commitId": "HEAD",
+    "commitId": "009c0b36b2bfaa40e22cdba332a98b9468cf893f",
     "commitName": "refactor(web): extraer fieldErrors en la publicación",
     "commitTimestamp": 1794454488050,
     "testId": 50
+  },
+  {
+    "numPassedTests": 144,
+    "failedTests": 0,
+    "numTotalTests": 144,
+    "timestamp": 1794454531501,
+    "success": true,
+    "testId": 51
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "refactor(web): reemplazar el ternario anidado por failureMessage",
+    "commitTimestamp": 1794454562405,
+    "testId": 51
   }
 ]

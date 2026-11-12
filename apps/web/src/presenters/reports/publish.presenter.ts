@@ -96,6 +96,20 @@ function fieldErrors(issues: Partial<Record<DraftField, DraftIssue>>): PublishSt
   return errors
 }
 
+/** General message of a failed publication; field errors are shown next to each field instead. */
+function failureMessage(
+  failure: ReportPublishFailure | undefined,
+  errors: PublishState['errors'],
+  uploading: boolean,
+) {
+  if (uploading) return 'No se pudo subir una foto. Intenta nuevamente.'
+  if (failure?.reason === 'unauthorized')
+    return 'Inicia sesión nuevamente para publicar el reporte.'
+  if (failure?.reason === 'validation' && errors.mediaIds) return errors.mediaIds
+  if (failure?.reason === 'validation' && Object.keys(errors).length) return ''
+  return 'No se pudo publicar el reporte. Intenta nuevamente.'
+}
+
 export const publishOptions = {
   categories: Object.entries(categoryLabels).map(([value, label]) => ({ value, label })),
   cities: [...cities],
@@ -237,15 +251,7 @@ export class PublishPresenter extends Store<PublishState> {
       if (attempt !== this.attempt) return false
       const failure = error instanceof ReportPublishFailure ? error : undefined
       const errors = failure?.reason === 'validation' ? fieldErrors(failure.errors) : {}
-      const message = uploadingMedia
-        ? 'No se pudo subir una foto. Intenta nuevamente.'
-        : failure?.reason === 'unauthorized'
-          ? 'Inicia sesión nuevamente para publicar el reporte.'
-          : failure?.reason === 'validation' && errors.mediaIds
-            ? errors.mediaIds
-            : failure?.reason === 'validation' && Object.keys(errors).length
-              ? ''
-              : 'No se pudo publicar el reporte. Intenta nuevamente.'
+      const message = failureMessage(failure, errors, uploadingMedia)
       this.setState({ ...this.state, pending: false, errors, message })
       return false
     }

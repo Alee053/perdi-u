@@ -1140,12 +1140,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "009c0b36b2bfaa40e22cdba332a98b9468cf893f",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-12T03:34:46.000Z",
       "message": "refactor(web): extraer fieldErrors en la publicación",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/009c0b36b2bfaa40e22cdba332a98b9468cf893f"
     },
     "stats": {
       "total": 19,
@@ -1154,6 +1154,25 @@
       "date": "2026-11-12"
     },
     "coverage": 87.96,
+    "test_count": 144,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-12T03:36:01.000Z",
+      "message": "refactor(web): reemplazar el ternario anidado por failureMessage",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 24,
+      "additions": 15,
+      "deletions": 9,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.04,
     "test_count": 144,
     "failed_tests": 0,
     "conclusion": "success"
