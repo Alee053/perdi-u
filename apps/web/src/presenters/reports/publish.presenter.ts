@@ -202,6 +202,30 @@ export class PublishPresenter extends Store<PublishState> {
     }
   }
 
+  /**
+   * Uploads the photos that have no ID yet and keeps each new ID in the state, so a retry does not
+   * upload them again. Undefined when a newer attempt (leaving the form) replaced this one.
+   */
+  private async uploadPendingPhotos(photos: PublishPhoto[], attempt: number) {
+    const mediaIds: string[] = []
+    for (const [index, photo] of photos.entries()) {
+      let mediaId = photo.mediaId
+      if (!mediaId) {
+        mediaId = await this.dependencies.media.upload(photo.file)
+        if (attempt !== this.attempt) {
+          await this.discardPhoto(mediaId)
+          return undefined
+        }
+        const updated = this.state.photos.map((item, photoIndex) =>
+          photoIndex === index ? { ...item, mediaId } : item,
+        )
+        this.setState({ ...this.state, photos: updated })
+      }
+      mediaIds.push(mediaId)
+    }
+    return mediaIds
+  }
+
   /** Returns false on validation, network failure or while another request is pending. */
   submit = async () => {
     if (this.state.pending) return false
@@ -217,23 +241,9 @@ export class PublishPresenter extends Store<PublishState> {
     let uploadingMedia = false
     try {
       const { petSpecies, ...draft } = this.state.draft
-      const mediaIds: string[] = []
       uploadingMedia = true
-      for (const [index, photo] of selected.entries()) {
-        let mediaId = photo.mediaId
-        if (!mediaId) {
-          mediaId = await this.dependencies.media.upload(photo.file)
-          if (attempt !== this.attempt) {
-            await this.discardPhoto(mediaId)
-            return false
-          }
-          const photos = this.state.photos.map((item, photoIndex) =>
-            photoIndex === index ? { ...item, mediaId } : item,
-          )
-          this.setState({ ...this.state, photos })
-        }
-        mediaIds.push(mediaId)
-      }
+      const mediaIds = await this.uploadPendingPhotos(selected, attempt)
+      if (!mediaIds) return false
       uploadingMedia = false
       await this.dependencies.publisher.publish({
         ...(draft.category === 'pet' ? { ...draft, petSpecies } : draft),

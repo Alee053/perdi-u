@@ -1846,9 +1846,31 @@
     "testId": 51
   },
   {
-    "commitId": "HEAD",
+    "commitId": "00a3895dc5e76fc47b651037b6541a88751f15dc",
     "commitName": "refactor(web): reemplazar el ternario anidado por failureMessage",
     "commitTimestamp": 1794454562405,
     "testId": 51
+  },
+  {
+    "numPassedTests": 144,
+    "failedTests": 0,
+    "numTotalTests": 144,
+    "timestamp": 1794454613067,
+    "success": true,
+    "testId": 52
+  },
+  {
+    "numPassedTests": 144,
+    "failedTests": 0,
+    "numTotalTests": 144,
+    "timestamp": 1794454655215,
+    "success": true,
+    "testId": 52
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "refactor(web): extraer uploadPendingPhotos de submit",
+    "commitTimestamp": 1794454697181,
+    "testId": 52
   }
 ]

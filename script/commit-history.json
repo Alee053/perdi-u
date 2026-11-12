@@ -1159,12 +1159,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "00a3895dc5e76fc47b651037b6541a88751f15dc",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-12T03:36:01.000Z",
       "message": "refactor(web): reemplazar el ternario anidado por failureMessage",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/00a3895dc5e76fc47b651037b6541a88751f15dc"
     },
     "stats": {
       "total": 24,
@@ -1173,6 +1173,25 @@
       "date": "2026-11-12"
     },
     "coverage": 88.04,
+    "test_count": 144,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-12T03:38:15.000Z",
+      "message": "refactor(web): extraer uploadPendingPhotos de submit",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 42,
+      "additions": 26,
+      "deletions": 16,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.08,
     "test_count": 144,
     "failed_tests": 0,
     "conclusion": "success"
