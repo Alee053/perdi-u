@@ -1,13 +1,10 @@
 import type { CreateReportInput, ReportValidationErrors } from '@perdiu/contracts'
 import { toPublicReport } from './catalog.js'
+import { normalizeReportPhone } from './contact.js'
 import type { ReportPublisher } from './model.js'
 
 const isRecord = (input: unknown): input is Record<string, unknown> =>
   typeof input === 'object' && input !== null && !Array.isArray(input)
-
-export function normalizeReportPhone(phone: string) {
-  return phone.trim().replace(/[\s().-]/g, '')
-}
 
 function isDate(value: unknown): value is string {
   if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false
