@@ -1884,9 +1884,31 @@
     "testId": 52
   },
   {
-    "commitId": "HEAD",
+    "commitId": "9cb3848373b3f375b2497561da1a55846a25694c",
     "commitName": "refactor(api): centralizar 503 de publicación",
     "commitTimestamp": 1794459368452,
     "testId": 52
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794459694698,
+    "success": true,
+    "testId": 53
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794459731549,
+    "success": true,
+    "testId": 53
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "refactor(api): aclarar excepciones esperadas del helper 503",
+    "commitTimestamp": 1794459770670,
+    "testId": 53
   }
 ]
