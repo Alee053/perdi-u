@@ -41,6 +41,7 @@ import {
 import { ACCESS_TOKEN_VERIFIER, AuthGuard, CurrentUser, OptionalAuthGuard } from './auth/guard.js'
 import { MediaController, REPORT_MEDIA_SERVICE } from './media/controller.js'
 import { parseOwnReportQuery, parseReportId, parseReportQuery } from './reports/query.js'
+import { orUnavailable } from './service-unavailable.js'
 
 @Controller('reports')
 class ReportsController {
@@ -58,12 +59,10 @@ class ReportsController {
   @Header('Cache-Control', 'no-store')
   async resolve(@Param('id') input: string, @CurrentUser() user: AuthenticatedUser) {
     const id = parseReportId(input)
-    let result
-    try {
-      result = await this.resolver.execute(id, user.id)
-    } catch {
-      throw new ServiceUnavailableException('No se pudo resolver el reporte. Intenta nuevamente.')
-    }
+    const result = await orUnavailable(
+      () => this.resolver.execute(id, user.id),
+      'No se pudo resolver el reporte. Intenta nuevamente.',
+    )
     if (result === 'forbidden')
       throw new ForbiddenException('Solo puedes resolver tus propios reportes.')
     if (result === 'not_found') throw new NotFoundException('Reporte no disponible.')
@@ -72,11 +71,10 @@ class ReportsController {
   @Get()
   async list(@Query() input: Record<string, unknown>) {
     const query = parseReportQuery(input)
-    try {
-      return await this.catalog.execute(query)
-    } catch {
-      throw new ServiceUnavailableException('No se pudo cargar el catálogo. Intenta nuevamente.')
-    }
+    return orUnavailable(
+      () => this.catalog.execute(query),
+      'No se pudo cargar el catálogo. Intenta nuevamente.',
+    )
   }
 
   @Post()
