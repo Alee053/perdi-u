@@ -1178,18 +1178,94 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "dfae7bea9b37a0d7a46341c518f1181678898091",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-10T13:50:46.000Z",
       "message": "docs(web): describir demoOwner solo como autor de datos demo",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/dfae7bea9b37a0d7a46341c518f1181678898091"
     },
     "stats": {
       "total": 8,
       "additions": 4,
       "deletions": 4,
       "date": "2026-11-10"
+    },
+    "coverage": 87.8,
+    "test_count": 139,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "328dc87f88dba419411163b8c4aa43be59897a40",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-10T13:53:27.000Z",
+      "message": "refactor(catalog): mover normalizeReportPhone al módulo de contacto",
+      "url": "https://github.com/Alee053/perdi-u/commit/328dc87f88dba419411163b8c4aa43be59897a40"
+    },
+    "stats": {
+      "total": 10,
+      "additions": 6,
+      "deletions": 4,
+      "date": "2026-11-10"
+    },
+    "coverage": 87.97,
+    "test_count": 141,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "eea2068b34cb3841c1f0d0a059a15c99f1738682",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-10T13:54:38.000Z",
+      "message": "refactor(catalog): reutilizar normalizeReportPhone en toWhatsAppNumber",
+      "url": "https://github.com/Alee053/perdi-u/commit/eea2068b34cb3841c1f0d0a059a15c99f1738682"
+    },
+    "stats": {
+      "total": 2,
+      "additions": 1,
+      "deletions": 1,
+      "date": "2026-11-10"
+    },
+    "coverage": 87.97,
+    "test_count": 141,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "41cfb63bb1d7c2001e76ca435017ff6ad152cffb",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-10T13:55:49.000Z",
+      "message": "refactor(catalog): renombrar digits a normalized en toWhatsAppNumber",
+      "url": "https://github.com/Alee053/perdi-u/commit/41cfb63bb1d7c2001e76ca435017ff6ad152cffb"
+    },
+    "stats": {
+      "total": 6,
+      "additions": 3,
+      "deletions": 3,
+      "date": "2026-11-10"
+    },
+    "coverage": 87.97,
+    "test_count": 141,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T13:43:15.000Z",
+      "message": "chore(repo): resolver evidencia al actualizar normalización",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 122,
+      "additions": 5,
+      "deletions": 117,
+      "date": "2026-11-12"
     },
     "coverage": 87.8,
     "test_count": 139,
