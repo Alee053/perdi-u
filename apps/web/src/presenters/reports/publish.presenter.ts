@@ -88,6 +88,14 @@ const issueMessages: Record<DraftField, Partial<Record<DraftIssue, string>>> = {
   mediaIds: { invalid: 'Revisa las fotos adjuntas e intenta nuevamente.' },
 }
 
+/** Message for each field rejected by the model or by the API. */
+function fieldErrors(issues: Partial<Record<DraftField, DraftIssue>>): PublishState['errors'] {
+  const errors: PublishState['errors'] = {}
+  for (const [field, issue] of Object.entries(issues) as [DraftField, DraftIssue][])
+    errors[field] = issueMessages[field][issue]
+  return errors
+}
+
 export const publishOptions = {
   categories: Object.entries(categoryLabels).map(([value, label]) => ({ value, label })),
   cities: [...cities],
@@ -185,10 +193,7 @@ export class PublishPresenter extends Store<PublishState> {
     if (this.state.pending) return false
     const issues = validateDraft(this.state.draft)
     if (Object.keys(issues).length) {
-      const errors: PublishState['errors'] = {}
-      for (const [field, issue] of Object.entries(issues) as [DraftField, DraftIssue][])
-        errors[field] = issueMessages[field][issue]
-      this.setState({ ...this.state, errors, message: '' })
+      this.setState({ ...this.state, errors: fieldErrors(issues), message: '' })
       return false
     }
 
@@ -231,11 +236,7 @@ export class PublishPresenter extends Store<PublishState> {
     } catch (error) {
       if (attempt !== this.attempt) return false
       const failure = error instanceof ReportPublishFailure ? error : undefined
-      const errors: PublishState['errors'] = {}
-      if (failure?.reason === 'validation') {
-        for (const [field, issue] of Object.entries(failure.errors) as [DraftField, DraftIssue][])
-          errors[field] = issueMessages[field][issue]
-      }
+      const errors = failure?.reason === 'validation' ? fieldErrors(failure.errors) : {}
       const message = uploadingMedia
         ? 'No se pudo subir una foto. Intenta nuevamente.'
         : failure?.reason === 'unauthorized'

@@ -1121,12 +1121,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "c0b89874b44a9fd919434e69c9ab4f939696682a",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-12T03:32:32.000Z",
       "message": "test(web): caracterizar los mensajes de fallo al publicar",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/c0b89874b44a9fd919434e69c9ab4f939696682a"
     },
     "stats": {
       "total": 80,
@@ -1135,6 +1135,25 @@
       "date": "2026-11-12"
     },
     "coverage": 87.97,
+    "test_count": 144,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-12T03:34:46.000Z",
+      "message": "refactor(web): extraer fieldErrors en la publicación",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 19,
+      "additions": 10,
+      "deletions": 9,
+      "date": "2026-11-12"
+    },
+    "coverage": 87.96,
     "test_count": 144,
     "failed_tests": 0,
     "conclusion": "success"

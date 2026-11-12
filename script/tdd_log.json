@@ -1818,9 +1818,23 @@
     "testId": 49
   },
   {
-    "commitId": "HEAD",
+    "commitId": "c0b89874b44a9fd919434e69c9ab4f939696682a",
     "commitName": "test(web): caracterizar los mensajes de fallo al publicar",
     "commitTimestamp": 1794454354809,
     "testId": 49
+  },
+  {
+    "numPassedTests": 144,
+    "failedTests": 0,
+    "numTotalTests": 144,
+    "timestamp": 1794454438395,
+    "success": true,
+    "testId": 50
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "refactor(web): extraer fieldErrors en la publicación",
+    "commitTimestamp": 1794454488050,
+    "testId": 50
   }
 ]
