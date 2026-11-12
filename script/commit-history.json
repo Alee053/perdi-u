@@ -1216,12 +1216,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "471c369b1f545244f4205dc6ec1ff8b48d8ba068",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-12T03:40:58.000Z",
       "message": "refactor(web): separar la subida de fotos de la publicación sin bandera",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/471c369b1f545244f4205dc6ec1ff8b48d8ba068"
     },
     "stats": {
       "total": 16,
@@ -1230,6 +1230,25 @@
       "date": "2026-11-12"
     },
     "coverage": 88.08,
+    "test_count": 144,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-12T03:42:10.000Z",
+      "message": "refactor(web): extraer finishPublication de submit",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 16,
+      "additions": 10,
+      "deletions": 6,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.09,
     "test_count": 144,
     "failed_tests": 0,
     "conclusion": "success"

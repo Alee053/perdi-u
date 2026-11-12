@@ -1896,9 +1896,23 @@
     "testId": 54
   },
   {
-    "commitId": "HEAD",
+    "commitId": "471c369b1f545244f4205dc6ec1ff8b48d8ba068",
     "commitName": "refactor(web): separar la subida de fotos de la publicación sin bandera",
     "commitTimestamp": 1794454859829,
     "testId": 54
+  },
+  {
+    "numPassedTests": 144,
+    "failedTests": 0,
+    "numTotalTests": 144,
+    "timestamp": 1794454897295,
+    "success": true,
+    "testId": 55
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "refactor(web): extraer finishPublication de submit",
+    "commitTimestamp": 1794454931186,
+    "testId": 55
   }
 ]

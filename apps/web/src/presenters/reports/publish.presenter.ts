@@ -252,16 +252,20 @@ export class PublishPresenter extends Store<PublishState> {
         ...(mediaIds.length ? { mediaIds } : {}),
       })
       if (attempt !== this.attempt) return false
-      for (const photo of this.state.photos)
-        this.dependencies.effects.revokePreview(photo.previewUrl)
-      this.setState({ draft: emptyDraft, photos: [], pending: false, errors: {}, message: '' })
-      this.dependencies.filters.reset()
-      this.dependencies.onPublished()
-      this.dependencies.notices.show('Tu reporte se publicó y ya aparece en el catálogo.')
+      this.finishPublication()
       return true
     } catch (error) {
       return this.showFailure(error, attempt, false)
     }
+  }
+
+  /** Clears the form and its previews, refreshes the catalog and confirms the publication. */
+  private finishPublication() {
+    for (const photo of this.state.photos) this.dependencies.effects.revokePreview(photo.previewUrl)
+    this.setState({ draft: emptyDraft, photos: [], pending: false, errors: {}, message: '' })
+    this.dependencies.filters.reset()
+    this.dependencies.onPublished()
+    this.dependencies.notices.show('Tu reporte se publicó y ya aparece en el catálogo.')
   }
 
   /** Explains why an attempt failed, unless the person already left the form. */
