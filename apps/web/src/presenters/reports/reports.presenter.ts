@@ -6,7 +6,7 @@ import type { NoticePresenter } from '../app/notice.presenter.js'
 import { toReportFilters, type FilterSelection } from '../catalog/filters.presenter.js'
 import type { Effects } from '../effects.js'
 import { Store } from '../store.js'
-import { toReportCard, type ReportCard } from './report-card.js'
+import { toReportCard, type ReportDetailView } from './report-card.js'
 
 export interface ReportsState {
   /** Demo reports, including the ones published in this session. */
@@ -15,13 +15,6 @@ export interface ReportsState {
   /** Saved catalog reports, kept so they stay visible after the search changes. */
   savedCatalog: CatalogReport[]
   selected: Report | null
-}
-
-export interface ReportDetailView {
-  card: ReportCard
-  saved: boolean
-  canContact: boolean
-  canResolve: boolean
 }
 
 export interface MapPin {

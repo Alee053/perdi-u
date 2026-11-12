@@ -5,9 +5,8 @@ import type { ReportDetailRepository } from '../../models/reports/reports-reposi
 import type { AuthPresenter } from '../auth/auth.presenter.js'
 import type { Effects } from '../effects.js'
 import { Store } from '../store.js'
-import { toReportCard, type ReportCard } from './report-card.js'
+import { toReportCard, type ReportCard, type ReportDetailView } from './report-card.js'
 import { parseReportPath, reportPath } from './report-route.js'
-import type { ReportDetailView } from './reports.presenter.js'
 
 export type ReportDetailState =
   | { status: 'closed' }

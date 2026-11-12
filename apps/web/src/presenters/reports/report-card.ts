@@ -25,6 +25,13 @@ export interface ReportCard {
   person: string
 }
 
+export interface ReportDetailView {
+  card: ReportCard
+  saved: boolean
+  canContact: boolean
+  canResolve: boolean
+}
+
 export const categoryLabels: Record<ReportCategory, string> = {
   pet: 'Mascota',
   object: 'Objeto',

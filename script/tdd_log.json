@@ -1916,6 +1916,202 @@
     "testId": 51
   },
   {
+    "numPassedTests": 140,
+    "failedTests": 1,
+    "numTotalTests": 141,
+    "timestamp": 1794454188600,
+    "success": false,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794454257128,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 144,
+    "failedTests": 0,
+    "numTotalTests": 144,
+    "timestamp": 1794454308890,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 142,
+    "failedTests": 0,
+    "numTotalTests": 142,
+    "timestamp": 1794454323518,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "commitId": "c0b89874b44a9fd919434e69c9ab4f939696682a",
+    "commitName": "test(web): caracterizar los mensajes de fallo al publicar",
+    "commitTimestamp": 1794454354809,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 148,
+    "failedTests": 0,
+    "numTotalTests": 148,
+    "timestamp": 1794454361999,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 150,
+    "failedTests": 0,
+    "numTotalTests": 150,
+    "timestamp": 1794454397216,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 144,
+    "failedTests": 0,
+    "numTotalTests": 144,
+    "timestamp": 1794454438395,
+    "success": true,
+    "testId": 50
+  },
+  {
+    "numPassedTests": 150,
+    "failedTests": 0,
+    "numTotalTests": 150,
+    "timestamp": 1794454460723,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "commitId": "4659b934331e9d38d0ecd8d19722c3b1e57365f6",
+    "commitName": "test(web): caracterizar el envío y reintento de reportes (#32)",
+    "commitTimestamp": 1794454484463,
+    "testId": 49
+  },
+  {
+    "commitId": "009c0b36b2bfaa40e22cdba332a98b9468cf893f",
+    "commitName": "refactor(web): extraer fieldErrors en la publicación",
+    "commitTimestamp": 1794454488050,
+    "testId": 50
+  },
+  {
+    "numPassedTests": 144,
+    "failedTests": 0,
+    "numTotalTests": 144,
+    "timestamp": 1794454531501,
+    "success": true,
+    "testId": 51
+  },
+  {
+    "numPassedTests": 150,
+    "failedTests": 0,
+    "numTotalTests": 150,
+    "timestamp": 1794454538486,
+    "success": true,
+    "testId": 50
+  },
+  {
+    "commitId": "00a3895dc5e76fc47b651037b6541a88751f15dc",
+    "commitName": "refactor(web): reemplazar el ternario anidado por failureMessage",
+    "commitTimestamp": 1794454562405,
+    "testId": 51
+  },
+  {
+    "commitId": "d5a6159aa3bb49ed8d3d74b46805cf3bf71f4a1e",
+    "commitName": "refactor(web): dividir el envío de reportes en pasos privados (#32)",
+    "commitTimestamp": 1794454604705,
+    "testId": 50
+  },
+  {
+    "numPassedTests": 144,
+    "failedTests": 0,
+    "numTotalTests": 144,
+    "timestamp": 1794454613067,
+    "success": true,
+    "testId": 52
+  },
+  {
+    "numPassedTests": 144,
+    "failedTests": 0,
+    "numTotalTests": 144,
+    "timestamp": 1794454655215,
+    "success": true,
+    "testId": 52
+  },
+  {
+    "commitId": "d58e4bb15a2b663a0c7733f1ea3f46cb8af2164c",
+    "commitName": "refactor(web): extraer uploadPendingPhotos de submit",
+    "commitTimestamp": 1794454697181,
+    "testId": 52
+  },
+  {
+    "numPassedTests": 144,
+    "failedTests": 0,
+    "numTotalTests": 144,
+    "timestamp": 1794454751964,
+    "success": true,
+    "testId": 53
+  },
+  {
+    "commitId": "427bd32b40eb196d9659f05cf4588e13d6965138",
+    "commitName": "refactor(web): extraer showFailure del catch de submit",
+    "commitTimestamp": 1794454786630,
+    "testId": 53
+  },
+  {
+    "numPassedTests": 144,
+    "failedTests": 0,
+    "numTotalTests": 144,
+    "timestamp": 1794454834057,
+    "success": true,
+    "testId": 54
+  },
+  {
+    "commitId": "471c369b1f545244f4205dc6ec1ff8b48d8ba068",
+    "commitName": "refactor(web): separar la subida de fotos de la publicación sin bandera",
+    "commitTimestamp": 1794454859829,
+    "testId": 54
+  },
+  {
+    "numPassedTests": 144,
+    "failedTests": 0,
+    "numTotalTests": 144,
+    "timestamp": 1794454897295,
+    "success": true,
+    "testId": 55
+  },
+  {
+    "commitId": "3fa40e7d7a4fc57f189ac4014265da9743bc73c9",
+    "commitName": "refactor(web): extraer finishPublication de submit",
+    "commitTimestamp": 1794454931186,
+    "testId": 55
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794454990485,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794455023347,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "commitId": "7fd0c955479bf17725e55a017bca8084dd700e63",
+    "commitName": "refactor(web): compartir el tipo de detalle entre presenters (#34)",
+    "commitTimestamp": 1794455060855,
+    "testId": 49
+  },
+  {
     "numPassedTests": 141,
     "failedTests": 0,
     "numTotalTests": 141,
@@ -2040,9 +2236,55 @@
     "testId": 52
   },
   {
-    "commitId": "HEAD",
+    "numPassedTests": 144,
+    "failedTests": 4,
+    "numTotalTests": 148,
+    "timestamp": 1794491042202,
+    "success": false,
+    "testId": 56
+  },
+  {
+    "numPassedTests": 148,
+    "failedTests": 0,
+    "numTotalTests": 148,
+    "timestamp": 1794491075588,
+    "success": true,
+    "testId": 56
+  },
+  {
+    "commitId": "d6161b18cbcfac4934b5931c114e87b1c18a3ce4",
+    "commitName": "fix(web): descartar publicaciones canceladas antes del envío",
+    "commitTimestamp": 1794491137910,
+    "testId": 56
+  },
+  {
+    "commitId": "9ffafc9c019d32e68214aa4f1965c231c9f233b0",
+    "commitName": "chore(repo): actualizar refactor de publicación con main",
+    "commitTimestamp": 1794491217491,
+    "testId": 53
+  },
+  {
+    "commitId": "8bb308c1384add0f870f5c695d467db27cbc00d3",
     "commitName": "chore(repo): actualizar refactor de errores con main",
     "commitTimestamp": 1794491376885,
     "testId": 53
+  },
+  {
+    "commitId": "adb728a7b0b9b9da4dea396624b53a0e6d61e339",
+    "commitName": "chore(web): combinar los refactors de publicación y sus pruebas",
+    "commitTimestamp": 1794491472336,
+    "testId": 54
+  },
+  {
+    "commitId": "ea2248e7ae583c47d19805818ff6d756869ff94b",
+    "commitName": "chore(repo): actualizar el tipo de detalle con main",
+    "commitTimestamp": 1794491675683,
+    "testId": 55
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "chore(repo): integrar refactors validados en manejo de errores",
+    "commitTimestamp": 1794491918257,
+    "testId": 56
   }
 ]

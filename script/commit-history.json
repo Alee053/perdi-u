@@ -1254,6 +1254,196 @@
     "conclusion": "success"
   },
   {
+    "sha": "c0b89874b44a9fd919434e69c9ab4f939696682a",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-12T03:32:32.000Z",
+      "message": "test(web): caracterizar los mensajes de fallo al publicar",
+      "url": "https://github.com/Alee053/perdi-u/commit/c0b89874b44a9fd919434e69c9ab4f939696682a"
+    },
+    "stats": {
+      "total": 80,
+      "additions": 80,
+      "deletions": 0,
+      "date": "2026-11-12"
+    },
+    "coverage": 87.97,
+    "test_count": 144,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "4659b934331e9d38d0ecd8d19722c3b1e57365f6",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T03:34:44.000Z",
+      "message": "test(web): caracterizar el envío y reintento de reportes (#32)",
+      "url": "https://github.com/Alee053/perdi-u/commit/4659b934331e9d38d0ecd8d19722c3b1e57365f6"
+    },
+    "stats": {
+      "total": 169,
+      "additions": 168,
+      "deletions": 1,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.13,
+    "test_count": 150,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "009c0b36b2bfaa40e22cdba332a98b9468cf893f",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-12T03:34:46.000Z",
+      "message": "refactor(web): extraer fieldErrors en la publicación",
+      "url": "https://github.com/Alee053/perdi-u/commit/009c0b36b2bfaa40e22cdba332a98b9468cf893f"
+    },
+    "stats": {
+      "total": 19,
+      "additions": 10,
+      "deletions": 9,
+      "date": "2026-11-12"
+    },
+    "coverage": 87.96,
+    "test_count": 144,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "00a3895dc5e76fc47b651037b6541a88751f15dc",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-12T03:36:01.000Z",
+      "message": "refactor(web): reemplazar el ternario anidado por failureMessage",
+      "url": "https://github.com/Alee053/perdi-u/commit/00a3895dc5e76fc47b651037b6541a88751f15dc"
+    },
+    "stats": {
+      "total": 24,
+      "additions": 15,
+      "deletions": 9,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.04,
+    "test_count": 144,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "d5a6159aa3bb49ed8d3d74b46805cf3bf71f4a1e",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T03:36:44.000Z",
+      "message": "refactor(web): dividir el envío de reportes en pasos privados (#32)",
+      "url": "https://github.com/Alee053/perdi-u/commit/d5a6159aa3bb49ed8d3d74b46805cf3bf71f4a1e"
+    },
+    "stats": {
+      "total": 99,
+      "additions": 60,
+      "deletions": 39,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.24,
+    "test_count": 150,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "d58e4bb15a2b663a0c7733f1ea3f46cb8af2164c",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-12T03:38:15.000Z",
+      "message": "refactor(web): extraer uploadPendingPhotos de submit",
+      "url": "https://github.com/Alee053/perdi-u/commit/d58e4bb15a2b663a0c7733f1ea3f46cb8af2164c"
+    },
+    "stats": {
+      "total": 42,
+      "additions": 26,
+      "deletions": 16,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.08,
+    "test_count": 144,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "427bd32b40eb196d9659f05cf4588e13d6965138",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-12T03:39:45.000Z",
+      "message": "refactor(web): extraer showFailure del catch de submit",
+      "url": "https://github.com/Alee053/perdi-u/commit/427bd32b40eb196d9659f05cf4588e13d6965138"
+    },
+    "stats": {
+      "total": 17,
+      "additions": 11,
+      "deletions": 6,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.09,
+    "test_count": 144,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "471c369b1f545244f4205dc6ec1ff8b48d8ba068",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-12T03:40:58.000Z",
+      "message": "refactor(web): separar la subida de fotos de la publicación sin bandera",
+      "url": "https://github.com/Alee053/perdi-u/commit/471c369b1f545244f4205dc6ec1ff8b48d8ba068"
+    },
+    "stats": {
+      "total": 16,
+      "additions": 9,
+      "deletions": 7,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.08,
+    "test_count": 144,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "3fa40e7d7a4fc57f189ac4014265da9743bc73c9",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-12T03:42:10.000Z",
+      "message": "refactor(web): extraer finishPublication de submit",
+      "url": "https://github.com/Alee053/perdi-u/commit/3fa40e7d7a4fc57f189ac4014265da9743bc73c9"
+    },
+    "stats": {
+      "total": 16,
+      "additions": 10,
+      "deletions": 6,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.09,
+    "test_count": 144,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "7fd0c955479bf17725e55a017bca8084dd700e63",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T03:44:20.000Z",
+      "message": "refactor(web): compartir el tipo de detalle entre presenters (#34)",
+      "url": "https://github.com/Alee053/perdi-u/commit/7fd0c955479bf17725e55a017bca8084dd700e63"
+    },
+    "stats": {
+      "total": 21,
+      "additions": 11,
+      "deletions": 10,
+      "date": "2026-11-12"
+    },
+    "coverage": 87.97,
+    "test_count": 141,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
     "sha": "3c4c99f71e796dc0cbb84e2dbd81da794faf7ebf",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
@@ -1368,12 +1558,50 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "d6161b18cbcfac4934b5931c114e87b1c18a3ce4",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T13:45:37.000Z",
+      "message": "fix(web): descartar publicaciones canceladas antes del envío",
+      "url": "https://github.com/Alee053/perdi-u/commit/d6161b18cbcfac4934b5931c114e87b1c18a3ce4"
+    },
+    "stats": {
+      "total": 27,
+      "additions": 26,
+      "deletions": 1,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.09,
+    "test_count": 148,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "9ffafc9c019d32e68214aa4f1965c231c9f233b0",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T13:46:57.000Z",
+      "message": "chore(repo): actualizar refactor de publicación con main",
+      "url": "https://github.com/Alee053/perdi-u/commit/9ffafc9c019d32e68214aa4f1965c231c9f233b0"
+    },
+    "stats": {
+      "total": 138,
+      "additions": 14,
+      "deletions": 124,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.07,
+    "test_count": 148,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "8bb308c1384add0f870f5c695d467db27cbc00d3",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-11-12T13:49:36.000Z",
       "message": "chore(repo): actualizar refactor de errores con main",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/8bb308c1384add0f870f5c695d467db27cbc00d3"
     },
     "stats": {
       "total": 138,
@@ -1383,6 +1611,63 @@
     },
     "coverage": 87.8,
     "test_count": 139,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "adb728a7b0b9b9da4dea396624b53a0e6d61e339",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T13:51:11.000Z",
+      "message": "chore(web): combinar los refactors de publicación y sus pruebas",
+      "url": "https://github.com/Alee053/perdi-u/commit/adb728a7b0b9b9da4dea396624b53a0e6d61e339"
+    },
+    "stats": {
+      "total": 308,
+      "additions": 183,
+      "deletions": 125,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.08,
+    "test_count": 155,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "ea2248e7ae583c47d19805818ff6d756869ff94b",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T13:54:35.000Z",
+      "message": "chore(repo): actualizar el tipo de detalle con main",
+      "url": "https://github.com/Alee053/perdi-u/commit/ea2248e7ae583c47d19805818ff6d756869ff94b"
+    },
+    "stats": {
+      "total": 537,
+      "additions": 364,
+      "deletions": 173,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.08,
+    "test_count": 155,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T13:58:37.000Z",
+      "message": "chore(repo): integrar refactors validados en manejo de errores",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 420,
+      "additions": 361,
+      "deletions": 59,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.08,
+    "test_count": 155,
     "failed_tests": 0,
     "conclusion": "success"
   }
