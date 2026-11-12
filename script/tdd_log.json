@@ -1788,9 +1788,47 @@
     "testId": 47
   },
   {
-    "commitId": "HEAD",
+    "commitId": "d973c04780b7725b8d26e49892b57bba3c098fe6",
     "commitName": "docs(repo): registrar verificación real de R2 en el VPS (#6)",
     "commitTimestamp": 1792651719028,
     "testId": 48
+  },
+  {
+    "numPassedTests": 142,
+    "failedTests": 0,
+    "numTotalTests": 142,
+    "timestamp": 1794454323518,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 148,
+    "failedTests": 0,
+    "numTotalTests": 148,
+    "timestamp": 1794454361999,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 150,
+    "failedTests": 0,
+    "numTotalTests": 150,
+    "timestamp": 1794454397216,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 150,
+    "failedTests": 0,
+    "numTotalTests": 150,
+    "timestamp": 1794454460723,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(web): caracterizar el envío y reintento de reportes (#32)",
+    "commitTimestamp": 1794454484463,
+    "testId": 49
   }
 ]
