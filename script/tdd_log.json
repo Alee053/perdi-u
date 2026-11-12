@@ -1788,9 +1788,39 @@
     "testId": 47
   },
   {
-    "commitId": "HEAD",
+    "commitId": "d973c04780b7725b8d26e49892b57bba3c098fe6",
     "commitName": "docs(repo): registrar verificación real de R2 en el VPS (#6)",
     "commitTimestamp": 1792651719028,
     "testId": 48
+  },
+  {
+    "numPassedTests": 140,
+    "failedTests": 1,
+    "numTotalTests": 141,
+    "timestamp": 1794454188600,
+    "success": false,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794454257128,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 144,
+    "failedTests": 0,
+    "numTotalTests": 144,
+    "timestamp": 1794454308890,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(web): caracterizar los mensajes de fallo al publicar",
+    "commitTimestamp": 1794454354809,
+    "testId": 49
   }
 ]
