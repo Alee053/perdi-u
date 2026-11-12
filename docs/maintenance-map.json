@@ -65,7 +65,18 @@
   },
   {
     "area": "Instrucciones y skills",
-    "prefixes": ["AGENTS.md", ".agents/", "docs/agent-workflow.md", "docs/maintenance-map.json"],
-    "review": ["AGENTS.md", "docs/agent-workflow.md", ".agents/skills/perdiu-docs-sync/SKILL.md"]
+    "prefixes": [
+      "AGENTS.md",
+      ".agents/",
+      ".claude/",
+      "docs/agent-workflow.md",
+      "docs/maintenance-map.json"
+    ],
+    "review": [
+      "AGENTS.md",
+      "docs/agent-workflow.md",
+      ".agents/skills/perdiu-docs-sync/SKILL.md",
+      ".claude/skills"
+    ]
   }
 ]

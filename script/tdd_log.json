@@ -2230,10 +2230,22 @@
     "testId": 53
   },
   {
+    "commitId": "0ae742f484bea4f0bf16756a6b170f3a9d90a12c",
+    "commitName": "docs(repo): replicar en .claude todas las skills de .agents",
+    "commitTimestamp": 1794490384797,
+    "testId": 49
+  },
+  {
     "commitId": "b842e83e02d1b1f25aec586c1268c05774120232",
     "commitName": "chore(repo): resolver evidencia al actualizar normalización",
     "commitTimestamp": 1794490995318,
     "testId": 52
+  },
+  {
+    "commitId": "8d55a83c1d4e0f0b8e70d059995c747f576ca4fe",
+    "commitName": "docs(repo): incluir los accesos de .claude en README y mapa de impacto",
+    "commitTimestamp": 1794491008815,
+    "testId": 50
   },
   {
     "numPassedTests": 144,
@@ -2282,9 +2294,21 @@
     "testId": 55
   },
   {
-    "commitId": "HEAD",
+    "commitId": "2e085cc10e8a60a248dc0585b9422ee307af7575",
+    "commitName": "Merge origin/main into docs/replicar-skills-claude",
+    "commitTimestamp": 1794491679691,
+    "testId": 51
+  },
+  {
+    "commitId": "129939f2c3018810ae8919aad99b331168ff19ba",
     "commitName": "chore(repo): integrar refactors validados en manejo de errores",
     "commitTimestamp": 1794491918257,
     "testId": 56
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(repo): resolver conflictos de la sincronización de skills",
+    "commitTimestamp": 1794492366180,
+    "testId": 57
   }
 ]

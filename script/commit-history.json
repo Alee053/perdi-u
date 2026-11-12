@@ -1539,6 +1539,25 @@
     "conclusion": "success"
   },
   {
+    "sha": "0ae742f484bea4f0bf16756a6b170f3a9d90a12c",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-12T13:33:00.000Z",
+      "message": "docs(repo): replicar en .claude todas las skills de .agents",
+      "url": "https://github.com/Alee053/perdi-u/commit/0ae742f484bea4f0bf16756a6b170f3a9d90a12c"
+    },
+    "stats": {
+      "total": 34,
+      "additions": 33,
+      "deletions": 1,
+      "date": "2026-11-12"
+    },
+    "coverage": 87.97,
+    "test_count": 141,
+    "failed_tests": 1,
+    "conclusion": "failure"
+  },
+  {
     "sha": "b842e83e02d1b1f25aec586c1268c05774120232",
     "author": "Alejandro Castro",
     "commit": {
@@ -1556,6 +1575,25 @@
     "test_count": 139,
     "failed_tests": 0,
     "conclusion": "success"
+  },
+  {
+    "sha": "8d55a83c1d4e0f0b8e70d059995c747f576ca4fe",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-12T13:43:23.000Z",
+      "message": "docs(repo): incluir los accesos de .claude en README y mapa de impacto",
+      "url": "https://github.com/Alee053/perdi-u/commit/8d55a83c1d4e0f0b8e70d059995c747f576ca4fe"
+    },
+    "stats": {
+      "total": 17,
+      "additions": 14,
+      "deletions": 3,
+      "date": "2026-11-12"
+    },
+    "coverage": 87.97,
+    "test_count": 141,
+    "failed_tests": 1,
+    "conclusion": "failure"
   },
   {
     "sha": "d6161b18cbcfac4934b5931c114e87b1c18a3ce4",
@@ -1634,6 +1672,25 @@
     "conclusion": "success"
   },
   {
+    "sha": "2e085cc10e8a60a248dc0585b9422ee307af7575",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-12T13:54:34.000Z",
+      "message": "Merge origin/main into docs/replicar-skills-claude",
+      "url": "https://github.com/Alee053/perdi-u/commit/2e085cc10e8a60a248dc0585b9422ee307af7575"
+    },
+    "stats": {
+      "total": 406,
+      "additions": 242,
+      "deletions": 164,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.07,
+    "test_count": 148,
+    "failed_tests": 1,
+    "conclusion": "failure"
+  },
+  {
     "sha": "ea2248e7ae583c47d19805818ff6d756869ff94b",
     "author": "Alejandro Castro",
     "commit": {
@@ -1653,17 +1710,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "129939f2c3018810ae8919aad99b331168ff19ba",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-11-12T13:58:37.000Z",
       "message": "chore(repo): integrar refactors validados en manejo de errores",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/129939f2c3018810ae8919aad99b331168ff19ba"
     },
     "stats": {
       "total": 420,
       "additions": 361,
       "deletions": 59,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.08,
+    "test_count": 155,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T14:06:05.000Z",
+      "message": "docs(repo): resolver conflictos de la sincronización de skills",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 425,
+      "additions": 310,
+      "deletions": 115,
       "date": "2026-11-12"
     },
     "coverage": 88.08,

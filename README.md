@@ -102,4 +102,4 @@ Consulta [la API](apps/api/README.md), [la evidencia de S1-01](docs/validation/s
 
 ## Instrucciones del repositorio
 
-[AGENTS.md](AGENTS.md) activa cuatro [skills locales y mantenibles](docs/agent-workflow.md). Están versionadas en `.agents/skills/` y remiten a guías canónicas; cualquier cambio que invalide sus instrucciones debe actualizarlas en la misma PR. CI valida estructura y enlaces; el equipo revisa significado y resultados.
+[AGENTS.md](AGENTS.md) activa cinco [skills locales y mantenibles](docs/agent-workflow.md). Están versionadas en `.agents/skills/`, con un acceso para Claude Code en `.claude/skills/`, y remiten a guías canónicas; cualquier cambio que invalide sus instrucciones debe actualizarlas en la misma PR. CI valida estructura y enlaces; el equipo revisa significado y resultados.
