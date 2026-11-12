@@ -100,6 +100,7 @@ test('cerrar sesión en la API revoca ese token, también después de reiniciar 
   const jwks = await jwksServer([key.jwk])
   const closing = await key.sign({ session_id: crypto.randomUUID() })
   const other = await key.sign({ session_id: crypto.randomUUID() })
+  const failed = await key.sign({ session_id: crypto.randomUUID() })
   const verifier = createRemoteAccessTokenVerifier(jwks.url, { issuer, audience })
   const request = (url: string, path: string, token?: string, method = 'GET') =>
     fetch(`${url}${path}`, {
@@ -110,6 +111,33 @@ test('cerrar sesión en la API revoca ese token, también después de reiniciar 
     await withApi(verifier, async (url) => {
       assert.equal((await request(url, '/me', closing)).status, 200)
       assert.equal((await request(url, '/me/logout', undefined, 'POST')).status, 401)
+
+      const pool = createPool(process.env.TEST_DATABASE_URL!)
+      try {
+        await pool.query(`
+          CREATE FUNCTION reject_session_revocation() RETURNS trigger
+          LANGUAGE plpgsql AS $$
+          BEGIN
+            RAISE EXCEPTION 'forced failure in disposable test';
+          END;
+          $$
+        `)
+        await pool.query(`
+          CREATE TRIGGER reject_session_revocation
+          BEFORE INSERT ON session_revocations
+          FOR EACH ROW EXECUTE FUNCTION reject_session_revocation()
+        `)
+        const unavailable = await request(url, '/me/logout', failed, 'POST')
+        assert.equal(unavailable.status, 503)
+        assert.equal(
+          (await unavailable.json()).message,
+          'No se pudo cerrar la sesión. Intenta nuevamente.',
+        )
+      } finally {
+        await pool.query('DROP TRIGGER IF EXISTS reject_session_revocation ON session_revocations')
+        await pool.query('DROP FUNCTION IF EXISTS reject_session_revocation()')
+        await pool.end()
+      }
 
       const logout = await request(url, '/me/logout', closing, 'POST')
       assert.equal(logout.status, 204)
@@ -176,6 +204,32 @@ test('GET /me agrega nombre y foto del perfil propio, sin contacto privado ni ot
         email: 'persona@example.test',
         displayName: 'Sin Foto',
       })
+    })
+  } finally {
+    await jwks.close()
+  }
+})
+
+test('GET /me traduce un fallo al leer el perfil a 503 con mensaje seguro', async () => {
+  const key = await signingKey('profile-unavailable')
+  const jwks = await jwksServer([key.jwk])
+  try {
+    await withApi(createRemoteAccessTokenVerifier(jwks.url, { issuer, audience }), async (url) => {
+      const pool = createPool(process.env.TEST_DATABASE_URL!)
+      try {
+        await pool.query('ALTER TABLE profiles RENAME TO unavailable_profiles')
+        const response = await fetch(`${url}/me`, {
+          headers: { authorization: `Bearer ${await key.sign()}` },
+        })
+        assert.equal(response.status, 503)
+        assert.equal(
+          (await response.json()).message,
+          'No se pudo cargar tu perfil. Intenta nuevamente.',
+        )
+      } finally {
+        await pool.query('ALTER TABLE unavailable_profiles RENAME TO profiles')
+        await pool.end()
+      }
     })
   } finally {
     await jwks.close()

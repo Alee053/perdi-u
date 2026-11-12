@@ -2112,6 +2112,124 @@
     "testId": 49
   },
   {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794458587280,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794458848659,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794458933920,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "commitId": "3c4c99f71e796dc0cbb84e2dbd81da794faf7ebf",
+    "commitName": "refactor(api): centralizar 503 de catálogo y resolución",
+    "commitTimestamp": 1794458995998,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794459049257,
+    "success": true,
+    "testId": 50
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794459094588,
+    "success": true,
+    "testId": 50
+  },
+  {
+    "commitId": "001e4ea754df256d7bbcb7405ae54b85f6aa7e79",
+    "commitName": "refactor(api): usar 503 compartido en detalle y contacto",
+    "commitTimestamp": 1794459144182,
+    "testId": 50
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794459163495,
+    "success": true,
+    "testId": 51
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794459198912,
+    "success": true,
+    "testId": 51
+  },
+  {
+    "commitId": "1452ee3983ed57a3103269d3d3cbcb4809e63ec8",
+    "commitName": "refactor(api): reutilizar 503 compartido en la cuenta",
+    "commitTimestamp": 1794459233639,
+    "testId": 51
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794459262697,
+    "success": true,
+    "testId": 52
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794459303519,
+    "success": true,
+    "testId": 52
+  },
+  {
+    "commitId": "9cb3848373b3f375b2497561da1a55846a25694c",
+    "commitName": "refactor(api): centralizar 503 de publicación",
+    "commitTimestamp": 1794459368452,
+    "testId": 52
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794459694698,
+    "success": true,
+    "testId": 53
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794459731549,
+    "success": true,
+    "testId": 53
+  },
+  {
+    "commitId": "a9ca416004460256264881ac91b6786a25b7b62f",
+    "commitName": "refactor(api): aclarar excepciones esperadas del helper 503",
+    "commitTimestamp": 1794459770670,
+    "testId": 53
+  },
+  {
     "commitId": "b842e83e02d1b1f25aec586c1268c05774120232",
     "commitName": "chore(repo): resolver evidencia al actualizar normalización",
     "commitTimestamp": 1794490995318,
@@ -2146,15 +2264,27 @@
     "testId": 53
   },
   {
+    "commitId": "8bb308c1384add0f870f5c695d467db27cbc00d3",
+    "commitName": "chore(repo): actualizar refactor de errores con main",
+    "commitTimestamp": 1794491376885,
+    "testId": 53
+  },
+  {
     "commitId": "adb728a7b0b9b9da4dea396624b53a0e6d61e339",
     "commitName": "chore(web): combinar los refactors de publicación y sus pruebas",
     "commitTimestamp": 1794491472336,
     "testId": 54
   },
   {
-    "commitId": "HEAD",
+    "commitId": "ea2248e7ae583c47d19805818ff6d756869ff94b",
     "commitName": "chore(repo): actualizar el tipo de detalle con main",
     "commitTimestamp": 1794491675683,
     "testId": 55
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "chore(repo): integrar refactors validados en manejo de errores",
+    "commitTimestamp": 1794491918257,
+    "testId": 56
   }
 ]
