@@ -1826,9 +1826,23 @@
     "testId": 49
   },
   {
-    "commitId": "HEAD",
+    "commitId": "4659b934331e9d38d0ecd8d19722c3b1e57365f6",
     "commitName": "test(web): caracterizar el envío y reintento de reportes (#32)",
     "commitTimestamp": 1794454484463,
     "testId": 49
+  },
+  {
+    "numPassedTests": 150,
+    "failedTests": 0,
+    "numTotalTests": 150,
+    "timestamp": 1794454538486,
+    "success": true,
+    "testId": 50
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "refactor(web): dividir el envío de reportes en pasos privados (#32)",
+    "commitTimestamp": 1794454604705,
+    "testId": 50
   }
 ]

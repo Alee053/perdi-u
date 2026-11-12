@@ -1121,12 +1121,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "4659b934331e9d38d0ecd8d19722c3b1e57365f6",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-11-12T03:34:44.000Z",
       "message": "test(web): caracterizar el envío y reintento de reportes (#32)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/4659b934331e9d38d0ecd8d19722c3b1e57365f6"
     },
     "stats": {
       "total": 169,
@@ -1135,6 +1135,25 @@
       "date": "2026-11-12"
     },
     "coverage": 88.13,
+    "test_count": 150,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T03:36:44.000Z",
+      "message": "refactor(web): dividir el envío de reportes en pasos privados (#32)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 99,
+      "additions": 60,
+      "deletions": 39,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.24,
     "test_count": 150,
     "failed_tests": 0,
     "conclusion": "success"
