@@ -1425,6 +1425,25 @@
     "conclusion": "success"
   },
   {
+    "sha": "7fd0c955479bf17725e55a017bca8084dd700e63",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T03:44:20.000Z",
+      "message": "refactor(web): compartir el tipo de detalle entre presenters (#34)",
+      "url": "https://github.com/Alee053/perdi-u/commit/7fd0c955479bf17725e55a017bca8084dd700e63"
+    },
+    "stats": {
+      "total": 21,
+      "additions": 11,
+      "deletions": 10,
+      "date": "2026-11-12"
+    },
+    "coverage": 87.97,
+    "test_count": 141,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
     "sha": "b842e83e02d1b1f25aec586c1268c05774120232",
     "author": "Alejandro Castro",
     "commit": {
@@ -1482,17 +1501,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "adb728a7b0b9b9da4dea396624b53a0e6d61e339",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-11-12T13:51:11.000Z",
       "message": "chore(web): combinar los refactors de publicación y sus pruebas",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/adb728a7b0b9b9da4dea396624b53a0e6d61e339"
     },
     "stats": {
       "total": 308,
       "additions": 183,
       "deletions": 125,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.08,
+    "test_count": 155,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T13:54:35.000Z",
+      "message": "chore(repo): actualizar el tipo de detalle con main",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 537,
+      "additions": 364,
+      "deletions": 173,
       "date": "2026-11-12"
     },
     "coverage": 88.08,

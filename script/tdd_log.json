@@ -2090,6 +2090,28 @@
     "testId": 55
   },
   {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794454990485,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794455023347,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "commitId": "7fd0c955479bf17725e55a017bca8084dd700e63",
+    "commitName": "refactor(web): compartir el tipo de detalle entre presenters (#34)",
+    "commitTimestamp": 1794455060855,
+    "testId": 49
+  },
+  {
     "commitId": "b842e83e02d1b1f25aec586c1268c05774120232",
     "commitName": "chore(repo): resolver evidencia al actualizar normalización",
     "commitTimestamp": 1794490995318,
@@ -2124,9 +2146,15 @@
     "testId": 53
   },
   {
-    "commitId": "HEAD",
+    "commitId": "adb728a7b0b9b9da4dea396624b53a0e6d61e339",
     "commitName": "chore(web): combinar los refactors de publicación y sus pruebas",
     "commitTimestamp": 1794491472336,
     "testId": 54
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "chore(repo): actualizar el tipo de detalle con main",
+    "commitTimestamp": 1794491675683,
+    "testId": 55
   }
 ]
