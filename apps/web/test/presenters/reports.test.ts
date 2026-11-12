@@ -239,6 +239,69 @@ test('el formulario explica cuando el API rechaza las fotos adjuntas', async () 
   assert.equal(presenter.getSnapshot().message, 'Revisa las fotos adjuntas e intenta nuevamente.')
 })
 
+for (const { reason, failure, errors, message } of [
+  {
+    reason: 'sesión rechazada',
+    failure: new ReportPublishFailure('unauthorized'),
+    errors: {},
+    message: 'Inicia sesión nuevamente para publicar el reporte.',
+  },
+  {
+    reason: 'validación de campos',
+    failure: new ReportPublishFailure('validation', { title: 'too_long' }),
+    errors: { title: 'Usa como máximo 200 caracteres.' },
+    message: '',
+  },
+  {
+    reason: 'validación de fotos y campos',
+    failure: new ReportPublishFailure('validation', { title: 'too_long', mediaIds: 'invalid' }),
+    errors: {
+      title: 'Usa como máximo 200 caracteres.',
+      mediaIds: 'Revisa las fotos adjuntas e intenta nuevamente.',
+    },
+    message: 'Revisa las fotos adjuntas e intenta nuevamente.',
+  },
+  {
+    reason: 'validación sin campos',
+    failure: new ReportPublishFailure('validation'),
+    errors: {},
+    message: 'No se pudo publicar el reporte. Intenta nuevamente.',
+  },
+  {
+    reason: 'servicio no disponible',
+    failure: new ReportPublishFailure('unavailable'),
+    errors: {},
+    message: 'No se pudo publicar el reporte. Intenta nuevamente.',
+  },
+  {
+    reason: 'error inesperado',
+    failure: new Error('internal detail'),
+    errors: {},
+    message: 'No se pudo publicar el reporte. Intenta nuevamente.',
+  },
+]) {
+  test(`un rechazo por ${reason} conserva el borrador y presenta el mensaje correspondiente`, async () => {
+    const { presenter, notices, counts } = publishSetup(async () => {
+      throw failure
+    })
+    presenter.setField('category', 'object')
+    presenter.setField('title', 'Mochila azul')
+    presenter.setField('description', 'La encontré en un minibús de la línea 2.')
+    presenter.setField('zone', 'Miraflores')
+    presenter.setField('incidentDate', '2026-10-20')
+    presenter.setField('phone', '+591 70123456')
+    const draft = presenter.getSnapshot().draft
+
+    assert.equal(await presenter.submit(), false)
+    assert.deepEqual(presenter.getSnapshot().draft, draft)
+    assert.equal(presenter.getSnapshot().pending, false)
+    assert.deepEqual(presenter.getSnapshot().errors, errors)
+    assert.equal(presenter.getSnapshot().message, message)
+    assert.deepEqual(notices, [])
+    assert.deepEqual(counts(), { resets: 0, published: 0 })
+  })
+}
+
 test('al abandonar el formulario libera previews y fotos subidas sin asociar', async () => {
   const { presenter, revokedPreviews, removedMedia } = publishSetup(async () => {
     throw new ReportPublishFailure('unavailable')
@@ -357,6 +420,44 @@ test('un envío pendiente bloquea duplicados y conserva el borrador si falla', a
     'No se pudo publicar el reporte. Intenta nuevamente.',
   )
 })
+
+for (const outcome of ['success', 'failure'] as const) {
+  test(`una respuesta tardía de publicación (${outcome}) no altera un formulario nuevo`, async () => {
+    let finish!: () => void
+    const request = new Promise<void>((resolve, reject) => {
+      finish = () => {
+        if (outcome === 'success') resolve()
+        else reject(new ReportPublishFailure('unauthorized'))
+      }
+    })
+    let started!: () => void
+    const publishing = new Promise<void>((resolve) => {
+      started = resolve
+    })
+    const { presenter, notices, counts } = publishSetup(() => {
+      started()
+      return request
+    })
+    presenter.setField('category', 'object')
+    presenter.setField('title', 'Mochila azul')
+    presenter.setField('description', 'La encontré en un minibús de la línea 2.')
+    presenter.setField('zone', 'Miraflores')
+    presenter.setField('incidentDate', '2026-10-20')
+    presenter.setField('phone', '+591 70123456')
+
+    const pending = presenter.submit()
+    await publishing
+    presenter.reset()
+    presenter.setField('title', 'Otro formulario')
+    const state = presenter.getSnapshot()
+    finish()
+
+    assert.equal(await pending, false)
+    assert.deepEqual(presenter.getSnapshot(), state)
+    assert.deepEqual(notices, [])
+    assert.deepEqual(counts(), { resets: 0, published: 0 })
+  })
+}
 
 test('un aviso nuevo reemplaza al anterior y se cierra solo tras su duración', () => {
   const tasks: { run: () => void; cancelled: boolean }[] = []

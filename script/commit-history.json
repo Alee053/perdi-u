@@ -1121,6 +1121,139 @@
     "conclusion": "success"
   },
   {
+    "sha": "4ca1a48937a1a4abeefa186e0bb05e3e2ad39e50",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-10T13:46:29.000Z",
+      "message": "refactor(web): eliminar resolveReport y removeReport sin uso",
+      "url": "https://github.com/Alee053/perdi-u/commit/4ca1a48937a1a4abeefa186e0bb05e3e2ad39e50"
+    },
+    "stats": {
+      "total": 35,
+      "additions": 1,
+      "deletions": 34,
+      "date": "2026-11-10"
+    },
+    "coverage": 87.86,
+    "test_count": 140,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "3b806dff056e7c8dafaa8515e2c075f14b5ecdab",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-10T13:48:12.000Z",
+      "message": "refactor(web): eliminar publishDemoReport y DemoReportDraft sin uso",
+      "url": "https://github.com/Alee053/perdi-u/commit/3b806dff056e7c8dafaa8515e2c075f14b5ecdab"
+    },
+    "stats": {
+      "total": 78,
+      "additions": 1,
+      "deletions": 77,
+      "date": "2026-11-10"
+    },
+    "coverage": 87.74,
+    "test_count": 139,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "be91e28930dd9b0f7dd24ae34ac2a470891a698d",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-10T13:49:24.000Z",
+      "message": "refactor(web): eliminar isOwnedBy sin uso",
+      "url": "https://github.com/Alee053/perdi-u/commit/be91e28930dd9b0f7dd24ae34ac2a470891a698d"
+    },
+    "stats": {
+      "total": 3,
+      "additions": 0,
+      "deletions": 3,
+      "date": "2026-11-10"
+    },
+    "coverage": 87.8,
+    "test_count": 139,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "dfae7bea9b37a0d7a46341c518f1181678898091",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-10T13:50:46.000Z",
+      "message": "docs(web): describir demoOwner solo como autor de datos demo",
+      "url": "https://github.com/Alee053/perdi-u/commit/dfae7bea9b37a0d7a46341c518f1181678898091"
+    },
+    "stats": {
+      "total": 8,
+      "additions": 4,
+      "deletions": 4,
+      "date": "2026-11-10"
+    },
+    "coverage": 87.8,
+    "test_count": 139,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "328dc87f88dba419411163b8c4aa43be59897a40",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-10T13:53:27.000Z",
+      "message": "refactor(catalog): mover normalizeReportPhone al módulo de contacto",
+      "url": "https://github.com/Alee053/perdi-u/commit/328dc87f88dba419411163b8c4aa43be59897a40"
+    },
+    "stats": {
+      "total": 10,
+      "additions": 6,
+      "deletions": 4,
+      "date": "2026-11-10"
+    },
+    "coverage": 87.97,
+    "test_count": 141,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "eea2068b34cb3841c1f0d0a059a15c99f1738682",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-10T13:54:38.000Z",
+      "message": "refactor(catalog): reutilizar normalizeReportPhone en toWhatsAppNumber",
+      "url": "https://github.com/Alee053/perdi-u/commit/eea2068b34cb3841c1f0d0a059a15c99f1738682"
+    },
+    "stats": {
+      "total": 2,
+      "additions": 1,
+      "deletions": 1,
+      "date": "2026-11-10"
+    },
+    "coverage": 87.97,
+    "test_count": 141,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "41cfb63bb1d7c2001e76ca435017ff6ad152cffb",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-10T13:55:49.000Z",
+      "message": "refactor(catalog): renombrar digits a normalized en toWhatsAppNumber",
+      "url": "https://github.com/Alee053/perdi-u/commit/41cfb63bb1d7c2001e76ca435017ff6ad152cffb"
+    },
+    "stats": {
+      "total": 6,
+      "additions": 3,
+      "deletions": 3,
+      "date": "2026-11-10"
+    },
+    "coverage": 87.97,
+    "test_count": 141,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
     "sha": "c0b89874b44a9fd919434e69c9ab4f939696682a",
     "author": "Santiamen23",
     "commit": {
@@ -1136,6 +1269,25 @@
     },
     "coverage": 87.97,
     "test_count": 144,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "4659b934331e9d38d0ecd8d19722c3b1e57365f6",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T03:34:44.000Z",
+      "message": "test(web): caracterizar el envío y reintento de reportes (#32)",
+      "url": "https://github.com/Alee053/perdi-u/commit/4659b934331e9d38d0ecd8d19722c3b1e57365f6"
+    },
+    "stats": {
+      "total": 169,
+      "additions": 168,
+      "deletions": 1,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.13,
+    "test_count": 150,
     "failed_tests": 0,
     "conclusion": "success"
   },
@@ -1174,6 +1326,25 @@
     },
     "coverage": 88.04,
     "test_count": 144,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "d5a6159aa3bb49ed8d3d74b46805cf3bf71f4a1e",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T03:36:44.000Z",
+      "message": "refactor(web): dividir el envío de reportes en pasos privados (#32)",
+      "url": "https://github.com/Alee053/perdi-u/commit/d5a6159aa3bb49ed8d3d74b46805cf3bf71f4a1e"
+    },
+    "stats": {
+      "total": 99,
+      "additions": 60,
+      "deletions": 39,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.24,
+    "test_count": 150,
     "failed_tests": 0,
     "conclusion": "success"
   },
@@ -1254,12 +1425,31 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "b842e83e02d1b1f25aec586c1268c05774120232",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T13:43:15.000Z",
+      "message": "chore(repo): resolver evidencia al actualizar normalización",
+      "url": "https://github.com/Alee053/perdi-u/commit/b842e83e02d1b1f25aec586c1268c05774120232"
+    },
+    "stats": {
+      "total": 122,
+      "additions": 5,
+      "deletions": 117,
+      "date": "2026-11-12"
+    },
+    "coverage": 87.8,
+    "test_count": 139,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "d6161b18cbcfac4934b5931c114e87b1c18a3ce4",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-11-12T13:45:37.000Z",
       "message": "fix(web): descartar publicaciones canceladas antes del envío",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/d6161b18cbcfac4934b5931c114e87b1c18a3ce4"
     },
     "stats": {
       "total": 27,
@@ -1269,6 +1459,44 @@
     },
     "coverage": 88.09,
     "test_count": 148,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "9ffafc9c019d32e68214aa4f1965c231c9f233b0",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T13:46:57.000Z",
+      "message": "chore(repo): actualizar refactor de publicación con main",
+      "url": "https://github.com/Alee053/perdi-u/commit/9ffafc9c019d32e68214aa4f1965c231c9f233b0"
+    },
+    "stats": {
+      "total": 138,
+      "additions": 14,
+      "deletions": 124,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.07,
+    "test_count": 148,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T13:51:11.000Z",
+      "message": "chore(web): combinar los refactors de publicación y sus pruebas",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 308,
+      "additions": 183,
+      "deletions": 125,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.08,
+    "test_count": 155,
     "failed_tests": 0,
     "conclusion": "success"
   }

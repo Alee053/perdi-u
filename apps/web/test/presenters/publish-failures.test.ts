@@ -79,6 +79,7 @@ test('los errores de campo del API se muestran junto a cada campo sin mensaje ge
   assert.equal(presenter.getSnapshot().message, '')
 })
 
+// Regression: leaving before the publish request starts must invalidate the attempt.
 for (const uploaded of [false, true]) {
   for (const cancel of ['reset', 'releasePhotos'] as const) {
     test(`${cancel} antes de publicar descarta el envío ${uploaded ? 'con fotos ya subidas' : 'sin fotos'}`, async () => {

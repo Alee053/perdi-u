@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict'
 import { test } from '@jest/globals'
-import type { ReportDraft, ReportPhotoFile } from '../../src/models/reports/publication.js'
+import {
+  ReportPublishFailure,
+  type ReportDraft,
+  type ReportPhotoFile,
+} from '../../src/models/reports/publication.js'
 import { PublishPresenter } from '../../src/presenters/reports/publish.presenter.js'
 
 const photo = (name: string): ReportPhotoFile => ({
@@ -10,6 +14,68 @@ const photo = (name: string): ReportPhotoFile => ({
   async arrayBuffer() {
     return new ArrayBuffer(1)
   },
+})
+
+test('un fallo de subida conserva las fotos completadas y el reintento sube solo las pendientes', async () => {
+  const uploads: string[] = []
+  const submissions: ReportDraft[] = []
+  const revoked: string[] = []
+  const notices: string[] = []
+  let failUpload = true
+  let resets = 0
+  let published = 0
+  const presenter = new PublishPresenter({
+    publisher: { publish: async (draft) => void submissions.push(draft) },
+    media: {
+      upload: async (file) => {
+        uploads.push(file.name)
+        if (file.name === 'two.jpg' && failUpload) {
+          failUpload = false
+          throw new ReportPublishFailure('unauthorized')
+        }
+        return 'media-' + file.name
+      },
+      remove: async () => {},
+    },
+    effects: {
+      createPreview: (file) => 'blob:' + (file as ReportPhotoFile).name,
+      revokePreview: (url) => void revoked.push(url),
+    },
+    filters: { reset: () => void resets++ },
+    notices: { show: (message) => void notices.push(message) },
+    onPublished: () => void published++,
+  })
+  presenter.setField('category', 'object')
+  presenter.setField('title', 'Mochila de prueba')
+  presenter.setField('description', 'Mochila de prueba encontrada cerca de la plaza.')
+  presenter.setField('zone', 'Centro')
+  presenter.setField('incidentDate', '2026-10-21')
+  presenter.setField('phone', '+591 70000000')
+  presenter.addPhotos([photo('one.jpg'), photo('two.jpg'), photo('three.jpg')])
+
+  assert.equal(await presenter.submit(), false)
+  assert.deepEqual(uploads, ['one.jpg', 'two.jpg'])
+  assert.equal(submissions.length, 0)
+  assert.equal(presenter.getSnapshot().pending, false)
+  assert.equal(presenter.getSnapshot().draft.title, 'Mochila de prueba')
+  assert.deepEqual(
+    presenter.getSnapshot().photos.map(({ mediaId }) => mediaId),
+    ['media-one.jpg', undefined, undefined],
+  )
+  assert.equal(presenter.getSnapshot().message, 'No se pudo subir una foto. Intenta nuevamente.')
+  assert.deepEqual(
+    { revoked, notices, resets, published },
+    { revoked: [], notices: [], resets: 0, published: 0 },
+  )
+
+  assert.equal(await presenter.submit(), true)
+  assert.deepEqual(uploads, ['one.jpg', 'two.jpg', 'two.jpg', 'three.jpg'])
+  assert.deepEqual(submissions[0]?.mediaIds, ['media-one.jpg', 'media-two.jpg', 'media-three.jpg'])
+  assert.deepEqual(revoked, ['blob:one.jpg', 'blob:two.jpg', 'blob:three.jpg'])
+  assert.deepEqual(notices, ['Tu reporte se publicó y ya aparece en el catálogo.'])
+  assert.deepEqual({ resets, published }, { resets: 1, published: 1 })
+  assert.equal(presenter.getSnapshot().draft.title, '')
+  assert.deepEqual(presenter.getSnapshot().photos, [])
 })
 
 for (const cancel of ['releasePhotos', 'reset'] as const) {
