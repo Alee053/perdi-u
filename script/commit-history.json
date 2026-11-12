@@ -1102,12 +1102,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "d973c04780b7725b8d26e49892b57bba3c098fe6",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-10-22T06:48:38.000Z",
       "message": "docs(repo): registrar verificación real de R2 en el VPS (#6)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/d973c04780b7725b8d26e49892b57bba3c098fe6"
     },
     "stats": {
       "total": 36,
@@ -1117,6 +1117,82 @@
     },
     "coverage": 87.97,
     "test_count": 141,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "4ca1a48937a1a4abeefa186e0bb05e3e2ad39e50",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-10T13:46:29.000Z",
+      "message": "refactor(web): eliminar resolveReport y removeReport sin uso",
+      "url": "https://github.com/Alee053/perdi-u/commit/4ca1a48937a1a4abeefa186e0bb05e3e2ad39e50"
+    },
+    "stats": {
+      "total": 35,
+      "additions": 1,
+      "deletions": 34,
+      "date": "2026-11-10"
+    },
+    "coverage": 87.86,
+    "test_count": 140,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "3b806dff056e7c8dafaa8515e2c075f14b5ecdab",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-10T13:48:12.000Z",
+      "message": "refactor(web): eliminar publishDemoReport y DemoReportDraft sin uso",
+      "url": "https://github.com/Alee053/perdi-u/commit/3b806dff056e7c8dafaa8515e2c075f14b5ecdab"
+    },
+    "stats": {
+      "total": 78,
+      "additions": 1,
+      "deletions": 77,
+      "date": "2026-11-10"
+    },
+    "coverage": 87.74,
+    "test_count": 139,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "be91e28930dd9b0f7dd24ae34ac2a470891a698d",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-10T13:49:24.000Z",
+      "message": "refactor(web): eliminar isOwnedBy sin uso",
+      "url": "https://github.com/Alee053/perdi-u/commit/be91e28930dd9b0f7dd24ae34ac2a470891a698d"
+    },
+    "stats": {
+      "total": 3,
+      "additions": 0,
+      "deletions": 3,
+      "date": "2026-11-10"
+    },
+    "coverage": 87.8,
+    "test_count": 139,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-10T13:50:46.000Z",
+      "message": "docs(web): describir demoOwner solo como autor de datos demo",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 8,
+      "additions": 4,
+      "deletions": 4,
+      "date": "2026-11-10"
+    },
+    "coverage": 87.8,
+    "test_count": 139,
     "failed_tests": 0,
     "conclusion": "success"
   }

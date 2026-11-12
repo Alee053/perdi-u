@@ -1788,9 +1788,81 @@
     "testId": 47
   },
   {
-    "commitId": "HEAD",
+    "commitId": "d973c04780b7725b8d26e49892b57bba3c098fe6",
     "commitName": "docs(repo): registrar verificación real de R2 en el VPS (#6)",
     "commitTimestamp": 1792651719028,
     "testId": 48
+  },
+  {
+    "numPassedTests": 140,
+    "failedTests": 1,
+    "numTotalTests": 141,
+    "timestamp": 1794318014927,
+    "success": false,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794318292285,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 140,
+    "failedTests": 0,
+    "numTotalTests": 140,
+    "timestamp": 1794318352596,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "commitId": "4ca1a48937a1a4abeefa186e0bb05e3e2ad39e50",
+    "commitName": "refactor(web): eliminar resolveReport y removeReport sin uso",
+    "commitTimestamp": 1794318391600,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 139,
+    "failedTests": 0,
+    "numTotalTests": 139,
+    "timestamp": 1794318458400,
+    "success": true,
+    "testId": 50
+  },
+  {
+    "commitId": "3b806dff056e7c8dafaa8515e2c075f14b5ecdab",
+    "commitName": "refactor(web): eliminar publishDemoReport y DemoReportDraft sin uso",
+    "commitTimestamp": 1794318493726,
+    "testId": 50
+  },
+  {
+    "numPassedTests": 139,
+    "failedTests": 0,
+    "numTotalTests": 139,
+    "timestamp": 1794318534376,
+    "success": true,
+    "testId": 51
+  },
+  {
+    "commitId": "be91e28930dd9b0f7dd24ae34ac2a470891a698d",
+    "commitName": "refactor(web): eliminar isOwnedBy sin uso",
+    "commitTimestamp": 1794318565641,
+    "testId": 51
+  },
+  {
+    "numPassedTests": 139,
+    "failedTests": 0,
+    "numTotalTests": 139,
+    "timestamp": 1794318617352,
+    "success": true,
+    "testId": 52
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(web): describir demoOwner solo como autor de datos demo",
+    "commitTimestamp": 1794318648283,
+    "testId": 52
   }
 ]
