@@ -1916,9 +1916,67 @@
     "testId": 51
   },
   {
-    "commitId": "HEAD",
+    "numPassedTests": 142,
+    "failedTests": 0,
+    "numTotalTests": 142,
+    "timestamp": 1794454323518,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 148,
+    "failedTests": 0,
+    "numTotalTests": 148,
+    "timestamp": 1794454361999,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 150,
+    "failedTests": 0,
+    "numTotalTests": 150,
+    "timestamp": 1794454397216,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 150,
+    "failedTests": 0,
+    "numTotalTests": 150,
+    "timestamp": 1794454460723,
+    "success": true,
+    "testId": 49
+  },
+  {
+    "commitId": "4659b934331e9d38d0ecd8d19722c3b1e57365f6",
+    "commitName": "test(web): caracterizar el envío y reintento de reportes (#32)",
+    "commitTimestamp": 1794454484463,
+    "testId": 49
+  },
+  {
+    "numPassedTests": 150,
+    "failedTests": 0,
+    "numTotalTests": 150,
+    "timestamp": 1794454538486,
+    "success": true,
+    "testId": 50
+  },
+  {
+    "commitId": "d5a6159aa3bb49ed8d3d74b46805cf3bf71f4a1e",
+    "commitName": "refactor(web): dividir el envío de reportes en pasos privados (#32)",
+    "commitTimestamp": 1794454604705,
+    "testId": 50
+  },
+  {
+    "commitId": "b842e83e02d1b1f25aec586c1268c05774120232",
     "commitName": "chore(repo): resolver evidencia al actualizar normalización",
     "commitTimestamp": 1794490995318,
     "testId": 52
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "chore(repo): actualizar refactor de publicación con main",
+    "commitTimestamp": 1794491217491,
+    "testId": 53
   }
 ]

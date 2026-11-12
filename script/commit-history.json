@@ -1254,12 +1254,50 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "4659b934331e9d38d0ecd8d19722c3b1e57365f6",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T03:34:44.000Z",
+      "message": "test(web): caracterizar el envío y reintento de reportes (#32)",
+      "url": "https://github.com/Alee053/perdi-u/commit/4659b934331e9d38d0ecd8d19722c3b1e57365f6"
+    },
+    "stats": {
+      "total": 169,
+      "additions": 168,
+      "deletions": 1,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.13,
+    "test_count": 150,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "d5a6159aa3bb49ed8d3d74b46805cf3bf71f4a1e",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T03:36:44.000Z",
+      "message": "refactor(web): dividir el envío de reportes en pasos privados (#32)",
+      "url": "https://github.com/Alee053/perdi-u/commit/d5a6159aa3bb49ed8d3d74b46805cf3bf71f4a1e"
+    },
+    "stats": {
+      "total": 99,
+      "additions": 60,
+      "deletions": 39,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.24,
+    "test_count": 150,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "b842e83e02d1b1f25aec586c1268c05774120232",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-11-12T13:43:15.000Z",
       "message": "chore(repo): resolver evidencia al actualizar normalización",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/b842e83e02d1b1f25aec586c1268c05774120232"
     },
     "stats": {
       "total": 122,
@@ -1269,6 +1307,25 @@
     },
     "coverage": 87.8,
     "test_count": 139,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-12T13:46:57.000Z",
+      "message": "chore(repo): actualizar refactor de publicación con main",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 138,
+      "additions": 14,
+      "deletions": 124,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.07,
+    "test_count": 148,
     "failed_tests": 0,
     "conclusion": "success"
   }
