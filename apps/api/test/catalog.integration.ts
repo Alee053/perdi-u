@@ -268,6 +268,25 @@ test('POST /reports exige sesión, persiste el reporte y conserva privado el Wha
       },
     )
     assert.ok(!JSON.stringify(published).includes('+59170000000'))
+
+    await pool.query('ALTER TABLE reports RENAME TO unavailable_reports')
+    try {
+      const failed = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer verified-publication-token',
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(draft),
+      })
+      assert.equal(failed.status, 503)
+      assert.equal(
+        (await failed.json()).message,
+        'No se pudo publicar el reporte. Intenta nuevamente.',
+      )
+    } finally {
+      await pool.query('ALTER TABLE unavailable_reports RENAME TO reports')
+    }
     await app.close()
     app = undefined
 

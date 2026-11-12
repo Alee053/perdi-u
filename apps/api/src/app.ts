@@ -14,7 +14,6 @@ import {
   Patch,
   Post,
   Query,
-  ServiceUnavailableException,
   UseGuards,
 } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
@@ -41,6 +40,7 @@ import {
 import { ACCESS_TOKEN_VERIFIER, AuthGuard, CurrentUser, OptionalAuthGuard } from './auth/guard.js'
 import { MediaController, REPORT_MEDIA_SERVICE } from './media/controller.js'
 import { parseOwnReportQuery, parseReportId, parseReportQuery } from './reports/query.js'
+import { orUnavailable } from './service-unavailable.js'
 
 @Controller('reports')
 class ReportsController {
@@ -58,12 +58,10 @@ class ReportsController {
   @Header('Cache-Control', 'no-store')
   async resolve(@Param('id') input: string, @CurrentUser() user: AuthenticatedUser) {
     const id = parseReportId(input)
-    let result
-    try {
-      result = await this.resolver.execute(id, user.id)
-    } catch {
-      throw new ServiceUnavailableException('No se pudo resolver el reporte. Intenta nuevamente.')
-    }
+    const result = await orUnavailable(
+      () => this.resolver.execute(id, user.id),
+      'No se pudo resolver el reporte. Intenta nuevamente.',
+    )
     if (result === 'forbidden')
       throw new ForbiddenException('Solo puedes resolver tus propios reportes.')
     if (result === 'not_found') throw new NotFoundException('Reporte no disponible.')
@@ -72,25 +70,25 @@ class ReportsController {
   @Get()
   async list(@Query() input: Record<string, unknown>) {
     const query = parseReportQuery(input)
-    try {
-      return await this.catalog.execute(query)
-    } catch {
-      throw new ServiceUnavailableException('No se pudo cargar el catálogo. Intenta nuevamente.')
-    }
+    return orUnavailable(
+      () => this.catalog.execute(query),
+      'No se pudo cargar el catálogo. Intenta nuevamente.',
+    )
   }
 
   @Post()
   @UseGuards(AuthGuard)
   async publish(@CurrentUser() user: AuthenticatedUser, @Body() input: unknown) {
-    try {
-      return await this.publisher.execute(user.id, input)
-    } catch (error) {
-      if (error instanceof ReportValidationError)
-        throw new BadRequestException({ fieldErrors: error.errors })
-      if (error instanceof MediaAssociationError)
-        throw new BadRequestException({ fieldErrors: { mediaIds: 'invalid' } })
-      throw new ServiceUnavailableException('No se pudo publicar el reporte. Intenta nuevamente.')
-    }
+    return orUnavailable(
+      () => this.publisher.execute(user.id, input),
+      'No se pudo publicar el reporte. Intenta nuevamente.',
+      (error) => {
+        if (error instanceof ReportValidationError)
+          throw new BadRequestException({ fieldErrors: error.errors })
+        if (error instanceof MediaAssociationError)
+          throw new BadRequestException({ fieldErrors: { mediaIds: 'invalid' } })
+      },
+    )
   }
 
   /**
@@ -105,12 +103,10 @@ class ReportsController {
     @CurrentUser() user: AuthenticatedUser | undefined,
   ): Promise<ReportSummary> {
     const id = parseReportId(input)
-    let report
-    try {
-      report = await this.detail.execute(id, user?.id)
-    } catch {
-      throw new ServiceUnavailableException('No se pudo cargar el reporte. Intenta nuevamente.')
-    }
+    const report = await orUnavailable(
+      () => this.detail.execute(id, user?.id),
+      'No se pudo cargar el reporte. Intenta nuevamente.',
+    )
     // Missing and not visible answer the same, so a closed case does not reveal that it exists.
     if (!report) throw new NotFoundException('Reporte no disponible.')
     return report
@@ -125,12 +121,10 @@ class ReportsController {
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<ReportContact> {
     const id = parseReportId(input)
-    let contact
-    try {
-      contact = await this.contacts.execute(id, user.id)
-    } catch {
-      throw new ServiceUnavailableException('No se pudo cargar el contacto. Intenta nuevamente.')
-    }
+    const contact = await orUnavailable(
+      () => this.contacts.execute(id, user.id),
+      'No se pudo cargar el contacto. Intenta nuevamente.',
+    )
     if (!contact) throw new NotFoundException('Reporte no disponible.')
     return contact
   }
@@ -155,23 +149,20 @@ class AccountController {
     @Query() input: Record<string, unknown>,
   ): Promise<ReportSummary[]> {
     const query = parseOwnReportQuery(input)
-    try {
-      return await this.reports.execute(user.id, query)
-    } catch {
-      throw new ServiceUnavailableException('No se pudo cargar tus reportes. Intenta nuevamente.')
-    }
+    return orUnavailable(
+      () => this.reports.execute(user.id, query),
+      'No se pudo cargar tus reportes. Intenta nuevamente.',
+    )
   }
 
   /** Private data never cached by the browser, so Back or reload cannot replay it. */
   @Get()
   @Header('Cache-Control', 'no-store')
   async me(@CurrentUser() user: AuthenticatedUser): Promise<AccountIdentity> {
-    let profile
-    try {
-      profile = await this.profiles.find(user.id)
-    } catch {
-      throw new ServiceUnavailableException('No se pudo cargar tu perfil. Intenta nuevamente.')
-    }
+    const profile = await orUnavailable(
+      () => this.profiles.find(user.id),
+      'No se pudo cargar tu perfil. Intenta nuevamente.',
+    )
     // Explicit allowlist: the profile of the verified subject, never its private contacts.
     return {
       id: user.id,
@@ -186,11 +177,10 @@ class AccountController {
   @HttpCode(204)
   @Header('Cache-Control', 'no-store')
   async logout(@CurrentUser() user: AuthenticatedUser) {
-    try {
-      await this.sessions.revoke(user.sessionId)
-    } catch {
-      throw new ServiceUnavailableException('No se pudo cerrar la sesión. Intenta nuevamente.')
-    }
+    await orUnavailable(
+      () => this.sessions.revoke(user.sessionId),
+      'No se pudo cerrar la sesión. Intenta nuevamente.',
+    )
   }
 }
 

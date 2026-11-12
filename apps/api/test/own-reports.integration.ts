@@ -194,15 +194,19 @@ test('un fallo real de PostgreSQL devuelve 503 seguro y permite reintentar el ci
   await fixture(async ({ request, pool, owners, ids }) => {
     await pool.query('ALTER TABLE reports RENAME TO reports_unavailable')
     try {
-      for (const [path, method] of [
-        ['/me/reports', 'GET'],
-        [`/reports/${ids[0]}/resolve`, 'PATCH'],
+      for (const [path, method, message] of [
+        ['/me/reports', 'GET', 'No se pudo cargar tus reportes. Intenta nuevamente.'],
+        [
+          `/reports/${ids[0]}/resolve`,
+          'PATCH',
+          'No se pudo resolver el reporte. Intenta nuevamente.',
+        ],
       ]) {
         const response = await request(path!, owners[0], method)
         assert.equal(response.status, 503)
-        const message = (await response.json()).message
-        assert.match(message, /^No se pudo/)
-        assert.doesNotMatch(message, /reports_unavailable|postgres|SELECT|UPDATE/)
+        const responseMessage = (await response.json()).message
+        assert.equal(responseMessage, message)
+        assert.doesNotMatch(responseMessage, /reports_unavailable|postgres|SELECT|UPDATE/)
       }
     } finally {
       await pool.query('ALTER TABLE reports_unavailable RENAME TO reports')

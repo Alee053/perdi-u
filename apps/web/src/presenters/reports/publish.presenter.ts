@@ -88,20 +88,25 @@ const issueMessages: Record<DraftField, Partial<Record<DraftIssue, string>>> = {
   mediaIds: { invalid: 'Revisa las fotos adjuntas e intenta nuevamente.' },
 }
 
-function fieldErrors(issues: Partial<Record<DraftField, DraftIssue>>) {
+/** Message for each field rejected by the model or by the API. */
+function fieldErrors(issues: Partial<Record<DraftField, DraftIssue>>): PublishState['errors'] {
   const errors: PublishState['errors'] = {}
   for (const [field, issue] of Object.entries(issues) as [DraftField, DraftIssue][])
     errors[field] = issueMessages[field][issue]
   return errors
 }
 
-function failureMessage(failure: ReportPublishFailure | undefined, errors: PublishState['errors']) {
+/** General message of a failed publication; field errors are shown next to each field instead. */
+function failureMessage(
+  failure: ReportPublishFailure | undefined,
+  errors: PublishState['errors'],
+  uploading: boolean,
+) {
+  if (uploading) return 'No se pudo subir una foto. Intenta nuevamente.'
   if (failure?.reason === 'unauthorized')
     return 'Inicia sesión nuevamente para publicar el reporte.'
-  if (failure?.reason === 'validation') {
-    if (errors.mediaIds) return errors.mediaIds
-    if (Object.keys(errors).length) return ''
-  }
+  if (failure?.reason === 'validation' && errors.mediaIds) return errors.mediaIds
+  if (failure?.reason === 'validation' && Object.keys(errors).length) return ''
   return 'No se pudo publicar el reporte. Intenta nuevamente.'
 }
 
@@ -197,6 +202,30 @@ export class PublishPresenter extends Store<PublishState> {
     }
   }
 
+  /**
+   * Uploads the photos that have no ID yet and keeps each new ID in the state, so a retry does not
+   * upload them again. Undefined when a newer attempt (leaving the form) replaced this one.
+   */
+  private async uploadPendingPhotos(photos: PublishPhoto[], attempt: number) {
+    const mediaIds: string[] = []
+    for (const [index, photo] of photos.entries()) {
+      let mediaId = photo.mediaId
+      if (!mediaId) {
+        mediaId = await this.dependencies.media.upload(photo.file)
+        if (attempt !== this.attempt) {
+          await this.discardPhoto(mediaId)
+          return undefined
+        }
+        const updated = this.state.photos.map((item, photoIndex) =>
+          photoIndex === index ? { ...item, mediaId } : item,
+        )
+        this.setState({ ...this.state, photos: updated })
+      }
+      mediaIds.push(mediaId)
+    }
+    return mediaIds
+  }
+
   /** Returns false on validation, network failure or while another request is pending. */
   submit = async () => {
     if (this.state.pending) return false
@@ -209,66 +238,44 @@ export class PublishPresenter extends Store<PublishState> {
     const attempt = ++this.attempt
     const selected = [...this.state.photos]
     this.setState({ ...this.state, pending: true, errors: {}, message: '' })
+    const { petSpecies, ...draft } = this.state.draft
+    let mediaIds: string[] | undefined
     try {
-      const { petSpecies, ...draft } = this.state.draft
-      const mediaIds = await this.uploadPendingPhotos(selected, attempt)
-      if (!mediaIds || attempt !== this.attempt) return false
+      mediaIds = await this.uploadPendingPhotos(selected, attempt)
+    } catch (error) {
+      return this.showFailure(error, attempt, true)
+    }
+    if (!mediaIds || attempt !== this.attempt) return false
+    try {
       await this.dependencies.publisher.publish({
         ...(draft.category === 'pet' ? { ...draft, petSpecies } : draft),
         ...(mediaIds.length ? { mediaIds } : {}),
       })
       if (attempt !== this.attempt) return false
-      this.completePublication()
+      this.finishPublication()
       return true
     } catch (error) {
-      return this.failSubmission(error, attempt)
+      return this.showFailure(error, attempt, false)
     }
   }
 
-  private async uploadPendingPhotos(selected: readonly PublishPhoto[], attempt: number) {
-    const mediaIds: string[] = []
-    try {
-      for (const [index, photo] of selected.entries()) {
-        let mediaId = photo.mediaId
-        if (!mediaId) {
-          mediaId = await this.dependencies.media.upload(photo.file)
-          if (attempt !== this.attempt) {
-            await this.discardPhoto(mediaId)
-            return undefined
-          }
-          const photos = this.state.photos.map((item, photoIndex) =>
-            photoIndex === index ? { ...item, mediaId } : item,
-          )
-          this.setState({ ...this.state, photos })
-        }
-        mediaIds.push(mediaId)
-      }
-      return mediaIds
-    } catch (error) {
-      this.failSubmission(error, attempt, 'No se pudo subir una foto. Intenta nuevamente.')
-      return undefined
-    }
-  }
-
-  private failSubmission(error: unknown, attempt: number, message?: string) {
-    if (attempt !== this.attempt) return false
-    const failure = error instanceof ReportPublishFailure ? error : undefined
-    const errors = fieldErrors(failure?.reason === 'validation' ? failure.errors : {})
-    this.setState({
-      ...this.state,
-      pending: false,
-      errors,
-      message: message ?? failureMessage(failure, errors),
-    })
-    return false
-  }
-
-  private completePublication() {
+  /** Clears the form and its previews, refreshes the catalog and confirms the publication. */
+  private finishPublication() {
     for (const photo of this.state.photos) this.dependencies.effects.revokePreview(photo.previewUrl)
     this.setState({ draft: emptyDraft, photos: [], pending: false, errors: {}, message: '' })
     this.dependencies.filters.reset()
     this.dependencies.onPublished()
     this.dependencies.notices.show('Tu reporte se publicó y ya aparece en el catálogo.')
+  }
+
+  /** Explains why an attempt failed, unless the person already left the form. */
+  private showFailure(error: unknown, attempt: number, uploading: boolean) {
+    if (attempt !== this.attempt) return false
+    const failure = error instanceof ReportPublishFailure ? error : undefined
+    const errors = failure?.reason === 'validation' ? fieldErrors(failure.errors) : {}
+    const message = failureMessage(failure, errors, uploading)
+    this.setState({ ...this.state, pending: false, errors, message })
+    return false
   }
 
   reset = () => {
