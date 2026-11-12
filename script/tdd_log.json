@@ -1818,9 +1818,31 @@
     "testId": 49
   },
   {
-    "commitId": "HEAD",
+    "commitId": "3c4c99f71e796dc0cbb84e2dbd81da794faf7ebf",
     "commitName": "refactor(api): centralizar 503 de catálogo y resolución",
     "commitTimestamp": 1794458995998,
     "testId": 49
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794459049257,
+    "success": true,
+    "testId": 50
+  },
+  {
+    "numPassedTests": 141,
+    "failedTests": 0,
+    "numTotalTests": 141,
+    "timestamp": 1794459094588,
+    "success": true,
+    "testId": 50
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "refactor(api): usar 503 compartido en detalle y contacto",
+    "commitTimestamp": 1794459144182,
+    "testId": 50
   }
 ]

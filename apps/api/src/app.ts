@@ -103,12 +103,10 @@ class ReportsController {
     @CurrentUser() user: AuthenticatedUser | undefined,
   ): Promise<ReportSummary> {
     const id = parseReportId(input)
-    let report
-    try {
-      report = await this.detail.execute(id, user?.id)
-    } catch {
-      throw new ServiceUnavailableException('No se pudo cargar el reporte. Intenta nuevamente.')
-    }
+    const report = await orUnavailable(
+      () => this.detail.execute(id, user?.id),
+      'No se pudo cargar el reporte. Intenta nuevamente.',
+    )
     // Missing and not visible answer the same, so a closed case does not reveal that it exists.
     if (!report) throw new NotFoundException('Reporte no disponible.')
     return report
@@ -123,12 +121,10 @@ class ReportsController {
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<ReportContact> {
     const id = parseReportId(input)
-    let contact
-    try {
-      contact = await this.contacts.execute(id, user.id)
-    } catch {
-      throw new ServiceUnavailableException('No se pudo cargar el contacto. Intenta nuevamente.')
-    }
+    const contact = await orUnavailable(
+      () => this.contacts.execute(id, user.id),
+      'No se pudo cargar el contacto. Intenta nuevamente.',
+    )
     if (!contact) throw new NotFoundException('Reporte no disponible.')
     return contact
   }
