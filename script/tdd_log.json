@@ -1882,9 +1882,23 @@
     "testId": 53
   },
   {
-    "commitId": "HEAD",
+    "commitId": "427bd32b40eb196d9659f05cf4588e13d6965138",
     "commitName": "refactor(web): extraer showFailure del catch de submit",
     "commitTimestamp": 1794454786630,
     "testId": 53
+  },
+  {
+    "numPassedTests": 144,
+    "failedTests": 0,
+    "numTotalTests": 144,
+    "timestamp": 1794454834057,
+    "success": true,
+    "testId": 54
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "refactor(web): separar la subida de fotos de la publicación sin bandera",
+    "commitTimestamp": 1794454859829,
+    "testId": 54
   }
 ]

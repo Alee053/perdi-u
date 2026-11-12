@@ -238,13 +238,15 @@ export class PublishPresenter extends Store<PublishState> {
     const attempt = ++this.attempt
     const selected = [...this.state.photos]
     this.setState({ ...this.state, pending: true, errors: {}, message: '' })
-    let uploadingMedia = false
+    const { petSpecies, ...draft } = this.state.draft
+    let mediaIds: string[] | undefined
     try {
-      const { petSpecies, ...draft } = this.state.draft
-      uploadingMedia = true
-      const mediaIds = await this.uploadPendingPhotos(selected, attempt)
-      if (!mediaIds) return false
-      uploadingMedia = false
+      mediaIds = await this.uploadPendingPhotos(selected, attempt)
+    } catch (error) {
+      return this.showFailure(error, attempt, true)
+    }
+    if (!mediaIds) return false
+    try {
       await this.dependencies.publisher.publish({
         ...(draft.category === 'pet' ? { ...draft, petSpecies } : draft),
         ...(mediaIds.length ? { mediaIds } : {}),
@@ -258,7 +260,7 @@ export class PublishPresenter extends Store<PublishState> {
       this.dependencies.notices.show('Tu reporte se publicó y ya aparece en el catálogo.')
       return true
     } catch (error) {
-      return this.showFailure(error, attempt, uploadingMedia)
+      return this.showFailure(error, attempt, false)
     }
   }
 

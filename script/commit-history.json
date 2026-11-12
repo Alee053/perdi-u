@@ -1197,12 +1197,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "427bd32b40eb196d9659f05cf4588e13d6965138",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-12T03:39:45.000Z",
       "message": "refactor(web): extraer showFailure del catch de submit",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/427bd32b40eb196d9659f05cf4588e13d6965138"
     },
     "stats": {
       "total": 17,
@@ -1211,6 +1211,25 @@
       "date": "2026-11-12"
     },
     "coverage": 88.09,
+    "test_count": 144,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-12T03:40:58.000Z",
+      "message": "refactor(web): separar la subida de fotos de la publicación sin bandera",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 16,
+      "additions": 9,
+      "deletions": 7,
+      "date": "2026-11-12"
+    },
+    "coverage": 88.08,
     "test_count": 144,
     "failed_tests": 0,
     "conclusion": "success"
