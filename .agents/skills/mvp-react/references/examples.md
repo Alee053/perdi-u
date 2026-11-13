@@ -4,11 +4,11 @@ Rutas relativas a `apps/web/src`.
 
 ## 1. Buscar en el catálogo (View → Presenter → Model → Presenter → View)
 
-1. `views/components/ReportFilters.tsx`: el `input` llama `actions.setSearch(event.target.value)`. No calcula nada.
-2. `presenters/catalog/filters.presenter.ts`: `FiltersPresenter.setSearch` guarda la selección visible (`'Todas las ciudades'`, `'Objeto'`…) y avisa el cambio.
+1. `views/components/ReportFilters.tsx`: los controles llaman `setSearch`, `setDateFrom` y `setDateTo`. No calculan nada.
+2. `presenters/catalog/filters.presenter.ts`: guarda la selección visible (`'Todas las ciudades'`, `'Objeto'`, «Desde/Hasta»…) y presenta errores del rango sin perder los valores editables.
 3. `app/dependencies.ts`: ese aviso está conectado a `catalog.load(selection)`.
-4. `presenters/catalog/catalog.presenter.ts`: traduce la selección con `toReportFilters`, pide al Model `toReportQuery` y llama al puerto `ReportsRepository`; cancela la consulta anterior y publica `loading`.
-5. `models/reports/filters.ts` + `models/reports/reports-repository.ts`: regla de consulta y contrato. La implementación HTTP es `infrastructure/http/catalog-client.ts`.
+4. `presenters/catalog/catalog.presenter.ts`: traduce la selección con `toReportFilters`, no consulta fechas inválidas, pide al Model `toReportQuery` y llama al puerto `ReportsRepository`; cancela la consulta anterior y publica `loading`.
+5. `models/reports/filters.ts` + `models/reports/reports-repository.ts`: valida fechas calendario, compara `incidentDate` inclusivamente en la demo y define el contrato de consulta. La implementación HTTP es `infrastructure/http/catalog-client.ts`.
 6. El presenter convierte cada `ReportSummary` en `ReportCard` (`presenters/reports/report-card.ts`: etiquetas, fechas, iniciales) y publica `ready` o `error`.
 7. `presenters/app/useApp.ts` re-renderiza mediante `useStore`; `views/pages/ExplorePage.tsx` muestra carga, error con «Reintentar», vacío o la grilla.
 

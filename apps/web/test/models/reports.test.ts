@@ -5,6 +5,7 @@ import {
   matchesFilters,
   noFilters,
   toReportQuery,
+  validateDateRange,
 } from '../../src/models/reports/filters.js'
 import {
   isAcceptedPhoto,
@@ -59,6 +60,25 @@ test('la búsqueda local ignora tildes y mayúsculas y excluye reportes resuelto
   assert.equal(matchesFilters(report(), { text: '', city: 'Cochabamba' }), false)
   assert.equal(matchesFilters(report(), { text: '', category: 'pet', type: 'lost' }), true)
   assert.equal(matchesFilters(report({ state: 'resolved' }), noFilters), false)
+})
+
+test('el filtro por fecha valida calendarios, permite límites abiertos y compara el día del hecho', () => {
+  assert.equal(validateDateRange('2024-02-29', '2024-02-29'), undefined)
+  assert.equal(validateDateRange('2026-10-07', '2026-10-10'), undefined)
+  assert.equal(validateDateRange('2026-10-07'), undefined)
+  assert.equal(validateDateRange(undefined, '2026-10-07'), undefined)
+  assert.equal(validateDateRange('2026-02-29'), 'invalid_date')
+  assert.equal(validateDateRange('2026-10-11', '2026-10-10'), 'range_order')
+  assert.equal(hasActiveFilters({ text: '', dateFrom: '2026-10-10' }), true)
+  assert.equal(
+    matchesFilters(report(), { text: '', dateFrom: '2026-10-06', dateTo: '2026-10-06' }),
+    true,
+  )
+  assert.equal(matchesFilters(report(), { text: '', dateFrom: '2026-10-07' }), false)
+  assert.deepEqual(toReportQuery({ text: '', dateFrom: '2026-10-06', dateTo: '2026-10-10' }), {
+    dateFrom: '2026-10-06',
+    dateTo: '2026-10-10',
+  })
 })
 
 test('el resumen cuenta activos por tipo y ciudad y aparte los resueltos', () => {

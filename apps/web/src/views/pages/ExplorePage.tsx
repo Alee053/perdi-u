@@ -14,7 +14,10 @@ import { StatusTabs } from '../components/StatusTabs'
 type ExplorePageProps = {
   catalog: AppView['catalog']
   selection: FilterSelection
-  filters: Pick<FiltersPresenter, 'setSearch' | 'setCity' | 'setCategory' | 'setStatus' | 'reset'>
+  filters: Pick<
+    FiltersPresenter,
+    'setSearch' | 'setCity' | 'setCategory' | 'setStatus' | 'setDateFrom' | 'setDateTo' | 'reset'
+  >
   onRetry: () => void
   onNavigate: (section: Section) => void
   isSaved: (id: string) => boolean
@@ -34,7 +37,7 @@ export function ExplorePage({
     <>
       <PageHeading
         title="Explorar reportes"
-        description="Busca por palabra, ciudad o categoría."
+        description="Busca por palabra, ciudad, categoría o fecha del hecho."
         action={
           <button className="primary-button" onClick={() => onNavigate('publish')}>
             Publicar reporte
@@ -54,7 +57,7 @@ export function ExplorePage({
           value={selection.status}
           onChange={filters.setStatus}
         />
-        {catalog.status === 'ready' && (
+        {catalog.status === 'ready' && !selection.dateError && (
           <span className="result-count">
             <b>{catalog.count}</b> resultados
           </span>
@@ -80,6 +83,7 @@ export function ExplorePage({
         </div>
       )}
       {catalog.status === 'ready' &&
+        !selection.dateError &&
         (catalog.count === 0 ? (
           <EmptyState
             title={catalog.empty.title}

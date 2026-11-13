@@ -1729,12 +1729,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "e6253ab7f93d8b62700cca94fff9dee387ba6122",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-11-12T14:06:05.000Z",
       "message": "docs(repo): resolver conflictos de la sincronización de skills",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/e6253ab7f93d8b62700cca94fff9dee387ba6122"
     },
     "stats": {
       "total": 425,
@@ -1746,5 +1746,24 @@
     "test_count": 155,
     "failed_tests": 0,
     "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "RocioChoque",
+    "commit": {
+      "date": "2026-11-13T14:22:56.000Z",
+      "message": "feat(catalog): filtrar reportes por fechas (#25)\n\nCo-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 413,
+      "additions": 360,
+      "deletions": 53,
+      "date": "2026-11-13"
+    },
+    "coverage": 90.24,
+    "test_count": 159,
+    "failed_tests": 2,
+    "conclusion": "failure"
   }
 ]

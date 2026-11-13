@@ -4,6 +4,8 @@ type FilterActions = {
   setSearch: (value: string) => void
   setCity: (value: string) => void
   setCategory: (value: string) => void
+  setDateFrom: (value: string) => void
+  setDateTo: (value: string) => void
 }
 
 type ReportFiltersProps = {
@@ -52,6 +54,35 @@ export function ReportFilters({
           <option key={category}>{category}</option>
         ))}
       </select>
+      <label>
+        Desde
+        <input
+          className="select-field"
+          type="date"
+          value={selection.dateFrom ?? ''}
+          onChange={(event) => actions.setDateFrom(event.target.value)}
+          aria-label="Desde"
+          aria-invalid={Boolean(selection.dateError)}
+          aria-describedby={selection.dateError ? 'date-range-error' : undefined}
+        />
+      </label>
+      <label>
+        Hasta
+        <input
+          className="select-field"
+          type="date"
+          value={selection.dateTo ?? ''}
+          onChange={(event) => actions.setDateTo(event.target.value)}
+          aria-label="Hasta"
+          aria-invalid={Boolean(selection.dateError)}
+          aria-describedby={selection.dateError ? 'date-range-error' : undefined}
+        />
+      </label>
+      {selection.dateError && (
+        <p id="date-range-error" role="alert">
+          {selection.dateError}
+        </p>
+      )}
     </>
   )
 }

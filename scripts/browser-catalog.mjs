@@ -208,6 +208,47 @@ async function verifySearch(page, size) {
     await page.getByRole('tab', { name: 'Todos', exact: true }).getAttribute('aria-selected'),
     'true',
   )
+  const dateFrom = page.getByLabel('Desde', { exact: true })
+  const dateTo = page.getByLabel('Hasta', { exact: true })
+  const invalidDateRequests = []
+  page.on('request', (request) => {
+    const url = new URL(request.url())
+    if (
+      url.pathname === '/api/reports' &&
+      url.searchParams.get('dateFrom') > url.searchParams.get('dateTo')
+    )
+      invalidDateRequests.push(url.href)
+  })
+  await dateFrom.fill('2026-10-10')
+  await dateTo.fill('2026-10-10')
+  await expectTitles(page, ['Cámara de prueba perdida'])
+  await dateTo.fill('2026-10-12')
+  await expectTitles(page, [
+    'Cámara de prueba perdida',
+    'Perrita de prueba encontrada',
+    'Carné de prueba encontrado',
+  ])
+  await page.getByRole('combobox', { name: 'Ciudad', exact: true }).selectOption('La Paz')
+  await expectTitles(page, ['Cámara de prueba perdida', 'Carné de prueba encontrado'])
+  await page.getByRole('button', { name: 'Limpiar filtros', exact: true }).click()
+  await expectTitles(page, [
+    'Cámara de prueba perdida',
+    'Perrita de prueba encontrada',
+    'Carné de prueba encontrado',
+    "Libro de prueba O'Reilly",
+    'Mochila azul encontrada',
+    'Gato de prueba perdido',
+  ])
+  assert.equal(await dateFrom.inputValue(), '')
+  assert.equal(await dateTo.inputValue(), '')
+  await dateFrom.fill('2026-10-12')
+  await dateTo.fill('2026-10-10')
+  await page.getByRole('alert').filter({ hasText: 'La fecha «Desde»' }).waitFor()
+  await expectTitles(page, [])
+  assert.deepEqual(invalidDateRequests, [])
+  await dateFrom.fill('2026-10-10')
+  await expectTitles(page, ['Cámara de prueba perdida'])
+  await page.getByRole('button', { name: 'Limpiar filtros', exact: true }).click()
   await page.getByRole('combobox', { name: 'Categoría', exact: true }).selectOption('Documentos')
   await expectTitles(page, ['Carné de prueba encontrado'])
   await page.getByRole('combobox', { name: 'Categoría', exact: true }).selectOption('Mascota')

@@ -558,6 +558,17 @@ test('la búsqueda HTTP normaliza texto, combina filtros y valida entradas sobre
       [{ q: "O'Reilly" }, ['30000000-0000-0000-0000-000000000004']],
       [{ q: '%_' }, ['30000000-0000-0000-0000-000000000004']],
       [{ q: "' OR true --" }, []],
+      [{ dateFrom: '2026-10-10' }, ['30000000-0000-0000-0000-000000000001']],
+      [{ dateTo: '2026-10-10' }, ['30000000-0000-0000-0000-000000000001']],
+      [
+        { dateFrom: '2026-10-11', dateTo: '2026-10-12' },
+        ['30000000-0000-0000-0000-000000000002', '30000000-0000-0000-0000-000000000003'],
+      ],
+      [
+        { dateFrom: '2026-10-11', dateTo: '2026-10-12', city: 'La Paz' },
+        ['30000000-0000-0000-0000-000000000003'],
+      ],
+      [{ dateFrom: '2026-10-10', dateTo: '2026-10-10' }, ['30000000-0000-0000-0000-000000000001']],
     ] satisfies [Record<string, string>, string[]][]) {
       const response = await fetch(`${endpoint}?${new URLSearchParams(query)}`)
       assert.equal(response.status, 200)
@@ -574,6 +585,11 @@ test('la búsqueda HTTP normaliza texto, combina filtros y valida entradas sobre
       'city=' + 'x'.repeat(101),
       'q=' + 'x'.repeat(201),
       'q=%00',
+      'dateFrom=2026-02-29',
+      'dateTo=2026-13-01',
+      'dateFrom=2026-10-11&dateTo=2026-10-10',
+      'dateFrom=2026-10-10&dateFrom=2026-10-11',
+      'dateTo%5Bvalue%5D=2026-10-10',
       'limit=100',
     ]) {
       const response = await fetch(`${endpoint}?${query}`)
@@ -595,6 +611,11 @@ test('la búsqueda HTTP normaliza texto, combina filtros y valida entradas sobre
     assert.equal(limited[0].id, '40000000-0000-0000-0000-000000000001')
     assert.equal(limited[49].id, '40000000-0000-0000-0000-000000000050')
     assert.equal((await (await fetch(endpoint)).json()).length, 50)
+    assert.equal(
+      (await (await fetch(`${endpoint}?dateFrom=2026-10-10&dateTo=2026-10-10&q=limite`)).json())
+        .length,
+      50,
+    )
   } finally {
     await app?.close()
     if (prepared)

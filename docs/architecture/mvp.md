@@ -103,10 +103,10 @@ Las fotos de reportes resueltos se cargan mediante el puerto `ReportPhotoLoader`
 
 ## 6. Flujo de una funcionalidad real: buscar en el catálogo
 
-1. **View** — `views/components/ReportFilters.tsx`: la persona escribe «cámara»; el `input` llama `setSearch('cámara')`.
-2. **Presenter** — `presenters/catalog/filters.presenter.ts`: guarda la selección y avisa el cambio. `app/dependencies.ts` conectó ese aviso con `CatalogPresenter.load`.
-3. **Presenter** — `presenters/catalog/catalog.presenter.ts`: cancela la consulta anterior, publica `loading` y pide al Model la consulta.
-4. **Model** — `models/reports/filters.ts`: `toReportQuery` recorta el texto y omite los criterios vacíos. El presenter usa el puerto `ReportsRepository`; su implementación (`infrastructure/http/catalog-client.ts`) llama `GET /api/reports?q=cámara` y valida la respuesta.
+1. **View** — `views/components/ReportFilters.tsx`: la persona escribe «cámara» o selecciona fechas «Desde/Hasta»; los controles delegan `setSearch`, `setDateFrom` y `setDateTo`.
+2. **Presenter** — `presenters/catalog/filters.presenter.ts`: conserva los valores editables, presenta los errores del rango y avisa cada cambio. `app/dependencies.ts` conectó ese aviso con `CatalogPresenter.load`.
+3. **Presenter** — `presenters/catalog/catalog.presenter.ts`: cancela la consulta anterior, no consulta si el rango es inválido y, para un rango válido, publica `loading` y pide al Model la consulta.
+4. **Model** — `models/reports/filters.ts`: valida fechas calendario sin convertirlas por zona horaria, compara inclusivamente `incidentDate` en datos demo y construye `ReportQuery` omitiendo los criterios vacíos. El presenter usa el puerto `ReportsRepository`; su implementación (`infrastructure/http/catalog-client.ts`) serializa filtros a `GET /api/reports` y valida la respuesta.
 5. **Presenter**: si la respuesta sigue vigente, convierte cada reporte en `ReportCard` (`report-card.ts`: «Perdido», «Objeto», fecha `14 oct 2026`, iniciales) y publica `ready`; si falla, publica `error` con el mensaje.
 6. **View** — `useApp` re-renderiza mediante `useStore`, y `views/pages/ExplorePage.tsx` muestra la grilla, el estado vacío o el error con «Reintentar».
 
