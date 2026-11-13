@@ -8,6 +8,7 @@ import { Store } from '../store.js'
 export interface FilterSelection {
   search: string
   city: string
+  zone: string
   category: string
   status: 'Todos' | 'Perdido' | 'Encontrado'
 }
@@ -17,6 +18,7 @@ export const allCategories = 'Todas las categorías'
 export const defaultSelection: FilterSelection = {
   search: '',
   city: allCities,
+  zone: '',
   category: allCategories,
   status: 'Todos',
 }
@@ -40,6 +42,7 @@ export function toReportFilters(selection: FilterSelection): ReportFilters {
   return {
     text: selection.search,
     ...(selection.city !== allCities ? { city: selection.city } : {}),
+    ...(selection.zone?.trim() ? { zone: selection.zone } : {}),
     ...(category ? { category } : {}),
     ...(selection.status !== 'Todos'
       ? { type: selection.status === 'Perdido' ? ('lost' as const) : ('found' as const) }
@@ -63,6 +66,7 @@ export class FiltersPresenter extends Store<FilterSelection> {
 
   setSearch = (search: string) => this.update({ search })
   setCity = (city: string) => this.update({ city })
+  setZone = (zone: string) => this.update({ zone })
   setCategory = (category: string) => this.update({ category })
   setStatus = (status: FilterSelection['status']) => this.update({ status })
   reset = () => this.update(defaultSelection)

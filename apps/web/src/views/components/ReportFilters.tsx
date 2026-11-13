@@ -3,6 +3,7 @@ import type { FilterSelection } from '../../presenters/catalog/filters.presenter
 type FilterActions = {
   setSearch: (value: string) => void
   setCity: (value: string) => void
+  setZone: (value: string) => void
   setCategory: (value: string) => void
 }
 
@@ -42,6 +43,14 @@ export function ReportFilters({
           <option key={city}>{city}</option>
         ))}
       </select>
+      <input
+        className="search-field"
+        value={selection.zone}
+        onChange={(event) => actions.setZone(event.target.value)}
+        placeholder="Zona o barrio"
+        aria-label="Zona o barrio"
+        maxLength={200}
+      />
       <select
         className="select-field"
         value={selection.category}

@@ -1729,12 +1729,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "e6253ab7f93d8b62700cca94fff9dee387ba6122",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-11-12T14:06:05.000Z",
       "message": "docs(repo): resolver conflictos de la sincronización de skills",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/e6253ab7f93d8b62700cca94fff9dee387ba6122"
     },
     "stats": {
       "total": 425,
@@ -1744,6 +1744,25 @@
     },
     "coverage": 88.08,
     "test_count": 155,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "RocioChoque",
+    "commit": {
+      "date": "2026-11-13T13:58:11.000Z",
+      "message": "feat(catalog): filtrar reportes por zona (#24)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 188,
+      "additions": 155,
+      "deletions": 33,
+      "date": "2026-11-13"
+    },
+    "coverage": 89.21,
+    "test_count": 158,
     "failed_tests": 0,
     "conclusion": "success"
   }

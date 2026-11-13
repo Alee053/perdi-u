@@ -14,7 +14,10 @@ import { StatusTabs } from '../components/StatusTabs'
 type ExplorePageProps = {
   catalog: AppView['catalog']
   selection: FilterSelection
-  filters: Pick<FiltersPresenter, 'setSearch' | 'setCity' | 'setCategory' | 'setStatus' | 'reset'>
+  filters: Pick<
+    FiltersPresenter,
+    'setSearch' | 'setCity' | 'setZone' | 'setCategory' | 'setStatus' | 'reset'
+  >
   onRetry: () => void
   onNavigate: (section: Section) => void
   isSaved: (id: string) => boolean
@@ -34,7 +37,7 @@ export function ExplorePage({
     <>
       <PageHeading
         title="Explorar reportes"
-        description="Busca por palabra, ciudad o categoría."
+        description="Busca por palabra, ciudad, zona o categoría."
         action={
           <button className="primary-button" onClick={() => onNavigate('publish')}>
             Publicar reporte
