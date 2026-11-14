@@ -2366,9 +2366,15 @@
     "testId": 58
   },
   {
-    "commitId": "HEAD",
+    "commitId": "874bada6d8bb40660fae6facdcdcf3bb457a9ec5",
     "commitName": "test(api): ajustar rango abierto a los fixtures (#25)",
     "commitTimestamp": 1794669221642,
     "testId": 59
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(api): cubrir semillas en rangos abiertos (#25)",
+    "commitTimestamp": 1794670070279,
+    "testId": 60
   }
 ]

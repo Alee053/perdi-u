@@ -568,7 +568,14 @@ test('la búsqueda HTTP normaliza texto, combina filtros y valida entradas sobre
           '30000000-0000-0000-0000-000000000004',
         ],
       ],
-      [{ dateTo: '2026-10-10' }, ['30000000-0000-0000-0000-000000000001']],
+      [
+        { dateTo: '2026-10-10' },
+        [
+          '20000000-0000-0000-0000-000000000001',
+          '20000000-0000-0000-0000-000000000002',
+          '30000000-0000-0000-0000-000000000001',
+        ],
+      ],
       [
         { dateFrom: '2026-10-11', dateTo: '2026-10-12' },
         ['30000000-0000-0000-0000-000000000002', '30000000-0000-0000-0000-000000000003'],
@@ -577,7 +584,10 @@ test('la búsqueda HTTP normaliza texto, combina filtros y valida entradas sobre
         { dateFrom: '2026-10-11', dateTo: '2026-10-12', city: 'La Paz' },
         ['30000000-0000-0000-0000-000000000003'],
       ],
-      [{ dateFrom: '2026-10-10', dateTo: '2026-10-10' }, ['30000000-0000-0000-0000-000000000001']],
+      [
+        { dateFrom: '2026-10-10', dateTo: '2026-10-10' },
+        ['20000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000001'],
+      ],
     ] satisfies [Record<string, string>, string[]][]) {
       const response = await fetch(`${endpoint}?${new URLSearchParams(query)}`)
       assert.equal(response.status, 200)

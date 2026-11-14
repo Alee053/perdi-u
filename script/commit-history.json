@@ -1767,17 +1767,36 @@
     "conclusion": "failure"
   },
   {
-    "sha": "HEAD",
+    "sha": "874bada6d8bb40660fae6facdcdcf3bb457a9ec5",
     "author": "RocioChoque",
     "commit": {
       "date": "2026-11-14T15:13:40.000Z",
       "message": "test(api): ajustar rango abierto a los fixtures (#25)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/874bada6d8bb40660fae6facdcdcf3bb457a9ec5"
     },
     "stats": {
       "total": 11,
       "additions": 10,
       "deletions": 1,
+      "date": "2026-11-14"
+    },
+    "coverage": 90.24,
+    "test_count": 159,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "RocioChoque",
+    "commit": {
+      "date": "2026-11-14T15:27:49.000Z",
+      "message": "test(api): cubrir semillas en rangos abiertos (#25)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 14,
+      "additions": 12,
+      "deletions": 2,
       "date": "2026-11-14"
     },
     "coverage": 90.24,
