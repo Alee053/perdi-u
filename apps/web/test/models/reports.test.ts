@@ -54,6 +54,14 @@ test('los filtros se traducen a la consulta pública sin texto vacío ni criteri
   assert.equal(hasActiveFilters({ text: '', type: 'found' }), true)
 })
 
+test('la zona filtra frases sin distinguir mayúsculas ni tildes y se envía al catálogo', () => {
+  const filters = { text: '', zone: 'san jose' }
+  assert.deepEqual(toReportQuery(filters), { zone: 'san jose' })
+  assert.equal(hasActiveFilters(filters), true)
+  assert.equal(matchesFilters(report({ zone: 'San José' }), filters), true)
+  assert.equal(matchesFilters(report({ zone: 'Sopocachi' }), filters), false)
+})
+
 test('la búsqueda local ignora tildes y mayúsculas y excluye reportes resueltos', () => {
   assert.equal(matchesFilters(report(), { text: 'SOPOCACHÍ' }), true)
   assert.equal(matchesFilters(report(), { text: '', city: 'Cochabamba' }), false)

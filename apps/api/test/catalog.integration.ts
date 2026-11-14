@@ -551,6 +551,18 @@ test('la búsqueda HTTP normaliza texto, combina filtros y valida entradas sobre
         { q: 'camara', type: 'found', category: 'pet', city: 'Cochabamba' },
         ['30000000-0000-0000-0000-000000000002'],
       ],
+      [
+        { zone: 'san jose' },
+        ['30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000003'],
+      ],
+      [{ zone: 'SOPOCACHÍ' }, ['30000000-0000-0000-0000-000000000002']],
+      [
+        { city: 'La Paz', zone: 'san jose' },
+        ['30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000003'],
+      ],
+      [{ city: 'Cochabamba', zone: 'san jose' }, []],
+      [{ zone: '%_' }, ['30000000-0000-0000-0000-000000000004']],
+      [{ zone: "' OR true --" }, []],
       [{ category: 'document', city: 'La Paz' }, ['30000000-0000-0000-0000-000000000003']],
       [{ q: 'camara', category: 'document' }, []],
       [{ q: 'camara', city: 'Santa Cruz' }, []],
@@ -572,6 +584,10 @@ test('la búsqueda HTTP normaliza texto, combina filtros y valida entradas sobre
       'q=a&q=b',
       'q[x]=a',
       'city=' + 'x'.repeat(101),
+      'zone=' + 'x'.repeat(201),
+      'zone=a&zone=b',
+      'zone[contains]=a',
+      'zone=%00',
       'q=' + 'x'.repeat(201),
       'q=%00',
       'limit=100',
@@ -590,10 +606,22 @@ test('la búsqueda HTTP normaliza texto, combina filtros y valida entradas sobre
         'utf8',
       ),
     )
+    await pool.query(
+      `UPDATE reports SET zone = 'Sopocachi'
+       WHERE id::text BETWEEN '40000000-0000-0000-0000-000000000051'
+         AND '40000000-0000-0000-0000-000000000060'`,
+    )
     const limited = await (await fetch(`${endpoint}?q=limite`)).json()
     assert.equal(limited.length, 50)
     assert.equal(limited[0].id, '40000000-0000-0000-0000-000000000001')
     assert.equal(limited[49].id, '40000000-0000-0000-0000-000000000050')
+    const filteredLimit = await (await fetch(`${endpoint}?q=limite&zone=sopocachi`)).json()
+    expect(filteredLimit.map((report: { id: string }) => report.id)).toStrictEqual(
+      Array.from(
+        { length: 10 },
+        (_, index) => `40000000-0000-0000-0000-${String(index + 51).padStart(12, '0')}`,
+      ),
+    )
     assert.equal((await (await fetch(endpoint)).json()).length, 50)
   } finally {
     await app?.close()

@@ -36,7 +36,7 @@ La API se ocupa de HTTP, validación y composición. `ListReports`, en `@perdiu/
 
 ### Buscar y filtrar
 
-`GET /reports?q=camara&type=lost&category=object&city=La%20Paz` combina todos los filtros con AND. Los parámetros son opcionales; se recortan espacios exteriores y los valores vacíos equivalen a omitir el filtro.
+`GET /reports?q=camara&type=lost&category=object&city=La%20Paz&zone=sopocachi` combina todos los filtros con AND. Los parámetros son opcionales; se recortan espacios exteriores y los valores vacíos equivalen a omitir el filtro.
 
 | Parámetro  | Valores y límites                                                                                                                                                                             |
 | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -44,8 +44,9 @@ La API se ocupa de HTTP, validación y composición. `ListReports`, en `@perdiu/
 | `type`     | `lost` o `found`.                                                                                                                                                                             |
 | `category` | `pet`, `object` o `document`.                                                                                                                                                                 |
 | `city`     | Hasta 100 unidades UTF-16. Coincidencia exacta con la ciudad almacenada, por ejemplo `La Paz`.                                                                                                |
+| `zone`     | Hasta 200 unidades UTF-16 antes de recortar. Frase contenida en la zona almacenada; ignora mayúsculas y marcas diacríticas U+0300–U+036F mediante NFD. Puede usarse sin `city`.               |
 
-Parámetros desconocidos, repetidos, estructurados, demasiado largos, caracteres de control o enumeraciones inválidas devuelven `400` con mensaje seguro. Las longitudes se comprueban antes de recortar espacios. Las comillas, `%`, `_` y barras en `q` se buscan literalmente; todos los valores SQL se parametrizan.
+Parámetros desconocidos, repetidos, estructurados, demasiado largos, caracteres de control o enumeraciones inválidas devuelven `400` con mensaje seguro. Las longitudes se comprueban antes de recortar espacios. Las comillas, `%`, `_` y barras en `q` y `zone` se buscan literalmente; todos los valores SQL se parametrizan. `city` conserva su coincidencia exacta, también al combinarse con `zone`.
 
 Cada consulta devuelve **como máximo 50 reportes**, después de filtrar y ordenar. La respuesta sigue siendo un array compatible con S1-01; no incluye total ni paginación. Al llegar a 50, la web indica el límite y sugiere ajustar los filtros. Este límite acota la respuesta, no el número de filas que PostgreSQL debe inspeccionar: para volúmenes mayores habrá que evaluar índices/búsqueda y paginación.
 

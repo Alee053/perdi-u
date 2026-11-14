@@ -14,13 +14,13 @@ export function parseOwnReportQuery(input: Record<string, unknown>): OwnReportQu
 /** HTTP input is untrusted; never echo values in validation errors. */
 export function parseReportQuery(input: Record<string, unknown>): ReportQuery {
   const invalid = () => new BadRequestException('Parámetros de búsqueda inválidos.')
-  const allowed = ['q', 'type', 'category', 'city']
+  const allowed = ['q', 'type', 'category', 'city', 'zone']
   if (Object.keys(input).some((key) => !allowed.includes(key))) throw invalid()
   const values: Record<string, string> = {}
   for (const [key, value] of Object.entries(input)) {
     if (
       typeof value !== 'string' ||
-      value.length > (key === 'q' ? 200 : 100) ||
+      value.length > (key === 'q' || key === 'zone' ? 200 : 100) ||
       /[\u0000-\u001f\u007f]/.test(value)
     )
       throw invalid()
@@ -41,6 +41,7 @@ export function parseReportQuery(input: Record<string, unknown>): ReportQuery {
     ...(type ? { type } : {}),
     ...(category ? { category } : {}),
     ...(values.city ? { city: values.city } : {}),
+    ...(values.zone ? { zone: values.zone } : {}),
   }
 }
 
