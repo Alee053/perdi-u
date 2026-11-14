@@ -2376,9 +2376,15 @@
     "testId": 58
   },
   {
-    "commitId": "HEAD",
+    "commitId": "fa97f36744d8c19a500420d629901cb1f638e13b",
     "commitName": "feat(catalog): filtrar reportes por zona (#24)",
     "commitTimestamp": 1794578292179,
     "testId": 58
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(api): corregir fixture del filtro por zona (#24)",
+    "commitTimestamp": 1794669105708,
+    "testId": 59
   }
 ]

@@ -615,7 +615,7 @@ test('la búsqueda HTTP normaliza texto, combina filtros y valida entradas sobre
     assert.equal(limited.length, 50)
     assert.equal(limited[0].id, '40000000-0000-0000-0000-000000000001')
     assert.equal(limited[49].id, '40000000-0000-0000-0000-000000000050')
-    const filteredLimit = await (await fetch(`${endpoint}?zone=sopocachi`)).json()
+    const filteredLimit = await (await fetch(`${endpoint}?q=limite&zone=sopocachi`)).json()
     expect(filteredLimit.map((report: { id: string }) => report.id)).toStrictEqual(
       Array.from(
         { length: 10 },
