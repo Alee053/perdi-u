@@ -2360,9 +2360,15 @@
     "testId": 58
   },
   {
-    "commitId": "HEAD",
+    "commitId": "43a7222561ff9a71d75a1d0844db52e5b5c9353a",
     "commitName": "feat(catalog): filtrar reportes por fechas (#25)\n\nCo-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>",
     "commitTimestamp": 1794579777518,
     "testId": 58
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(api): ajustar rango abierto a los fixtures (#25)",
+    "commitTimestamp": 1794669221642,
+    "testId": 59
   }
 ]

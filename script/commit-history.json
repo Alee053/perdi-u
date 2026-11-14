@@ -1748,12 +1748,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "43a7222561ff9a71d75a1d0844db52e5b5c9353a",
     "author": "RocioChoque",
     "commit": {
       "date": "2026-11-13T14:22:56.000Z",
       "message": "feat(catalog): filtrar reportes por fechas (#25)\n\nCo-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/43a7222561ff9a71d75a1d0844db52e5b5c9353a"
     },
     "stats": {
       "total": 413,
@@ -1765,5 +1765,24 @@
     "test_count": 159,
     "failed_tests": 2,
     "conclusion": "failure"
+  },
+  {
+    "sha": "HEAD",
+    "author": "RocioChoque",
+    "commit": {
+      "date": "2026-11-14T15:13:40.000Z",
+      "message": "test(api): ajustar rango abierto a los fixtures (#25)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 11,
+      "additions": 10,
+      "deletions": 1,
+      "date": "2026-11-14"
+    },
+    "coverage": 90.24,
+    "test_count": 159,
+    "failed_tests": 0,
+    "conclusion": "success"
   }
 ]
