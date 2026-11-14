@@ -2382,9 +2382,15 @@
     "testId": 58
   },
   {
-    "commitId": "HEAD",
+    "commitId": "0fb1211538ae30f7c604b74d0059c311d32eb732",
     "commitName": "test(api): corregir fixture del filtro por zona (#24)",
     "commitTimestamp": 1794669105708,
     "testId": 59
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(web): esperar resultados al limpiar zona (#24)",
+    "commitTimestamp": 1794670024595,
+    "testId": 60
   }
 ]

@@ -161,7 +161,14 @@ async function verifySearch(page, size) {
   await expectTitles(page, ['Perrita de prueba encontrada'])
   await zone.fill('')
   await city.selectOption('Todas las ciudades')
-  await expectCatalog(page)
+  await expectTitles(page, [
+    'Cámara de prueba perdida',
+    'Perrita de prueba encontrada',
+    'Carné de prueba encontrado',
+    "Libro de prueba O'Reilly",
+    'Mochila azul encontrada',
+    'Gato de prueba perdido',
+  ])
   const query = page.waitForResponse((response) => {
     const url = new URL(response.url())
     return url.pathname === '/api/reports' && url.searchParams.get('q') === 'camara'

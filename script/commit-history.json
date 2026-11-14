@@ -1767,16 +1767,35 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "0fb1211538ae30f7c604b74d0059c311d32eb732",
     "author": "RocioChoque",
     "commit": {
       "date": "2026-11-14T15:11:44.000Z",
       "message": "test(api): corregir fixture del filtro por zona (#24)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/0fb1211538ae30f7c604b74d0059c311d32eb732"
     },
     "stats": {
       "total": 2,
       "additions": 1,
+      "deletions": 1,
+      "date": "2026-11-14"
+    },
+    "coverage": 89.21,
+    "test_count": 158,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "RocioChoque",
+    "commit": {
+      "date": "2026-11-14T15:27:03.000Z",
+      "message": "test(web): esperar resultados al limpiar zona (#24)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 9,
+      "additions": 8,
       "deletions": 1,
       "date": "2026-11-14"
     },
