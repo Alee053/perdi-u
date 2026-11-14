@@ -133,8 +133,10 @@ export class PostgresReportRepository
         AND ($3::text IS NULL OR r.type = $3)
         AND ($4::text IS NULL OR r.category = $4)
         AND ($5::text IS NULL OR r.city = $5)
+        AND ($6::date IS NULL OR r.incident_date >= $6::date)
+        AND ($7::date IS NULL OR r.incident_date <= $7::date)
       ORDER BY r.created_at DESC, r.id ASC
-      LIMIT $6
+      LIMIT $8
     `,
       [
         'active',
@@ -146,6 +148,8 @@ export class PostgresReportRepository
         query.type ?? null,
         query.category ?? null,
         query.city ?? null,
+        query.dateFrom ?? null,
+        query.dateTo ?? null,
         REPORT_RESULT_LIMIT,
       ],
     )

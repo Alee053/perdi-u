@@ -14,7 +14,10 @@ import { StatusTabs } from '../components/StatusTabs'
 type MapPageProps = {
   map: AppView['map']
   selection: FilterSelection
-  filters: Pick<FiltersPresenter, 'setSearch' | 'setCity' | 'setCategory' | 'setStatus'>
+  filters: Pick<
+    FiltersPresenter,
+    'setSearch' | 'setCity' | 'setCategory' | 'setStatus' | 'setDateFrom' | 'setDateTo' | 'reset'
+  >
   onOpen: (id: string) => void
   onNavigate: (section: Section) => void
 }
@@ -44,9 +47,14 @@ export function MapPage({ map, selection, filters, onOpen, onNavigate }: MapPage
           value={selection.status}
           onChange={filters.setStatus}
         />
-        <span className="result-count">
-          <b>{map.count}</b> reportes visibles
-        </span>
+        <button className="secondary-button" onClick={filters.reset}>
+          Limpiar filtros
+        </button>
+        {!selection.dateError && (
+          <span className="result-count">
+            <b>{map.count}</b> reportes visibles
+          </span>
+        )}
       </div>
       <div className="map-layout">
         <MapView pins={map.pins} onOpen={onOpen} />
@@ -65,7 +73,7 @@ export function MapPage({ map, selection, filters, onOpen, onNavigate }: MapPage
               </span>
             </button>
           ))}
-          {map.count === 0 && (
+          {map.count === 0 && !selection.dateError && (
             <EmptyState
               title="No hay reportes en esta zona"
               description="Cambia los filtros o crea un reporte nuevo."

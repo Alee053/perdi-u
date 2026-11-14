@@ -1,4 +1,5 @@
 import type { ReportCategory } from '@perdiu/contracts'
+import { validateDateRange, type DateRangeError } from '../../models/reports/filters.js'
 import { cities } from '../../models/reports/report.js'
 import type { ReportFilters } from '../../models/reports/filters.js'
 import { categoryLabels } from '../reports/report-card.js'
@@ -10,6 +11,11 @@ export interface FilterSelection {
   city: string
   category: string
   status: 'Todos' | 'Perdido' | 'Encontrado'
+  dateFrom?: string
+  dateTo?: string
+  dateError?:
+    | 'La fecha «Desde» debe ser anterior o igual a «Hasta».'
+    | 'Indica fechas válidas para el periodo.'
 }
 
 export const allCities = 'Todas las ciudades'
@@ -19,6 +25,8 @@ export const defaultSelection: FilterSelection = {
   city: allCities,
   category: allCategories,
   status: 'Todos',
+  dateFrom: '',
+  dateTo: '',
 }
 export const filterOptions = {
   cities: [allCities, ...cities],
@@ -34,6 +42,11 @@ const categoryValues = Object.fromEntries(
   Object.entries(categoryLabels).map(([value, label]) => [label, value]),
 ) as Partial<Record<string, ReportCategory>>
 
+const dateRangeMessages: Record<DateRangeError, NonNullable<FilterSelection['dateError']>> = {
+  invalid_date: 'Indica fechas válidas para el periodo.',
+  range_order: 'La fecha «Desde» debe ser anterior o igual a «Hasta».',
+}
+
 /** Translates the visible selection into the model's search criteria. */
 export function toReportFilters(selection: FilterSelection): ReportFilters {
   const category = categoryValues[selection.category]
@@ -44,6 +57,8 @@ export function toReportFilters(selection: FilterSelection): ReportFilters {
     ...(selection.status !== 'Todos'
       ? { type: selection.status === 'Perdido' ? ('lost' as const) : ('found' as const) }
       : {}),
+    ...(selection.dateFrom ? { dateFrom: selection.dateFrom } : {}),
+    ...(selection.dateTo ? { dateTo: selection.dateTo } : {}),
   }
 }
 
@@ -57,7 +72,11 @@ export class FiltersPresenter extends Store<FilterSelection> {
   }
 
   private update(patch: Partial<FilterSelection>) {
-    this.setState({ ...this.state, ...patch })
+    const next = { ...this.state, ...patch }
+    const dateError = validateDateRange(next.dateFrom, next.dateTo)
+    if (dateError) next.dateError = dateRangeMessages[dateError]
+    else delete next.dateError
+    this.setState(next)
     this.onChange(this.state)
   }
 
@@ -65,5 +84,7 @@ export class FiltersPresenter extends Store<FilterSelection> {
   setCity = (city: string) => this.update({ city })
   setCategory = (category: string) => this.update({ category })
   setStatus = (status: FilterSelection['status']) => this.update({ status })
+  setDateFrom = (dateFrom: string) => this.update({ dateFrom })
+  setDateTo = (dateTo: string) => this.update({ dateTo })
   reset = () => this.update(defaultSelection)
 }

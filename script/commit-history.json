@@ -1729,12 +1729,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "e6253ab7f93d8b62700cca94fff9dee387ba6122",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-11-12T14:06:05.000Z",
       "message": "docs(repo): resolver conflictos de la sincronización de skills",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/e6253ab7f93d8b62700cca94fff9dee387ba6122"
     },
     "stats": {
       "total": 425,
@@ -1746,5 +1746,81 @@
     "test_count": 155,
     "failed_tests": 0,
     "conclusion": "success"
+  },
+  {
+    "sha": "43a7222561ff9a71d75a1d0844db52e5b5c9353a",
+    "author": "RocioChoque",
+    "commit": {
+      "date": "2026-11-13T14:22:56.000Z",
+      "message": "feat(catalog): filtrar reportes por fechas (#25)\n\nCo-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>",
+      "url": "https://github.com/Alee053/perdi-u/commit/43a7222561ff9a71d75a1d0844db52e5b5c9353a"
+    },
+    "stats": {
+      "total": 413,
+      "additions": 360,
+      "deletions": 53,
+      "date": "2026-11-13"
+    },
+    "coverage": 90.24,
+    "test_count": 159,
+    "failed_tests": 2,
+    "conclusion": "failure"
+  },
+  {
+    "sha": "874bada6d8bb40660fae6facdcdcf3bb457a9ec5",
+    "author": "RocioChoque",
+    "commit": {
+      "date": "2026-11-14T15:13:40.000Z",
+      "message": "test(api): ajustar rango abierto a los fixtures (#25)",
+      "url": "https://github.com/Alee053/perdi-u/commit/874bada6d8bb40660fae6facdcdcf3bb457a9ec5"
+    },
+    "stats": {
+      "total": 11,
+      "additions": 10,
+      "deletions": 1,
+      "date": "2026-11-14"
+    },
+    "coverage": 90.24,
+    "test_count": 159,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "5bb5a47a85d564140d2df8499b01880972e8a783",
+    "author": "RocioChoque",
+    "commit": {
+      "date": "2026-11-14T15:27:49.000Z",
+      "message": "test(api): cubrir semillas en rangos abiertos (#25)",
+      "url": "https://github.com/Alee053/perdi-u/commit/5bb5a47a85d564140d2df8499b01880972e8a783"
+    },
+    "stats": {
+      "total": 14,
+      "additions": 12,
+      "deletions": 2,
+      "date": "2026-11-14"
+    },
+    "coverage": 90.24,
+    "test_count": 159,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "RocioChoque",
+    "commit": {
+      "date": "2026-11-14T17:11:43.000Z",
+      "message": "test(web): corregir rangos de fechas en fixtures (#25)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 11,
+      "additions": 8,
+      "deletions": 3,
+      "date": "2026-11-14"
+    },
+    "coverage": 90.24,
+    "test_count": 159,
+    "failed_tests": 2,
+    "conclusion": "failure"
   }
 ]
