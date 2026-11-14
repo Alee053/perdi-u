@@ -2372,9 +2372,31 @@
     "testId": 59
   },
   {
-    "commitId": "HEAD",
+    "commitId": "5bb5a47a85d564140d2df8499b01880972e8a783",
     "commitName": "test(api): cubrir semillas en rangos abiertos (#25)",
     "commitTimestamp": 1794670070279,
     "testId": 60
+  },
+  {
+    "numPassedTests": 157,
+    "failedTests": 2,
+    "numTotalTests": 159,
+    "timestamp": 1794676201144,
+    "success": false,
+    "testId": 61
+  },
+  {
+    "numPassedTests": 159,
+    "failedTests": 0,
+    "numTotalTests": 159,
+    "timestamp": 1794676243578,
+    "success": true,
+    "testId": 61
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(web): corregir rangos de fechas en fixtures (#25)",
+    "commitTimestamp": 1794676304308,
+    "testId": 61
   }
 ]

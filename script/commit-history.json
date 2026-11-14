@@ -1786,12 +1786,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "5bb5a47a85d564140d2df8499b01880972e8a783",
     "author": "RocioChoque",
     "commit": {
       "date": "2026-11-14T15:27:49.000Z",
       "message": "test(api): cubrir semillas en rangos abiertos (#25)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/5bb5a47a85d564140d2df8499b01880972e8a783"
     },
     "stats": {
       "total": 14,
@@ -1803,5 +1803,24 @@
     "test_count": 159,
     "failed_tests": 0,
     "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "RocioChoque",
+    "commit": {
+      "date": "2026-11-14T17:11:43.000Z",
+      "message": "test(web): corregir rangos de fechas en fixtures (#25)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 11,
+      "additions": 8,
+      "deletions": 3,
+      "date": "2026-11-14"
+    },
+    "coverage": 90.24,
+    "test_count": 159,
+    "failed_tests": 2,
+    "conclusion": "failure"
   }
 ]

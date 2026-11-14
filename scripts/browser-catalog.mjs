@@ -221,15 +221,20 @@ async function verifySearch(page, size) {
   })
   await dateFrom.fill('2026-10-10')
   await dateTo.fill('2026-10-10')
-  await expectTitles(page, ['Cámara de prueba perdida'])
+  await expectTitles(page, ['Cámara de prueba perdida', 'Mochila azul encontrada'])
   await dateTo.fill('2026-10-12')
   await expectTitles(page, [
     'Cámara de prueba perdida',
     'Perrita de prueba encontrada',
     'Carné de prueba encontrado',
+    'Mochila azul encontrada',
   ])
   await page.getByRole('combobox', { name: 'Ciudad', exact: true }).selectOption('La Paz')
-  await expectTitles(page, ['Cámara de prueba perdida', 'Carné de prueba encontrado'])
+  await expectTitles(page, [
+    'Cámara de prueba perdida',
+    'Carné de prueba encontrado',
+    'Mochila azul encontrada',
+  ])
   await page.getByRole('button', { name: 'Limpiar filtros', exact: true }).click()
   await expectTitles(page, [
     'Cámara de prueba perdida',
@@ -247,7 +252,7 @@ async function verifySearch(page, size) {
   await expectTitles(page, [])
   assert.deepEqual(invalidDateRequests, [])
   await dateFrom.fill('2026-10-10')
-  await expectTitles(page, ['Cámara de prueba perdida'])
+  await expectTitles(page, ['Cámara de prueba perdida', 'Mochila azul encontrada'])
   await page.getByRole('button', { name: 'Limpiar filtros', exact: true }).click()
   await page.getByRole('combobox', { name: 'Categoría', exact: true }).selectOption('Documentos')
   await expectTitles(page, ['Carné de prueba encontrado'])
