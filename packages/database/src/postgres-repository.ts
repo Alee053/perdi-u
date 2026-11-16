@@ -31,6 +31,13 @@ const reportColumns = `
   END AS "imageUrls"
 `
 
+const normalizeSearch = (value: string) =>
+  value
+    .trim()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLocaleLowerCase('es')
+
 export class PostgresReportRepository
   implements ReportRepository, ReportDetailRepository, ReportPublisher, OwnReportsRepository
 {
@@ -133,19 +140,18 @@ export class PostgresReportRepository
         AND ($3::text IS NULL OR r.type = $3)
         AND ($4::text IS NULL OR r.category = $4)
         AND ($5::text IS NULL OR r.city = $5)
+        AND ($6 = '' OR
+          position($6 in lower(regexp_replace(normalize(r.zone, NFD), '[\u0300-\u036f]', '', 'g'))) > 0)
       ORDER BY r.created_at DESC, r.id ASC
-      LIMIT $6
+      LIMIT $7
     `,
       [
         'active',
-        (query.q ?? '')
-          .trim()
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '')
-          .toLocaleLowerCase('es'),
+        normalizeSearch(query.q ?? ''),
         query.type ?? null,
         query.category ?? null,
         query.city ?? null,
+        normalizeSearch(query.zone ?? ''),
         REPORT_RESULT_LIMIT,
       ],
     )

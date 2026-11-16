@@ -2306,9 +2306,91 @@
     "testId": 56
   },
   {
-    "commitId": "HEAD",
+    "commitId": "e6253ab7f93d8b62700cca94fff9dee387ba6122",
     "commitName": "docs(repo): resolver conflictos de la sincronización de skills",
     "commitTimestamp": 1794492366180,
     "testId": 57
+  },
+  {
+    "numPassedTests": 156,
+    "failedTests": 1,
+    "numTotalTests": 157,
+    "timestamp": 1794577068695,
+    "success": false,
+    "testId": 58
+  },
+  {
+    "numPassedTests": 157,
+    "failedTests": 0,
+    "numTotalTests": 157,
+    "timestamp": 1794577162478,
+    "success": true,
+    "testId": 58
+  },
+  {
+    "numPassedTests": 157,
+    "failedTests": 1,
+    "numTotalTests": 158,
+    "timestamp": 1794577220536,
+    "success": false,
+    "testId": 58
+  },
+  {
+    "numPassedTests": 158,
+    "failedTests": 0,
+    "numTotalTests": 158,
+    "timestamp": 1794577362624,
+    "success": true,
+    "testId": 58
+  },
+  {
+    "numPassedTests": 157,
+    "failedTests": 1,
+    "numTotalTests": 158,
+    "timestamp": 1794577555937,
+    "success": false,
+    "testId": 58
+  },
+  {
+    "numPassedTests": 158,
+    "failedTests": 0,
+    "numTotalTests": 158,
+    "timestamp": 1794577612893,
+    "success": true,
+    "testId": 58
+  },
+  {
+    "numPassedTests": 158,
+    "failedTests": 0,
+    "numTotalTests": 158,
+    "timestamp": 1794577760846,
+    "success": true,
+    "testId": 58
+  },
+  {
+    "numPassedTests": 158,
+    "failedTests": 0,
+    "numTotalTests": 158,
+    "timestamp": 1794578212616,
+    "success": true,
+    "testId": 58
+  },
+  {
+    "commitId": "fa97f36744d8c19a500420d629901cb1f638e13b",
+    "commitName": "feat(catalog): filtrar reportes por zona (#24)",
+    "commitTimestamp": 1794578292179,
+    "testId": 58
+  },
+  {
+    "commitId": "0fb1211538ae30f7c604b74d0059c311d32eb732",
+    "commitName": "test(api): corregir fixture del filtro por zona (#24)",
+    "commitTimestamp": 1794669105708,
+    "testId": 59
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(web): esperar resultados al limpiar zona (#24)",
+    "commitTimestamp": 1794670024595,
+    "testId": 60
   }
 ]

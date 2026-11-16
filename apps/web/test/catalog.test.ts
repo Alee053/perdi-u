@@ -167,6 +167,7 @@ test('la búsqueda del presenter combina selecciones, reintenta la misma consult
   await presenter.load({
     search: '  CÁMARA  ',
     city: 'La Paz',
+    zone: '  San José ',
     category: 'Objeto',
     status: 'Perdido',
   })
@@ -177,12 +178,13 @@ test('la búsqueda del presenter combina selecciones, reintenta la misma consult
   await presenter.load({
     search: '',
     city: 'Todas las ciudades',
+    zone: '',
     category: 'Todas las categorías',
     status: 'Todos',
   })
   assert.deepEqual(queries, [
-    { q: 'CÁMARA', city: 'La Paz', category: 'object', type: 'lost' },
-    { q: 'CÁMARA', city: 'La Paz', category: 'object', type: 'lost' },
+    { q: 'CÁMARA', city: 'La Paz', zone: 'San José', category: 'object', type: 'lost' },
+    { q: 'CÁMARA', city: 'La Paz', zone: 'San José', category: 'object', type: 'lost' },
     {},
   ])
 })
@@ -200,6 +202,7 @@ test('el cliente codifica texto y filtros como parámetros HTTP y omite los filt
     type: 'found',
     category: 'object',
     city: 'La Paz',
+    zone: 'San José %_',
   })
   await client.list(controller.signal)
   const url = new URL(requests[0]!, 'http://localhost')
@@ -209,6 +212,7 @@ test('el cliente codifica texto y filtros como parámetros HTTP y omite los filt
     type: 'found',
     category: 'object',
     city: 'La Paz',
+    zone: 'San José %_',
   })
   assert.equal(requests[1], '/api/reports')
 })
@@ -231,12 +235,14 @@ test('cambiar texto o filtros cancela la consulta anterior y descarta tanto su r
     const previous = presenter.load({
       search: 'camara',
       city: 'Todas las ciudades',
+      zone: '',
       category: 'Todas las categorías',
       status: 'Todos',
     })
     await presenter.load({
       search: 'mochila',
       city: 'La Paz',
+      zone: '',
       category: 'Objeto',
       status: 'Encontrado',
     })

@@ -8,6 +8,7 @@ export interface ReportQuery {
   type?: ReportType
   category?: ReportCategory
   city?: string
+  zone?: string
 }
 
 /** Private history of the verified subject, including resolved reports. */

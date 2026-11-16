@@ -5,6 +5,7 @@ import type { Report } from './report.js'
 export interface ReportFilters {
   text: string
   city?: string
+  zone?: string
   category?: ReportCategory
   type?: ReportType
 }
@@ -18,14 +19,18 @@ export const normalizeText = (value: string) =>
     .toLocaleLowerCase('es')
 
 export const hasActiveFilters = (filters: ReportFilters) =>
-  Boolean(filters.text.trim() || filters.city || filters.category || filters.type)
+  Boolean(
+    filters.text.trim() || filters.city || filters.zone?.trim() || filters.category || filters.type,
+  )
 
 /** Query for the public catalog: trimmed text and only the selected criteria. */
 export function toReportQuery(filters: ReportFilters): ReportQuery {
   const text = filters.text.trim()
+  const zone = filters.zone?.trim()
   return {
     ...(text ? { q: text } : {}),
     ...(filters.city ? { city: filters.city } : {}),
+    ...(zone ? { zone } : {}),
     ...(filters.category ? { category: filters.category } : {}),
     ...(filters.type ? { type: filters.type } : {}),
   }
@@ -38,6 +43,7 @@ export function matchesFilters(report: Report, filters: ReportFilters) {
     report.state === 'active' &&
     (!filters.text || text.includes(normalizeText(filters.text))) &&
     (!filters.city || report.city === filters.city) &&
+    (!filters.zone?.trim() || normalizeText(report.zone).includes(normalizeText(filters.zone))) &&
     (!filters.category || report.category === filters.category) &&
     (!filters.type || report.type === filters.type)
   )

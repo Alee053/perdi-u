@@ -145,7 +145,30 @@ async function expectTitles(page, titles) {
 
 async function verifySearch(page, size) {
   const search = page.getByRole('textbox', { name: 'Buscar reportes' })
+  const zone = page.getByRole('textbox', { name: 'Zona o barrio' })
+  const city = page.getByRole('combobox', { name: 'Ciudad', exact: true })
   const camera = ['Cámara de prueba perdida', 'Perrita de prueba encontrada']
+  await zone.fill('san jose')
+  await expectTitles(page, ['Cámara de prueba perdida', 'Carné de prueba encontrado'])
+  await city.selectOption('Cochabamba')
+  await page
+    .getByRole('heading', { name: 'No se encontraron coincidencias', exact: true })
+    .waitFor()
+  await city.selectOption('La Paz')
+  await expectTitles(page, ['Cámara de prueba perdida', 'Carné de prueba encontrado'])
+  await zone.fill('SOPOCACHÍ')
+  await city.selectOption('Todas las ciudades')
+  await expectTitles(page, ['Perrita de prueba encontrada'])
+  await zone.fill('')
+  await city.selectOption('Todas las ciudades')
+  await expectTitles(page, [
+    'Cámara de prueba perdida',
+    'Perrita de prueba encontrada',
+    'Carné de prueba encontrado',
+    "Libro de prueba O'Reilly",
+    'Mochila azul encontrada',
+    'Gato de prueba perdido',
+  ])
   const query = page.waitForResponse((response) => {
     const url = new URL(response.url())
     return url.pathname === '/api/reports' && url.searchParams.get('q') === 'camara'
@@ -157,9 +180,9 @@ async function verifySearch(page, size) {
   await expectTitles(page, camera)
   await page.getByRole('tab', { name: 'Perdidos', exact: true }).click()
   await page.getByRole('combobox', { name: 'Categoría', exact: true }).selectOption('Objeto')
-  await page.getByRole('combobox', { name: 'Ciudad', exact: true }).selectOption('La Paz')
+  await city.selectOption('La Paz')
   await expectTitles(page, ['Cámara de prueba perdida'])
-  await page.getByRole('combobox', { name: 'Ciudad', exact: true }).selectOption('Cochabamba')
+  await city.selectOption('Cochabamba')
   await page
     .getByRole('heading', { name: 'No se encontraron coincidencias', exact: true })
     .waitFor()
@@ -196,10 +219,8 @@ async function verifySearch(page, size) {
     'Gato de prueba perdido',
   ])
   assert.equal(await search.inputValue(), '')
-  assert.equal(
-    await page.getByRole('combobox', { name: 'Ciudad', exact: true }).inputValue(),
-    'Todas las ciudades',
-  )
+  assert.equal(await city.inputValue(), 'Todas las ciudades')
+  assert.equal(await zone.inputValue(), '')
   assert.equal(
     await page.getByRole('combobox', { name: 'Categoría', exact: true }).inputValue(),
     'Todas las categorías',
@@ -239,9 +260,10 @@ async function verifySearch(page, size) {
   await expectTitles(page, ['Mochila azul encontrada'])
 
   // A failed filtered search must retain its controls and retry the same query.
-  await page.getByRole('combobox', { name: 'Ciudad', exact: true }).selectOption('La Paz')
+  await city.selectOption('La Paz')
   await page.getByRole('combobox', { name: 'Categoría', exact: true }).selectOption('Objeto')
   await page.getByRole('tab', { name: 'Perdidos', exact: true }).click()
+  await zone.fill('san jose')
   let failOnce = true
   await page.route('**/api/reports*', async (route) => {
     if (new URL(route.request().url()).searchParams.get('q') === 'camara' && failOnce) {
@@ -261,10 +283,8 @@ async function verifySearch(page, size) {
   await expectTitles(page, ['Cámara de prueba perdida'])
   await page.unroute('**/api/reports*')
   assert.equal(await search.inputValue(), 'camara')
-  assert.equal(
-    await page.getByRole('combobox', { name: 'Ciudad', exact: true }).inputValue(),
-    'La Paz',
-  )
+  assert.equal(await city.inputValue(), 'La Paz')
+  assert.equal(await zone.inputValue(), 'san jose')
   await page.evaluate(() =>
     Promise.all(
       document

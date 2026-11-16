@@ -14,7 +14,7 @@ import { StatusTabs } from '../components/StatusTabs'
 type MapPageProps = {
   map: AppView['map']
   selection: FilterSelection
-  filters: Pick<FiltersPresenter, 'setSearch' | 'setCity' | 'setCategory' | 'setStatus'>
+  filters: Pick<FiltersPresenter, 'setSearch' | 'setCity' | 'setZone' | 'setCategory' | 'setStatus'>
   onOpen: (id: string) => void
   onNavigate: (section: Section) => void
 }

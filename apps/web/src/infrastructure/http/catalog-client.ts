@@ -85,7 +85,7 @@ export function createReportsClient(
   return {
     async list(signal, query = {}) {
       const params = new URLSearchParams()
-      for (const key of ['q', 'type', 'category', 'city'] as const) {
+      for (const key of ['q', 'type', 'category', 'city', 'zone'] as const) {
         if (query[key]) params.set(key, query[key])
       }
       const search = params.size ? `?${params}` : ''
