@@ -570,6 +570,51 @@ test('la búsqueda HTTP normaliza texto, combina filtros y valida entradas sobre
       [{ q: "O'Reilly" }, ['30000000-0000-0000-0000-000000000004']],
       [{ q: '%_' }, ['30000000-0000-0000-0000-000000000004']],
       [{ q: "' OR true --" }, []],
+      [
+        { dateFrom: '2026-10-10' },
+        [
+          '20000000-0000-0000-0000-000000000001',
+          '30000000-0000-0000-0000-000000000001',
+          '30000000-0000-0000-0000-000000000002',
+          '30000000-0000-0000-0000-000000000003',
+          '30000000-0000-0000-0000-000000000004',
+        ],
+      ],
+      [
+        { dateTo: '2026-10-10' },
+        [
+          '20000000-0000-0000-0000-000000000001',
+          '20000000-0000-0000-0000-000000000002',
+          '30000000-0000-0000-0000-000000000001',
+        ],
+      ],
+      [
+        { dateFrom: '2026-10-11', dateTo: '2026-10-12' },
+        ['30000000-0000-0000-0000-000000000002', '30000000-0000-0000-0000-000000000003'],
+      ],
+      [
+        { dateFrom: '2026-10-11', dateTo: '2026-10-12', city: 'La Paz' },
+        ['30000000-0000-0000-0000-000000000003'],
+      ],
+      [
+        { dateFrom: '2026-10-10', dateTo: '2026-10-10' },
+        ['20000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000001'],
+      ],
+      [
+        {
+          q: 'camara',
+          type: 'lost',
+          category: 'object',
+          city: 'La Paz',
+          zone: 'san jose',
+          dateFrom: '2026-10-10',
+          dateTo: '2026-10-10',
+        },
+        ['30000000-0000-0000-0000-000000000001'],
+      ],
+      [{ dateFrom: '2026-10-11', dateTo: '2026-10-11', zone: 'san jose' }, []],
+      // The camera was published on the 14th, but the incident happened on the 10th.
+      [{ q: 'camara', dateFrom: '2026-10-14', dateTo: '2026-10-14' }, []],
     ] satisfies [Record<string, string>, string[]][]) {
       const response = await fetch(`${endpoint}?${new URLSearchParams(query)}`)
       assert.equal(response.status, 200)
@@ -590,6 +635,13 @@ test('la búsqueda HTTP normaliza texto, combina filtros y valida entradas sobre
       'zone=%00',
       'q=' + 'x'.repeat(201),
       'q=%00',
+      'dateFrom=2026-02-29',
+      'dateTo=2026-13-01',
+      'dateFrom=2026-10-11&dateTo=2026-10-10',
+      'dateFrom=2026-10-10&dateFrom=2026-10-11',
+      'dateTo=2026-10-10&dateTo=2026-10-11',
+      'dateFrom%5Bvalue%5D=2026-10-10',
+      'dateTo%5Bvalue%5D=2026-10-10',
       'limit=100',
     ]) {
       const response = await fetch(`${endpoint}?${query}`)
@@ -607,7 +659,7 @@ test('la búsqueda HTTP normaliza texto, combina filtros y valida entradas sobre
       ),
     )
     await pool.query(
-      `UPDATE reports SET zone = 'Sopocachi'
+      `UPDATE reports SET zone = 'Sopocachi', incident_date = '2026-10-11'
        WHERE id::text BETWEEN '40000000-0000-0000-0000-000000000051'
          AND '40000000-0000-0000-0000-000000000060'`,
     )
@@ -623,6 +675,20 @@ test('la búsqueda HTTP normaliza texto, combina filtros y valida entradas sobre
       ),
     )
     assert.equal((await (await fetch(endpoint)).json()).length, 50)
+    assert.equal(
+      (await (await fetch(`${endpoint}?dateFrom=2026-10-10&dateTo=2026-10-10&q=limite`)).json())
+        .length,
+      50,
+    )
+    const dateFiltered = await (
+      await fetch(`${endpoint}?dateFrom=2026-10-11&dateTo=2026-10-11&q=limite`)
+    ).json()
+    expect(dateFiltered.map((report: { id: string }) => report.id)).toStrictEqual(
+      Array.from(
+        { length: 10 },
+        (_, index) => `40000000-0000-0000-0000-${String(index + 51).padStart(12, '0')}`,
+      ),
+    )
   } finally {
     await app?.close()
     if (prepared)

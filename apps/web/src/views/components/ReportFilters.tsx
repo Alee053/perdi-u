@@ -1,3 +1,4 @@
+import type { SyntheticEvent } from 'react'
 import type { FilterSelection } from '../../presenters/catalog/filters.presenter'
 
 type FilterActions = {
@@ -5,13 +6,15 @@ type FilterActions = {
   setCity: (value: string) => void
   setZone: (value: string) => void
   setCategory: (value: string) => void
+  setDateFrom: (value: string, invalidInput?: boolean) => void
+  setDateTo: (value: string, invalidInput?: boolean) => void
 }
 
 type ReportFiltersProps = {
   selection: FilterSelection
   options: { cities: readonly string[]; categories: readonly string[] }
   actions: FilterActions
-  /** The map filters by place and category only. */
+  /** Search text is specific to Explore; the other controls are shared with the map. */
   withSearch?: boolean
 }
 
@@ -21,6 +24,11 @@ export function ReportFilters({
   actions,
   withSearch = true,
 }: ReportFiltersProps) {
+  const readDateFrom = (event: SyntheticEvent<HTMLInputElement>) =>
+    actions.setDateFrom(event.currentTarget.value, event.currentTarget.validity.badInput)
+  const readDateTo = (event: SyntheticEvent<HTMLInputElement>) =>
+    actions.setDateTo(event.currentTarget.value, event.currentTarget.validity.badInput)
+
   return (
     <>
       {withSearch && (
@@ -61,6 +69,41 @@ export function ReportFilters({
           <option key={category}>{category}</option>
         ))}
       </select>
+      <label>
+        Desde
+        <input
+          key={selection.dateInputRevision}
+          className="select-field"
+          type="date"
+          value={selection.dateFrom ?? ''}
+          onChange={readDateFrom}
+          onKeyUp={readDateFrom}
+          onBlur={readDateFrom}
+          aria-label="Desde"
+          aria-invalid={Boolean(selection.dateError)}
+          aria-describedby={selection.dateError ? 'date-range-error' : undefined}
+        />
+      </label>
+      <label>
+        Hasta
+        <input
+          key={selection.dateInputRevision}
+          className="select-field"
+          type="date"
+          value={selection.dateTo ?? ''}
+          onChange={readDateTo}
+          onKeyUp={readDateTo}
+          onBlur={readDateTo}
+          aria-label="Hasta"
+          aria-invalid={Boolean(selection.dateError)}
+          aria-describedby={selection.dateError ? 'date-range-error' : undefined}
+        />
+      </label>
+      {selection.dateError && (
+        <p id="date-range-error" role="alert">
+          {selection.dateError}
+        </p>
+      )}
     </>
   )
 }

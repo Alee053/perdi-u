@@ -3,7 +3,7 @@ import { expect, test } from '@jest/globals'
 import type { ReportSummary } from '@perdiu/contracts'
 import { CatalogPresenter } from '../src/presenters/catalog/catalog.presenter.js'
 import { createReportsClient } from '../src/infrastructure/http/catalog-client.js'
-import { defaultSelection } from '../src/presenters/catalog/filters.presenter.js'
+import { defaultSelection, FiltersPresenter } from '../src/presenters/catalog/filters.presenter.js'
 
 test('el cierre retira el reporte y descarta respuestas anteriores conservando la búsqueda', async () => {
   let complete!: (reports: ReportSummary[]) => void
@@ -170,6 +170,8 @@ test('la búsqueda del presenter combina selecciones, reintenta la misma consult
     zone: '  San José ',
     category: 'Objeto',
     status: 'Perdido',
+    dateFrom: '2026-10-10',
+    dateTo: '2026-10-11',
   })
   assert.equal(presenter.getSnapshot().status, 'error')
   fail = false
@@ -183,8 +185,24 @@ test('la búsqueda del presenter combina selecciones, reintenta la misma consult
     status: 'Todos',
   })
   assert.deepEqual(queries, [
-    { q: 'CÁMARA', city: 'La Paz', zone: 'San José', category: 'object', type: 'lost' },
-    { q: 'CÁMARA', city: 'La Paz', zone: 'San José', category: 'object', type: 'lost' },
+    {
+      q: 'CÁMARA',
+      city: 'La Paz',
+      zone: 'San José',
+      category: 'object',
+      type: 'lost',
+      dateFrom: '2026-10-10',
+      dateTo: '2026-10-11',
+    },
+    {
+      q: 'CÁMARA',
+      city: 'La Paz',
+      zone: 'San José',
+      category: 'object',
+      type: 'lost',
+      dateFrom: '2026-10-10',
+      dateTo: '2026-10-11',
+    },
     {},
   ])
 })
@@ -203,6 +221,8 @@ test('el cliente codifica texto y filtros como parámetros HTTP y omite los filt
     category: 'object',
     city: 'La Paz',
     zone: 'San José %_',
+    dateFrom: '2026-10-10',
+    dateTo: '2026-10-11',
   })
   await client.list(controller.signal)
   const url = new URL(requests[0]!, 'http://localhost')
@@ -213,11 +233,103 @@ test('el cliente codifica texto y filtros como parámetros HTTP y omite los filt
     category: 'object',
     city: 'La Paz',
     zone: 'San José %_',
+    dateFrom: '2026-10-10',
+    dateTo: '2026-10-11',
   })
   assert.equal(requests[1], '/api/reports')
 })
 
-test('cambiar texto o filtros cancela la consulta anterior y descarta tanto su resultado como su error', async () => {
+test('el rango del hecho se consulta al validarse, un error se conserva sin llamar al API y limpiar lo vacía', () => {
+  const queries: unknown[] = []
+  const catalog = new CatalogPresenter({
+    list: async (_signal, query) => {
+      queries.push(query)
+      return []
+    },
+  })
+  const filters = new FiltersPresenter((selection) => void catalog.load(selection))
+
+  filters.setDateFrom('2026-10-10')
+  filters.setDateTo('2026-10-10')
+  filters.setDateFrom('2026-10-11')
+
+  assert.deepEqual(filters.getSnapshot(), {
+    ...defaultSelection,
+    dateFrom: '2026-10-11',
+    dateTo: '2026-10-10',
+    dateError: 'La fecha «Desde» debe ser anterior o igual a «Hasta».',
+  })
+  assert.deepEqual(queries, [
+    { dateFrom: '2026-10-10' },
+    { dateFrom: '2026-10-10', dateTo: '2026-10-10' },
+  ])
+  assert.deepEqual(catalog.getSnapshot(), { status: 'ready', reports: [] })
+
+  filters.setDateTo('2026-10-11')
+  filters.reset()
+  assert.deepEqual(queries, [
+    { dateFrom: '2026-10-10' },
+    { dateFrom: '2026-10-10', dateTo: '2026-10-10' },
+    { dateFrom: '2026-10-11', dateTo: '2026-10-11' },
+    {},
+  ])
+  assert.equal(filters.getSnapshot().dateFrom, '')
+  assert.equal(filters.getSnapshot().dateTo, '')
+  assert.equal(filters.getSnapshot().dateError, undefined)
+})
+
+test('reintentar o refrescar no recupera una búsqueda anterior mientras el rango sea inválido', async () => {
+  const queries: unknown[] = []
+  const catalog = new CatalogPresenter({
+    list: async (_signal, query) => {
+      queries.push(query)
+      return [summary]
+    },
+  })
+  await catalog.load({ ...defaultSelection, dateFrom: '2026-10-10' })
+  await catalog.load({
+    ...defaultSelection,
+    dateFrom: '2026-10-11',
+    dateTo: '2026-10-10',
+  })
+  await catalog.load()
+
+  assert.deepEqual(queries, [{ dateFrom: '2026-10-10' }])
+  assert.deepEqual(catalog.getSnapshot(), { status: 'ready', reports: [] })
+})
+
+test('una fecha inválida del control nativo muestra error sin buscar y permite corregir o limpiar', () => {
+  const queries: unknown[] = []
+  const catalog = new CatalogPresenter({
+    list: async (_signal, query) => {
+      queries.push(query)
+      return []
+    },
+  })
+  const filters = new FiltersPresenter((selection) => void catalog.load(selection))
+
+  filters.setDateFrom('2026-02-28')
+  // Native date inputs expose an impossible/partial date as an empty value with badInput=true.
+  filters.setDateFrom('', true)
+  assert.equal(filters.getSnapshot().dateError, 'Indica fechas válidas para el periodo.')
+  assert.deepEqual(queries, [{ dateFrom: '2026-02-28' }])
+  assert.deepEqual(catalog.getSnapshot(), { status: 'ready', reports: [] })
+
+  filters.setDateFrom('2026-02-27')
+  filters.setDateFrom('2026-02-27')
+  assert.equal(filters.getSnapshot().dateError, undefined)
+  assert.deepEqual(queries.at(-1), { dateFrom: '2026-02-27' })
+  filters.setDateTo('', true)
+  assert.equal(filters.getSnapshot().dateError, 'Indica fechas válidas para el periodo.')
+  assert.equal(queries.length, 2)
+  filters.reset()
+  assert.equal(filters.getSnapshot().dateFrom, '')
+  assert.equal(filters.getSnapshot().dateTo, '')
+  assert.equal(filters.getSnapshot().dateError, undefined)
+  assert.deepEqual(queries.at(-1), {})
+})
+
+test('cambiar el rango cancela la consulta anterior y descarta tanto su resultado como su error', async () => {
   for (const staleFails of [false, true]) {
     let finishOld!: (reports: ReportSummary[]) => void
     let failOld!: (error: Error) => void
@@ -229,7 +341,7 @@ test('cambiar texto o filtros cancela la consulta anterior y descarta tanto su r
     const presenter = new CatalogPresenter({
       list: async (signal, query) => {
         signals.push(signal)
-        return query?.q === 'camara' ? old : [summary]
+        return query?.dateFrom === '2026-10-10' ? old : [summary]
       },
     })
     const previous = presenter.load({
@@ -238,13 +350,17 @@ test('cambiar texto o filtros cancela la consulta anterior y descarta tanto su r
       zone: '',
       category: 'Todas las categorías',
       status: 'Todos',
+      dateFrom: '2026-10-10',
+      dateTo: '2026-10-12',
     })
     await presenter.load({
-      search: 'mochila',
+      search: 'camara',
       city: 'La Paz',
       zone: '',
       category: 'Objeto',
       status: 'Encontrado',
+      dateFrom: '2026-10-11',
+      dateTo: '2026-10-12',
     })
     assert.equal(signals[0]!.aborted, true)
     assert.equal(signals[1]!.aborted, false)

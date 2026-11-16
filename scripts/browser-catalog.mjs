@@ -229,6 +229,131 @@ async function verifySearch(page, size) {
     await page.getByRole('tab', { name: 'Todos', exact: true }).getAttribute('aria-selected'),
     'true',
   )
+  const dateFrom = page.getByLabel('Desde', { exact: true })
+  const dateTo = page.getByLabel('Hasta', { exact: true })
+  const invalidDateRequests = []
+  page.on('request', (request) => {
+    const url = new URL(request.url())
+    const from = url.searchParams.get('dateFrom')
+    const to = url.searchParams.get('dateTo')
+    if (url.pathname === '/api/reports' && from && to && from > to)
+      invalidDateRequests.push(url.href)
+  })
+  await dateFrom.fill('2026-10-10')
+  await expectTitles(page, [
+    'Cámara de prueba perdida',
+    'Perrita de prueba encontrada',
+    'Carné de prueba encontrado',
+    "Libro de prueba O'Reilly",
+    'Mochila azul encontrada',
+  ])
+  await dateTo.fill('2026-10-10')
+  await expectTitles(page, ['Cámara de prueba perdida', 'Mochila azul encontrada'])
+  await dateFrom.fill('')
+  await expectTitles(page, [
+    'Cámara de prueba perdida',
+    'Mochila azul encontrada',
+    'Gato de prueba perdido',
+  ])
+  await dateFrom.fill('2026-10-10')
+  await expectTitles(page, ['Cámara de prueba perdida', 'Mochila azul encontrada'])
+  await dateTo.fill('2026-10-12')
+  await expectTitles(page, [
+    'Cámara de prueba perdida',
+    'Perrita de prueba encontrada',
+    'Carné de prueba encontrado',
+    'Mochila azul encontrada',
+  ])
+  await page.getByRole('combobox', { name: 'Ciudad', exact: true }).selectOption('La Paz')
+  await expectTitles(page, [
+    'Cámara de prueba perdida',
+    'Carné de prueba encontrado',
+    'Mochila azul encontrada',
+  ])
+  await zone.fill('san jose')
+  await expectTitles(page, ['Cámara de prueba perdida', 'Carné de prueba encontrado'])
+  await search.fill('camara')
+  await page.getByRole('combobox', { name: 'Categoría', exact: true }).selectOption('Objeto')
+  await page.getByRole('tab', { name: 'Perdidos', exact: true }).click()
+  await expectTitles(page, ['Cámara de prueba perdida'])
+  await dateFrom.fill('2026-10-11')
+  await page
+    .getByRole('heading', { name: 'No se encontraron coincidencias', exact: true })
+    .waitFor()
+  await page.getByRole('button', { name: 'Limpiar filtros', exact: true }).click()
+  await expectTitles(page, [
+    'Cámara de prueba perdida',
+    'Perrita de prueba encontrada',
+    'Carné de prueba encontrado',
+    "Libro de prueba O'Reilly",
+    'Mochila azul encontrada',
+    'Gato de prueba perdido',
+  ])
+  assert.equal(await dateFrom.inputValue(), '')
+  assert.equal(await dateTo.inputValue(), '')
+  await dateFrom.fill('2026-10-12')
+  await dateTo.fill('2026-10-10')
+  await page.getByRole('alert').filter({ hasText: 'La fecha «Desde»' }).waitFor()
+  await expectTitles(page, [])
+  assert.equal(await dateFrom.inputValue(), '2026-10-12')
+  assert.equal(await dateTo.inputValue(), '2026-10-10')
+  assert.deepEqual(invalidDateRequests, [])
+  await dateFrom.fill('2026-10-10')
+  await expectTitles(page, ['Cámara de prueba perdida', 'Mochila azul encontrada'])
+  await page.getByRole('button', { name: 'Limpiar filtros', exact: true }).click()
+  // Native date editors keep impossible/partial segments while their string value is empty.
+  const enterImpossibleDate = async (input) => {
+    await input.fill('2026-02-28')
+    for (let index = 0; index < 3; index++) await input.press('ArrowLeft')
+    await input.press('ArrowRight')
+    await page.keyboard.type('31')
+    assert.equal(await input.evaluate((element) => element.validity.badInput), true)
+    await page.getByRole('alert').filter({ hasText: 'Indica fechas válidas' }).waitFor()
+    await expectTitles(page, [])
+  }
+  for (const [input, correctedTitles] of [
+    [
+      dateFrom,
+      [
+        'Cámara de prueba perdida',
+        'Perrita de prueba encontrada',
+        'Carné de prueba encontrado',
+        "Libro de prueba O'Reilly",
+        'Mochila azul encontrada',
+      ],
+    ],
+    [dateTo, ['Cámara de prueba perdida', 'Mochila azul encontrada', 'Gato de prueba perdido']],
+  ]) {
+    await input.focus()
+    for (let index = 0; index < 3; index++) await input.press('ArrowLeft')
+    await page.keyboard.type('02')
+    assert.equal(await input.inputValue(), '')
+    assert.equal(await input.evaluate((element) => element.validity.badInput), true)
+    await page
+      .getByRole('alert')
+      .filter({ hasText: 'Indica fechas válidas' })
+      .waitFor({ timeout: 2000 })
+    await expectTitles(page, [])
+    await page.getByRole('button', { name: 'Limpiar filtros', exact: true }).click()
+    await enterImpossibleDate(input)
+    await input.fill('2026-10-10')
+    await expectTitles(page, correctedTitles)
+    await enterImpossibleDate(input)
+    await page.getByRole('button', { name: 'Limpiar filtros', exact: true }).click()
+    for (const date of [dateFrom, dateTo]) {
+      assert.equal(await date.inputValue(), '')
+      assert.equal(await date.evaluate((element) => element.validity.badInput), false)
+      assert.equal(await date.getAttribute('aria-invalid'), 'false')
+    }
+    await expectTitles(page, [
+      'Cámara de prueba perdida',
+      'Perrita de prueba encontrada',
+      'Carné de prueba encontrado',
+      "Libro de prueba O'Reilly",
+      'Mochila azul encontrada',
+      'Gato de prueba perdido',
+    ])
+  }
   await page.getByRole('combobox', { name: 'Categoría', exact: true }).selectOption('Documentos')
   await expectTitles(page, ['Carné de prueba encontrado'])
   await page.getByRole('combobox', { name: 'Categoría', exact: true }).selectOption('Mascota')
@@ -251,6 +376,7 @@ async function verifySearch(page, size) {
   await savedCard.waitFor()
   await savedCard.getByRole('button', { name: 'Quitar de guardados', exact: true }).click()
   await savedCard.waitFor({ state: 'detached' })
+  await page.getByRole('button', { name: 'Cerrar aviso', exact: true }).click()
   if (size === 'mobile') await page.getByRole('button', { name: 'Abrir menú' }).click()
   await page
     .getByRole('navigation')
@@ -264,6 +390,8 @@ async function verifySearch(page, size) {
   await page.getByRole('combobox', { name: 'Categoría', exact: true }).selectOption('Objeto')
   await page.getByRole('tab', { name: 'Perdidos', exact: true }).click()
   await zone.fill('san jose')
+  await dateFrom.fill('2026-10-10')
+  await dateTo.fill('2026-10-10')
   let failOnce = true
   await page.route('**/api/reports*', async (route) => {
     if (new URL(route.request().url()).searchParams.get('q') === 'camara' && failOnce) {
@@ -285,6 +413,8 @@ async function verifySearch(page, size) {
   assert.equal(await search.inputValue(), 'camara')
   assert.equal(await city.inputValue(), 'La Paz')
   assert.equal(await zone.inputValue(), 'san jose')
+  assert.equal(await dateFrom.inputValue(), '2026-10-10')
+  assert.equal(await dateTo.inputValue(), '2026-10-10')
   await page.evaluate(() =>
     Promise.all(
       document
@@ -593,12 +723,12 @@ try {
     ),
   )
   // Start a fresh page for each viewport so acceptance does not depend on previous controls.
-  for (const [size, viewport] of [
-    ['desktop', { width: 1440, height: 1000 }],
-    ['mobile', { width: 390, height: 844 }],
+  for (const [size, viewport, timezoneId] of [
+    ['desktop', { width: 1440, height: 1000 }, 'America/La_Paz'],
+    ['mobile', { width: 390, height: 844 }, 'Pacific/Kiritimati'],
   ]) {
     await page.close()
-    page = await browser.newPage({ viewport })
+    page = await browser.newPage({ viewport, timezoneId, locale: 'en-US' })
     page.on('pageerror', (error) => pageErrors.push(error.message))
     await page.goto(webUrl)
     if (size === 'mobile') await page.getByRole('button', { name: 'Abrir menú' }).click()

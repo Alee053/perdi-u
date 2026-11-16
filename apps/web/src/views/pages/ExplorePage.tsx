@@ -16,7 +16,14 @@ type ExplorePageProps = {
   selection: FilterSelection
   filters: Pick<
     FiltersPresenter,
-    'setSearch' | 'setCity' | 'setZone' | 'setCategory' | 'setStatus' | 'reset'
+    | 'setSearch'
+    | 'setCity'
+    | 'setZone'
+    | 'setCategory'
+    | 'setStatus'
+    | 'setDateFrom'
+    | 'setDateTo'
+    | 'reset'
   >
   onRetry: () => void
   onNavigate: (section: Section) => void
@@ -37,7 +44,7 @@ export function ExplorePage({
     <>
       <PageHeading
         title="Explorar reportes"
-        description="Busca por palabra, ciudad, zona o categoría."
+        description="Busca por palabra, ciudad, zona, categoría o fecha del hecho."
         action={
           <button className="primary-button" onClick={() => onNavigate('publish')}>
             Publicar reporte
@@ -57,7 +64,7 @@ export function ExplorePage({
           value={selection.status}
           onChange={filters.setStatus}
         />
-        {catalog.status === 'ready' && (
+        {catalog.status === 'ready' && !selection.dateError && (
           <span className="result-count">
             <b>{catalog.count}</b> resultados
           </span>
@@ -83,6 +90,7 @@ export function ExplorePage({
         </div>
       )}
       {catalog.status === 'ready' &&
+        !selection.dateError &&
         (catalog.count === 0 ? (
           <EmptyState
             title={catalog.empty.title}

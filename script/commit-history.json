@@ -1767,6 +1767,25 @@
     "conclusion": "success"
   },
   {
+    "sha": "43a7222561ff9a71d75a1d0844db52e5b5c9353a",
+    "author": "RocioChoque",
+    "commit": {
+      "date": "2026-11-13T14:22:56.000Z",
+      "message": "feat(catalog): filtrar reportes por fechas (#25)\n\nCo-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>",
+      "url": "https://github.com/Alee053/perdi-u/commit/43a7222561ff9a71d75a1d0844db52e5b5c9353a"
+    },
+    "stats": {
+      "total": 413,
+      "additions": 360,
+      "deletions": 53,
+      "date": "2026-11-13"
+    },
+    "coverage": 90.24,
+    "test_count": 159,
+    "failed_tests": 2,
+    "conclusion": "failure"
+  },
+  {
     "sha": "0fb1211538ae30f7c604b74d0059c311d32eb732",
     "author": "RocioChoque",
     "commit": {
@@ -1786,12 +1805,31 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "874bada6d8bb40660fae6facdcdcf3bb457a9ec5",
+    "author": "RocioChoque",
+    "commit": {
+      "date": "2026-11-14T15:13:40.000Z",
+      "message": "test(api): ajustar rango abierto a los fixtures (#25)",
+      "url": "https://github.com/Alee053/perdi-u/commit/874bada6d8bb40660fae6facdcdcf3bb457a9ec5"
+    },
+    "stats": {
+      "total": 11,
+      "additions": 10,
+      "deletions": 1,
+      "date": "2026-11-14"
+    },
+    "coverage": 90.24,
+    "test_count": 159,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "fe82067445473305c2b8a88a0bc6096cb560ad07",
     "author": "RocioChoque",
     "commit": {
       "date": "2026-11-14T15:27:03.000Z",
       "message": "test(web): esperar resultados al limpiar zona (#24)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/fe82067445473305c2b8a88a0bc6096cb560ad07"
     },
     "stats": {
       "total": 9,
@@ -1801,6 +1839,63 @@
     },
     "coverage": 89.21,
     "test_count": 158,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "5bb5a47a85d564140d2df8499b01880972e8a783",
+    "author": "RocioChoque",
+    "commit": {
+      "date": "2026-11-14T15:27:49.000Z",
+      "message": "test(api): cubrir semillas en rangos abiertos (#25)",
+      "url": "https://github.com/Alee053/perdi-u/commit/5bb5a47a85d564140d2df8499b01880972e8a783"
+    },
+    "stats": {
+      "total": 14,
+      "additions": 12,
+      "deletions": 2,
+      "date": "2026-11-14"
+    },
+    "coverage": 90.24,
+    "test_count": 159,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "e75fa2b676ffbee677f4243c5a0e49db90f58464",
+    "author": "RocioChoque",
+    "commit": {
+      "date": "2026-11-14T17:11:43.000Z",
+      "message": "test(web): corregir rangos de fechas en fixtures (#25)",
+      "url": "https://github.com/Alee053/perdi-u/commit/e75fa2b676ffbee677f4243c5a0e49db90f58464"
+    },
+    "stats": {
+      "total": 11,
+      "additions": 8,
+      "deletions": 3,
+      "date": "2026-11-14"
+    },
+    "coverage": 90.24,
+    "test_count": 159,
+    "failed_tests": 2,
+    "conclusion": "failure"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-16T02:44:22.000Z",
+      "message": "feat(catalog): integrar fechas del hecho con zona (#25)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 758,
+      "additions": 691,
+      "deletions": 67,
+      "date": "2026-11-16"
+    },
+    "coverage": 90.15,
+    "test_count": 164,
     "failed_tests": 0,
     "conclusion": "success"
   }
