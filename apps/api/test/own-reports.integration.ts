@@ -257,6 +257,18 @@ test('edición actualiza y persiste la categoría del reporte propio', async () 
   })
 })
 
+test('edición actualiza y persiste la fecha del reporte propio', async () => {
+  await fixture(async ({ request, owners, ids }) => {
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', {
+      incidentDate: '2026-11-01',
+    })
+    assert.equal(response.status, 200)
+    assert.equal((await response.json()).incidentDate, '2026-11-01')
+    const detail = await request(`/reports/${ids[0]}`, owners[0])
+    assert.equal((await detail.json()).incidentDate, '2026-11-01')
+  })
+})
+
 test('resolver HTTP verifica permisos, persiste tras reinicio y repetir no vuelve a escribir el cierre', async () => {
   await fixture(async ({ request, pool, owners, ids, restart }) => {
     const path = `/reports/${ids[0]}/resolve`

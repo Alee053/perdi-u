@@ -2854,9 +2854,23 @@
     "testId": 74
   },
   {
-    "commitId": "HEAD",
+    "commitId": "c1529368b10949f9ec94a3288afd4f6c226858cb",
     "commitName": "feat(catalog): permitir editar categoría de reporte (#27)",
     "commitTimestamp": 1794924463610,
     "testId": 74
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794924566602,
+    "success": true,
+    "testId": 75
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(catalog): permitir editar fecha del reporte (#27)",
+    "commitTimestamp": 1794924579515,
+    "testId": 75
   }
 ]

@@ -7,6 +7,12 @@ import type {
 import type { OwnReportsRepository, ResolveReportResult } from './model.js'
 import { compareReports, toPublicReport } from './catalog.js'
 
+const isDate = (value: unknown): value is string => {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false
+  const date = new Date(`${value}T00:00:00Z`)
+  return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value
+}
+
 export class ReportEditValidationError extends Error {
   constructor(readonly errors: Partial<Record<keyof EditReportInput, ReportValidationIssue>> = {}) {
     super('Los datos del reporte no son válidos.')
@@ -33,7 +39,8 @@ export class EditReport {
           field !== 'city' &&
           field !== 'zone' &&
           field !== 'type' &&
-          field !== 'category',
+          field !== 'category' &&
+          field !== 'incidentDate',
       )
     )
       throw new ReportEditValidationError()
@@ -47,6 +54,8 @@ export class EditReport {
       patch.category !== 'document'
     )
       throw new ReportEditValidationError({ category: 'invalid' })
+    if ('incidentDate' in patch && !isDate(patch.incidentDate))
+      throw new ReportEditValidationError({ incidentDate: 'invalid' })
     if ('title' in patch) {
       if (typeof patch.title !== 'string' || !patch.title.trim())
         throw new ReportEditValidationError({ title: 'required' })

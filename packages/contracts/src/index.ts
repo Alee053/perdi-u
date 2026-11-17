@@ -36,6 +36,7 @@ export interface CreateReportInput {
 export interface EditReportInput {
   type?: ReportType
   category?: ReportCategory
+  incidentDate?: string
   title?: string
   description?: string
   city?: string
