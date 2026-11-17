@@ -3,6 +3,22 @@ import { test } from '@jest/globals'
 import { ReportPhotoPresenter } from '../../src/presenters/reports/report-photo.presenter.js'
 import type { ReportPhotoResource } from '../../src/models/reports/photo.js'
 
+test('una imagen rota se anuncia como no disponible y cambiar de foto permite recuperarse', async () => {
+  const released: string[] = []
+  const presenter = new ReportPhotoPresenter({
+    load: async () => ({ source: 'blob:private', release: () => released.push('private') }),
+  })
+  await presenter.show('/api/media/missing', false)
+  presenter.imageFailed()
+  assert.deepEqual(presenter.getSnapshot(), { failed: true })
+  await presenter.show('/images/pet.svg', false)
+  assert.deepEqual(presenter.getSnapshot(), { source: '/images/pet.svg', failed: false })
+  await presenter.show('/api/media/private', true)
+  presenter.imageFailed()
+  assert.deepEqual(presenter.getSnapshot(), { failed: true })
+  assert.deepEqual(released, ['private'], 'también libera una foto privada que no se pudo mostrar')
+})
+
 test('la foto privada libera recursos al cambiar o salir y descarta una respuesta anterior', async () => {
   let complete!: (value: ReportPhotoResource) => void
   let signal: AbortSignal | undefined

@@ -25,7 +25,8 @@ async function command(root, executable, args) {
     const result = await exec(executable, args, {
       cwd: root,
       env: fixtureEnv,
-      timeout: 30000,
+      // Windows starts Git hooks and npm shims for each fixture command.
+      timeout: process.platform === 'win32' ? 60000 : 30000,
       shell,
     })
     return { code: 0, ...result }
@@ -84,75 +85,83 @@ async function fixture() {
 
 const json = async (root, name) => JSON.parse(await readFile(join(root, 'script', name), 'utf8'))
 
-test('TDDLab registra rojo y verde y vincula dos commits con sus pruebas y cobertura', async () => {
-  const root = await fixture()
-  try {
-    for (const args of [
-      ['init', '--initial-branch=main'],
-      ['config', 'user.name', 'Prueba local'],
-      ['config', 'user.email', 'test@example.invalid'],
-      ['config', 'commit.gpgsign', 'false'],
-      ['remote', 'add', 'origin', 'https://example.invalid/perdi-u.git'],
-      ['add', '.'],
-      ['-c', 'core.hooksPath=/dev/null', 'commit', '-m', 'chore: preparar fixture'],
-    ])
-      assert.equal((await command(root, 'git', args)).code, 0)
-    assert.equal((await command(root, 'pnpm', ['exec', 'husky'])).code, 0)
+test(
+  'TDDLab registra rojo y verde y vincula dos commits con sus pruebas y cobertura',
+  async () => {
+    const root = await fixture()
+    try {
+      for (const args of [
+        ['init', '--initial-branch=main'],
+        ['config', 'user.name', 'Prueba local'],
+        ['config', 'user.email', 'test@example.invalid'],
+        ['config', 'commit.gpgsign', 'false'],
+        ['remote', 'add', 'origin', 'https://example.invalid/perdi-u.git'],
+        ['add', '.'],
+        ['-c', 'core.hooksPath=/dev/null', 'commit', '-m', 'chore: preparar fixture'],
+      ])
+        assert.equal((await command(root, 'git', args)).code, 0)
+      assert.equal((await command(root, 'pnpm', ['exec', 'husky'])).code, 0)
 
-    assert.equal((await command(root, 'pnpm', ['test'])).code, 1)
-    await writeFile(join(root, 'answer.js'), 'export const answer = () => 42\n')
-    assert.equal((await command(root, 'pnpm', ['test'])).code, 0)
-    const runs = await json(root, 'tdd_log.json')
-    assert.deepEqual(
-      runs.map(({ success, failedTests, testId }) => ({ success, failedTests, testId })),
-      [
-        { success: false, failedTests: 1, testId: 0 },
-        { success: true, failedTests: 0, testId: 0 },
-      ],
-    )
+      assert.equal((await command(root, 'pnpm', ['test'])).code, 1)
+      await writeFile(join(root, 'answer.js'), 'export const answer = () => 42\n')
+      assert.equal((await command(root, 'pnpm', ['test'])).code, 0)
+      const runs = await json(root, 'tdd_log.json')
+      assert.deepEqual(
+        runs.map(({ success, failedTests, testId }) => ({ success, failedTests, testId })),
+        [
+          { success: false, failedTests: 1, testId: 0 },
+          { success: true, failedTests: 0, testId: 0 },
+        ],
+      )
 
-    await command(root, 'git', ['add', 'answer.js'])
-    const first = await command(root, 'git', ['commit', '-m', 'fix: responder correctamente'])
-    assert.equal(first.code, 0, first.stderr)
-    const firstSha = (await command(root, 'git', ['rev-parse', 'HEAD'])).stdout.trim()
-    assert.equal((await command(root, 'git', ['status', '--porcelain'])).stdout.trim(), '')
-    assert.equal((await json(root, 'tdd_log.json')).at(-1).commitId, 'HEAD')
-    const firstHistory = (await json(root, 'commit-history.json')).at(-1)
-    assert.equal(firstHistory.sha, 'HEAD')
-    assert.equal(firstHistory.test_count, 1)
-    assert.equal(firstHistory.failed_tests, 0)
-    assert.equal(firstHistory.conclusion, 'success')
-    assert.ok(firstHistory.coverage > 0)
+      await command(root, 'git', ['add', 'answer.js'])
+      const first = await command(root, 'git', ['commit', '-m', 'fix: responder correctamente'])
+      assert.equal(first.code, 0, first.stderr)
+      const firstSha = (await command(root, 'git', ['rev-parse', 'HEAD'])).stdout.trim()
+      assert.equal((await command(root, 'git', ['status', '--porcelain'])).stdout.trim(), '')
+      assert.equal((await json(root, 'tdd_log.json')).at(-1).commitId, 'HEAD')
+      const firstHistory = (await json(root, 'commit-history.json')).at(-1)
+      assert.equal(firstHistory.sha, 'HEAD')
+      assert.equal(firstHistory.test_count, 1)
+      assert.equal(firstHistory.failed_tests, 0)
+      assert.equal(firstHistory.conclusion, 'success')
+      assert.ok(firstHistory.coverage > 0)
 
-    assert.equal((await command(root, 'pnpm', ['test'])).code, 0)
-    assert.equal((await json(root, 'tdd_log.json')).at(-1).testId, 1)
-    await writeFile(join(root, 'README.md'), '# Fixture local\n')
-    await command(root, 'git', ['add', 'README.md'])
-    const second = await command(root, 'git', ['commit', '-m', 'docs: describir fixture'])
-    assert.equal(second.code, 0, second.stderr)
-    const history = await json(root, 'commit-history.json')
-    assert.equal(history[0].sha, firstSha)
-    assert.equal(history[1].sha, 'HEAD')
-    const commits = (await json(root, 'tdd_log.json')).filter((entry) => 'commitId' in entry)
-    assert.equal(commits[0].commitId, firstSha)
-    assert.equal(commits[1].commitId, 'HEAD')
-    assert.equal((await command(root, 'git', ['status', '--porcelain'])).stdout.trim(), '')
-  } finally {
-    await removeFixture(root)
-  }
-}, 60000)
+      assert.equal((await command(root, 'pnpm', ['test'])).code, 0)
+      assert.equal((await json(root, 'tdd_log.json')).at(-1).testId, 1)
+      await writeFile(join(root, 'README.md'), '# Fixture local\n')
+      await command(root, 'git', ['add', 'README.md'])
+      const second = await command(root, 'git', ['commit', '-m', 'docs: describir fixture'])
+      assert.equal(second.code, 0, second.stderr)
+      const history = await json(root, 'commit-history.json')
+      assert.equal(history[0].sha, firstSha)
+      assert.equal(history[1].sha, 'HEAD')
+      const commits = (await json(root, 'tdd_log.json')).filter((entry) => 'commitId' in entry)
+      assert.equal(commits[0].commitId, firstSha)
+      assert.equal(commits[1].commitId, 'HEAD')
+      assert.equal((await command(root, 'git', ['status', '--porcelain'])).stdout.trim(), '')
+    } finally {
+      await removeFixture(root)
+    }
+  },
+  process.platform === 'win32' ? 180000 : 60000,
+)
 
-test('el comando TDD rechaza una ejecución sin pruebas aunque exista un reporte verde anterior', async () => {
-  const root = await fixture()
-  try {
-    await rm(join(root, 'probe.test.js'))
-    await writeFile(
-      join(root, 'script/report.json'),
-      JSON.stringify({ success: true, numTotalTests: 1 }),
-    )
-    assert.equal((await command(root, 'pnpm', ['test'])).code, 1)
-    await assert.rejects(readFile(join(root, 'script/report.json')), { code: 'ENOENT' })
-  } finally {
-    await removeFixture(root)
-  }
-}, 30000)
+test(
+  'el comando TDD rechaza una ejecución sin pruebas aunque exista un reporte verde anterior',
+  async () => {
+    const root = await fixture()
+    try {
+      await rm(join(root, 'probe.test.js'))
+      await writeFile(
+        join(root, 'script/report.json'),
+        JSON.stringify({ success: true, numTotalTests: 1 }),
+      )
+      assert.equal((await command(root, 'pnpm', ['test'])).code, 1)
+      await assert.rejects(readFile(join(root, 'script/report.json')), { code: 'ENOENT' })
+    } finally {
+      await removeFixture(root)
+    }
+  },
+  process.platform === 'win32' ? 90000 : 30000,
+)

@@ -6,7 +6,7 @@ import type { NoticePresenter } from '../app/notice.presenter.js'
 import { toReportFilters, type FilterSelection } from '../catalog/filters.presenter.js'
 import type { Effects } from '../effects.js'
 import { Store } from '../store.js'
-import { toReportCard, type ReportDetailView } from './report-card.js'
+import { toReportCard, toReportGallery, type ReportDetailView } from './report-card.js'
 
 export interface ReportsState {
   /** Demo reports, including the ones published in this session. */
@@ -15,6 +15,7 @@ export interface ReportsState {
   /** Saved catalog reports, kept so they stay visible after the search changes. */
   savedCatalog: CatalogReport[]
   selected: Report | null
+  selectedPhoto: number
 }
 
 export interface MapPin {
@@ -46,7 +47,7 @@ export class ReportsPresenter extends Store<ReportsState> {
     private readonly dependencies: Dependencies,
     saved: string[] = [],
   ) {
-    super({ reports, saved, savedCatalog: [], selected: null })
+    super({ reports, saved, savedCatalog: [], selected: null, selectedPhoto: 0 })
   }
 
   private update(patch: Partial<ReportsState>) {
@@ -83,10 +84,24 @@ export class ReportsPresenter extends Store<ReportsState> {
   /** Demo reports keep the local detail; catalog reports open through their stable link. */
   open = (id: string) => {
     const report = this.find(id)
-    if (report?.source === 'demo') this.update({ selected: report })
+    if (report?.source === 'demo') this.update({ selected: report, selectedPhoto: 0 })
     else this.dependencies.links.open(id)
   }
   close = () => this.update({ selected: null })
+
+  selectPhoto = (index: number) => {
+    const { selected } = this.state
+    if (!selected || !Number.isInteger(index) || !toReportCard(selected).images[index]) return
+    this.update({ selectedPhoto: index })
+  }
+
+  nextPhoto = () => this.movePhoto(1)
+  previousPhoto = () => this.movePhoto(-1)
+  private movePhoto(step: number) {
+    if (!this.state.selected) return
+    const count = toReportCard(this.state.selected).images.length
+    this.selectPhoto((this.state.selectedPhoto + count + step) % count)
+  }
 
   markResolved = (id: string) =>
     this.update({
@@ -125,8 +140,10 @@ export class ReportsPresenter extends Store<ReportsState> {
     const report = selected && (this.find(selected.id) ?? selected)
     if (!report) return null
     const canResolve = false
+    const card = toReportCard(report)
     return {
-      card: toReportCard(report),
+      card,
+      gallery: toReportGallery(card, this.state.selectedPhoto),
       saved: this.isSaved(report.id),
       canContact: !canResolve && report.source === 'demo',
       canResolve,

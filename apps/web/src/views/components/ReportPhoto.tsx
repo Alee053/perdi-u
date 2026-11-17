@@ -14,12 +14,19 @@ export function ReportPhoto({
   loading?: 'eager' | 'lazy'
 }) {
   const photo = useReportPhoto(src, privatePhoto)
+  if (photo.failed)
+    return (
+      <span className={className} role="img" aria-label="Foto no disponible">
+        Foto no disponible
+      </span>
+    )
   return (
     <img
       src={photo.source}
-      alt={photo.failed ? 'Foto no disponible' : alt}
+      alt={alt}
       className={className}
       loading={loading}
+      onError={photo.onError}
     />
   )
 }

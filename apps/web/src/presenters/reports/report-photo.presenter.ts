@@ -22,6 +22,11 @@ export class ReportPhotoPresenter extends Store<{ source?: string; failed: boole
       if (generation === this.generation) this.setState({ failed: true })
     }
   }
+  /** The bytes arrived, but the browser could not decode or display the image. */
+  imageFailed = () => {
+    this.stop()
+    this.setState({ failed: true })
+  }
   stop = () => {
     this.generation++
     this.controller?.abort()

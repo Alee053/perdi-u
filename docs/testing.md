@@ -37,6 +37,8 @@ Los tests de caracterización de comportamiento existente pueden pasar desde el 
 
 Para S1-08, las unitarias de `catalog` y `apps/web` prueban historial, identidad, filtros y confirmación con cancelación/error/reintento. `apps/api/test/own-reports.integration.ts` verifica `GET /me/reports` y `PATCH /reports/:id/resolve` con tokens firmados, PostgreSQL real, nombres iguales, permisos, fallos de BD, reinicio e idempotencia por fila/`xmin`. `pnpm test:auth --with-browser` integra GoTrue/Mailpit con publicación, búsqueda, detalle/contacto y cierre en móvil/escritorio; solo intercepta el destino de WhatsApp y los errores HTTP deliberados. La evidencia de ciclos está en [S1-08](validation/s1-08.md).
 
+Para el detalle ampliado de S2-03, `test/presenters/report-detail.test.ts` de la web comprueba selección, anterior/siguiente, reinicio y conservación de la foto durante una solicitud de contacto; `test/presenters/report-photo.test.ts` cubre imágenes rotas, recuperación y liberación de recursos privados. `scripts/browser-report-gallery.mjs`, invocado por `pnpm test:e2e`, reutiliza la respuesta del detalle real y sustituye fotos y datos descriptivos por fixtures públicos; verifica párrafos, etiquetas, fechas en dos zonas horarias, teclado, Escape, recuperación de foco, una foto que devuelve 404 y móvil/escritorio. Las capturas `report-gallery-*.png` y `report-detail-*.png` quedan en `test-results/`. Ese doble de imágenes no demuestra una integración real con R2.
+
 ## Comandos
 
 Usar la versión de [`.node-version`](../.node-version) y pnpm de [`packageManager`](../package.json). Desde un clone limpio, instalar con `pnpm install --frozen-lockfile`. Los imports entre workspaces resuelven `dist`: el build de dependencias debe preceder a una prueba focalizada. `pnpm test` y `pnpm test:unit` preparan ese build. `.npmrc` habilita los módulos ESM de Jest tanto para pnpm como para el `npx jest` del hook original; conservar pnpm 10.29.2 y Node 24.
@@ -89,6 +91,8 @@ El hook `post-commit` registra el commit, ejecuta Jest con cobertura, añade amb
 Las métricas del commit se calculan sobre el árbol de trabajo. Preparar commits coherentes desde un estado limpio; no dejar implementación ajena sin stage que pueda alterar el resultado medido. El hook original no bloquea commits rojos: revisar siempre el resultado de las pruebas. La validación semántica de mensajes es opcional (`pnpm semantic-commits-on`); respeta el conjunto de tipos y scopes admitidos por `semantic-commits.js`.
 
 `pnpm test:unit`, `pnpm test:repo`, los scripts `test` de cada workspace y las integraciones no añaden entradas al log local. Se usan en CI y comprobaciones auxiliares. No presentar esas ejecuciones como ciclos registrados. `scripts/test/tdd-command.test.mjs` verifica en repositorios temporales el rojo/verde, códigos de salida, cobertura y vínculo de dos commits; sus ejemplos no se incorporan al historial de desarrollo real.
+
+En Windows, ese fixture admite 60 segundos por comando, 180 segundos para el recorrido con dos commits y 90 segundos para el rechazo de una ejecución sin pruebas. El arranque de los shims de npm y hooks de Git necesita ese margen en máquinas con carga; las comprobaciones y la instrumentación original se conservan. En otros sistemas mantiene sus límites anteriores.
 
 La migración importa el código anterior como línea base; no genera evidencia retroactiva. Sus verificaciones y procedencia se documentan en [la evidencia de migración](validation/tddlab-migration.md).
 
