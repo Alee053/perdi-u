@@ -2742,9 +2742,23 @@
     "testId": 66
   },
   {
-    "commitId": "HEAD",
+    "commitId": "bf5fedb896a07788e173f2dee03afae51bc13f50",
     "commitName": "feat(api): rechazar PATCH vacío de reporte (#27)",
     "commitTimestamp": 1794923602244,
     "testId": 66
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794923675222,
+    "success": true,
+    "testId": 67
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(catalog): rechazar campos ajenos al editar (#27)",
+    "commitTimestamp": 1794923705864,
+    "testId": 67
   }
 ]

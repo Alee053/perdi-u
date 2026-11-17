@@ -161,6 +161,21 @@ test('edición rechaza el cuerpo vacío sin modificar el reporte', async () => {
   })
 })
 
+test('edición rechaza campos ajenos al contrato sin modificar el reporte', async () => {
+  await fixture(async ({ request, pool, owners, ids }) => {
+    const before = (await pool.query('SELECT title FROM reports WHERE id = $1', [ids[0]])).rows[0]
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', {
+      title: 'Título que no debe guardarse',
+      ownerId: owners[1],
+    })
+    assert.equal(response.status, 400)
+    assert.equal(
+      (await pool.query('SELECT title FROM reports WHERE id = $1', [ids[0]])).rows[0].title,
+      before.title,
+    )
+  })
+})
+
 test('resolver HTTP verifica permisos, persiste tras reinicio y repetir no vuelve a escribir el cierre', async () => {
   await fixture(async ({ request, pool, owners, ids, restart }) => {
     const path = `/reports/${ids[0]}/resolve`

@@ -21,7 +21,10 @@ export class EditReport {
     ownerId: string,
     input: EditReportInput,
   ): Promise<ReportSummary | 'forbidden' | 'not_found' | 'resolved'> {
-    if (!input || typeof input !== 'object' || Array.isArray(input) || !Object.keys(input).length)
+    if (!input || typeof input !== 'object' || Array.isArray(input))
+      throw new ReportEditValidationError()
+    const fields = Object.keys(input)
+    if (!fields.length || fields.some((field) => field !== 'title'))
       throw new ReportEditValidationError()
     const result = await this.repository.editOwned(id, ownerId, input)
     return typeof result === 'string' ? result : toPublicReport(result.report)
