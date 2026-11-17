@@ -123,13 +123,13 @@ La View nunca filtra ni formatea; el Model nunca sabe qué texto se mostrará.
 3. **Model** — `models/reports/publication.ts` define las reglas y los puertos `ReportPublisher` y `ReportMediaClient`; los adapters HTTP envían formulario y archivos con el token de sesión.
 4. **API y persistencia** — `POST /media` comprueba las firmas de archivo y entrega el contenido al caso de uso. `POST /reports` valida los IDs del dueño y asocia todas las fotos en la transacción del reporte. El API responde solo con URLs de medios ya asociados; `/media/:id` sirve bytes desde el bucket privado.
 
-### 7.1 Historial propio y cierre
+### 7.1 Historial propio, edición y cierre
 
-`OwnReportsPresenter` sigue la cuenta verificada por `AuthPresenter` y usa `OwnReportsRepository` (`own-reports-client.ts`) para leer el historial completo. `selectOwnReports` compara `author.id` con esa cuenta y filtra estado; ni `demoOwner` ni el nombre visible conceden permisos. La View recibe tarjetas, conteos y mensajes ya preparados, con título, tipo y estado separados.
+`OwnReportsPresenter` sigue la cuenta verificada por `AuthPresenter` y usa `OwnReportsRepository` (`own-reports-client.ts`) para leer el historial completo. `selectOwnReports` compara `author.id` con esa cuenta y filtra estado; ni `demoOwner` ni el nombre visible conceden permisos. La View recibe tarjetas, conteos y mensajes ya preparados, con título, tipo y estado separados. El borrador y los errores de edición viven en este presenter; se puede abrir desde la fila propia o desde el detalle de un reporte propio activo.
 
 `requestResolve` abre la confirmación sin escribir. `confirmResolve` bloquea duplicados, espera el `204` y conserva estado/diálogo con un error seguro si falla. Al cambiar de cuenta se abortan solicitudes y se descartan tanto éxitos como fallos tardíos. Un `401` oculta datos privados y solicita ingresar nuevamente.
 
-Tras el éxito, `app/dependencies.ts` sincroniza historial, detalle y guardados, invalida consultas anteriores del catálogo y refresca la misma búsqueda. `ReportDetailPresenter` ofrece resolver solo al autor de un activo que ya está en su historial; el SQL vuelve a comprobar propiedad/estado. `ResolveConfirmation` usa un diálogo nativo para foco y teclado. No existen controles de eliminación demo. Resumen y mapa siguen siendo ilustrativos.
+`requestEdit` prepara el borrador sin escribir; `saveEdit` bloquea envíos duplicados, envía solo el contrato parcial y conserva borrador y errores del servidor para corregirlos. Al cancelar descarta el borrador. `ReportDetailPresenter` ofrece editar y resolver únicamente al autor de un reporte activo que también figura en su historial privado; la API y el SQL vuelven a comprobar identidad y estado. Tras una edición confirmada, `app/dependencies.ts` refresca historial, catálogo y detalle conservando los filtros. Tras el cierre confirmado, también sincroniza guardados. `ResolveConfirmation` y `EditReportDialog` usan diálogos nativos para foco y teclado. No existen controles de eliminación demo. Resumen y mapa siguen siendo ilustrativos.
 
 ## 8. Papel de React y Vite
 

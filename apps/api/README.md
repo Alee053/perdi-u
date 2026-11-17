@@ -20,13 +20,15 @@ Las fotos asociadas siguen la visibilidad del reporte. `GET /media/:id` acepta v
 
 `GET /reports/:id/contact` exige sesión (`AuthGuard`) y aplica la misma regla de acceso antes de leer `report_contacts`. Devuelve `ReportContact`: `{ "available": true, "whatsapp": "59170000001" }` o `{ "available": false }` si no hay teléfono o no es válido. `@perdiu/catalog` quita espacios, guiones y paréntesis y acepta el formato internacional que guarda la publicación (`+` y 8 a 15 dígitos, de cualquier país) o, en datos locales anteriores, un celular boliviano (8 dígitos que empiezan con 6 o 7, con o sin `591`); devuelve solo dígitos, así que ningún valor almacenado cambia el destino de `wa.me`. Responde `404` si el reporte no es accesible, `503` si falla la consulta y `no-store`. El teléfono no aparece en el detalle público ni en el catálogo.
 
-## Historial propio y cierre
+## Historial propio, edición y cierre
 
 `GET /me/reports` exige `AuthGuard` y devuelve un array de `ReportSummary` solo del sujeto verificado. Incluye activos y resueltos, ordenados por creación descendente e ID ascendente, sin el límite público de 50. Acepta únicamente el filtro opcional `state=active|resolved`; parámetros desconocidos, un estado inválido o valores repetidos responden `400`. Sin publicaciones responde `200 []`. No consulta contacto ni almacenamiento privado y usa `Cache-Control: no-store`.
 
+`PATCH /reports/:id` permite al autor de un reporte activo actualizar parcialmente `type`, `category`, `title`, `description`, `city`, `zone`, `incidentDate` y, al elegir la categoría mascota, `petSpecies`. Rechaza cuerpos vacíos o campos ajenos al contrato; valida enumeraciones, fecha calendario y longitudes, y responde `400` con `fieldErrors` por campo. Devuelve el `ReportSummary` público actualizado. La identidad proviene del token, nunca del cuerpo; un `401` indica sesión inválida, `403` reporte ajeno, `404` reporte inexistente, `409` reporte propio ya resuelto y `400` ID no UUID. La respuesta usa `Cache-Control: no-store`. El `UPDATE` limita la escritura por ID, propietario y estado activo; no altera identidad, estado, fecha de creación, contacto ni fotos. Cambiar la categoría a objeto o documento limpia la especie. No requiere migraciones.
+
 `PATCH /reports/:id/resolve` exige sesión y no toma identidad, tipo ni estado del cuerpo. Devuelve `204` sin cuerpo cuando el autor cierra su reporte o repite un cierre ya aplicado, `401` sin sesión válida, `403` para un reporte ajeno, `404` si no existe y `400` para un ID no UUID. El SQL incluye propietario y estado activo en el `UPDATE`: solo cambia `state`, conserva `type` y las repeticiones concurrentes no producen otra escritura. No requiere migraciones ni añade fechas de cierre artificiales.
 
-Ambas rutas responden `503` con mensajes seguros ante un fallo de persistencia. Un cierre fallido conserva el estado anterior. Los resueltos desaparecen del catálogo y búsquedas, y su detalle sigue accesible solo a su autor. Editar/eliminar, reabrir y expiración permanecen fuera de alcance.
+Las tres rutas responden `503` con mensajes seguros ante un fallo de persistencia. Una edición o cierre fallido conserva el estado anterior. Los resueltos desaparecen del catálogo y búsquedas, y su detalle sigue accesible solo a su autor. Eliminar, reabrir y expiración permanecen fuera de alcance.
 
 ## Cuenta autenticada
 

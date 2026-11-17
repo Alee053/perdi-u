@@ -20,7 +20,7 @@ Navegador ──/auth──▶ Vite proxy ──▶ GoTrue :9999 ──▶ Postg
 
 La identidad es siempre el `sub` verificado: un nombre visible o un ID enviado por el cliente nunca concede propiedad. `Publicar reporte`, `Mis reportes` y `Mi perfil` requieren sesión en la web; el catálogo, el mapa, los guardados del dispositivo y la seguridad siguen siendo públicos.
 
-`GET /me/reports` y `PATCH /reports/:id/resolve` usan el mismo guard con revocación por sesión. El historial privado sigue la identidad de `GET /me`; al cambiar de cuenta se borran sus datos y se descartan respuestas tardías. Un `401` de estas rutas vuelve a pedir ingreso. Los permisos y respuestas se describen en [la API](../apps/api/README.md#historial-propio-y-cierre).
+`GET /me/reports`, `PATCH /reports/:id` y `PATCH /reports/:id/resolve` usan el mismo guard con revocación por sesión. La edición y el historial privado siguen la identidad verificada de `GET /me`; al cambiar de cuenta se borran sus datos y se descartan respuestas tardías. Un `401` de estas rutas vuelve a pedir ingreso. Los permisos y respuestas se describen en [la API](../apps/api/README.md#historial-propio-edicion-y-cierre).
 
 ## Datos y permisos en PostgreSQL
 

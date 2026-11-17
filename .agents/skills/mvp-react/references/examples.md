@@ -42,4 +42,4 @@ Rutas relativas a `apps/web/src`.
 4. Composición: después del `204`, actualiza detalle y guardados, retira el caso del catálogo y refresca la misma búsqueda. `ReportDetailPresenter` ofrece cerrar únicamente al autor cuando su historial está cargado.
 5. View: `MyReportsPage` y `ResolveConfirmation` muestran estado y delegan eventos; el diálogo nativo conserva foco/teclado. Las pruebas están en `test/presenters/own-reports.test.ts`; el recorrido con Auth real en `scripts/browser-own-reports.mjs`.
 
-Resolver conserva `type = lost | found`; cambia solo `state`. La identidad se valida también en la API y en la escritura SQL. Editar/eliminar y reabrir no pertenecen a esta historia.
+Resolver conserva `type = lost | found`; cambia solo `state`. La identidad se valida también en la API y en la escritura SQL. En S1-08, editar/eliminar y reabrir quedaron fuera de esa historia.
