@@ -204,6 +204,17 @@ test('edición marca título mayor a 200 caracteres como error de campo y no lo 
   })
 })
 
+test('edición actualiza y persiste la descripción sin volver a publicar', async () => {
+  await fixture(async ({ request, owners, ids }) => {
+    const description = 'La mochila tiene una cinta roja y se encontró cerca del mercado.'
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', { description })
+    assert.equal(response.status, 200)
+    assert.equal((await response.json()).description, description)
+    const detail = await request(`/reports/${ids[0]}`, owners[0])
+    assert.equal((await detail.json()).description, description)
+  })
+})
+
 test('resolver HTTP verifica permisos, persiste tras reinicio y repetir no vuelve a escribir el cierre', async () => {
   await fixture(async ({ request, pool, owners, ids, restart }) => {
     const path = `/reports/${ids[0]}/resolve`

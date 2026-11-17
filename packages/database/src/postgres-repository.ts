@@ -48,12 +48,12 @@ export class PostgresReportRepository
   async editOwned(id: string, ownerId: string, input: EditReportInput): Promise<EditReportResult> {
     const updated = await this.pool.query<ReportRecord>(
       `WITH updated AS (
-         UPDATE reports SET title = $3
+         UPDATE reports SET title = COALESCE($3, title), description = COALESCE($4, description)
          WHERE id = $1 AND owner_id = $2 AND state = 'active'
          RETURNING id, owner_id, type, state, category, pet_species, title, description, city, zone, incident_date, created_at
        )
        SELECT ${reportColumns} FROM updated r JOIN profiles p ON p.id = r.owner_id`,
-      [id, ownerId, input.title],
+      [id, ownerId, input.title ?? null, input.description ?? null],
     )
     if (updated.rowCount) return { kind: 'updated', report: updated.rows[0]! }
     const existing = await this.pool.query<{ ownerId: string }>(
