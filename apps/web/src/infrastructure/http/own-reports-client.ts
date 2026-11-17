@@ -1,3 +1,4 @@
+import type { EditReportInput } from '@perdiu/contracts'
 import { SessionRejected } from '../../models/auth/session.js'
 import {
   OwnReportsFailure,
@@ -10,7 +11,7 @@ export function createOwnReportsClient(
   accessToken: () => Promise<string | undefined>,
   fetcher: typeof fetch = fetch,
 ): OwnReportsRepository {
-  async function request(path: string, signal: AbortSignal, method = 'GET') {
+  async function request(path: string, signal: AbortSignal, method = 'GET', body?: unknown) {
     const token = await accessToken()
     if (!token) throw new SessionRejected()
     const response = await fetcher(`${baseUrl.replace(/\/$/, '')}${path}`, {
@@ -18,7 +19,12 @@ export function createOwnReportsClient(
       signal,
       credentials: 'omit',
       cache: 'no-store',
-      headers: { Accept: 'application/json', Authorization: `Bearer ${token}` },
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+        ...(body !== undefined && { 'Content-Type': 'application/json' }),
+      },
+      ...(body !== undefined && { body: JSON.stringify(body) }),
     })
     if (response.status === 401) throw new SessionRejected()
     if (response.status === 403) throw new OwnReportsFailure('forbidden')
@@ -35,6 +41,10 @@ export function createOwnReportsClient(
     async resolve(id, signal) {
       const response = await request(`/reports/${encodeURIComponent(id)}/resolve`, signal, 'PATCH')
       if (response.status !== 204) throw new OwnReportsFailure('unavailable')
+    },
+    async edit(id, patch: EditReportInput, signal) {
+      const response = await request(`/reports/${encodeURIComponent(id)}`, signal, 'PATCH', patch)
+      return readReport(await response.json(), ['active', 'resolved'])
     },
   }
 }

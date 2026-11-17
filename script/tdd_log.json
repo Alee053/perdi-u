@@ -2896,9 +2896,23 @@
     "testId": 77
   },
   {
-    "commitId": "HEAD",
+    "commitId": "736cf2c2ce9d96226a05e301c39511fc67c4c39d",
     "commitName": "feat(catalog): editar especie de mascota en reporte (#27)",
     "commitTimestamp": 1794924767387,
     "testId": 77
+  },
+  {
+    "numPassedTests": 168,
+    "failedTests": 0,
+    "numTotalTests": 168,
+    "timestamp": 1794924921348,
+    "success": true,
+    "testId": 78
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): enviar cambios de reportes propios",
+    "commitTimestamp": 1794924934793,
+    "testId": 78
   }
 ]

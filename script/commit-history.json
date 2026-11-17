@@ -2204,12 +2204,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "736cf2c2ce9d96226a05e301c39511fc67c4c39d",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-11-17T14:12:47.000Z",
       "message": "feat(catalog): editar especie de mascota en reporte (#27)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/736cf2c2ce9d96226a05e301c39511fc67c4c39d"
     },
     "stats": {
       "total": 31,
@@ -2219,6 +2219,25 @@
     },
     "coverage": 85.98,
     "test_count": 167,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:15:34.000Z",
+      "message": "feat(web): enviar cambios de reportes propios",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 49,
+      "additions": 45,
+      "deletions": 4,
+      "date": "2026-11-17"
+    },
+    "coverage": 86,
+    "test_count": 168,
     "failed_tests": 0,
     "conclusion": "success"
   }

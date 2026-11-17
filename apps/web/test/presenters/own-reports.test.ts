@@ -28,7 +28,12 @@ function setup(repository: Partial<OwnReportsRepository> = {}) {
   let rejected = 0
   let cleared = 0
   const presenter = new OwnReportsPresenter(
-    { list: async () => [], resolve: async () => {}, ...repository },
+    {
+      list: async () => [],
+      resolve: async () => {},
+      edit: async () => report('edited'),
+      ...repository,
+    },
     {
       notices: { show: (message) => notices.push(message) },
       onResolved: (item) => resolved.push(item.id),

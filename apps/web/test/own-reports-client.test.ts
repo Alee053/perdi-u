@@ -99,3 +99,28 @@ test('el cliente distingue sesión rechazada y permisos, y rechaza DTOs o confir
   )
   await assert.rejects(unconfirmed.resolve('own-1', signal), OwnReportsFailure)
 })
+
+test('el cliente envía un PATCH autenticado y devuelve el reporte actualizado', async () => {
+  const calls: { url: string; init?: RequestInit }[] = []
+  const updated = { ...summary, state: 'active', title: 'Mochila recuperada' }
+  const client = createOwnReportsClient(
+    '/api/',
+    async () => 'test-session',
+    async (url, init) => {
+      calls.push({ url: String(url), init })
+      return Response.json(updated)
+    },
+  )
+  const signal = new AbortController().signal
+  assert.deepEqual(
+    JSON.parse(JSON.stringify(await client.edit('own-1', { title: updated.title }, signal))),
+    updated,
+  )
+  assert.equal(calls[0]?.url, '/api/reports/own-1')
+  assert.equal(calls[0]?.init?.method, 'PATCH')
+  assert.equal(calls[0]?.init?.body, JSON.stringify({ title: updated.title }))
+  assert.equal(calls[0]?.init?.signal, signal)
+  assert.equal(calls[0]?.init?.cache, 'no-store')
+  assert.equal(calls[0]?.init?.credentials, 'omit')
+  assert.equal(new Headers(calls[0]?.init?.headers).get('authorization'), 'Bearer test-session')
+})
