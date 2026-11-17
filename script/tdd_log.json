@@ -3120,9 +3120,15 @@
     "testId": 89
   },
   {
-    "commitId": "HEAD",
+    "commitId": "584a88e5354abddca10712a7555d4120a8b02523",
     "commitName": "feat(web): copiar el enlace público del reporte (#28)",
     "commitTimestamp": 1794958699695,
     "testId": 89
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(web): verificar la copia pública en navegador (#28)",
+    "commitTimestamp": 1794958751005,
+    "testId": 90
   }
 ]
