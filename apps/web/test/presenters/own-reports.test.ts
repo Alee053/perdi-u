@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict'
 import { test } from '@jest/globals'
 import type { ReportSummary } from '@perdiu/contracts'
-import type { OwnReportsRepository } from '../../src/models/reports/own-reports-repository.js'
+import {
+  OwnReportsFailure,
+  type OwnReportsRepository,
+} from '../../src/models/reports/own-reports-repository.js'
 import { OwnReportsPresenter } from '../../src/presenters/reports/own-reports.presenter.js'
 import { SessionRejected } from '../../src/models/auth/session.js'
 import { Store } from '../../src/presenters/store.js'
@@ -129,6 +132,22 @@ test('guardar el borrador actualiza el historial y avisa a la composición', asy
   assert.equal(presenter.view().edit, null)
   assert.deepEqual(edited, ['Mochila azul'])
   assert.deepEqual(notices, ['Cambios guardados.'])
+})
+
+test('un rechazo de validación muestra el error junto al campo y conserva el borrador', async () => {
+  const { presenter } = setup({
+    list: async () => [report('active')],
+    edit: async () => {
+      throw new OwnReportsFailure('validation', { title: 'too_long' })
+    },
+  })
+  await presenter.setOwner('owner-1')
+  presenter.requestEdit('active')
+  presenter.setEditField('title', 'Título largo')
+  assert.equal(await presenter.submitEdit(), false)
+  assert.equal(presenter.view().edit?.errors.title, 'Usa como máximo 200 caracteres.')
+  assert.equal(presenter.view().edit?.draft.title, 'Título largo')
+  assert.equal(presenter.view().edit?.message, '')
 })
 
 test('resolver pide confirmación, cancelar no escribe y un fallo conserva el estado para reintentar sin duplicar', async () => {

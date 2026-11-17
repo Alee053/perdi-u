@@ -2960,9 +2960,23 @@
     "testId": 81
   },
   {
-    "commitId": "HEAD",
+    "commitId": "2783b49966e63874fff7811f13251eb8c8f06f52",
     "commitName": "feat(web): guardar cambios del reporte propio",
     "commitTimestamp": 1794926706948,
     "testId": 81
+  },
+  {
+    "numPassedTests": 172,
+    "failedTests": 0,
+    "numTotalTests": 172,
+    "timestamp": 1794926788319,
+    "success": true,
+    "testId": 82
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): traducir errores de edición por campo",
+    "commitTimestamp": 1794926803069,
+    "testId": 82
   }
 ]

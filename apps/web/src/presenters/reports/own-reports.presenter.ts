@@ -1,4 +1,9 @@
-import type { EditReportInput, ReportCategory, ReportType } from '@perdiu/contracts'
+import type {
+  EditReportInput,
+  ReportCategory,
+  ReportType,
+  ReportValidationIssue,
+} from '@perdiu/contracts'
 import type { OwnReport } from '../../models/reports/report.js'
 import {
   OwnReportsFailure,
@@ -57,6 +62,39 @@ const initialState = (): OwnReportsState => ({
   resolveError: null,
   edit: null,
 })
+
+const editIssueMessages: Record<keyof EditDraft, Partial<Record<ReportValidationIssue, string>>> = {
+  type: { invalid: 'Elige si el reporte es por una pérdida o un hallazgo.' },
+  category: { invalid: 'Elige una categoría válida.' },
+  title: {
+    required: 'Escribe un nombre para el reporte.',
+    too_long: 'Usa como máximo 200 caracteres.',
+  },
+  description: {
+    required: 'Describe lo que perdiste o encontraste.',
+    too_short: 'Usa al menos 20 caracteres para que puedan reconocerlo.',
+    too_long: 'Usa como máximo 5000 caracteres.',
+  },
+  city: { required: 'Indica una ciudad.', too_long: 'Usa como máximo 100 caracteres.' },
+  zone: { required: 'Indica la zona o el barrio.', too_long: 'Usa como máximo 200 caracteres.' },
+  incidentDate: { required: 'Indica una fecha válida.', invalid: 'Indica una fecha válida.' },
+  petSpecies: {
+    required: 'Indica la especie de la mascota.',
+    too_long: 'Usa como máximo 100 caracteres.',
+  },
+}
+
+function presentEditErrors(issues: OwnReportsFailure['fieldErrors']): EditForm['errors'] {
+  const errors: EditForm['errors'] = {}
+  for (const [field, issue] of Object.entries(issues) as [
+    keyof EditDraft,
+    ReportValidationIssue,
+  ][]) {
+    const message = editIssueMessages[field][issue]
+    if (message) errors[field] = message
+  }
+  return errors
+}
 
 export class OwnReportsPresenter extends Store<OwnReportsState> {
   private ownerId: string | null = null
@@ -198,13 +236,19 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
         this.rejectSession()
         return false
       }
+      const errors =
+        error instanceof OwnReportsFailure && error.reason === 'validation'
+          ? presentEditErrors(error.fieldErrors)
+          : {}
       const message =
         error instanceof OwnReportsFailure && error.reason === 'forbidden'
           ? 'Solo puedes editar tus propios reportes.'
           : error instanceof OwnReportsFailure && error.reason === 'not_found'
             ? 'El reporte ya no está disponible.'
-            : 'No se pudo guardar el reporte. Intenta nuevamente.'
-      this.update({ edit: { ...edit, pending: false, errors: {}, message } })
+            : Object.keys(errors).length
+              ? ''
+              : 'No se pudo guardar el reporte. Intenta nuevamente.'
+      this.update({ edit: { ...edit, pending: false, errors, message } })
       return false
     }
     if (attempt !== this.editAttempt || version !== this.ownerVersion) return false
