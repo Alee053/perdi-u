@@ -32,13 +32,21 @@ export class EditReport {
           field !== 'description' &&
           field !== 'city' &&
           field !== 'zone' &&
-          field !== 'type',
+          field !== 'type' &&
+          field !== 'category',
       )
     )
       throw new ReportEditValidationError()
     const patch = { ...input }
     if ('type' in patch && patch.type !== 'lost' && patch.type !== 'found')
       throw new ReportEditValidationError({ type: 'invalid' })
+    if (
+      'category' in patch &&
+      patch.category !== 'pet' &&
+      patch.category !== 'object' &&
+      patch.category !== 'document'
+    )
+      throw new ReportEditValidationError({ category: 'invalid' })
     if ('title' in patch) {
       if (typeof patch.title !== 'string' || !patch.title.trim())
         throw new ReportEditValidationError({ title: 'required' })

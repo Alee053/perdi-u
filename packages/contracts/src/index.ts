@@ -35,6 +35,7 @@ export interface CreateReportInput {
 /** Descriptive fields accepted by the authenticated partial report editor. */
 export interface EditReportInput {
   type?: ReportType
+  category?: ReportCategory
   title?: string
   description?: string
   city?: string
