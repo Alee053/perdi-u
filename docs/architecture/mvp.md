@@ -94,6 +94,8 @@ Los view models compartidos `ReportCard` y `ReportDetailView` se declaran en `pr
 
 Las fotos de reportes resueltos se cargan mediante el puerto `ReportPhotoLoader` del Model. El adapter HTTP envía bearer exclusivamente a la ruta de medios de la API configurada, rechaza redirecciones y entrega un recurso blob liberable. `ReportPhotoPresenter` descarta respuestas antiguas y revoca recursos al cambiar de foto o desmontar; `useReportPhoto` conecta su ciclo de vida y `ReportPhoto` solo muestra el estado. La composición provee el cargador por contexto. Las imágenes públicas conservan su URL normal. El formulario invalida un envío al abandonar o cerrar sesión y limpia una subida que termine tarde, sin publicar un borrador parcial.
 
+`ReportPhoto` entrega también los fallos de carga/decodificación del navegador al Presenter: invalida la solicitud, libera el recurso privado y publica el estado «Foto no disponible». Cambiar de foto reinicia ese estado; la galería y los datos del reporte siguen disponibles.
+
 | Capa           | Hace                                                                                         | No hace                                                      |
 | -------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
 | Model          | Propiedad por `author.id`, validar borrador y credenciales, filtrar, contar, crear reportes. | Mensajes en pantalla, React, `window`, `fetch`.              |

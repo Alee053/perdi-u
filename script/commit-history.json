@@ -1824,12 +1824,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "8692d8760ef91b33042d687f33c7a7d459217485",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-17T03:15:06.000Z",
       "message": "feat(web): ampliar el detalle y navegar sus fotos (#26)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/8692d8760ef91b33042d687f33c7a7d459217485"
     },
     "stats": {
       "total": 667,
@@ -1839,6 +1839,25 @@
     },
     "coverage": 88.69,
     "test_count": 160,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-17T03:23:29.000Z",
+      "message": "fix(web): mostrar el fallo de una foto y permitir recuperarse (#26)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 74,
+      "additions": 55,
+      "deletions": 19,
+      "date": "2026-11-17"
+    },
+    "coverage": 88.72,
+    "test_count": 161,
     "failed_tests": 0,
     "conclusion": "success"
   }

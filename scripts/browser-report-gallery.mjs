@@ -5,7 +5,7 @@ const bag = '20000000-0000-0000-0000-000000000001'
 const images = [
   '/images/pet.svg?gallery=1',
   '/images/pet.svg?gallery=2',
-  '/images/pet.svg?gallery=3',
+  '/images/gallery-missing.jpg',
 ]
 const description =
   'Gato gris de prueba con collar azul. Se perdió cerca de la plaza y responde a su nombre.\n\n' +
@@ -42,6 +42,7 @@ export async function verifyReportGallery(browser, webUrl, size, viewport) {
         },
       })
     })
+    await page.route('**/images/gallery-missing.jpg', (route) => route.fulfill({ status: 404 }))
     await page.goto(`${webUrl}/reportes/${cat}`)
     await heading.waitFor()
     const bounds = await dialog.boundingBox()
@@ -71,19 +72,16 @@ export async function verifyReportGallery(browser, webUrl, size, viewport) {
     assert.equal(await choice(2).getAttribute('aria-pressed'), 'true')
     assert.equal(await dialog.getByRole('img').getAttribute('src'), images[1])
     await dialog.getByRole('button', { name: 'Foto siguiente', exact: true }).click()
-    await dialog
-      .getByRole('img', { name: 'Foto 3 de 3: Gato de prueba perdido', exact: true })
-      .waitFor()
+    await dialog.getByRole('img', { name: 'Foto no disponible', exact: true }).waitFor()
     assert.equal(await choice(3).getAttribute('aria-pressed'), 'true')
+    assert.equal(await heading.isVisible(), true, 'la imagen rota no oculta los datos')
     await dialog.getByRole('button', { name: 'Foto siguiente', exact: true }).click()
     await dialog
       .getByRole('img', { name: 'Foto 1 de 3: Gato de prueba perdido', exact: true })
       .waitFor()
     await page.waitForFunction(() => document.querySelector('dialog img')?.naturalWidth > 0)
     await dialog.getByRole('button', { name: 'Foto anterior', exact: true }).click()
-    await dialog
-      .getByRole('img', { name: 'Foto 3 de 3: Gato de prueba perdido', exact: true })
-      .waitFor()
+    await dialog.getByRole('img', { name: 'Foto no disponible', exact: true }).waitFor()
     await choice(1).click()
     await dialog.getByRole('button', { name: 'Cerrar', exact: true }).focus()
     for (let step = 0; step < 12; step++) {
@@ -111,18 +109,20 @@ export async function verifyReportGallery(browser, webUrl, size, viewport) {
       'recargar reinicia la galería',
     )
 
+    let bagImages = [images[0]]
     await page.route(`**/api/reports/${bag}`, async (route) => {
       const response = await route.fetch()
       await route.fulfill({
         response,
-        json: { ...(await response.json()), imageUrls: [images[0]] },
+        json: { ...(await response.json()), imageUrls: bagImages },
       })
     })
     await page.goto(`${webUrl}/reportes/${bag}`)
     await dialog.getByRole('heading', { name: 'Mochila azul encontrada', exact: true }).waitFor()
     assert.equal(await dialog.getByRole('group', { name: 'Seleccionar foto' }).count(), 0)
-    await page.unroute(`**/api/reports/${bag}`)
+    bagImages = []
     await page.reload()
+    await dialog.getByRole('heading', { name: 'Mochila azul encontrada', exact: true }).waitFor()
     await dialog.getByText('Imagen de referencia de categoría', { exact: true }).waitFor()
     assert.equal(await dialog.getByRole('img').getAttribute('src'), '/images/object.svg')
     assert.equal(await dialog.getByRole('group', { name: 'Seleccionar foto' }).count(), 0)
@@ -141,6 +141,10 @@ export async function verifyReportGallery(browser, webUrl, size, viewport) {
     await dialog.waitFor({ state: 'detached' })
     assert.ok(await opener.evaluate((node) => node === document.activeElement), 'recupera el foco')
     assert.deepEqual(errors, [])
+  } catch (error) {
+    await page.screenshot({ path: `test-results/report-gallery-failed-${size}.png` })
+    console.error(await dialog.textContent().catch(() => 'Detalle cerrado durante el fallo.'))
+    throw error
   } finally {
     await context.close()
   }
