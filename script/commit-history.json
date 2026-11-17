@@ -2413,12 +2413,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "9c726c9a2dca44154cd26becb5d08788823d788d",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-11-17T15:18:20.000Z",
       "message": "test(api): verify edit ownership and privacy (#27)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/9c726c9a2dca44154cd26becb5d08788823d788d"
     },
     "stats": {
       "total": 34,
@@ -2428,6 +2428,25 @@
     },
     "coverage": 86.04,
     "test_count": 174,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-17T17:26:14.000Z",
+      "message": "feat(web): validar y representar filtros de búsqueda en enlaces (#29)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 172,
+      "additions": 172,
+      "deletions": 0,
+      "date": "2026-11-17"
+    },
+    "coverage": 86.49,
+    "test_count": 176,
     "failed_tests": 0,
     "conclusion": "success"
   }

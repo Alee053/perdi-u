@@ -3050,9 +3050,47 @@
     "testId": 88
   },
   {
-    "commitId": "HEAD",
+    "commitId": "9c726c9a2dca44154cd26becb5d08788823d788d",
     "commitName": "test(api): verify edit ownership and privacy (#27)",
     "commitTimestamp": 1794928700527,
     "testId": 88
+  },
+  {
+    "numPassedTests": 174,
+    "failedTests": 1,
+    "numTotalTests": 175,
+    "timestamp": 1794935981545,
+    "success": false,
+    "testId": 89
+  },
+  {
+    "numPassedTests": 175,
+    "failedTests": 0,
+    "numTotalTests": 175,
+    "timestamp": 1794936088610,
+    "success": true,
+    "testId": 89
+  },
+  {
+    "numPassedTests": 175,
+    "failedTests": 1,
+    "numTotalTests": 176,
+    "timestamp": 1794936171992,
+    "success": false,
+    "testId": 89
+  },
+  {
+    "numPassedTests": 176,
+    "failedTests": 0,
+    "numTotalTests": 176,
+    "timestamp": 1794936257349,
+    "success": true,
+    "testId": 89
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): validar y representar filtros de búsqueda en enlaces (#29)",
+    "commitTimestamp": 1794936377390,
+    "testId": 89
   }
 ]
