@@ -2451,12 +2451,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "808188d8f6ca4b40bc57b730dc45f79238855003",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-17T17:46:03.000Z",
       "message": "feat(web): restaurar y sincronizar la búsqueda desde la URL (#29)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/808188d8f6ca4b40bc57b730dc45f79238855003"
     },
     "stats": {
       "total": 397,
@@ -2466,6 +2466,25 @@
     },
     "coverage": 86.38,
     "test_count": 178,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-17T18:15:15.000Z",
+      "message": "feat(web): conservar la búsqueda al recorrer el historial (#29)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 387,
+      "additions": 362,
+      "deletions": 25,
+      "date": "2026-11-17"
+    },
+    "coverage": 85.5,
+    "test_count": 182,
     "failed_tests": 0,
     "conclusion": "success"
   }

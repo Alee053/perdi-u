@@ -1,4 +1,8 @@
-import type { SearchLocation, SearchNavigation } from '../../models/reports/search-location.js'
+import {
+  searchKeys,
+  type SearchLocation,
+  type SearchNavigation,
+} from '../../models/reports/search-location.js'
 import { toReportQuery } from '../../models/reports/filters.js'
 import type { CatalogPresenter } from './catalog.presenter.js'
 import { toReportFilters, type FiltersPresenter } from './filters.presenter.js'
@@ -53,6 +57,17 @@ export class CatalogSearchPresenter {
 
   private followLocation = (location: SearchLocation | undefined) => {
     if (!location) return
+    const selection = this.dependencies.filters.getSnapshot()
+    const query = toReportQuery(toReportFilters(selection))
+    if (
+      !selection.dateFromInvalidInput &&
+      !selection.dateToInvalidInput &&
+      location.invalid === Boolean(selection.urlError) &&
+      searchKeys.every((key) => query[key] === location.query[key])
+    ) {
+      if (Object.keys(location.query).length || location.invalid) this.dependencies.onSearch()
+      return
+    }
     this.restore(location)
     this.load()
   }

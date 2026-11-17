@@ -34,7 +34,7 @@ flowchart LR
   end
   subgraph Model["Model (models/)"]
     Rules["Reglas y entidades<br/>filters, publication, contact, credentials"]
-    Ports["Puertos<br/>ReportsRepository, OwnReportsRepository, ReportDetailRepository, AuthGateway, AccountClient"]
+    Ports["Puertos<br/>ReportsRepository, OwnReportsRepository, ReportDetailRepository, SearchNavigation, AuthGateway, AccountClient"]
   end
   subgraph Infra["Infrastructure (infrastructure/)"]
     Http["HTTP: catalog-client, own-reports-client, publish-client, account-client"]
@@ -47,6 +47,7 @@ flowchart LR
   Core --> Ports
   Http -. implementa .-> Ports
   Auth -. implementa .-> Ports
+  Browser -. implementa SearchNavigation .-> Ports
   App --> Core
   App --> Infra
   Browser -. implementa Effects .-> Core
@@ -72,7 +73,7 @@ apps/web/src/
 │   ├── effects.ts            Efectos que el presenter pide (temporizador, dirección, WhatsApp, foto…)
 │   ├── app/                  shell (navegación), notice (avisos), useApp
 │   ├── auth/                 auth (sesión), auth-form (formulario), useAuthForm
-│   ├── catalog/              catalog (consulta), filters (selección)
+│   ├── catalog/              catalog (consulta), filters (selección), search (URL y ciclo de vida)
 │   └── reports/              reports (demo/guardados), own-reports, report-detail y report-route, publish, usePublishPage (limpieza de vistas previas), report-card
 ├── views/                    View
 │   ├── layouts/              AppShell, Sidebar, AppHeader
@@ -117,6 +118,10 @@ Las fotos de reportes resueltos se cargan mediante el puerto `ReportPhotoLoader`
 La View nunca filtra ni formatea; el Model nunca sabe qué texto se mostrará.
 
 `models/reports/search-location.ts` valida los pares decodificados con la allowlist pública y el calendario existente. `infrastructure/browser/search-navigation.ts` representa esos datos con `URL`/`URLSearchParams` y adapta los efectos de ruta más búsqueda al puerto `SearchNavigation`. Un enlace inválido conserva su dirección y muestra un aviso; editar o limpiar produce una dirección nueva válida sin reenviar parámetros ajenos. `app/dependencies.ts` conecta el adapter y los presenters, y `useApp` mantiene sus suscripciones y limpieza.
+
+Las entradas que la aplicación añade al historial llevan solo una marca booleana. `ReportDetailPresenter` puede volver desde ellas aun tras Adelante o recarga; un enlace abierto directamente sin esa marca se cierra reemplazando la ruta raíz. Abrir un reporte conserva su dirección canónica sin filtros. Volver a una búsqueda que no cambió conserva sus resultados y foco; cambiar la entrada restaura la selección y cancela la consulta anterior.
+
+La limpieza de códigos/errores de Auth notifica una vez consumidos esos parámetros mediante el adapter del navegador. La búsqueda vuelve a leer la dirección limpia y no conserva un aviso obsoleto. Las escrituras propias de los controles no emiten ese evento, lo que evita bucles entre reemplazo y restauración.
 
 ## 7. Flujo de publicación y fotos privadas
 

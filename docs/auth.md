@@ -22,6 +22,8 @@ La identidad es siempre el `sub` verificado: un nombre visible o un ID enviado p
 
 `GET /me/reports`, `PATCH /reports/:id` y `PATCH /reports/:id/resolve` usan el mismo guard con revocación por sesión. La edición y el historial privado siguen la identidad verificada de `GET /me`; al cambiar de cuenta se borran sus datos y se descartan respuestas tardías. Un `401` de estas rutas vuelve a pedir ingreso. Los permisos y respuestas se describen en [la API](../apps/api/README.md#historial-propio-edicion-y-cierre).
 
+Al consumir códigos o errores de un enlace de ingreso, el adapter limpia la dirección y notifica el cambio a la navegación. Los filtros públicos que acompañaban ese enlace se conservan; la búsqueda vuelve a leerlos y elimina el aviso de parámetros que ya fueron consumidos. No se cambian la verificación de identidad ni los permisos.
+
 ## Datos y permisos en PostgreSQL
 
 [`bootstrap.sql`](../packages/database/auth/bootstrap.sql) lo ejecuta el servicio de un solo uso `auth-db-init` en cada `pnpm db:up`. Es idempotente y no lee ni modifica `perdiu_dev`; funciona también sobre un volumen existente sin recrearlo.

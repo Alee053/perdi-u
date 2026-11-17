@@ -40,7 +40,13 @@ interface Dependencies {
   auth: Pick<AuthPresenter, 'getSnapshot' | 'subscribe'>
   effects: Pick<
     Effects,
-    'openWhatsApp' | 'absoluteUrl' | 'currentPath' | 'showPath' | 'onPathChange' | 'back'
+    | 'openWhatsApp'
+    | 'absoluteUrl'
+    | 'currentPath'
+    | 'hasAppReturn'
+    | 'showPath'
+    | 'onPathChange'
+    | 'back'
   >
   /** Opens the login screen; the report stays open behind it to return to after signing in. */
   onLoginRequired: () => void
@@ -106,7 +112,7 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
     this.setState({ status: 'closed' })
     const { effects } = this.dependencies
     // A direct link has nothing behind it in PerdiU: replace the address instead of leaving.
-    if (this.pushed) effects.back()
+    if (this.pushed || effects.hasAppReturn()) effects.back()
     else effects.showPath('/', 'replace')
     this.pushed = false
   }

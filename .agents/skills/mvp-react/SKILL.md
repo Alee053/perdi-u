@@ -47,7 +47,7 @@ Buscar en `views/`: cálculos (`filter`, conteos, fechas), `new FormData`, `wind
 
 - Para historial, edición y cierre, comparar `author.id` con la sesión verificada mediante `selectOwnReports`; los datos de demostración (`demoOwner`) no conceden permisos. Seguir el [flujo persistente](../../../docs/architecture/mvp.md#71-historial-propio-edicion-y-cierre) para borradores, permisos y sincronización.
 - La View no importa `@perdiu/contracts`: recibe `ReportCard`, `AccountView` u otros view models.
-- Restaurar los filtros antes de la consulta inicial y pedir navegación mediante el puerto inyectado; consultar el [flujo de búsqueda](../../../docs/architecture/mvp.md#6-flujo-de-una-funcionalidad-real-buscar-en-el-catalogo) para URL y ciclo de vida.
+- Restaurar los filtros antes de la consulta inicial y pedir navegación mediante el puerto inyectado; consultar el [flujo de búsqueda](../../../docs/architecture/mvp.md) para URL y ciclo de vida.
 - Los mensajes para la persona los escribe el Presenter; el Model devuelve códigos (`'too_short'`, `'invalid'`).
 - No crear un presenter para todo: uno por responsabilidad (`ShellPresenter` navegación, `CatalogPresenter` catálogo, `PublishPresenter` formulario…). Tampoco interfaces sin un segundo implementador o un doble de prueba que las justifique.
 - Si algún día se migra a Next.js: las Views pueden ser Server Components solo si no usan hooks de presenter; el núcleo nunca importa `next/*` (inyectar la navegación como `Effects`), y lo exclusivo del servidor va en infrastructure del servidor.

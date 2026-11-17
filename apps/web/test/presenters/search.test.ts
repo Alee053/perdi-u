@@ -115,3 +115,28 @@ test('un enlace inválido bloquea las consultas y conserva el aviso hasta correg
   assert.deepEqual(queries.at(-1), {})
   stop()
 })
+
+test('volver del detalle conserva los resultados de la misma búsqueda y restaura otra entrada solo una vez', async () => {
+  const { search, filters, queries, replaced, navigate } = setup({
+    query: { q: 'gato' },
+    invalid: false,
+  })
+  const stop = search.start()
+  await settle()
+  const writes = replaced.length
+  navigate(undefined)
+  assert.equal(replaced.length, writes, 'el detalle conserva su enlace canónico')
+  navigate({ query: { q: 'gato' }, invalid: false })
+  await settle()
+  assert.deepEqual(
+    queries,
+    [{ q: 'gato' }],
+    'conserva los resultados y el elemento que abrió el detalle',
+  )
+  navigate({ query: { q: 'mochila', dateTo: '2026-10-12' }, invalid: false })
+  await settle()
+  assert.equal(filters.getSnapshot().search, 'mochila')
+  assert.deepEqual(queries.at(-1), { q: 'mochila', dateTo: '2026-10-12' })
+  assert.equal(queries.length, 2)
+  stop()
+})

@@ -3126,9 +3126,79 @@
     "testId": 90
   },
   {
-    "commitId": "HEAD",
+    "commitId": "808188d8f6ca4b40bc57b730dc45f79238855003",
     "commitName": "feat(web): restaurar y sincronizar la búsqueda desde la URL (#29)",
     "commitTimestamp": 1794937565994,
     "testId": 90
+  },
+  {
+    "numPassedTests": 178,
+    "failedTests": 1,
+    "numTotalTests": 179,
+    "timestamp": 1794937718545,
+    "success": false,
+    "testId": 91
+  },
+  {
+    "numPassedTests": 179,
+    "failedTests": 0,
+    "numTotalTests": 179,
+    "timestamp": 1794937835379,
+    "success": true,
+    "testId": 91
+  },
+  {
+    "numPassedTests": 179,
+    "failedTests": 1,
+    "numTotalTests": 180,
+    "timestamp": 1794937931617,
+    "success": false,
+    "testId": 91
+  },
+  {
+    "numPassedTests": 180,
+    "failedTests": 0,
+    "numTotalTests": 180,
+    "timestamp": 1794937996803,
+    "success": true,
+    "testId": 91
+  },
+  {
+    "numPassedTests": 180,
+    "failedTests": 1,
+    "numTotalTests": 181,
+    "timestamp": 1794938064395,
+    "success": false,
+    "testId": 91
+  },
+  {
+    "numPassedTests": 181,
+    "failedTests": 0,
+    "numTotalTests": 181,
+    "timestamp": 1794938268100,
+    "success": true,
+    "testId": 91
+  },
+  {
+    "numPassedTests": 181,
+    "failedTests": 1,
+    "numTotalTests": 182,
+    "timestamp": 1794938968510,
+    "success": false,
+    "testId": 91
+  },
+  {
+    "numPassedTests": 182,
+    "failedTests": 0,
+    "numTotalTests": 182,
+    "timestamp": 1794939069173,
+    "success": true,
+    "testId": 91
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): conservar la búsqueda al recorrer el historial (#29)",
+    "commitTimestamp": 1794939316154,
+    "testId": 91
   }
 ]
