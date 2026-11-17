@@ -147,6 +147,7 @@ export class ReportsPresenter extends Store<ReportsState> {
       saved: this.isSaved(report.id),
       canContact: !canResolve && report.source === 'demo',
       canResolve,
+      canEdit: false,
     }
   }
 

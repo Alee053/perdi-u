@@ -105,6 +105,7 @@ export async function verifyOwnReportsBrowser({
       await page.getByRole('button', { name: 'Iniciar sesión', exact: true }).click()
       await detail.getByRole('heading', { name: titles[0], exact: true }).waitFor()
       assert.equal(await detail.getByRole('button', { name: 'Marcar como resuelto' }).count(), 0)
+      assert.equal(await detail.getByRole('button', { name: 'Editar datos' }).count(), 0)
       const [chat] = await Promise.all([context.waitForEvent('page'), contact.click()])
       await chat.waitForLoadState()
       const destination = new URL(chat.url())
@@ -267,6 +268,18 @@ export async function verifyOwnReportsBrowser({
           ])
         ).rows[0]
         assert.deepEqual(stored, { city: 'Cochabamba', category: 'pet', pet_species: 'Perro' })
+        await row(page, titles[0]).getByRole('button', { name: titles[0], exact: true }).click()
+        const ownDetail = page.getByRole('dialog', { name: titles[0], exact: true })
+        await ownDetail.getByRole('heading', { name: titles[0], exact: true }).waitFor()
+        await ownDetail.getByRole('button', { name: 'Editar datos', exact: true }).click()
+        const detailEditor = page.getByRole('dialog', { name: 'Editar reporte', exact: true })
+        assert.equal(
+          await detailEditor.getByLabel('Nombre del reporte', { exact: true }).inputValue(),
+          titles[0],
+        )
+        await detailEditor.getByRole('button', { name: 'Cancelar', exact: true }).click()
+        await detailEditor.waitFor({ state: 'detached' })
+        await ownDetail.getByRole('button', { name: 'Cerrar', exact: true }).click()
       }
       await row(page, titles[0]).waitFor()
       const privateImage = row(page, titles[2]).locator('img')

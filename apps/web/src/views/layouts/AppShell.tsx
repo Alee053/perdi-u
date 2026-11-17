@@ -129,6 +129,7 @@ export function AppShell({ app }: { app: AppView }) {
           onSave={() => reports.toggleSaved(detail.card.id)}
           onContact={() => reports.contact(detail.card.id)}
           onResolve={() => actions.own.requestResolve(detail.card.id)}
+          onEdit={() => actions.own.requestEdit(detail.card.id)}
           onClose={reports.close}
           onSelectPhoto={reports.selectPhoto}
           onNextPhoto={reports.nextPhoto}
@@ -144,6 +145,9 @@ export function AppShell({ app }: { app: AppView }) {
           onContact={actions.reportLink.contact}
           onResolve={() =>
             reportLink.status === 'ready' && actions.own.requestResolve(reportLink.detail.card.id)
+          }
+          onEdit={() =>
+            reportLink.status === 'ready' && actions.own.requestEdit(reportLink.detail.card.id)
           }
           onRetry={actions.reportLink.retry}
           onClose={actions.reportLink.close}

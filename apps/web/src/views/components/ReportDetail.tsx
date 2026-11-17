@@ -8,6 +8,7 @@ type ReportDetailProps = {
   onSave: () => void
   onContact: () => void
   onResolve: () => void
+  onEdit: () => void
   onRetry?: () => void
   onClose: () => void
   onSelectPhoto: (index: number) => void
@@ -20,6 +21,7 @@ export function ReportDetail({
   onSave,
   onContact,
   onResolve,
+  onEdit,
   onRetry,
   onClose,
   onSelectPhoto,
@@ -86,7 +88,7 @@ export function ReportDetail({
       {view.status === 'ready' && (
         <ReadyDetail
           view={view}
-          {...{ onSave, onContact, onResolve, onSelectPhoto, onNextPhoto, onPreviousPhoto }}
+          {...{ onSave, onContact, onResolve, onEdit, onSelectPhoto, onNextPhoto, onPreviousPhoto }}
         />
       )}
     </dialog>
@@ -98,6 +100,7 @@ function ReadyDetail({
   onSave,
   onContact,
   onResolve,
+  onEdit,
   onSelectPhoto,
   onNextPhoto,
   onPreviousPhoto,
@@ -106,11 +109,12 @@ function ReadyDetail({
   onSave: () => void
   onContact: () => void
   onResolve: () => void
+  onEdit: () => void
   onSelectPhoto: (index: number) => void
   onNextPhoto: () => void
   onPreviousPhoto: () => void
 }) {
-  const { card: report, gallery, saved, canContact, canResolve } = view.detail
+  const { card: report, gallery, saved, canContact, canResolve, canEdit } = view.detail
   return (
     <>
       <figure className="detail-gallery" aria-label="Fotos del reporte">
@@ -202,6 +206,11 @@ function ReadyDetail({
           </dl>
         </section>
         <div className="detail-actions">
+          {canEdit && (
+            <button className="secondary-button" onClick={onEdit}>
+              Editar datos
+            </button>
+          )}
           {canResolve && (
             <button className="primary-button" onClick={onResolve}>
               Marcar como resuelto

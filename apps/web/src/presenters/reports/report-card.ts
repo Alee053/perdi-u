@@ -40,6 +40,7 @@ export interface ReportDetailView {
   saved: boolean
   canContact: boolean
   canResolve: boolean
+  canEdit: boolean
 }
 
 export const categoryLabels: Record<ReportCategory, string> = {

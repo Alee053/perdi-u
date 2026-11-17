@@ -192,7 +192,7 @@ test('el cierre confirmado actualiza el detalle propio y descarta una recarga ac
   })
   await presenter.open(report.id)
   const own = presenter.view()
-  assert.ok(own?.status === 'ready' && own.detail.canResolve)
+  assert.ok(own?.status === 'ready' && own.detail.canResolve && own.detail.canEdit)
   let complete!: (value: ReportSummary) => void
   api.find = () =>
     new Promise((resolve) => {
@@ -207,6 +207,7 @@ test('el cierre confirmado actualiza el detalle propio y descarta una recarga ac
   assert.equal(closed.detail.card.badge, 'Resuelto')
   assert.equal(closed.detail.card.status, 'Perdido')
   assert.equal(closed.detail.canResolve, false)
+  assert.equal(closed.detail.canEdit, false)
   assert.equal(closed.detail.canContact, false)
 })
 
@@ -448,6 +449,7 @@ test('la vista del detalle indica qué acciones ofrecer y permite guardar el rep
         saved: true,
         canContact: true,
         canResolve: false,
+        canEdit: false,
       },
       contacting: false,
     },

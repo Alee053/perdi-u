@@ -104,7 +104,14 @@ test('el detalle demo ofrece contacto y deja el cierre a los reportes persistido
   presenter.open('demo-1')
   assert.deepEqual(
     { ...presenter.detail(), card: undefined, gallery: undefined },
-    { card: undefined, gallery: undefined, saved: false, canContact: true, canResolve: false },
+    {
+      card: undefined,
+      gallery: undefined,
+      saved: false,
+      canContact: true,
+      canResolve: false,
+      canEdit: false,
+    },
   )
   presenter.contact('demo-1')
   assert.deepEqual(opened, [
