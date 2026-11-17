@@ -49,7 +49,7 @@ export class PostgresReportRepository
     const updated = await this.pool.query<ReportRecord>(
       `WITH updated AS (
          UPDATE reports SET title = COALESCE($3, title), description = COALESCE($4, description),
-           city = COALESCE($5, city), zone = COALESCE($6, zone)
+           city = COALESCE($5, city), zone = COALESCE($6, zone), type = COALESCE($7, type)
          WHERE id = $1 AND owner_id = $2 AND state = 'active'
          RETURNING id, owner_id, type, state, category, pet_species, title, description, city, zone, incident_date, created_at
        )
@@ -61,6 +61,7 @@ export class PostgresReportRepository
         input.description ?? null,
         input.city ?? null,
         input.zone ?? null,
+        input.type ?? null,
       ],
     )
     if (updated.rowCount) return { kind: 'updated', report: updated.rows[0]! }

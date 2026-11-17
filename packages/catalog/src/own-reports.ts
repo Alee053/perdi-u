@@ -28,11 +28,17 @@ export class EditReport {
       !fields.length ||
       fields.some(
         (field) =>
-          field !== 'title' && field !== 'description' && field !== 'city' && field !== 'zone',
+          field !== 'title' &&
+          field !== 'description' &&
+          field !== 'city' &&
+          field !== 'zone' &&
+          field !== 'type',
       )
     )
       throw new ReportEditValidationError()
     const patch = { ...input }
+    if ('type' in patch && patch.type !== 'lost' && patch.type !== 'found')
+      throw new ReportEditValidationError({ type: 'invalid' })
     if ('title' in patch) {
       if (typeof patch.title !== 'string' || !patch.title.trim())
         throw new ReportEditValidationError({ title: 'required' })

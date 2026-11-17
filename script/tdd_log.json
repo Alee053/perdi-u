@@ -2826,9 +2826,23 @@
     "testId": 72
   },
   {
-    "commitId": "HEAD",
+    "commitId": "05c77bb2ca76d342d1df57b29f7dc7f78d09a208",
     "commitName": "feat(catalog): permitir editar zona de reporte (#27)",
     "commitTimestamp": 1794924279032,
     "testId": 72
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794924352831,
+    "success": true,
+    "testId": 73
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(catalog): permitir editar tipo de reporte (#27)",
+    "commitTimestamp": 1794924367418,
+    "testId": 73
   }
 ]
