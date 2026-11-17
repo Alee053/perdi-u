@@ -1,5 +1,5 @@
 import { REPORT_RESULT_LIMIT, type ReportQuery } from '@perdiu/contracts'
-import { hasActiveFilters, toReportQuery } from '../../models/reports/filters.js'
+import { hasActiveFilters, toReportQuery, validateDateRange } from '../../models/reports/filters.js'
 import type { CatalogReport } from '../../models/reports/report.js'
 import type { ReportsRepository } from '../../models/reports/reports-repository.js'
 import { toReportCard, type ReportCard } from '../reports/report-card.js'
@@ -16,6 +16,7 @@ export class CatalogPresenter extends Store<CatalogState> {
   private request = 0
   private controller?: AbortController
   private query: ReportQuery = {}
+  private invalidRange = false
   private filtered = false
   private loaded: CatalogReport[] = []
   constructor(private readonly repository: ReportsRepository) {
@@ -27,14 +28,22 @@ export class CatalogPresenter extends Store<CatalogState> {
     this.controller?.abort()
   }
 
-  /** Without a selection it retries the last query. */
+  /** Without a selection it retries the last query, provided the current range is valid. */
   async load(selection?: FilterSelection) {
     if (selection) {
       const filters = toReportFilters(selection)
-      this.query = toReportQuery(filters)
       this.filtered = hasActiveFilters(filters)
+      this.invalidRange = Boolean(
+        validateDateRange(filters.dateFrom, filters.dateTo, filters.dateInputInvalid),
+      )
+      if (!this.invalidRange) this.query = toReportQuery(filters)
     }
     this.cancel()
+    if (this.invalidRange) {
+      this.loaded = []
+      this.setState({ status: 'ready', reports: [] })
+      return
+    }
     const request = this.request
     this.controller = new AbortController()
     this.setState({ status: 'loading', reports: [] })

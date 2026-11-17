@@ -2382,16 +2382,182 @@
     "testId": 58
   },
   {
+    "numPassedTests": 155,
+    "failedTests": 1,
+    "numTotalTests": 156,
+    "timestamp": 1794578347524,
+    "success": false,
+    "testId": 58
+  },
+  {
+    "numPassedTests": 157,
+    "failedTests": 0,
+    "numTotalTests": 157,
+    "timestamp": 1794578565336,
+    "success": true,
+    "testId": 58
+  },
+  {
+    "numPassedTests": 151,
+    "failedTests": 0,
+    "numTotalTests": 151,
+    "timestamp": 1794578641663,
+    "success": false,
+    "testId": 58
+  },
+  {
+    "numPassedTests": 158,
+    "failedTests": 1,
+    "numTotalTests": 159,
+    "timestamp": 1794578767454,
+    "success": false,
+    "testId": 58
+  },
+  {
+    "numPassedTests": 159,
+    "failedTests": 0,
+    "numTotalTests": 159,
+    "timestamp": 1794578941754,
+    "success": true,
+    "testId": 58
+  },
+  {
+    "numPassedTests": 159,
+    "failedTests": 0,
+    "numTotalTests": 159,
+    "timestamp": 1794579191857,
+    "success": true,
+    "testId": 58
+  },
+  {
+    "commitId": "43a7222561ff9a71d75a1d0844db52e5b5c9353a",
+    "commitName": "feat(catalog): filtrar reportes por fechas (#25)\n\nCo-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>",
+    "commitTimestamp": 1794579777518,
+    "testId": 58
+  },
+  {
     "commitId": "0fb1211538ae30f7c604b74d0059c311d32eb732",
     "commitName": "test(api): corregir fixture del filtro por zona (#24)",
     "commitTimestamp": 1794669105708,
     "testId": 59
   },
   {
-    "commitId": "745598187a329d50c8ad26c9167a22e8f3354fbd",
+    "commitId": "874bada6d8bb40660fae6facdcdcf3bb457a9ec5",
+    "commitName": "test(api): ajustar rango abierto a los fixtures (#25)",
+    "commitTimestamp": 1794669221642,
+    "testId": 59
+  },
+  {
+    "commitId": "fe82067445473305c2b8a88a0bc6096cb560ad07",
     "commitName": "test(web): esperar resultados al limpiar zona (#24)",
     "commitTimestamp": 1794670024595,
     "testId": 60
+  },
+  {
+    "commitId": "5bb5a47a85d564140d2df8499b01880972e8a783",
+    "commitName": "test(api): cubrir semillas en rangos abiertos (#25)",
+    "commitTimestamp": 1794670070279,
+    "testId": 60
+  },
+  {
+    "numPassedTests": 157,
+    "failedTests": 2,
+    "numTotalTests": 159,
+    "timestamp": 1794676201144,
+    "success": false,
+    "testId": 61
+  },
+  {
+    "numPassedTests": 159,
+    "failedTests": 0,
+    "numTotalTests": 159,
+    "timestamp": 1794676243578,
+    "success": true,
+    "testId": 61
+  },
+  {
+    "commitId": "e75fa2b676ffbee677f4243c5a0e49db90f58464",
+    "commitName": "test(web): corregir rangos de fechas en fixtures (#25)",
+    "commitTimestamp": 1794676304308,
+    "testId": 61
+  },
+  {
+    "numPassedTests": 162,
+    "failedTests": 0,
+    "numTotalTests": 162,
+    "timestamp": 1794794711693,
+    "success": true,
+    "testId": 62
+  },
+  {
+    "numPassedTests": 162,
+    "failedTests": 1,
+    "numTotalTests": 163,
+    "timestamp": 1794794734848,
+    "success": false,
+    "testId": 62
+  },
+  {
+    "numPassedTests": 162,
+    "failedTests": 1,
+    "numTotalTests": 163,
+    "timestamp": 1794794854301,
+    "success": false,
+    "testId": 62
+  },
+  {
+    "numPassedTests": 163,
+    "failedTests": 0,
+    "numTotalTests": 163,
+    "timestamp": 1794795230813,
+    "success": true,
+    "testId": 62
+  },
+  {
+    "numPassedTests": 163,
+    "failedTests": 0,
+    "numTotalTests": 163,
+    "timestamp": 1794795431274,
+    "success": true,
+    "testId": 62
+  },
+  {
+    "numPassedTests": 163,
+    "failedTests": 1,
+    "numTotalTests": 164,
+    "timestamp": 1794795854934,
+    "success": false,
+    "testId": 62
+  },
+  {
+    "numPassedTests": 164,
+    "failedTests": 0,
+    "numTotalTests": 164,
+    "timestamp": 1794796266227,
+    "success": true,
+    "testId": 62
+  },
+  {
+    "numPassedTests": 163,
+    "failedTests": 1,
+    "numTotalTests": 164,
+    "timestamp": 1794796834466,
+    "success": false,
+    "testId": 62
+  },
+  {
+    "numPassedTests": 164,
+    "failedTests": 0,
+    "numTotalTests": 164,
+    "timestamp": 1794796876363,
+    "success": true,
+    "testId": 62
+  },
+  {
+    "commitId": "06b3f301725fd5a9a6042ce7243facd0247c6cc0",
+    "commitName": "feat(catalog): integrar fechas del hecho con zona (#25)",
+    "commitTimestamp": 1794797062344,
+    "testId": 62
   },
   {
     "numPassedTests": 157,
@@ -2502,9 +2668,23 @@
     "testId": 63
   },
   {
-    "commitId": "HEAD",
+    "commitId": "863b137193dc55107206ce6fdf9548a50198b277",
     "commitName": "fix(web): mostrar el fallo de una foto y permitir recuperarse (#26)",
     "commitTimestamp": 1794885811212,
     "testId": 63
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794921491100,
+    "success": true,
+    "testId": 64
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "chore(repo): integrar main y conservar ciclos TDD (#25)",
+    "commitTimestamp": 1794921715336,
+    "testId": 64
   }
 ]

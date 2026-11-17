@@ -23,3 +23,34 @@ test('la búsqueda rechaza zonas repetidas, estructuradas, con controles o demas
     })
   }
 })
+
+test('la búsqueda acepta límites inclusivos de fecha y un rango de un solo día', () => {
+  assert.deepEqual(parseReportQuery({ dateFrom: '2026-10-10' }), { dateFrom: '2026-10-10' })
+  assert.deepEqual(parseReportQuery({ dateTo: '2026-10-10' }), { dateTo: '2026-10-10' })
+  assert.deepEqual(parseReportQuery({ dateFrom: '2026-10-10', dateTo: '2026-10-10' }), {
+    dateFrom: '2026-10-10',
+    dateTo: '2026-10-10',
+  })
+})
+
+test('la búsqueda rechaza fechas inexistentes, formatos distintos y rangos invertidos', () => {
+  for (const query of [
+    { dateFrom: '2026-02-29' },
+    { dateTo: '2026-13-01' },
+    { dateTo: '2026-04-31' },
+    { dateFrom: '2100-02-29' },
+    { dateTo: '2026-10-10T00:00:00Z' },
+    { dateFrom: '10/10/2026' },
+    { dateFrom: ' 2026-10-10 ' },
+    { dateFrom: '0000-01-01' },
+    { dateFrom: '2026-10-11', dateTo: '2026-10-10' },
+    { dateFrom: ['2026-10-10'] },
+    { dateTo: { value: '2026-10-10' } },
+  ]) {
+    assert.throws(() => parseReportQuery(query), {
+      message: 'Parámetros de búsqueda inválidos.',
+    })
+  }
+  assert.deepEqual(parseReportQuery({ dateFrom: '2024-02-29' }), { dateFrom: '2024-02-29' })
+  assert.deepEqual(parseReportQuery({ dateTo: '2000-02-29' }), { dateTo: '2000-02-29' })
+})

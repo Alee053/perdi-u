@@ -142,8 +142,10 @@ export class PostgresReportRepository
         AND ($5::text IS NULL OR r.city = $5)
         AND ($6 = '' OR
           position($6 in lower(regexp_replace(normalize(r.zone, NFD), '[\u0300-\u036f]', '', 'g'))) > 0)
+        AND ($7::date IS NULL OR r.incident_date >= $7::date)
+        AND ($8::date IS NULL OR r.incident_date <= $8::date)
       ORDER BY r.created_at DESC, r.id ASC
-      LIMIT $7
+      LIMIT $9
     `,
       [
         'active',
@@ -152,6 +154,8 @@ export class PostgresReportRepository
         query.category ?? null,
         query.city ?? null,
         normalizeSearch(query.zone ?? ''),
+        query.dateFrom ?? null,
+        query.dateTo ?? null,
         REPORT_RESULT_LIMIT,
       ],
     )

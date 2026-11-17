@@ -36,7 +36,7 @@ La API se ocupa de HTTP, validación y composición. `ListReports`, en `@perdiu/
 
 ### Buscar y filtrar
 
-`GET /reports?q=camara&type=lost&category=object&city=La%20Paz&zone=sopocachi` combina todos los filtros con AND. Los parámetros son opcionales; se recortan espacios exteriores y los valores vacíos equivalen a omitir el filtro.
+`GET /reports?q=camara&type=lost&category=object&city=La%20Paz&zone=sopocachi&dateFrom=2026-10-01&dateTo=2026-10-31` combina todos los filtros con AND. Los parámetros son opcionales; en texto se recortan espacios exteriores y los valores vacíos equivalen a omitir el filtro. Las fechas deben usar estrictamente `YYYY-MM-DD`; no tienen conversión de zona horaria.
 
 | Parámetro  | Valores y límites                                                                                                                                                                             |
 | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -45,8 +45,21 @@ La API se ocupa de HTTP, validación y composición. `ListReports`, en `@perdiu/
 | `category` | `pet`, `object` o `document`.                                                                                                                                                                 |
 | `city`     | Hasta 100 unidades UTF-16. Coincidencia exacta con la ciudad almacenada, por ejemplo `La Paz`.                                                                                                |
 | `zone`     | Hasta 200 unidades UTF-16 antes de recortar. Frase contenida en la zona almacenada; ignora mayúsculas y marcas diacríticas U+0300–U+036F mediante NFD. Puede usarse sin `city`.               |
+| `dateFrom` | Fecha calendario válida `YYYY-MM-DD`, incluida. Filtra por `incident_date` desde ese día; se puede usar sin `dateTo`.                                                                         |
+| `dateTo`   | Fecha calendario válida `YYYY-MM-DD`, incluida. Filtra por `incident_date` hasta ese día; se puede usar sin `dateFrom`. Un mismo día en ambos parámetros es válido.                           |
 
-Parámetros desconocidos, repetidos, estructurados, demasiado largos, caracteres de control o enumeraciones inválidas devuelven `400` con mensaje seguro. Las longitudes se comprueban antes de recortar espacios. Las comillas, `%`, `_` y barras en `q` y `zone` se buscan literalmente; todos los valores SQL se parametrizan. `city` conserva su coincidencia exacta, también al combinarse con `zone`.
+Parámetros desconocidos, repetidos, estructurados, demasiado largos, caracteres de control, enumeraciones inválidas, fechas inexistentes o un rango invertido devuelven `400` con mensaje seguro. Las longitudes se comprueban antes de recortar espacios. Las comillas, `%`, `_` y barras en `q` y `zone` se buscan literalmente; todos los valores SQL se parametrizan. `city` conserva su coincidencia exacta, también al combinarse con `zone`.
+
+Ejemplos para clientes que serialicen el rango (S2-06):
+
+| Rango                         | Consulta                                             |
+| ----------------------------- | ---------------------------------------------------- |
+| Desde una fecha, sin fin      | `GET /reports?dateFrom=2026-10-10`                   |
+| Hasta una fecha, sin inicio   | `GET /reports?dateTo=2026-10-12`                     |
+| Cerrado, incluidos ambos días | `GET /reports?dateFrom=2026-10-10&dateTo=2026-10-12` |
+| Un solo día                   | `GET /reports?dateFrom=2026-10-10&dateTo=2026-10-10` |
+
+Se compara la fecha del hecho (`incidentDate`), aunque `createdAt` sea de otro día. Los valores de fecha no admiten horas ni espacios exteriores. `dateFrom=2026-02-29` o `dateFrom=2026-10-12&dateTo=2026-10-10` devuelven `400` con `message: "Parámetros de búsqueda inválidos."`; el error no devuelve los valores recibidos.
 
 Cada consulta devuelve **como máximo 50 reportes**, después de filtrar y ordenar. La respuesta sigue siendo un array compatible con S1-01; no incluye total ni paginación. Al llegar a 50, la web indica el límite y sugiere ajustar los filtros. Este límite acota la respuesta, no el número de filas que PostgreSQL debe inspeccionar: para volúmenes mayores habrá que evaluar índices/búsqueda y paginación.
 
