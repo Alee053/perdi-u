@@ -2812,9 +2812,23 @@
     "testId": 71
   },
   {
-    "commitId": "HEAD",
+    "commitId": "5ce19dc6f7666865d5a465cafd2fb1ee9773dcc9",
     "commitName": "feat(catalog): permitir editar ciudad de reporte (#27)",
     "commitTimestamp": 1794924185965,
     "testId": 71
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794924256804,
+    "success": true,
+    "testId": 72
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(catalog): permitir editar zona de reporte (#27)",
+    "commitTimestamp": 1794924279032,
+    "testId": 72
   }
 ]

@@ -225,6 +225,16 @@ test('edición actualiza y persiste la ciudad del reporte propio', async () => {
   })
 })
 
+test('edición actualiza y persiste la zona del reporte propio', async () => {
+  await fixture(async ({ request, owners, ids }) => {
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', { zone: 'Recoleta' })
+    assert.equal(response.status, 200)
+    assert.equal((await response.json()).zone, 'Recoleta')
+    const detail = await request(`/reports/${ids[0]}`, owners[0])
+    assert.equal((await detail.json()).zone, 'Recoleta')
+  })
+})
+
 test('resolver HTTP verifica permisos, persiste tras reinicio y repetir no vuelve a escribir el cierre', async () => {
   await fixture(async ({ request, pool, owners, ids, restart }) => {
     const path = `/reports/${ids[0]}/resolve`

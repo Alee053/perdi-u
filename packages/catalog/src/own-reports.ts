@@ -26,7 +26,10 @@ export class EditReport {
     const fields = Object.keys(input)
     if (
       !fields.length ||
-      fields.some((field) => field !== 'title' && field !== 'description' && field !== 'city')
+      fields.some(
+        (field) =>
+          field !== 'title' && field !== 'description' && field !== 'city' && field !== 'zone',
+      )
     )
       throw new ReportEditValidationError()
     const patch = { ...input }
@@ -51,6 +54,12 @@ export class EditReport {
         throw new ReportEditValidationError({ city: 'required' })
       if (patch.city.trim().length > 100) throw new ReportEditValidationError({ city: 'too_long' })
       patch.city = patch.city.trim()
+    }
+    if ('zone' in patch) {
+      if (typeof patch.zone !== 'string' || !patch.zone.trim())
+        throw new ReportEditValidationError({ zone: 'required' })
+      if (patch.zone.trim().length > 200) throw new ReportEditValidationError({ zone: 'too_long' })
+      patch.zone = patch.zone.trim()
     }
     const result = await this.repository.editOwned(id, ownerId, patch)
     return typeof result === 'string' ? result : toPublicReport(result.report)
