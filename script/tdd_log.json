@@ -2682,9 +2682,55 @@
     "testId": 64
   },
   {
-    "commitId": "HEAD",
+    "commitId": "89bd8069e589d2f5cefde84a4c50b05080ff862b",
     "commitName": "chore(repo): integrar main y conservar ciclos TDD (#25)",
     "commitTimestamp": 1794921715336,
     "testId": 64
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794922699971,
+    "success": true,
+    "testId": 65
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794923149742,
+    "success": true,
+    "testId": 65
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794923260872,
+    "success": true,
+    "testId": 65
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794923320112,
+    "success": true,
+    "testId": 65
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794923408257,
+    "success": true,
+    "testId": 65
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(api): iniciar edición parcial de reporte propio (#27)",
+    "commitTimestamp": 1794923444275,
+    "testId": 65
   }
 ]

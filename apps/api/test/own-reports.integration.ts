@@ -135,6 +135,20 @@ test('mis reportes HTTP usa identidad verificada, incluye resueltos y filtra sin
   })
 })
 
+test('edición actualiza el título del reporte propio y persiste al volver a consultarlo', async () => {
+  await fixture(async ({ request, owners, ids }) => {
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', {
+      title: 'Mochila azul recuperada',
+    })
+    assert.equal(response.status, 200)
+    const updated = await response.json()
+    assert.equal(updated.id, ids[0])
+    assert.equal(updated.title, 'Mochila azul recuperada')
+    const detail = await request(`/reports/${ids[0]}`, owners[0])
+    assert.equal((await detail.json()).title, 'Mochila azul recuperada')
+  })
+})
+
 test('resolver HTTP verifica permisos, persiste tras reinicio y repetir no vuelve a escribir el cierre', async () => {
   await fixture(async ({ request, pool, owners, ids, restart }) => {
     const path = `/reports/${ids[0]}/resolve`

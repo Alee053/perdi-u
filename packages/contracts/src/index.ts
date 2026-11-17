@@ -32,6 +32,11 @@ export interface CreateReportInput {
   mediaIds?: string[]
 }
 
+/** Descriptive fields accepted by the authenticated partial report editor. */
+export interface EditReportInput {
+  title?: string
+}
+
 export type CreateReportField = keyof CreateReportInput
 export type ReportValidationIssue = 'required' | 'too_short' | 'too_long' | 'invalid'
 export type ReportValidationErrors = Partial<Record<CreateReportField, ReportValidationIssue>>
