@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import type { AppView } from '../../presenters/app/useApp'
 
 type EditForm = NonNullable<AppView['myReports']['edit']>
+type EditField = keyof EditForm['draft']
 
 export function EditReportDialog({
   edit,
@@ -10,7 +11,7 @@ export function EditReportDialog({
   onCancel,
 }: {
   edit: EditForm
-  onChange: (field: 'title', value: string) => void
+  onChange: (field: EditField, value: string) => void
   onSave: () => void
   onCancel: () => void
 }) {
@@ -19,6 +20,42 @@ export function EditReportDialog({
     dialog.current!.showModal()
     return () => dialog.current?.close()
   }, [])
+  const error = (field: EditField) =>
+    edit.errors[field] ? (
+      <small id={`edit-${field}-error`} role="alert">
+        {edit.errors[field]}
+      </small>
+    ) : null
+  const input = (
+    field: 'title' | 'city' | 'zone' | 'petSpecies',
+    label: string,
+    maxLength: number,
+  ) => (
+    <label key={field}>
+      {label}
+      <input
+        value={edit.draft[field]}
+        maxLength={maxLength}
+        aria-invalid={Boolean(edit.errors[field])}
+        aria-describedby={edit.errors[field] ? `edit-${field}-error` : undefined}
+        onChange={(event) => onChange(field, event.target.value)}
+      />
+      {error(field)}
+    </label>
+  )
+  const select = (field: 'type' | 'category', label: string, options: [string, string][]) => (
+    <label key={field}>
+      {label}
+      <select value={edit.draft[field]} onChange={(event) => onChange(field, event.target.value)}>
+        {options.map(([value, text]) => (
+          <option key={value} value={value}>
+            {text}
+          </option>
+        ))}
+      </select>
+      {error(field)}
+    </label>
+  )
   return (
     <dialog
       ref={dialog}
@@ -36,21 +73,42 @@ export function EditReportDialog({
           onSave()
         }}
       >
+        {select('type', 'Tipo de reporte', [
+          ['lost', 'Perdido'],
+          ['found', 'Encontrado'],
+        ])}
+        {input('title', 'Nombre del reporte', 200)}
         <label>
-          Nombre del reporte
-          <input
-            value={edit.draft.title}
-            maxLength={200}
-            aria-invalid={Boolean(edit.errors.title)}
-            aria-describedby={edit.errors.title ? 'edit-title-error' : undefined}
-            onChange={(event) => onChange('title', event.target.value)}
+          Descripción
+          <textarea
+            value={edit.draft.description}
+            minLength={20}
+            maxLength={5000}
+            aria-invalid={Boolean(edit.errors.description)}
+            aria-describedby={edit.errors.description ? 'edit-description-error' : undefined}
+            onChange={(event) => onChange('description', event.target.value)}
           />
-          {edit.errors.title && (
-            <small id="edit-title-error" role="alert">
-              {edit.errors.title}
-            </small>
-          )}
+          {error('description')}
         </label>
+        {select('category', 'Categoría', [
+          ['pet', 'Mascota'],
+          ['object', 'Objeto'],
+          ['document', 'Documento'],
+        ])}
+        {edit.draft.category === 'pet' && input('petSpecies', 'Especie de la mascota', 100)}
+        <label>
+          Fecha del hecho
+          <input
+            type="date"
+            value={edit.draft.incidentDate}
+            aria-invalid={Boolean(edit.errors.incidentDate)}
+            aria-describedby={edit.errors.incidentDate ? 'edit-incidentDate-error' : undefined}
+            onChange={(event) => onChange('incidentDate', event.target.value)}
+          />
+          {error('incidentDate')}
+        </label>
+        {input('city', 'Ciudad', 100)}
+        {input('zone', 'Zona o barrio', 200)}
         {edit.message && <p role="alert">{edit.message}</p>}
         <div className="detail-actions">
           <button className="secondary-button" type="button" onClick={onCancel}>

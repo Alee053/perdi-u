@@ -3002,9 +3002,23 @@
     "testId": 84
   },
   {
-    "commitId": "HEAD",
+    "commitId": "f981d82c81b579c214a38b226982fc2cd4e7a5b9",
     "commitName": "feat(web): abrir edición desde mis reportes",
     "commitTimestamp": 1794927484177,
     "testId": 84
+  },
+  {
+    "numPassedTests": 174,
+    "failedTests": 0,
+    "numTotalTests": 174,
+    "timestamp": 1794927799200,
+    "success": true,
+    "testId": 85
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): editar todos los datos del reporte propio\n\nIssue #27",
+    "commitTimestamp": 1794927815206,
+    "testId": 85
   }
 ]

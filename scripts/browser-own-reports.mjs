@@ -244,6 +244,29 @@ export async function verifyOwnReportsBrowser({
         )
         await editor.getByRole('button', { name: 'Cancelar', exact: true }).click()
         await editor.waitFor({ state: 'detached' })
+        await edit.click()
+        const saveDialog = page.getByRole('dialog', { name: 'Editar reporte', exact: true })
+        await saveDialog.getByLabel('Ciudad', { exact: true }).fill('Cochabamba')
+        await saveDialog.getByLabel('Categoría').selectOption('pet')
+        await saveDialog.getByLabel('Especie de la mascota', { exact: true }).fill('Perro')
+        const saved = page.waitForResponse(
+          (response) =>
+            response.request().method() === 'PATCH' &&
+            new URL(response.url()).pathname === `/api/reports/${ids[0]}`,
+        )
+        await saveDialog.getByRole('button', { name: 'Guardar cambios', exact: true }).click()
+        const editResponse = await saved
+        assert.equal(editResponse.status(), 200)
+        const updated = await editResponse.json()
+        assert.equal(updated.city, 'Cochabamba')
+        assert.equal(updated.category, 'pet')
+        assert.equal(updated.petSpecies, 'Perro')
+        const stored = (
+          await pool.query('SELECT city, category, pet_species FROM reports WHERE id = $1', [
+            ids[0],
+          ])
+        ).rows[0]
+        assert.deepEqual(stored, { city: 'Cochabamba', category: 'pet', pet_species: 'Perro' })
       }
       await row(page, titles[0]).waitFor()
       const privateImage = row(page, titles[2]).locator('img')
