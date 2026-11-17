@@ -3088,9 +3088,47 @@
     "testId": 89
   },
   {
-    "commitId": "HEAD",
+    "commitId": "1846efbcb109c0851fb6b630d9c175cb60172042",
     "commitName": "feat(web): validar y representar filtros de búsqueda en enlaces (#29)",
     "commitTimestamp": 1794936377390,
     "testId": 89
+  },
+  {
+    "numPassedTests": 176,
+    "failedTests": 1,
+    "numTotalTests": 177,
+    "timestamp": 1794936461255,
+    "success": false,
+    "testId": 90
+  },
+  {
+    "numPassedTests": 177,
+    "failedTests": 0,
+    "numTotalTests": 177,
+    "timestamp": 1794936658344,
+    "success": true,
+    "testId": 90
+  },
+  {
+    "numPassedTests": 177,
+    "failedTests": 1,
+    "numTotalTests": 178,
+    "timestamp": 1794937244350,
+    "success": false,
+    "testId": 90
+  },
+  {
+    "numPassedTests": 178,
+    "failedTests": 0,
+    "numTotalTests": 178,
+    "timestamp": 1794937324652,
+    "success": true,
+    "testId": 90
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): restaurar y sincronizar la búsqueda desde la URL (#29)",
+    "commitTimestamp": 1794937565994,
+    "testId": 90
   }
 ]

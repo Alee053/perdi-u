@@ -26,14 +26,14 @@ export const browserEffects = {
     window.open(url, '_blank', 'noopener,noreferrer')
   },
   currentPath() {
-    return window.location.pathname
+    return window.location.pathname + window.location.search
   },
   showPath(path: string, mode: 'push' | 'replace') {
     if (mode === 'push') window.history.pushState(null, '', path)
     else window.history.replaceState(null, '', path)
   },
   onPathChange(listener: (path: string) => void) {
-    const handle = () => listener(window.location.pathname)
+    const handle = () => listener(window.location.pathname + window.location.search)
     window.addEventListener('popstate', handle)
     return () => window.removeEventListener('popstate', handle)
   },

@@ -6,8 +6,8 @@ Rutas relativas a `apps/web/src`.
 
 1. `views/components/ReportFilters.tsx`: los controles llaman `setSearch`, `setDateFrom` y `setDateTo`. No calculan nada.
 2. `presenters/catalog/filters.presenter.ts`: guarda la selección visible (`'Todas las ciudades'`, `'Objeto'`, «Desde/Hasta»…) y la invalidez nativa de fechas sin valor serializable; presenta errores sin perder la edición y permite limpiar los segmentos parciales.
-3. `app/dependencies.ts`: ese aviso está conectado a `catalog.load(selection)`.
-4. `presenters/catalog/catalog.presenter.ts`: traduce la selección con `toReportFilters`, no consulta fechas inválidas, pide al Model `toReportQuery` y llama al puerto `ReportsRepository`; cancela la consulta anterior y publica `loading`.
+3. `presenters/catalog/search.presenter.ts`: restaura los controles desde el puerto `SearchNavigation` antes de cargar y sigue los cambios de selección. La composición conecta su adapter `infrastructure/browser/search-navigation.ts`; el Model valida los parámetros en `models/reports/search-location.ts`. El arranque descarta montajes abandonados para no duplicar la consulta inicial.
+4. `presenters/catalog/catalog.presenter.ts`: traduce la selección con `toReportFilters`, no consulta rangos ni enlaces inválidos, pide al Model `toReportQuery` y llama al puerto `ReportsRepository`; cancela la consulta anterior y publica `loading`.
 5. `models/reports/filters.ts` + `models/reports/reports-repository.ts`: valida fechas calendario, compara `incidentDate` inclusivamente en la demo y define el contrato de consulta. La implementación HTTP es `infrastructure/http/catalog-client.ts`.
 6. El presenter convierte cada `ReportSummary` en `ReportCard` (`presenters/reports/report-card.ts`: etiquetas, fechas, iniciales) y publica `ready` o `error`.
 7. `presenters/app/useApp.ts` re-renderiza mediante `useStore`; `views/pages/ExplorePage.tsx` muestra carga, error con «Reintentar», vacío o la grilla.

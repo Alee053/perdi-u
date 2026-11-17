@@ -1,4 +1,4 @@
-import type { ReportCategory } from '@perdiu/contracts'
+import type { ReportCategory, ReportQuery } from '@perdiu/contracts'
 import { validateDateRange, type DateRangeError } from '../../models/reports/filters.js'
 import { cities } from '../../models/reports/report.js'
 import type { ReportFilters } from '../../models/reports/filters.js'
@@ -7,6 +7,7 @@ import { Store } from '../store.js'
 
 /** Selection shown by the controls; the values are the labels the person sees. */
 export interface FilterSelection {
+  urlError?: string
   search: string
   city: string
   zone: string
@@ -86,6 +87,12 @@ export class FiltersPresenter extends Store<FilterSelection> {
 
   private update(patch: Partial<FilterSelection>) {
     const next = { ...this.state, ...patch }
+    delete next.urlError
+    this.setSelection(next)
+    this.onChange(this.state)
+  }
+
+  private setSelection(next: FilterSelection) {
     const dateError = validateDateRange(
       next.dateFrom,
       next.dateTo,
@@ -94,8 +101,33 @@ export class FiltersPresenter extends Store<FilterSelection> {
     if (dateError) next.dateError = dateRangeMessages[dateError]
     else delete next.dateError
     this.setState(next)
-    this.onChange(this.state)
   }
+
+  restore = (query: ReportQuery, invalid = false) =>
+    this.setSelection({
+      ...defaultSelection,
+      search: query.q ?? '',
+      city: query.city ?? allCities,
+      zone: query.zone ?? '',
+      category: query.category ? categoryLabels[query.category] : allCategories,
+      status: query.type === 'lost' ? 'Perdido' : query.type === 'found' ? 'Encontrado' : 'Todos',
+      dateFrom: query.dateFrom ?? '',
+      dateTo: query.dateTo ?? '',
+      dateInputRevision: (this.state.dateInputRevision ?? 0) + 1,
+      ...(invalid
+        ? {
+            urlError:
+              'El enlace contiene filtros inválidos. Corrígelos o limpia los filtros para buscar.',
+          }
+        : {}),
+    })
+
+  options = () => ({
+    ...filterOptions,
+    cities: filterOptions.cities.includes(this.state.city)
+      ? filterOptions.cities
+      : [...filterOptions.cities, this.state.city],
+  })
 
   setSearch = (search: string) => this.update({ search })
   setCity = (city: string) => this.update({ city })

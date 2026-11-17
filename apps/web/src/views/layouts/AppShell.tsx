@@ -73,6 +73,7 @@ export function AppShell({ app }: { app: AppView }) {
             <ExplorePage
               catalog={app.catalog}
               selection={app.selection}
+              options={app.filterOptions}
               filters={actions.filters}
               onRetry={actions.retryCatalog}
               onNavigate={actions.navigate}
@@ -83,6 +84,7 @@ export function AppShell({ app }: { app: AppView }) {
             <MapPage
               map={app.map}
               selection={app.selection}
+              options={app.filterOptions}
               filters={actions.filters}
               onOpen={reports.open}
               onNavigate={actions.navigate}

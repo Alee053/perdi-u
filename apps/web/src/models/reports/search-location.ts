@@ -8,6 +8,13 @@ export interface SearchLocation {
   invalid: boolean
 }
 
+/** Only search addresses have a location; report addresses leave the selection in memory. */
+export interface SearchNavigation {
+  current(): SearchLocation | undefined
+  replace(query: ReportQuery): void
+  onChange(listener: (location: SearchLocation | undefined) => void): () => void
+}
+
 /** Decoded parameters are data; browser navigation belongs to the adapter. */
 export function readSearchParameters(entries: Iterable<readonly [string, string]>): SearchLocation {
   const grouped = new Map<string, string[]>()

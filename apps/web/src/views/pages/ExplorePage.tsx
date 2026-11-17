@@ -1,7 +1,6 @@
 import type { Section } from '../../presenters/app/sections'
 import type { AppView } from '../../presenters/app/useApp'
 import {
-  filterOptions,
   type FilterSelection,
   type FiltersPresenter,
 } from '../../presenters/catalog/filters.presenter'
@@ -14,6 +13,7 @@ import { StatusTabs } from '../components/StatusTabs'
 type ExplorePageProps = {
   catalog: AppView['catalog']
   selection: FilterSelection
+  options: AppView['filterOptions']
   filters: Pick<
     FiltersPresenter,
     | 'setSearch'
@@ -35,6 +35,7 @@ type ExplorePageProps = {
 export function ExplorePage({
   catalog,
   selection,
+  options,
   filters,
   onRetry,
   onNavigate,
@@ -52,7 +53,7 @@ export function ExplorePage({
         }
       />
       <div className="toolbar">
-        <ReportFilters selection={selection} options={filterOptions} actions={filters} />
+        <ReportFilters selection={selection} options={options} actions={filters} />
         <button className="secondary-button" onClick={filters.reset}>
           Limpiar filtros
         </button>
@@ -60,11 +61,11 @@ export function ExplorePage({
       <div className="toolbar toolbar-row">
         <StatusTabs
           label="Estado del reporte"
-          options={filterOptions.statuses}
+          options={options.statuses}
           value={selection.status}
           onChange={filters.setStatus}
         />
-        {catalog.status === 'ready' && !selection.dateError && (
+        {catalog.status === 'ready' && !selection.dateError && !selection.urlError && (
           <span className="result-count">
             <b>{catalog.count}</b> resultados
           </span>
@@ -91,6 +92,7 @@ export function ExplorePage({
       )}
       {catalog.status === 'ready' &&
         !selection.dateError &&
+        !selection.urlError &&
         (catalog.count === 0 ? (
           <EmptyState
             title={catalog.empty.title}

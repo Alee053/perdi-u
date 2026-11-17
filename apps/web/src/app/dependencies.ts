@@ -1,5 +1,6 @@
 import { createAuthGateway } from '../infrastructure/auth/supabase-gateway.js'
 import { browserEffects } from '../infrastructure/browser/browser-effects.js'
+import { createSearchNavigation } from '../infrastructure/browser/search-navigation.js'
 import { demoReports, demoSavedIds } from '../infrastructure/demo/demo-reports.js'
 import { createAccountClient } from '../infrastructure/http/account-client.js'
 import {
@@ -15,6 +16,7 @@ import { ShellPresenter } from '../presenters/app/shell.presenter.js'
 import { AuthPresenter } from '../presenters/auth/auth.presenter.js'
 import { CatalogPresenter } from '../presenters/catalog/catalog.presenter.js'
 import { FiltersPresenter } from '../presenters/catalog/filters.presenter.js'
+import { CatalogSearchPresenter } from '../presenters/catalog/search.presenter.js'
 import { PublishPresenter } from '../presenters/reports/publish.presenter.js'
 import { ReportDetailPresenter } from '../presenters/reports/report-detail.presenter.js'
 import { ReportsPresenter } from '../presenters/reports/reports.presenter.js'
@@ -31,7 +33,7 @@ export function createPresenters(env = import.meta.env) {
   const auth = new AuthPresenter(gateway, createAccountClient(apiUrl, accessToken))
   const notices = new NoticePresenter(browserEffects)
   const catalog = new CatalogPresenter(createReportsClient(apiUrl))
-  const filters = new FiltersPresenter((selection) => void catalog.load(selection))
+  const filters = new FiltersPresenter()
   const own: OwnReportsPresenter = new OwnReportsPresenter(
     createOwnReportsClient(apiUrl, accessToken),
     {
@@ -94,7 +96,25 @@ export function createPresenters(env = import.meta.env) {
     },
   })
   const photos = createReportPhotoLoader(apiUrl, accessToken)
-  return { auth, notices, catalog, filters, reports, own, reportDetail, publish, shell, photos }
+  const search = new CatalogSearchPresenter({
+    filters,
+    catalog,
+    navigation: createSearchNavigation(browserEffects),
+    onSearch: () => shell.navigate('explore'),
+  })
+  return {
+    auth,
+    notices,
+    catalog,
+    filters,
+    reports,
+    own,
+    reportDetail,
+    publish,
+    shell,
+    photos,
+    search,
+  }
 }
 
 export type Presenters = ReturnType<typeof createPresenters>
