@@ -2910,9 +2910,23 @@
     "testId": 78
   },
   {
-    "commitId": "HEAD",
+    "commitId": "958c241b3173e87947262d7aabca5b331010c2c1",
     "commitName": "feat(web): enviar cambios de reportes propios",
     "commitTimestamp": 1794924934793,
     "testId": 78
+  },
+  {
+    "numPassedTests": 169,
+    "failedTests": 0,
+    "numTotalTests": 169,
+    "timestamp": 1794926380818,
+    "success": true,
+    "testId": 79
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): mostrar errores de validación al editar",
+    "commitTimestamp": 1794926393312,
+    "testId": 79
   }
 ]

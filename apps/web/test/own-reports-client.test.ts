@@ -124,3 +124,18 @@ test('el cliente envía un PATCH autenticado y devuelve el reporte actualizado',
   assert.equal(calls[0]?.init?.credentials, 'omit')
   assert.equal(new Headers(calls[0]?.init?.headers).get('authorization'), 'Bearer test-session')
 })
+
+test('el cliente conserva los errores de validación devueltos por PATCH', async () => {
+  const client = createOwnReportsClient(
+    '/api',
+    async () => 'test-session',
+    async () => Response.json({ fieldErrors: { title: 'too_long' } }, { status: 400 }),
+  )
+  await assert.rejects(
+    client.edit('own-1', { title: 'x'.repeat(201) }, new AbortController().signal),
+    (error: unknown) =>
+      error instanceof OwnReportsFailure &&
+      error.reason === 'validation' &&
+      error.fieldErrors.title === 'too_long',
+  )
+})

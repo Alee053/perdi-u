@@ -1,10 +1,14 @@
-import type { EditReportInput } from '@perdiu/contracts'
+import type { EditReportInput, ReportValidationIssue } from '@perdiu/contracts'
 import { SessionRejected } from '../../models/auth/session.js'
 import {
   OwnReportsFailure,
+  type OwnReportEditErrors,
   type OwnReportsRepository,
 } from '../../models/reports/own-reports-repository.js'
 import { readReport } from './catalog-client.js'
+
+const object = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value)
 
 export function createOwnReportsClient(
   baseUrl: string,
@@ -29,6 +33,27 @@ export function createOwnReportsClient(
     if (response.status === 401) throw new SessionRejected()
     if (response.status === 403) throw new OwnReportsFailure('forbidden')
     if (response.status === 404) throw new OwnReportsFailure('not_found')
+    if (response.status === 400) {
+      const value: unknown = await response.json().catch(() => null)
+      const fieldErrors: OwnReportEditErrors = {}
+      if (object(value) && object(value.fieldErrors))
+        for (const [field, issue] of Object.entries(value.fieldErrors))
+          if (
+            [
+              'type',
+              'category',
+              'incidentDate',
+              'petSpecies',
+              'title',
+              'description',
+              'city',
+              'zone',
+            ].includes(field) &&
+            ['required', 'too_short', 'too_long', 'invalid'].includes(String(issue))
+          )
+            fieldErrors[field as keyof EditReportInput] = issue as ReportValidationIssue
+      throw new OwnReportsFailure('validation', fieldErrors)
+    }
     if (!response.ok) throw new OwnReportsFailure('unavailable')
     return response
   }
