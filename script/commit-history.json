@@ -1786,18 +1786,37 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "745598187a329d50c8ad26c9167a22e8f3354fbd",
     "author": "RocioChoque",
     "commit": {
       "date": "2026-11-14T15:27:03.000Z",
       "message": "test(web): esperar resultados al limpiar zona (#24)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/745598187a329d50c8ad26c9167a22e8f3354fbd"
     },
     "stats": {
       "total": 9,
       "additions": 8,
       "deletions": 1,
       "date": "2026-11-14"
+    },
+    "coverage": 89.21,
+    "test_count": 158,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-17T03:12:05.000Z",
+      "message": "test(repo): ajustar el margen de TDDLab en Windows (#26)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 149,
+      "additions": 80,
+      "deletions": 69,
+      "date": "2026-11-17"
     },
     "coverage": 89.21,
     "test_count": 158,

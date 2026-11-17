@@ -90,6 +90,8 @@ Las métricas del commit se calculan sobre el árbol de trabajo. Preparar commit
 
 `pnpm test:unit`, `pnpm test:repo`, los scripts `test` de cada workspace y las integraciones no añaden entradas al log local. Se usan en CI y comprobaciones auxiliares. No presentar esas ejecuciones como ciclos registrados. `scripts/test/tdd-command.test.mjs` verifica en repositorios temporales el rojo/verde, códigos de salida, cobertura y vínculo de dos commits; sus ejemplos no se incorporan al historial de desarrollo real.
 
+En Windows, ese fixture admite 60 segundos por comando, 180 segundos para el recorrido con dos commits y 90 segundos para el rechazo de una ejecución sin pruebas. El arranque de los shims de npm y hooks de Git necesita ese margen en máquinas con carga; las comprobaciones y la instrumentación original se conservan. En otros sistemas mantiene sus límites anteriores.
+
 La migración importa el código anterior como línea base; no genera evidencia retroactiva. Sus verificaciones y procedencia se documentan en [la evidencia de migración](validation/tddlab-migration.md).
 
 ### Agrupar rojo, verde y refactor
