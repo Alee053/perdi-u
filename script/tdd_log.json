@@ -3218,9 +3218,15 @@
     "testId": 92
   },
   {
-    "commitId": "HEAD",
+    "commitId": "e3647388dcafdba3cc0be8aebc0d9ffbeb957c84",
     "commitName": "fix(web): distinguir ciudades del enlace y la opción general (#29)",
     "commitTimestamp": 1794939525215,
     "testId": 92
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(web): registrar la aceptación de filtros persistidos (#29)",
+    "commitTimestamp": 1794939716242,
+    "testId": 93
   }
 ]

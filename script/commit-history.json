@@ -2489,17 +2489,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "e3647388dcafdba3cc0be8aebc0d9ffbeb957c84",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-17T18:18:44.000Z",
       "message": "fix(web): distinguir ciudades del enlace y la opción general (#29)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/e3647388dcafdba3cc0be8aebc0d9ffbeb957c84"
     },
     "stats": {
       "total": 59,
       "additions": 46,
       "deletions": 13,
+      "date": "2026-11-17"
+    },
+    "coverage": 85.59,
+    "test_count": 183,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-17T18:21:55.000Z",
+      "message": "docs(web): registrar la aceptación de filtros persistidos (#29)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 27,
+      "additions": 20,
+      "deletions": 7,
       "date": "2026-11-17"
     },
     "coverage": 85.59,
