@@ -26,7 +26,13 @@ export class EditReport {
     const fields = Object.keys(input)
     if (!fields.length || fields.some((field) => field !== 'title'))
       throw new ReportEditValidationError()
-    const result = await this.repository.editOwned(id, ownerId, input)
+    const patch = { ...input }
+    if ('title' in patch) {
+      if (typeof patch.title !== 'string' || !patch.title.trim())
+        throw new ReportEditValidationError({ title: 'required' })
+      patch.title = patch.title.trim()
+    }
+    const result = await this.repository.editOwned(id, ownerId, patch)
     return typeof result === 'string' ? result : toPublicReport(result.report)
   }
 }

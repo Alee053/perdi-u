@@ -2756,9 +2756,23 @@
     "testId": 67
   },
   {
-    "commitId": "HEAD",
+    "commitId": "ed114998b2f757aa19120fca0039d50ac0029f83",
     "commitName": "feat(catalog): rechazar campos ajenos al editar (#27)",
     "commitTimestamp": 1794923705864,
     "testId": 67
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794923776531,
+    "success": true,
+    "testId": 68
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(catalog): validar título en edición (#27)",
+    "commitTimestamp": 1794923801036,
+    "testId": 68
   }
 ]

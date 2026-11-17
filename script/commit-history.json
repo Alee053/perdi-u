@@ -2014,12 +2014,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "ed114998b2f757aa19120fca0039d50ac0029f83",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-11-17T13:55:05.000Z",
       "message": "feat(catalog): rechazar campos ajenos al editar (#27)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/ed114998b2f757aa19120fca0039d50ac0029f83"
     },
     "stats": {
       "total": 20,
@@ -2028,6 +2028,25 @@
       "date": "2026-11-17"
     },
     "coverage": 89.06,
+    "test_count": 167,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T13:56:40.000Z",
+      "message": "feat(catalog): validar título en edición (#27)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 21,
+      "additions": 20,
+      "deletions": 1,
+      "date": "2026-11-17"
+    },
+    "coverage": 88.73,
     "test_count": 167,
     "failed_tests": 0,
     "conclusion": "success"
