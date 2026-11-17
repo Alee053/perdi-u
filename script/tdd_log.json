@@ -2798,9 +2798,23 @@
     "testId": 70
   },
   {
-    "commitId": "HEAD",
+    "commitId": "9bff395179571e020cc7d2a64e08322459e72580",
     "commitName": "feat(catalog): editar descripción de reporte propio (#27)",
     "commitTimestamp": 1794924086121,
     "testId": 70
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794924161043,
+    "success": true,
+    "testId": 71
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(catalog): permitir editar ciudad de reporte (#27)",
+    "commitTimestamp": 1794924185965,
+    "testId": 71
   }
 ]

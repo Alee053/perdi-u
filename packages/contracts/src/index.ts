@@ -36,6 +36,7 @@ export interface CreateReportInput {
 export interface EditReportInput {
   title?: string
   description?: string
+  city?: string
 }
 
 export type CreateReportField = keyof CreateReportInput

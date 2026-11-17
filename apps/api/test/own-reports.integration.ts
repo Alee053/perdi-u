@@ -215,6 +215,16 @@ test('edición actualiza y persiste la descripción sin volver a publicar', asyn
   })
 })
 
+test('edición actualiza y persiste la ciudad del reporte propio', async () => {
+  await fixture(async ({ request, owners, ids }) => {
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', { city: 'Cochabamba' })
+    assert.equal(response.status, 200)
+    assert.equal((await response.json()).city, 'Cochabamba')
+    const detail = await request(`/reports/${ids[0]}`, owners[0])
+    assert.equal((await detail.json()).city, 'Cochabamba')
+  })
+})
+
 test('resolver HTTP verifica permisos, persiste tras reinicio y repetir no vuelve a escribir el cierre', async () => {
   await fixture(async ({ request, pool, owners, ids, restart }) => {
     const path = `/reports/${ids[0]}/resolve`
