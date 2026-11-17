@@ -2299,12 +2299,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "21b9be9b0196a6fc9495c469b9203a95b0aa1fb6",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-11-17T14:46:42.000Z",
       "message": "feat(web): traducir errores de edición por campo",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/21b9be9b0196a6fc9495c469b9203a95b0aa1fb6"
     },
     "stats": {
       "total": 71,
@@ -2314,6 +2314,25 @@
     },
     "coverage": 86.01,
     "test_count": 172,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:48:19.000Z",
+      "message": "feat(web): explicar conflictos al editar reportes",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 38,
+      "additions": 34,
+      "deletions": 4,
+      "date": "2026-11-17"
+    },
+    "coverage": 86.03,
+    "test_count": 174,
     "failed_tests": 0,
     "conclusion": "success"
   }

@@ -2974,9 +2974,23 @@
     "testId": 82
   },
   {
-    "commitId": "HEAD",
+    "commitId": "21b9be9b0196a6fc9495c469b9203a95b0aa1fb6",
     "commitName": "feat(web): traducir errores de edición por campo",
     "commitTimestamp": 1794926803069,
     "testId": 82
+  },
+  {
+    "numPassedTests": 174,
+    "failedTests": 0,
+    "numTotalTests": 174,
+    "timestamp": 1794926883925,
+    "success": true,
+    "testId": 83
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): explicar conflictos al editar reportes",
+    "commitTimestamp": 1794926900092,
+    "testId": 83
   }
 ]

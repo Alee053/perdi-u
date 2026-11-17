@@ -139,3 +139,15 @@ test('el cliente conserva los errores de validación devueltos por PATCH', async
       error.fieldErrors.title === 'too_long',
   )
 })
+
+test('el cliente identifica el conflicto cuando el reporte ya fue resuelto', async () => {
+  const client = createOwnReportsClient(
+    '/api',
+    async () => 'test-session',
+    async () => new Response(null, { status: 409 }),
+  )
+  await assert.rejects(
+    client.edit('own-1', { title: 'Cambio tardío' }, new AbortController().signal),
+    (error: unknown) => error instanceof OwnReportsFailure && error.reason === 'conflict',
+  )
+})

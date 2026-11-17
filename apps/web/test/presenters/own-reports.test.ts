@@ -150,6 +150,21 @@ test('un rechazo de validación muestra el error junto al campo y conserva el bo
   assert.equal(presenter.view().edit?.message, '')
 })
 
+test('un conflicto por reporte resuelto permite entender el rechazo y no borra el borrador', async () => {
+  const { presenter } = setup({
+    list: async () => [report('active')],
+    edit: async () => {
+      throw new OwnReportsFailure('conflict')
+    },
+  })
+  await presenter.setOwner('owner-1')
+  presenter.requestEdit('active')
+  presenter.setEditField('title', 'Cambio tardío')
+  assert.equal(await presenter.submitEdit(), false)
+  assert.equal(presenter.view().edit?.message, 'Este reporte ya fue resuelto y no se puede editar.')
+  assert.equal(presenter.view().edit?.draft.title, 'Cambio tardío')
+})
+
 test('resolver pide confirmación, cancelar no escribe y un fallo conserva el estado para reintentar sin duplicar', async () => {
   let calls = 0
   let complete!: () => void

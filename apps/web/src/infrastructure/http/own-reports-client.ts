@@ -33,6 +33,7 @@ export function createOwnReportsClient(
     if (response.status === 401) throw new SessionRejected()
     if (response.status === 403) throw new OwnReportsFailure('forbidden')
     if (response.status === 404) throw new OwnReportsFailure('not_found')
+    if (response.status === 409) throw new OwnReportsFailure('conflict')
     if (response.status === 400) {
       const value: unknown = await response.json().catch(() => null)
       const fieldErrors: OwnReportEditErrors = {}

@@ -10,7 +10,7 @@ export interface OwnReportsRepository {
 
 export class OwnReportsFailure extends Error {
   constructor(
-    readonly reason: 'forbidden' | 'not_found' | 'validation' | 'unavailable',
+    readonly reason: 'forbidden' | 'not_found' | 'conflict' | 'validation' | 'unavailable',
     readonly fieldErrors: OwnReportEditErrors = {},
   ) {
     super(reason)

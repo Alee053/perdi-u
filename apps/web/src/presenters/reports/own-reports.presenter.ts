@@ -245,9 +245,11 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
           ? 'Solo puedes editar tus propios reportes.'
           : error instanceof OwnReportsFailure && error.reason === 'not_found'
             ? 'El reporte ya no está disponible.'
-            : Object.keys(errors).length
-              ? ''
-              : 'No se pudo guardar el reporte. Intenta nuevamente.'
+            : error instanceof OwnReportsFailure && error.reason === 'conflict'
+              ? 'Este reporte ya fue resuelto y no se puede editar.'
+              : Object.keys(errors).length
+                ? ''
+                : 'No se pudo guardar el reporte. Intenta nuevamente.'
       this.update({ edit: { ...edit, pending: false, errors, message } })
       return false
     }
