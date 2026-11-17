@@ -25,6 +25,7 @@ const report = (id: string, overrides: Partial<ReportSummary> = {}): ReportSumma
 function setup(repository: Partial<OwnReportsRepository> = {}) {
   const notices: string[] = []
   const resolved: string[] = []
+  const edited: string[] = []
   let rejected = 0
   let cleared = 0
   const presenter = new OwnReportsPresenter(
@@ -37,6 +38,7 @@ function setup(repository: Partial<OwnReportsRepository> = {}) {
     {
       notices: { show: (message) => notices.push(message) },
       onResolved: (item) => resolved.push(item.id),
+      onEdited: (item) => edited.push(item.title),
       onSessionRejected: () => {
         rejected++
       },
@@ -45,7 +47,14 @@ function setup(repository: Partial<OwnReportsRepository> = {}) {
       },
     },
   )
-  return { presenter, notices, resolved, rejected: () => rejected, cleared: () => cleared }
+  return {
+    presenter,
+    notices,
+    resolved,
+    edited,
+    rejected: () => rejected,
+    cleared: () => cleared,
+  }
 }
 
 test('la lista propia carga desde el puerto, separa nombres iguales y presenta los tres filtros', async () => {
@@ -99,6 +108,27 @@ test('el formulario de edición parte del reporte propio activo y cancelar desca
   presenter.cancelEdit()
   assert.equal(presenter.view().edit, null)
   assert.equal(presenter.find('active')?.title, 'Mochila active')
+})
+
+test('guardar el borrador actualiza el historial y avisa a la composición', async () => {
+  let calls = 0
+  const { presenter, notices, edited } = setup({
+    list: async () => [report('active')],
+    edit: async (id, patch) => {
+      calls++
+      return report(id, patch)
+    },
+  })
+  await presenter.setOwner('owner-1')
+  presenter.requestEdit('active')
+  presenter.setEditField('title', 'Mochila azul')
+  const saved = await presenter.submitEdit()
+  assert.equal(saved, true)
+  assert.equal(calls, 1)
+  assert.equal(presenter.find('active')?.title, 'Mochila azul')
+  assert.equal(presenter.view().edit, null)
+  assert.deepEqual(edited, ['Mochila azul'])
+  assert.deepEqual(notices, ['Cambios guardados.'])
 })
 
 test('resolver pide confirmación, cancelar no escribe y un fallo conserva el estado para reintentar sin duplicar', async () => {

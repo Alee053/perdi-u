@@ -1,4 +1,4 @@
-import type { ReportCategory, ReportType } from '@perdiu/contracts'
+import type { EditReportInput, ReportCategory, ReportType } from '@perdiu/contracts'
 import type { OwnReport } from '../../models/reports/report.js'
 import {
   OwnReportsFailure,
@@ -42,6 +42,7 @@ interface OwnReportsState {
 interface Dependencies {
   notices: Pick<NoticePresenter, 'show'>
   onResolved: (report: OwnReport) => void
+  onEdited: (report: OwnReport) => void
   onSessionRejected: () => void
   onOwnerChanged: () => void
 }
@@ -63,6 +64,8 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
   private request = 0
   private controller?: AbortController
   private mutation?: AbortController
+  private editMutation?: AbortController
+  private editAttempt = 0
   constructor(
     private readonly repository: OwnReportsRepository,
     private readonly dependencies: Dependencies,
@@ -91,6 +94,8 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
     this.ownerVersion++
     this.cancelLoad()
     this.mutation?.abort()
+    this.editMutation?.abort()
+    this.editAttempt++
     this.ownerId = ownerId
     this.setState(initialState())
     this.dependencies.onOwnerChanged()
@@ -162,8 +167,55 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
     this.update({ edit: { ...edit, draft, errors, message: '' } })
   }
   cancelEdit = () => {
-    if (this.state.edit?.pending) return
+    this.editAttempt++
+    this.editMutation?.abort()
     this.update({ edit: null })
+  }
+  submitEdit = async () => {
+    const edit = this.state.edit
+    if (!edit || edit.pending || !this.find(edit.id)) return false
+    const version = this.ownerVersion
+    const attempt = ++this.editAttempt
+    const controller = new AbortController()
+    this.editMutation = controller
+    this.update({ edit: { ...edit, pending: true, errors: {}, message: '' } })
+    const patch: EditReportInput = {
+      type: edit.draft.type,
+      category: edit.draft.category,
+      title: edit.draft.title,
+      description: edit.draft.description,
+      city: edit.draft.city,
+      zone: edit.draft.zone,
+      incidentDate: edit.draft.incidentDate,
+      ...(edit.draft.category === 'pet' && { petSpecies: edit.draft.petSpecies }),
+    }
+    let saved
+    try {
+      saved = await this.repository.edit(edit.id, patch, controller.signal)
+    } catch (error) {
+      if (attempt !== this.editAttempt || version !== this.ownerVersion) return false
+      if (error instanceof SessionRejected) {
+        this.rejectSession()
+        return false
+      }
+      const message =
+        error instanceof OwnReportsFailure && error.reason === 'forbidden'
+          ? 'Solo puedes editar tus propios reportes.'
+          : error instanceof OwnReportsFailure && error.reason === 'not_found'
+            ? 'El reporte ya no está disponible.'
+            : 'No se pudo guardar el reporte. Intenta nuevamente.'
+      this.update({ edit: { ...edit, pending: false, errors: {}, message } })
+      return false
+    }
+    if (attempt !== this.editAttempt || version !== this.ownerVersion) return false
+    const updated: OwnReport = { ...saved, source: 'own' }
+    this.update({
+      reports: this.state.reports.map((report) => (report.id === updated.id ? updated : report)),
+      edit: null,
+    })
+    this.dependencies.onEdited(updated)
+    this.dependencies.notices.show('Cambios guardados.')
+    return true
   }
   requestResolve = (id: string) => {
     if (!this.ownerId) return this.dependencies.onSessionRejected()

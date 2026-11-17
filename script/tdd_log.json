@@ -2938,9 +2938,31 @@
     "testId": 80
   },
   {
-    "commitId": "HEAD",
+    "commitId": "a85fd63ce69fe618ca0356c1d1d5ea46071d649a",
     "commitName": "feat(web): preparar borrador de edición propia",
     "commitTimestamp": 1794926481859,
     "testId": 80
+  },
+  {
+    "numPassedTests": 171,
+    "failedTests": 0,
+    "numTotalTests": 171,
+    "timestamp": 1794926623555,
+    "success": true,
+    "testId": 81
+  },
+  {
+    "numPassedTests": 171,
+    "failedTests": 0,
+    "numTotalTests": 171,
+    "timestamp": 1794926682346,
+    "success": true,
+    "testId": 81
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): guardar cambios del reporte propio",
+    "commitTimestamp": 1794926706948,
+    "testId": 81
   }
 ]
