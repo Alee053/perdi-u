@@ -189,6 +189,21 @@ test('edición devuelve error por campo para un título vacío y conserva el bor
   })
 })
 
+test('edición marca título mayor a 200 caracteres como error de campo y no lo persiste', async () => {
+  await fixture(async ({ request, pool, owners, ids }) => {
+    const before = (await pool.query('SELECT title FROM reports WHERE id = $1', [ids[0]])).rows[0]
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', {
+      title: 'x'.repeat(201),
+    })
+    assert.equal(response.status, 400)
+    assert.equal((await response.json()).fieldErrors.title, 'too_long')
+    assert.equal(
+      (await pool.query('SELECT title FROM reports WHERE id = $1', [ids[0]])).rows[0].title,
+      before.title,
+    )
+  })
+})
+
 test('resolver HTTP verifica permisos, persiste tras reinicio y repetir no vuelve a escribir el cierre', async () => {
   await fixture(async ({ request, pool, owners, ids, restart }) => {
     const path = `/reports/${ids[0]}/resolve`

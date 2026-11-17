@@ -2770,9 +2770,23 @@
     "testId": 68
   },
   {
-    "commitId": "HEAD",
+    "commitId": "26a06f106955646f6e9e049482fd9042b61f667c",
     "commitName": "feat(catalog): validar título en edición (#27)",
     "commitTimestamp": 1794923801036,
     "testId": 68
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794923883346,
+    "success": true,
+    "testId": 69
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(catalog): limitar título editado (#27)",
+    "commitTimestamp": 1794923907686,
+    "testId": 69
   }
 ]

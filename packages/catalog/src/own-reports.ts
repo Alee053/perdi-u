@@ -30,6 +30,8 @@ export class EditReport {
     if ('title' in patch) {
       if (typeof patch.title !== 'string' || !patch.title.trim())
         throw new ReportEditValidationError({ title: 'required' })
+      if (patch.title.trim().length > 200)
+        throw new ReportEditValidationError({ title: 'too_long' })
       patch.title = patch.title.trim()
     }
     const result = await this.repository.editOwned(id, ownerId, patch)

@@ -2033,12 +2033,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "26a06f106955646f6e9e049482fd9042b61f667c",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-11-17T13:56:40.000Z",
       "message": "feat(catalog): validar título en edición (#27)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/26a06f106955646f6e9e049482fd9042b61f667c"
     },
     "stats": {
       "total": 21,
@@ -2047,6 +2047,25 @@
       "date": "2026-11-17"
     },
     "coverage": 88.73,
+    "test_count": 167,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T13:58:27.000Z",
+      "message": "feat(catalog): limitar título editado (#27)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 17,
+      "additions": 17,
+      "deletions": 0,
+      "date": "2026-11-17"
+    },
+    "coverage": 88.6,
     "test_count": 167,
     "failed_tests": 0,
     "conclusion": "success"
