@@ -10,6 +10,7 @@ type MyReportsPageProps = {
   myReports: AppView['myReports']
   onFilter: (filter: OwnFilter) => void
   onResolve: (id: string) => void
+  onEdit: (id: string) => void
   onRetry: () => void
   onOpen: (id: string) => void
   onNavigate: (section: Section) => void
@@ -25,6 +26,7 @@ export function MyReportsPage({
   myReports,
   onFilter,
   onResolve,
+  onEdit,
   onRetry,
   onOpen,
   onNavigate,
@@ -33,7 +35,7 @@ export function MyReportsPage({
     <>
       <PageHeading
         title="Mis reportes"
-        description={`${myReports.total} publicados · ${myReports.active} activos. Solo tú puedes cambiar su estado.`}
+        description={`${myReports.total} publicados · ${myReports.active} activos. Solo tú puedes gestionar tus reportes.`}
         action={
           <button className="primary-button" onClick={() => onNavigate('publish')}>
             Nuevo reporte
@@ -89,6 +91,11 @@ export function MyReportsPage({
                 </span>
               </div>
               <div className="managed-actions">
+                {!report.resolved && (
+                  <button className="secondary-button" onClick={() => onEdit(report.id)}>
+                    Editar datos
+                  </button>
+                )}
                 {!report.resolved && (
                   <button className="secondary-button" onClick={() => onResolve(report.id)}>
                     Marcar como resuelto

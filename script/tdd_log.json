@@ -2988,9 +2988,23 @@
     "testId": 83
   },
   {
-    "commitId": "HEAD",
+    "commitId": "9c22df53b730189f913118ead25fb01c2a1a512e",
     "commitName": "feat(web): explicar conflictos al editar reportes",
     "commitTimestamp": 1794926900092,
     "testId": 83
+  },
+  {
+    "numPassedTests": 174,
+    "failedTests": 0,
+    "numTotalTests": 174,
+    "timestamp": 1794927437152,
+    "success": true,
+    "testId": 84
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): abrir edición desde mis reportes",
+    "commitTimestamp": 1794927484177,
+    "testId": 84
   }
 ]

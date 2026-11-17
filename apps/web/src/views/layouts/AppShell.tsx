@@ -1,6 +1,7 @@
 import { LoaderCircle } from 'lucide-react'
 import type { AppView } from '../../presenters/app/useApp'
 import { ReportDetail } from '../components/ReportDetail'
+import { EditReportDialog } from '../components/EditReportDialog'
 import { ResolveConfirmation } from '../components/ResolveConfirmation'
 import { Toast } from '../components/Toast'
 import { AuthPage } from '../pages/AuthPage'
@@ -95,6 +96,7 @@ export function AppShell({ app }: { app: AppView }) {
               myReports={app.myReports}
               onFilter={actions.own.setFilter}
               onResolve={actions.own.requestResolve}
+              onEdit={actions.own.requestEdit}
               onRetry={() => void actions.own.load()}
               onOpen={reports.open}
               onNavigate={actions.navigate}
@@ -155,6 +157,14 @@ export function AppShell({ app }: { app: AppView }) {
           confirmation={app.myReports.confirmation}
           onConfirm={() => void actions.own.confirmResolve()}
           onCancel={actions.own.cancelResolve}
+        />
+      )}
+      {app.myReports.edit && (
+        <EditReportDialog
+          edit={app.myReports.edit}
+          onChange={actions.own.setEditField}
+          onSave={() => void actions.own.submitEdit()}
+          onCancel={actions.own.cancelEdit}
         />
       )}
     </div>

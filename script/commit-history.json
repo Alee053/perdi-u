@@ -2318,16 +2318,35 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "9c22df53b730189f913118ead25fb01c2a1a512e",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-11-17T14:48:19.000Z",
       "message": "feat(web): explicar conflictos al editar reportes",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/9c22df53b730189f913118ead25fb01c2a1a512e"
     },
     "stats": {
       "total": 38,
       "additions": 34,
+      "deletions": 4,
+      "date": "2026-11-17"
+    },
+    "coverage": 86.03,
+    "test_count": 174,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:58:04.000Z",
+      "message": "feat(web): abrir edición desde mis reportes",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 103,
+      "additions": 99,
       "deletions": 4,
       "date": "2026-11-17"
     },
