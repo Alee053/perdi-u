@@ -54,8 +54,12 @@ export class EditReport {
       patch.category !== 'document'
     )
       throw new ReportEditValidationError({ category: 'invalid' })
-    if ('incidentDate' in patch && !isDate(patch.incidentDate))
-      throw new ReportEditValidationError({ incidentDate: 'invalid' })
+    if ('incidentDate' in patch) {
+      if (typeof patch.incidentDate !== 'string' || !patch.incidentDate.trim())
+        throw new ReportEditValidationError({ incidentDate: 'required' })
+      if (!isDate(patch.incidentDate))
+        throw new ReportEditValidationError({ incidentDate: 'invalid' })
+    }
     if ('title' in patch) {
       if (typeof patch.title !== 'string' || !patch.title.trim())
         throw new ReportEditValidationError({ title: 'required' })

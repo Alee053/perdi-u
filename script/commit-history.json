@@ -2166,12 +2166,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "ad21cea4317e94fedf931a36e18141b1155661fa",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-11-17T14:09:39.000Z",
       "message": "feat(catalog): permitir editar fecha del reporte (#27)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/ad21cea4317e94fedf931a36e18141b1155661fa"
     },
     "stats": {
       "total": 26,
@@ -2180,6 +2180,25 @@
       "date": "2026-11-17"
     },
     "coverage": 86.65,
+    "test_count": 167,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:11:18.000Z",
+      "message": "fix(catalog): marcar fecha vacía como requerida (#27)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 24,
+      "additions": 22,
+      "deletions": 2,
+      "date": "2026-11-17"
+    },
+    "coverage": 86.47,
     "test_count": 167,
     "failed_tests": 0,
     "conclusion": "success"

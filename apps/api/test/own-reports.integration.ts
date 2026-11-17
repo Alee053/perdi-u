@@ -269,6 +269,22 @@ test('edición actualiza y persiste la fecha del reporte propio', async () => {
   })
 })
 
+test('edición marca una fecha vacía como requerida y conserva la fecha persistida', async () => {
+  await fixture(async ({ request, pool, owners, ids }) => {
+    const before = (await pool.query('SELECT incident_date FROM reports WHERE id = $1', [ids[0]]))
+      .rows[0]
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', { incidentDate: '  ' })
+    assert.equal(response.status, 400)
+    assert.equal((await response.json()).fieldErrors.incidentDate, 'required')
+    assert.equal(
+      (
+        await pool.query('SELECT incident_date FROM reports WHERE id = $1', [ids[0]])
+      ).rows[0].incident_date.toISOString(),
+      before.incident_date.toISOString(),
+    )
+  })
+})
+
 test('resolver HTTP verifica permisos, persiste tras reinicio y repetir no vuelve a escribir el cierre', async () => {
   await fixture(async ({ request, pool, owners, ids, restart }) => {
     const path = `/reports/${ids[0]}/resolve`

@@ -2868,9 +2868,23 @@
     "testId": 75
   },
   {
-    "commitId": "HEAD",
+    "commitId": "ad21cea4317e94fedf931a36e18141b1155661fa",
     "commitName": "feat(catalog): permitir editar fecha del reporte (#27)",
     "commitTimestamp": 1794924579515,
     "testId": 75
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794924666057,
+    "success": true,
+    "testId": 76
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "fix(catalog): marcar fecha vacía como requerida (#27)",
+    "commitTimestamp": 1794924678710,
+    "testId": 76
   }
 ]
