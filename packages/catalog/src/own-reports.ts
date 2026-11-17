@@ -40,7 +40,8 @@ export class EditReport {
           field !== 'zone' &&
           field !== 'type' &&
           field !== 'category' &&
-          field !== 'incidentDate',
+          field !== 'incidentDate' &&
+          field !== 'petSpecies',
       )
     )
       throw new ReportEditValidationError()
@@ -59,6 +60,15 @@ export class EditReport {
         throw new ReportEditValidationError({ incidentDate: 'required' })
       if (!isDate(patch.incidentDate))
         throw new ReportEditValidationError({ incidentDate: 'invalid' })
+    }
+    if (patch.category === 'pet') {
+      if (typeof patch.petSpecies !== 'string' || !patch.petSpecies.trim())
+        throw new ReportEditValidationError({ petSpecies: 'required' })
+      if (patch.petSpecies.trim().length > 100)
+        throw new ReportEditValidationError({ petSpecies: 'too_long' })
+      patch.petSpecies = patch.petSpecies.trim()
+    } else if ('petSpecies' in patch) {
+      throw new ReportEditValidationError({ petSpecies: 'invalid' })
     }
     if ('title' in patch) {
       if (typeof patch.title !== 'string' || !patch.title.trim())

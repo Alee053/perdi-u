@@ -2185,12 +2185,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "126a0b17c0ab3fa21c011904ee3d2de291aa96a0",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-11-17T14:11:18.000Z",
       "message": "fix(catalog): marcar fecha vacía como requerida (#27)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/126a0b17c0ab3fa21c011904ee3d2de291aa96a0"
     },
     "stats": {
       "total": 24,
@@ -2199,6 +2199,25 @@
       "date": "2026-11-17"
     },
     "coverage": 86.47,
+    "test_count": 167,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:12:47.000Z",
+      "message": "feat(catalog): editar especie de mascota en reporte (#27)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 31,
+      "additions": 29,
+      "deletions": 2,
+      "date": "2026-11-17"
+    },
+    "coverage": 85.98,
     "test_count": 167,
     "failed_tests": 0,
     "conclusion": "success"

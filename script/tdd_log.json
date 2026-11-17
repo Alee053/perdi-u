@@ -2882,9 +2882,23 @@
     "testId": 76
   },
   {
-    "commitId": "HEAD",
+    "commitId": "126a0b17c0ab3fa21c011904ee3d2de291aa96a0",
     "commitName": "fix(catalog): marcar fecha vacía como requerida (#27)",
     "commitTimestamp": 1794924678710,
     "testId": 76
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794924752760,
+    "success": true,
+    "testId": 77
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(catalog): editar especie de mascota en reporte (#27)",
+    "commitTimestamp": 1794924767387,
+    "testId": 77
   }
 ]

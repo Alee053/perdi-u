@@ -52,7 +52,7 @@ export class PostgresReportRepository
            city = COALESCE($5, city), zone = COALESCE($6, zone), type = COALESCE($7, type),
            category = COALESCE($8, category),
            incident_date = COALESCE($9, incident_date),
-           pet_species = CASE WHEN COALESCE($8, category) = 'pet' THEN pet_species ELSE NULL END
+           pet_species = CASE WHEN COALESCE($8, category) = 'pet' THEN COALESCE($10, pet_species) ELSE NULL END
          WHERE id = $1 AND owner_id = $2 AND state = 'active'
          RETURNING id, owner_id, type, state, category, pet_species, title, description, city, zone, incident_date, created_at
        )
@@ -67,6 +67,7 @@ export class PostgresReportRepository
         input.type ?? null,
         input.category ?? null,
         input.incidentDate ?? null,
+        input.petSpecies ?? null,
       ],
     )
     if (updated.rowCount) return { kind: 'updated', report: updated.rows[0]! }
