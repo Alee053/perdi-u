@@ -3050,9 +3050,79 @@
     "testId": 88
   },
   {
-    "commitId": "HEAD",
+    "commitId": "9c726c9a2dca44154cd26becb5d08788823d788d",
     "commitName": "test(api): verify edit ownership and privacy (#27)",
     "commitTimestamp": 1794928700527,
     "testId": 88
+  },
+  {
+    "numPassedTests": 174,
+    "failedTests": 1,
+    "numTotalTests": 175,
+    "timestamp": 1794958101208,
+    "success": false,
+    "testId": 89
+  },
+  {
+    "numPassedTests": 175,
+    "failedTests": 0,
+    "numTotalTests": 175,
+    "timestamp": 1794958160458,
+    "success": true,
+    "testId": 89
+  },
+  {
+    "numPassedTests": 175,
+    "failedTests": 1,
+    "numTotalTests": 176,
+    "timestamp": 1794958181036,
+    "success": false,
+    "testId": 89
+  },
+  {
+    "numPassedTests": 176,
+    "failedTests": 0,
+    "numTotalTests": 176,
+    "timestamp": 1794958240827,
+    "success": true,
+    "testId": 89
+  },
+  {
+    "numPassedTests": 176,
+    "failedTests": 1,
+    "numTotalTests": 177,
+    "timestamp": 1794958270635,
+    "success": false,
+    "testId": 89
+  },
+  {
+    "numPassedTests": 177,
+    "failedTests": 0,
+    "numTotalTests": 177,
+    "timestamp": 1794958325466,
+    "success": true,
+    "testId": 89
+  },
+  {
+    "numPassedTests": 177,
+    "failedTests": 1,
+    "numTotalTests": 178,
+    "timestamp": 1794958395809,
+    "success": false,
+    "testId": 89
+  },
+  {
+    "numPassedTests": 178,
+    "failedTests": 0,
+    "numTotalTests": 178,
+    "timestamp": 1794958417472,
+    "success": true,
+    "testId": 89
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): copiar el enlace público del reporte (#28)",
+    "commitTimestamp": 1794958699695,
+    "testId": 89
   }
 ]
