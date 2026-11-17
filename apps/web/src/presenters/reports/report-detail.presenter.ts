@@ -5,7 +5,12 @@ import type { ReportDetailRepository } from '../../models/reports/reports-reposi
 import type { AuthPresenter } from '../auth/auth.presenter.js'
 import type { Effects } from '../effects.js'
 import { Store } from '../store.js'
-import { toReportCard, type ReportCard, type ReportDetailView } from './report-card.js'
+import {
+  toReportCard,
+  toReportGallery,
+  type ReportCard,
+  type ReportDetailView,
+} from './report-card.js'
 import { parseReportPath, reportPath } from './report-route.js'
 
 export type ReportDetailState =
@@ -15,6 +20,7 @@ export type ReportDetailState =
       status: 'ready'
       id: string
       card: ReportCard
+      selectedPhoto: number
       authorId: string
       active: boolean
       contacting: boolean
@@ -146,10 +152,31 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
       status: 'ready',
       id,
       card: toReportCard(this.loaded),
+      selectedPhoto: 0,
       authorId: report.author.id,
       active: report.state === 'active',
       contacting: false,
     })
+  }
+
+  selectPhoto = (index: number) => {
+    const { state } = this
+    if (state.status !== 'ready' || !Number.isInteger(index) || !state.card.images[index]) return
+    this.setState({ ...state, selectedPhoto: index })
+  }
+
+  nextPhoto = () => {
+    const { state } = this
+    if (state.status === 'ready')
+      this.selectPhoto((state.selectedPhoto + 1) % state.card.images.length)
+  }
+
+  previousPhoto = () => {
+    const { state } = this
+    if (state.status === 'ready')
+      this.selectPhoto(
+        (state.selectedPhoto + state.card.images.length - 1) % state.card.images.length,
+      )
   }
 
   /** WhatsApp with the author: a visitor is asked to sign in first. */
@@ -164,8 +191,8 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
     try {
       contact = await repository.contact(report.id)
     } catch (error) {
-      if (request !== this.request) return
-      this.setState({ ...report, contacting: false, contactMessage: contactFailed })
+      if (request !== this.request || this.state.status !== 'ready') return
+      this.setState({ ...this.state, contacting: false, contactMessage: contactFailed })
       // The API rejected the session: signing in again gives access to the contact.
       if (error instanceof SessionRejected) onLoginRequired()
       return
@@ -183,7 +210,7 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
         contact.whatsapp,
         `Hola, vi tu reporte "${report.card.title}" en PerdiU y quiero coordinar contigo: ${link}`,
       )
-    this.setState({ ...report, contacting: false, ...(!url && { contactMessage: noContact }) })
+    this.setState({ ...this.state, contacting: false, ...(!url && { contactMessage: noContact }) })
     if (url) effects.openWhatsApp(url)
   }
 
@@ -197,6 +224,7 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
       status: 'ready',
       detail: {
         card: state.card,
+        gallery: toReportGallery(state.card, state.selectedPhoto),
         saved: this.dependencies.isSaved(state.id),
         canContact: this.canContact(),
         canResolve: this.canResolve(),
@@ -247,6 +275,7 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
       status: 'ready',
       id,
       card: toReportCard(this.loaded),
+      selectedPhoto: this.state.status === 'ready' ? this.state.selectedPhoto : 0,
       authorId: this.loaded.author.id,
       active: false,
       contacting: false,

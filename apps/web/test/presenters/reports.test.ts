@@ -103,8 +103,8 @@ test('el detalle demo ofrece contacto y deja el cierre a los reportes persistido
   const { presenter, opened, links } = setup([demo('demo-1'), own('demo-2')])
   presenter.open('demo-1')
   assert.deepEqual(
-    { ...presenter.detail(), card: undefined },
-    { card: undefined, saved: false, canContact: true, canResolve: false },
+    { ...presenter.detail(), card: undefined, gallery: undefined },
+    { card: undefined, gallery: undefined, saved: false, canContact: true, canResolve: false },
   )
   presenter.contact('demo-1')
   assert.deepEqual(opened, [

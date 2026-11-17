@@ -1805,12 +1805,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "dee0b56715d8c00e1ea318c2c79edb153fd148f6",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-17T03:12:05.000Z",
       "message": "test(repo): ajustar el margen de TDDLab en Windows (#26)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/dee0b56715d8c00e1ea318c2c79edb153fd148f6"
     },
     "stats": {
       "total": 149,
@@ -1820,6 +1820,25 @@
     },
     "coverage": 89.21,
     "test_count": 158,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-17T03:15:06.000Z",
+      "message": "feat(web): ampliar el detalle y navegar sus fotos (#26)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 667,
+      "additions": 579,
+      "deletions": 88,
+      "date": "2026-11-17"
+    },
+    "coverage": 88.69,
+    "test_count": 160,
     "failed_tests": 0,
     "conclusion": "success"
   }

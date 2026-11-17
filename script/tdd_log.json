@@ -2466,9 +2466,23 @@
     "testId": 61
   },
   {
-    "commitId": "HEAD",
+    "commitId": "dee0b56715d8c00e1ea318c2c79edb153fd148f6",
     "commitName": "test(repo): ajustar el margen de TDDLab en Windows (#26)",
     "commitTimestamp": 1794885126794,
     "testId": 61
+  },
+  {
+    "numPassedTests": 160,
+    "failedTests": 0,
+    "numTotalTests": 160,
+    "timestamp": 1794885226282,
+    "success": true,
+    "testId": 62
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): ampliar el detalle y navegar sus fotos (#26)",
+    "commitTimestamp": 1794885307803,
+    "testId": 62
   }
 ]
