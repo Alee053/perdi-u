@@ -84,6 +84,23 @@ test('la lista propia carga desde el puerto, separa nombres iguales y presenta l
   assert.equal(presenter.view().cards[0]?.badge, 'Resuelto')
 })
 
+test('el formulario de edición parte del reporte propio activo y cancelar descarta el borrador', async () => {
+  const { presenter } = setup({
+    list: async () => [report('active'), report('closed', { state: 'resolved' })],
+  })
+  await presenter.setOwner('owner-1')
+  presenter.requestEdit('closed')
+  assert.equal(presenter.view().edit, null, 'un reporte resuelto no se puede editar')
+  presenter.requestEdit('active')
+  assert.equal(presenter.view().edit?.id, 'active')
+  assert.equal(presenter.view().edit?.draft.title, 'Mochila active')
+  presenter.setEditField('title', 'Borrador sin guardar')
+  assert.equal(presenter.view().edit?.draft.title, 'Borrador sin guardar')
+  presenter.cancelEdit()
+  assert.equal(presenter.view().edit, null)
+  assert.equal(presenter.find('active')?.title, 'Mochila active')
+})
+
 test('resolver pide confirmación, cancelar no escribe y un fallo conserva el estado para reintentar sin duplicar', async () => {
   let calls = 0
   let complete!: () => void

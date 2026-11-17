@@ -2924,9 +2924,23 @@
     "testId": 79
   },
   {
-    "commitId": "HEAD",
+    "commitId": "ad21d689d882738a4c170e4f0b088927790a1c96",
     "commitName": "feat(web): mostrar errores de validación al editar",
     "commitTimestamp": 1794926393312,
     "testId": 79
+  },
+  {
+    "numPassedTests": 170,
+    "failedTests": 0,
+    "numTotalTests": 170,
+    "timestamp": 1794926469049,
+    "success": true,
+    "testId": 80
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): preparar borrador de edición propia",
+    "commitTimestamp": 1794926481859,
+    "testId": 80
   }
 ]

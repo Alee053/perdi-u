@@ -1,3 +1,4 @@
+import type { ReportCategory, ReportType } from '@perdiu/contracts'
 import type { OwnReport } from '../../models/reports/report.js'
 import {
   OwnReportsFailure,
@@ -11,6 +12,23 @@ import { Store } from '../store.js'
 import { toReportCard } from './report-card.js'
 
 export type OwnFilter = 'Todos' | 'Activos' | 'Resueltos'
+interface EditDraft {
+  type: ReportType
+  category: ReportCategory
+  title: string
+  description: string
+  city: string
+  zone: string
+  incidentDate: string
+  petSpecies: string
+}
+interface EditForm {
+  id: string
+  draft: EditDraft
+  pending: boolean
+  errors: Partial<Record<keyof EditDraft, string>>
+  message: string
+}
 interface OwnReportsState {
   status: 'idle' | 'loading' | 'ready' | 'error'
   reports: OwnReport[]
@@ -19,6 +37,7 @@ interface OwnReportsState {
   confirmation: string | null
   pending: boolean
   resolveError: string | null
+  edit: EditForm | null
 }
 interface Dependencies {
   notices: Pick<NoticePresenter, 'show'>
@@ -35,6 +54,7 @@ const initialState = (): OwnReportsState => ({
   confirmation: null,
   pending: false,
   resolveError: null,
+  edit: null,
 })
 
 export class OwnReportsPresenter extends Store<OwnReportsState> {
@@ -108,6 +128,43 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
     }
   }
   setFilter = (filter: OwnFilter) => this.update({ filter })
+  requestEdit = (id: string) => {
+    if (!this.ownerId) return this.dependencies.onSessionRejected()
+    const report = this.find(id)
+    if (!report || report.state !== 'active' || this.state.pending) return
+    this.update({
+      edit: {
+        id,
+        draft: {
+          type: report.type,
+          category: report.category,
+          title: report.title,
+          description: report.description,
+          city: report.city,
+          zone: report.zone,
+          incidentDate: report.incidentDate,
+          petSpecies: report.petSpecies ?? '',
+        },
+        pending: false,
+        errors: {},
+        message: '',
+      },
+    })
+  }
+  setEditField = <Field extends keyof EditDraft>(field: Field, value: EditDraft[Field]) => {
+    const edit = this.state.edit
+    if (!edit || edit.pending) return
+    const draft = { ...edit.draft, [field]: value }
+    if (field === 'category' && value !== 'pet') draft.petSpecies = ''
+    const errors = { ...edit.errors }
+    delete errors[field]
+    if (field === 'category' && value !== 'pet') delete errors.petSpecies
+    this.update({ edit: { ...edit, draft, errors, message: '' } })
+  }
+  cancelEdit = () => {
+    if (this.state.edit?.pending) return
+    this.update({ edit: null })
+  }
   requestResolve = (id: string) => {
     if (!this.ownerId) return this.dependencies.onSessionRejected()
     if (this.state.pending || this.find(id)?.state !== 'active') return
@@ -183,6 +240,7 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
             error: resolveError,
           }
         : null,
+      edit: this.state.edit,
     }
   }
 }

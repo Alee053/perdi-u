@@ -2242,12 +2242,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "ad21d689d882738a4c170e4f0b088927790a1c96",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-11-17T14:39:53.000Z",
       "message": "feat(web): mostrar errores de validación al editar",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/ad21d689d882738a4c170e4f0b088927790a1c96"
     },
     "stats": {
       "total": 51,
@@ -2257,6 +2257,25 @@
     },
     "coverage": 86.04,
     "test_count": 169,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:41:21.000Z",
+      "message": "feat(web): preparar borrador de edición propia",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 75,
+      "additions": 75,
+      "deletions": 0,
+      "date": "2026-11-17"
+    },
+    "coverage": 85.91,
+    "test_count": 170,
     "failed_tests": 0,
     "conclusion": "success"
   }
