@@ -8,6 +8,7 @@ import { createServer } from 'node:net'
 import { chromium } from 'playwright'
 import { createPool } from '@perdiu/database'
 import { assertLocalDatabase } from '@perdiu/database/config'
+import { verifyReportGallery } from './browser-report-gallery.mjs'
 
 async function freePort() {
   const server = createServer()
@@ -715,6 +716,8 @@ try {
 
   await verifyReportLink('desktop', { width: 1440, height: 1000 })
   await verifyReportLink('mobile', { width: 390, height: 844 })
+  await verifyReportGallery(browser, webUrl, 'desktop', { width: 1440, height: 1000 })
+  await verifyReportGallery(browser, webUrl, 'mobile', { width: 390, height: 844 })
 
   await pool.query(
     await readFile(

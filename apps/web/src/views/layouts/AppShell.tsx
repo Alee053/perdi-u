@@ -128,6 +128,9 @@ export function AppShell({ app }: { app: AppView }) {
           onContact={() => reports.contact(detail.card.id)}
           onResolve={() => actions.own.requestResolve(detail.card.id)}
           onClose={reports.close}
+          onSelectPhoto={reports.selectPhoto}
+          onNextPhoto={reports.nextPhoto}
+          onPreviousPhoto={reports.previousPhoto}
         />
       )}
       {reportLink && (
@@ -142,6 +145,9 @@ export function AppShell({ app }: { app: AppView }) {
           }
           onRetry={actions.reportLink.retry}
           onClose={actions.reportLink.close}
+          onSelectPhoto={actions.reportLink.selectPhoto}
+          onNextPhoto={actions.reportLink.nextPhoto}
+          onPreviousPhoto={actions.reportLink.previousPhoto}
         />
       )}
       {app.myReports.confirmation && (

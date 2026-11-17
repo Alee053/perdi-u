@@ -1881,12 +1881,12 @@
     "conclusion": "failure"
   },
   {
-    "sha": "HEAD",
+    "sha": "06b3f301725fd5a9a6042ce7243facd0247c6cc0",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-11-16T02:44:22.000Z",
       "message": "feat(catalog): integrar fechas del hecho con zona (#25)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/06b3f301725fd5a9a6042ce7243facd0247c6cc0"
     },
     "stats": {
       "total": 758,
@@ -1896,6 +1896,82 @@
     },
     "coverage": 90.15,
     "test_count": 164,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "dee0b56715d8c00e1ea318c2c79edb153fd148f6",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-17T03:12:05.000Z",
+      "message": "test(repo): ajustar el margen de TDDLab en Windows (#26)",
+      "url": "https://github.com/Alee053/perdi-u/commit/dee0b56715d8c00e1ea318c2c79edb153fd148f6"
+    },
+    "stats": {
+      "total": 149,
+      "additions": 80,
+      "deletions": 69,
+      "date": "2026-11-17"
+    },
+    "coverage": 89.21,
+    "test_count": 158,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "8692d8760ef91b33042d687f33c7a7d459217485",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-17T03:15:06.000Z",
+      "message": "feat(web): ampliar el detalle y navegar sus fotos (#26)",
+      "url": "https://github.com/Alee053/perdi-u/commit/8692d8760ef91b33042d687f33c7a7d459217485"
+    },
+    "stats": {
+      "total": 667,
+      "additions": 579,
+      "deletions": 88,
+      "date": "2026-11-17"
+    },
+    "coverage": 88.69,
+    "test_count": 160,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "863b137193dc55107206ce6fdf9548a50198b277",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-17T03:23:29.000Z",
+      "message": "fix(web): mostrar el fallo de una foto y permitir recuperarse (#26)",
+      "url": "https://github.com/Alee053/perdi-u/commit/863b137193dc55107206ce6fdf9548a50198b277"
+    },
+    "stats": {
+      "total": 74,
+      "additions": 55,
+      "deletions": 19,
+      "date": "2026-11-17"
+    },
+    "coverage": 88.72,
+    "test_count": 161,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-17T13:21:55.000Z",
+      "message": "chore(repo): integrar main y conservar ciclos TDD (#25)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 864,
+      "additions": 705,
+      "deletions": 159,
+      "date": "2026-11-17"
+    },
+    "coverage": 89.65,
+    "test_count": 167,
     "failed_tests": 0,
     "conclusion": "success"
   }

@@ -86,6 +86,67 @@ function setup(options: { path?: string; session?: AuthState; allowResolve?: boo
 
 const settle = () => new Promise((resolve) => setTimeout(resolve, 0))
 
+test('la galería permite elegir y recorrer fotos y reinicia la selección al abrir otro reporte', async () => {
+  const { presenter, api } = setup()
+  const images = ['/api/media/first', '/api/media/second', '/api/media/third']
+  api.find = async (id) => ({ ...report, id, imageUrls: images })
+  const gallery = () => {
+    const view = presenter.view()
+    assert.ok(view?.status === 'ready')
+    return view.detail.gallery
+  }
+  await presenter.open(report.id)
+  assert.equal(gallery()?.source, images[0])
+  assert.equal(gallery().caption, 'Foto 1 de 3')
+  assert.equal(gallery().canNavigate, true)
+  presenter.selectPhoto(2)
+  assert.equal(gallery().source, images[2])
+  assert.deepEqual(
+    gallery().choices.map((choice) => choice.selected),
+    [false, false, true],
+  )
+  presenter.nextPhoto()
+  assert.equal(gallery().source, images[0], 'después de la última vuelve a la primera')
+  presenter.previousPhoto()
+  assert.equal(gallery().source, images[2])
+  presenter.selectPhoto(-1)
+  presenter.selectPhoto(3)
+  presenter.selectPhoto(0.5)
+  assert.equal(gallery().source, images[2], 'ignora selecciones fuera de la galería')
+  await presenter.open('another-report')
+  assert.equal(gallery().source, images[0])
+  api.find = async () => ({ ...report, imageUrls: [images[0]!] })
+  await presenter.retry()
+  assert.equal(gallery().canNavigate, false, 'una sola foto no necesita controles')
+  api.find = async () => report
+  await presenter.retry()
+  assert.equal(gallery().source, '/images/pet.svg')
+  assert.equal(gallery().caption, 'Imagen de referencia de categoría')
+  assert.deepEqual(gallery().choices, [])
+})
+
+test('terminar una solicitud de contacto conserva la foto elegida durante la espera', async () => {
+  for (const fails of [false, true]) {
+    const { presenter, api } = setup({
+      session: { status: 'authenticated', user: { id: 'viewer-1', email: 'persona@example.test' } },
+    })
+    api.find = async () => ({ ...report, imageUrls: ['/api/media/first', '/api/media/second'] })
+    await presenter.open(report.id)
+    let finish!: () => void
+    api.contact = () =>
+      new Promise((resolve, reject) => {
+        finish = () => (fails ? reject(new Error('network')) : resolve({ available: false }))
+      })
+    const pending = presenter.contact()
+    presenter.selectPhoto(1)
+    finish()
+    await pending
+    const view = presenter.view()
+    assert.ok(view?.status === 'ready')
+    assert.equal(view.detail.gallery.source, '/api/media/second')
+  }
+})
+
 test('un contacto pendiente de otra sesión no restaura el detalle activo tras el cierre', async () => {
   for (const fails of [false, true]) {
     const { presenter, api, session, opened } = setup({
@@ -378,10 +439,16 @@ test('la vista del detalle indica qué acciones ofrecer y permite guardar el rep
   const view = presenter.view()
   assert.ok(view?.status === 'ready')
   assert.deepEqual(
-    { ...view, detail: { ...view.detail, card: view.detail.card.id } },
+    { ...view, detail: { ...view.detail, card: view.detail.card.id, gallery: undefined } },
     {
       status: 'ready',
-      detail: { card: report.id, saved: true, canContact: true, canResolve: false },
+      detail: {
+        card: report.id,
+        gallery: undefined,
+        saved: true,
+        canContact: true,
+        canResolve: false,
+      },
       contacting: false,
     },
   )

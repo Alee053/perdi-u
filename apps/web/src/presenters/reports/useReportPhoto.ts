@@ -14,5 +14,5 @@ export function useReportPhoto(source: string, privatePhoto: boolean) {
     void presenter.show(source, privatePhoto)
     return presenter.stop
   }, [presenter, source, privatePhoto])
-  return photo
+  return { ...photo, onError: presenter.imageFailed }
 }

@@ -2554,9 +2554,137 @@
     "testId": 62
   },
   {
-    "commitId": "HEAD",
+    "commitId": "06b3f301725fd5a9a6042ce7243facd0247c6cc0",
     "commitName": "feat(catalog): integrar fechas del hecho con zona (#25)",
     "commitTimestamp": 1794797062344,
     "testId": 62
+  },
+  {
+    "numPassedTests": 157,
+    "failedTests": 2,
+    "numTotalTests": 159,
+    "timestamp": 1794883337556,
+    "success": false,
+    "testId": 61
+  },
+  {
+    "numPassedTests": 159,
+    "failedTests": 0,
+    "numTotalTests": 159,
+    "timestamp": 1794883499816,
+    "success": true,
+    "testId": 61
+  },
+  {
+    "numPassedTests": 158,
+    "failedTests": 2,
+    "numTotalTests": 160,
+    "timestamp": 1794883549860,
+    "success": false,
+    "testId": 61
+  },
+  {
+    "numPassedTests": 159,
+    "failedTests": 1,
+    "numTotalTests": 160,
+    "timestamp": 1794883678600,
+    "success": false,
+    "testId": 61
+  },
+  {
+    "numPassedTests": 159,
+    "failedTests": 1,
+    "numTotalTests": 160,
+    "timestamp": 1794883795585,
+    "success": false,
+    "testId": 61
+  },
+  {
+    "numPassedTests": 160,
+    "failedTests": 0,
+    "numTotalTests": 160,
+    "timestamp": 1794883847187,
+    "success": true,
+    "testId": 61
+  },
+  {
+    "numPassedTests": 159,
+    "failedTests": 1,
+    "numTotalTests": 160,
+    "timestamp": 1794884604853,
+    "success": false,
+    "testId": 61
+  },
+  {
+    "numPassedTests": 159,
+    "failedTests": 1,
+    "numTotalTests": 160,
+    "timestamp": 1794884802093,
+    "success": false,
+    "testId": 61
+  },
+  {
+    "numPassedTests": 158,
+    "failedTests": 0,
+    "numTotalTests": 158,
+    "timestamp": 1794885008206,
+    "success": true,
+    "testId": 61
+  },
+  {
+    "commitId": "dee0b56715d8c00e1ea318c2c79edb153fd148f6",
+    "commitName": "test(repo): ajustar el margen de TDDLab en Windows (#26)",
+    "commitTimestamp": 1794885126794,
+    "testId": 61
+  },
+  {
+    "numPassedTests": 160,
+    "failedTests": 0,
+    "numTotalTests": 160,
+    "timestamp": 1794885226282,
+    "success": true,
+    "testId": 62
+  },
+  {
+    "commitId": "8692d8760ef91b33042d687f33c7a7d459217485",
+    "commitName": "feat(web): ampliar el detalle y navegar sus fotos (#26)",
+    "commitTimestamp": 1794885307803,
+    "testId": 62
+  },
+  {
+    "numPassedTests": 160,
+    "failedTests": 1,
+    "numTotalTests": 161,
+    "timestamp": 1794885394976,
+    "success": false,
+    "testId": 63
+  },
+  {
+    "numPassedTests": 161,
+    "failedTests": 0,
+    "numTotalTests": 161,
+    "timestamp": 1794885462835,
+    "success": true,
+    "testId": 63
+  },
+  {
+    "commitId": "863b137193dc55107206ce6fdf9548a50198b277",
+    "commitName": "fix(web): mostrar el fallo de una foto y permitir recuperarse (#26)",
+    "commitTimestamp": 1794885811212,
+    "testId": 63
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794921491100,
+    "success": true,
+    "testId": 64
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "chore(repo): integrar main y conservar ciclos TDD (#25)",
+    "commitTimestamp": 1794921715336,
+    "testId": 64
   }
 ]

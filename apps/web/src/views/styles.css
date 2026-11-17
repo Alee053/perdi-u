@@ -875,23 +875,20 @@ nav {
 .resolve-dialog p {
   margin-top: var(--space-3);
 }
-.modal-backdrop {
-  position: fixed;
-  z-index: 45;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: var(--space-4);
-  overflow: auto;
+.modal::backdrop {
   background: rgba(20, 26, 21, 0.5);
 }
 .modal {
   position: relative;
-  width: min(100%, 500px);
-  max-height: calc(100vh - 32px);
+  width: min(720px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 0;
   overflow: auto;
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
+  color: var(--text);
 }
 .modal-close {
   position: absolute;
@@ -905,14 +902,33 @@ nav {
   border-radius: 50%;
   background: var(--surface);
 }
-.detail-images {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 4px;
+.detail-gallery {
+  margin: 0;
+  padding-top: 48px;
 }
 .detail-image {
-  height: 220px;
+  display: block;
+  width: 100%;
+  height: clamp(220px, 40dvh, 420px);
+  object-fit: contain;
   background: var(--line);
+}
+.gallery-caption {
+  padding: var(--space-2);
+  color: var(--muted);
+  text-align: center;
+}
+.gallery-controls {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: 0 var(--space-2) var(--space-2);
+}
+.gallery-controls [aria-pressed='true'] {
+  color: var(--green-dark);
+  background: var(--green-soft);
+  border-color: var(--green-dark);
 }
 .detail-content {
   display: flex;
@@ -922,6 +938,31 @@ nav {
 }
 .detail-content h2 {
   font-size: 20px;
+}
+.detail-content h3 {
+  margin-bottom: var(--space-2);
+  font-size: 16px;
+}
+.detail-content section {
+  margin-top: var(--space-3);
+}
+.detail-content {
+  overflow-wrap: anywhere;
+}
+.detail-description {
+  white-space: pre-wrap;
+}
+.detail-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: var(--space-3);
+}
+.detail-facts dt {
+  color: var(--muted);
+  font-size: 12px;
+}
+.detail-facts dd {
+  margin: 0;
 }
 .detail-actions {
   display: flex;

@@ -22,11 +22,21 @@ export interface ReportCard {
   posted: string
   image: string
   images: string[]
+  hasPhotos: boolean
   person: string
+}
+
+export interface ReportGalleryView {
+  source: string
+  alt: string
+  caption: string
+  canNavigate: boolean
+  choices: { index: number; label: string; selected: boolean }[]
 }
 
 export interface ReportDetailView {
   card: ReportCard
+  gallery: ReportGalleryView
   saved: boolean
   canContact: boolean
   canResolve: boolean
@@ -71,6 +81,28 @@ export function toReportCard(report: Report): ReportCard {
     posted: publishedDay.format(new Date(report.createdAt)),
     image: images[0]!,
     images,
+    hasPhotos: report.imageUrls.length > 0,
     person: report.author.displayName,
+  }
+}
+
+/** The presenter owns the selection; the view receives accessible labels ready to render. */
+export function toReportGallery(card: ReportCard, selected = 0): ReportGalleryView {
+  const caption = card.hasPhotos
+    ? `Foto ${selected + 1} de ${card.images.length}`
+    : 'Imagen de referencia de categoría'
+  return {
+    source: card.images[selected]!,
+    alt: `${caption}: ${card.title}`,
+    caption,
+    canNavigate: card.images.length > 1,
+    choices:
+      card.images.length > 1
+        ? card.images.map((_, index) => ({
+            index,
+            label: `Ver foto ${index + 1} de ${card.images.length}`,
+            selected: index === selected,
+          }))
+        : [],
   }
 }
