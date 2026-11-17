@@ -2394,17 +2394,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "6e0af52a78f91ff3daeb9726a23713d9d798435e",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-11-17T15:12:02.000Z",
       "message": "docs: document editing own reports\n\nIssue #27",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/6e0af52a78f91ff3daeb9726a23713d9d798435e"
     },
     "stats": {
       "total": 69,
       "additions": 37,
       "deletions": 32,
+      "date": "2026-11-17"
+    },
+    "coverage": 86.04,
+    "test_count": 174,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T15:18:20.000Z",
+      "message": "test(api): verify edit ownership and privacy (#27)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 34,
+      "additions": 34,
+      "deletions": 0,
       "date": "2026-11-17"
     },
     "coverage": 86.04,

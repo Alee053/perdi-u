@@ -149,6 +149,40 @@ test('edición actualiza el título del reporte propio y persiste al volver a co
   })
 })
 
+test('edición HTTP rechaza sesión, dueño, reporte y estado sin mutar filas ni revelar contacto', async () => {
+  await fixture(async ({ request, pool, owners, ids }) => {
+    const snapshot = async (id: string) =>
+      (await pool.query('SELECT *, xmin::text AS version FROM reports WHERE id = $1', [id])).rows[0]
+    const before = await Promise.all(ids.slice(0, 2).map(snapshot))
+    const path = `/reports/${ids[0]}`
+    assert.equal((await request(path, undefined, 'PATCH', { title: 'No autorizado' })).status, 401)
+    assert.equal((await request(path, owners[1], 'PATCH', { title: 'No autorizado' })).status, 403)
+    assert.equal(
+      (await request(`/reports/${crypto.randomUUID()}`, owners[0], 'PATCH', { title: 'No existe' }))
+        .status,
+      404,
+    )
+    assert.equal(
+      (await request(`/reports/${ids[1]}`, owners[0], 'PATCH', { title: 'No reabrir' })).status,
+      409,
+    )
+    assert.deepEqual(await Promise.all(ids.slice(0, 2).map(snapshot)), before)
+
+    const response = await request(path, owners[0], 'PATCH', { city: 'Cochabamba' })
+    assert.equal(response.status, 200)
+    assert.equal(response.headers.get('cache-control'), 'no-store')
+    const updated = await response.json()
+    assert.equal(updated.city, 'Cochabamba')
+    assert.equal(Object.hasOwn(updated, 'whatsapp'), false)
+    assert.ok(!JSON.stringify(updated).includes('private-contact'))
+    assert.equal(
+      (await pool.query('SELECT phone FROM report_contacts WHERE report_id = $1', [ids[0]])).rows[0]
+        .phone,
+      'private-contact',
+    )
+  })
+})
+
 test('edición rechaza el cuerpo vacío sin modificar el reporte', async () => {
   await fixture(async ({ request, pool, owners, ids }) => {
     const before = (await pool.query('SELECT title FROM reports WHERE id = $1', [ids[0]])).rows[0]

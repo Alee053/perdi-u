@@ -3036,9 +3036,23 @@
     "testId": 86
   },
   {
-    "commitId": "HEAD",
+    "commitId": "6e0af52a78f91ff3daeb9726a23713d9d798435e",
     "commitName": "docs: document editing own reports\n\nIssue #27",
     "commitTimestamp": 1794928322838,
     "testId": 87
+  },
+  {
+    "numPassedTests": 174,
+    "failedTests": 0,
+    "numTotalTests": 174,
+    "timestamp": 1794928656700,
+    "success": true,
+    "testId": 88
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(api): verify edit ownership and privacy (#27)",
+    "commitTimestamp": 1794928700527,
+    "testId": 88
   }
 ]
