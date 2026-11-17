@@ -3,7 +3,7 @@ import { test } from '@jest/globals'
 import type { ReportQuery } from '@perdiu/contracts'
 import type { SearchLocation, SearchNavigation } from '../../src/models/reports/search-location.js'
 import { CatalogPresenter } from '../../src/presenters/catalog/catalog.presenter.js'
-import { FiltersPresenter } from '../../src/presenters/catalog/filters.presenter.js'
+import { allCities, FiltersPresenter } from '../../src/presenters/catalog/filters.presenter.js'
 import { CatalogSearchPresenter } from '../../src/presenters/catalog/search.presenter.js'
 
 const settle = () => new Promise((resolve) => setTimeout(resolve, 0))
@@ -138,5 +138,29 @@ test('volver del detalle conserva los resultados de la misma búsqueda y restaur
   assert.equal(filters.getSnapshot().search, 'mochila')
   assert.deepEqual(queries.at(-1), { q: 'mochila', dateTo: '2026-10-12' })
   assert.equal(queries.length, 2)
+  stop()
+})
+
+test('una ciudad del enlace que coincide con la opción general sigue siendo un filtro', async () => {
+  const { search, filters, queries, replaced } = setup({
+    query: { city: allCities },
+    invalid: false,
+  })
+  const stop = search.start()
+  await settle()
+  assert.deepEqual(queries, [{ city: allCities }])
+  assert.notEqual(
+    filters.getSnapshot().city,
+    allCities,
+    'el control distingue ciudad y opción general',
+  )
+  assert.ok(filters.options().cities.includes(filters.getSnapshot().city))
+  filters.setSearch('mochila')
+  await settle()
+  assert.deepEqual(replaced.at(-1), { q: 'mochila', city: allCities })
+  filters.setCity(allCities)
+  await settle()
+  assert.deepEqual(queries.at(-1), { q: 'mochila' })
+  assert.deepEqual(replaced.at(-1), { q: 'mochila' })
   stop()
 })

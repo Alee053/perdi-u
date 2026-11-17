@@ -3196,9 +3196,31 @@
     "testId": 91
   },
   {
-    "commitId": "HEAD",
+    "commitId": "70a1ba553cb0172db23074d2e06725e72866bb53",
     "commitName": "feat(web): conservar la búsqueda al recorrer el historial (#29)",
     "commitTimestamp": 1794939316154,
     "testId": 91
+  },
+  {
+    "numPassedTests": 182,
+    "failedTests": 1,
+    "numTotalTests": 183,
+    "timestamp": 1794939443113,
+    "success": false,
+    "testId": 92
+  },
+  {
+    "numPassedTests": 183,
+    "failedTests": 0,
+    "numTotalTests": 183,
+    "timestamp": 1794939481420,
+    "success": true,
+    "testId": 92
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "fix(web): distinguir ciudades del enlace y la opción general (#29)",
+    "commitTimestamp": 1794939525215,
+    "testId": 92
   }
 ]
