@@ -28,6 +28,7 @@ import {
   ListReports,
   MediaAssociationError,
   ReportMediaService,
+  ReportEditValidationError,
   ReportValidationError,
   ResolveReport,
   type ReportMediaStorage,
@@ -72,6 +73,10 @@ class ReportsController {
     const result = await orUnavailable(
       () => this.editor.execute(id, user.id, body),
       'No se pudo actualizar el reporte. Intenta nuevamente.',
+      (error) => {
+        if (error instanceof ReportEditValidationError)
+          throw new BadRequestException({ fieldErrors: error.errors })
+      },
     )
     if (result === 'forbidden') throw new ForbiddenException('Solo puedes editar tus reportes.')
     if (result === 'not_found') throw new NotFoundException('Reporte no disponible.')

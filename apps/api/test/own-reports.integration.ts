@@ -149,6 +149,18 @@ test('edición actualiza el título del reporte propio y persiste al volver a co
   })
 })
 
+test('edición rechaza el cuerpo vacío sin modificar el reporte', async () => {
+  await fixture(async ({ request, pool, owners, ids }) => {
+    const before = (await pool.query('SELECT title FROM reports WHERE id = $1', [ids[0]])).rows[0]
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', {})
+    assert.equal(response.status, 400)
+    assert.equal(
+      (await pool.query('SELECT title FROM reports WHERE id = $1', [ids[0]])).rows[0].title,
+      before.title,
+    )
+  })
+})
+
 test('resolver HTTP verifica permisos, persiste tras reinicio y repetir no vuelve a escribir el cierre', async () => {
   await fixture(async ({ request, pool, owners, ids, restart }) => {
     const path = `/reports/${ids[0]}/resolve`

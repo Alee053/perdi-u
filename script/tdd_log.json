@@ -2728,9 +2728,23 @@
     "testId": 65
   },
   {
-    "commitId": "HEAD",
+    "commitId": "fca8bfd02ecbf6834c3077817f416147d46ec301",
     "commitName": "feat(api): iniciar edición parcial de reporte propio (#27)",
     "commitTimestamp": 1794923444275,
     "testId": 65
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794923576204,
+    "success": true,
+    "testId": 66
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(api): rechazar PATCH vacío de reporte (#27)",
+    "commitTimestamp": 1794923602244,
+    "testId": 66
   }
 ]

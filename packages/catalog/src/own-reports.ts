@@ -1,6 +1,17 @@
-import type { EditReportInput, OwnReportQuery, ReportSummary } from '@perdiu/contracts'
+import type {
+  EditReportInput,
+  OwnReportQuery,
+  ReportSummary,
+  ReportValidationIssue,
+} from '@perdiu/contracts'
 import type { OwnReportsRepository, ResolveReportResult } from './model.js'
 import { compareReports, toPublicReport } from './catalog.js'
+
+export class ReportEditValidationError extends Error {
+  constructor(readonly errors: Partial<Record<keyof EditReportInput, ReportValidationIssue>> = {}) {
+    super('Los datos del reporte no son válidos.')
+  }
+}
 
 export class EditReport {
   constructor(private readonly repository: Pick<OwnReportsRepository, 'editOwned'>) {}
@@ -10,6 +21,8 @@ export class EditReport {
     ownerId: string,
     input: EditReportInput,
   ): Promise<ReportSummary | 'forbidden' | 'not_found' | 'resolved'> {
+    if (!input || typeof input !== 'object' || Array.isArray(input) || !Object.keys(input).length)
+      throw new ReportEditValidationError()
     const result = await this.repository.editOwned(id, ownerId, input)
     return typeof result === 'string' ? result : toPublicReport(result.report)
   }

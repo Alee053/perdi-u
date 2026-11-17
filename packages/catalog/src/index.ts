@@ -1,5 +1,10 @@
 export { ListReports } from './catalog.js'
-export { EditReport, ListOwnReports, ResolveReport } from './own-reports.js'
+export {
+  EditReport,
+  ListOwnReports,
+  ReportEditValidationError,
+  ResolveReport,
+} from './own-reports.js'
 export { toWhatsAppNumber } from './contact.js'
 export { GetReport, GetReportContact } from './report-detail.js'
 export type {
