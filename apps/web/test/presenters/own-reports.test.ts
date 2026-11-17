@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict'
 import { test } from '@jest/globals'
 import type { ReportSummary } from '@perdiu/contracts'
-import type { OwnReportsRepository } from '../../src/models/reports/own-reports-repository.js'
+import {
+  OwnReportsFailure,
+  type OwnReportsRepository,
+} from '../../src/models/reports/own-reports-repository.js'
 import { OwnReportsPresenter } from '../../src/presenters/reports/own-reports.presenter.js'
 import { SessionRejected } from '../../src/models/auth/session.js'
 import { Store } from '../../src/presenters/store.js'
@@ -25,13 +28,20 @@ const report = (id: string, overrides: Partial<ReportSummary> = {}): ReportSumma
 function setup(repository: Partial<OwnReportsRepository> = {}) {
   const notices: string[] = []
   const resolved: string[] = []
+  const edited: string[] = []
   let rejected = 0
   let cleared = 0
   const presenter = new OwnReportsPresenter(
-    { list: async () => [], resolve: async () => {}, ...repository },
+    {
+      list: async () => [],
+      resolve: async () => {},
+      edit: async () => report('edited'),
+      ...repository,
+    },
     {
       notices: { show: (message) => notices.push(message) },
       onResolved: (item) => resolved.push(item.id),
+      onEdited: (item) => edited.push(item.title),
       onSessionRejected: () => {
         rejected++
       },
@@ -40,7 +50,14 @@ function setup(repository: Partial<OwnReportsRepository> = {}) {
       },
     },
   )
-  return { presenter, notices, resolved, rejected: () => rejected, cleared: () => cleared }
+  return {
+    presenter,
+    notices,
+    resolved,
+    edited,
+    rejected: () => rejected,
+    cleared: () => cleared,
+  }
 }
 
 test('la lista propia carga desde el puerto, separa nombres iguales y presenta los tres filtros', async () => {
@@ -77,6 +94,75 @@ test('la lista propia carga desde el puerto, separa nombres iguales y presenta l
   )
   assert.equal(presenter.view().cards[0]?.status, 'Encontrado')
   assert.equal(presenter.view().cards[0]?.badge, 'Resuelto')
+})
+
+test('el formulario de edición parte del reporte propio activo y cancelar descarta el borrador', async () => {
+  const { presenter } = setup({
+    list: async () => [report('active'), report('closed', { state: 'resolved' })],
+  })
+  await presenter.setOwner('owner-1')
+  presenter.requestEdit('closed')
+  assert.equal(presenter.view().edit, null, 'un reporte resuelto no se puede editar')
+  presenter.requestEdit('active')
+  assert.equal(presenter.view().edit?.id, 'active')
+  assert.equal(presenter.view().edit?.draft.title, 'Mochila active')
+  presenter.setEditField('title', 'Borrador sin guardar')
+  assert.equal(presenter.view().edit?.draft.title, 'Borrador sin guardar')
+  presenter.cancelEdit()
+  assert.equal(presenter.view().edit, null)
+  assert.equal(presenter.find('active')?.title, 'Mochila active')
+})
+
+test('guardar el borrador actualiza el historial y avisa a la composición', async () => {
+  let calls = 0
+  const { presenter, notices, edited } = setup({
+    list: async () => [report('active')],
+    edit: async (id, patch) => {
+      calls++
+      return report(id, patch)
+    },
+  })
+  await presenter.setOwner('owner-1')
+  presenter.requestEdit('active')
+  presenter.setEditField('title', 'Mochila azul')
+  const saved = await presenter.submitEdit()
+  assert.equal(saved, true)
+  assert.equal(calls, 1)
+  assert.equal(presenter.find('active')?.title, 'Mochila azul')
+  assert.equal(presenter.view().edit, null)
+  assert.deepEqual(edited, ['Mochila azul'])
+  assert.deepEqual(notices, ['Cambios guardados.'])
+})
+
+test('un rechazo de validación muestra el error junto al campo y conserva el borrador', async () => {
+  const { presenter } = setup({
+    list: async () => [report('active')],
+    edit: async () => {
+      throw new OwnReportsFailure('validation', { title: 'too_long' })
+    },
+  })
+  await presenter.setOwner('owner-1')
+  presenter.requestEdit('active')
+  presenter.setEditField('title', 'Título largo')
+  assert.equal(await presenter.submitEdit(), false)
+  assert.equal(presenter.view().edit?.errors.title, 'Usa como máximo 200 caracteres.')
+  assert.equal(presenter.view().edit?.draft.title, 'Título largo')
+  assert.equal(presenter.view().edit?.message, '')
+})
+
+test('un conflicto por reporte resuelto permite entender el rechazo y no borra el borrador', async () => {
+  const { presenter } = setup({
+    list: async () => [report('active')],
+    edit: async () => {
+      throw new OwnReportsFailure('conflict')
+    },
+  })
+  await presenter.setOwner('owner-1')
+  presenter.requestEdit('active')
+  presenter.setEditField('title', 'Cambio tardío')
+  assert.equal(await presenter.submitEdit(), false)
+  assert.equal(presenter.view().edit?.message, 'Este reporte ya fue resuelto y no se puede editar.')
+  assert.equal(presenter.view().edit?.draft.title, 'Cambio tardío')
 })
 
 test('resolver pide confirmación, cancelar no escribe y un fallo conserva el estado para reintentar sin duplicar', async () => {

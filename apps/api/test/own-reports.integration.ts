@@ -135,6 +135,205 @@ test('mis reportes HTTP usa identidad verificada, incluye resueltos y filtra sin
   })
 })
 
+test('edición actualiza el título del reporte propio y persiste al volver a consultarlo', async () => {
+  await fixture(async ({ request, owners, ids }) => {
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', {
+      title: 'Mochila azul recuperada',
+    })
+    assert.equal(response.status, 200)
+    const updated = await response.json()
+    assert.equal(updated.id, ids[0])
+    assert.equal(updated.title, 'Mochila azul recuperada')
+    const detail = await request(`/reports/${ids[0]}`, owners[0])
+    assert.equal((await detail.json()).title, 'Mochila azul recuperada')
+  })
+})
+
+test('edición HTTP rechaza sesión, dueño, reporte y estado sin mutar filas ni revelar contacto', async () => {
+  await fixture(async ({ request, pool, owners, ids }) => {
+    const snapshot = async (id: string) =>
+      (await pool.query('SELECT *, xmin::text AS version FROM reports WHERE id = $1', [id])).rows[0]
+    const before = await Promise.all(ids.slice(0, 2).map(snapshot))
+    const path = `/reports/${ids[0]}`
+    assert.equal((await request(path, undefined, 'PATCH', { title: 'No autorizado' })).status, 401)
+    assert.equal((await request(path, owners[1], 'PATCH', { title: 'No autorizado' })).status, 403)
+    assert.equal(
+      (await request(`/reports/${crypto.randomUUID()}`, owners[0], 'PATCH', { title: 'No existe' }))
+        .status,
+      404,
+    )
+    assert.equal(
+      (await request(`/reports/${ids[1]}`, owners[0], 'PATCH', { title: 'No reabrir' })).status,
+      409,
+    )
+    assert.deepEqual(await Promise.all(ids.slice(0, 2).map(snapshot)), before)
+
+    const response = await request(path, owners[0], 'PATCH', { city: 'Cochabamba' })
+    assert.equal(response.status, 200)
+    assert.equal(response.headers.get('cache-control'), 'no-store')
+    const updated = await response.json()
+    assert.equal(updated.city, 'Cochabamba')
+    assert.equal(Object.hasOwn(updated, 'whatsapp'), false)
+    assert.ok(!JSON.stringify(updated).includes('private-contact'))
+    assert.equal(
+      (await pool.query('SELECT phone FROM report_contacts WHERE report_id = $1', [ids[0]])).rows[0]
+        .phone,
+      'private-contact',
+    )
+  })
+})
+
+test('edición rechaza el cuerpo vacío sin modificar el reporte', async () => {
+  await fixture(async ({ request, pool, owners, ids }) => {
+    const before = (await pool.query('SELECT title FROM reports WHERE id = $1', [ids[0]])).rows[0]
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', {})
+    assert.equal(response.status, 400)
+    assert.equal(
+      (await pool.query('SELECT title FROM reports WHERE id = $1', [ids[0]])).rows[0].title,
+      before.title,
+    )
+  })
+})
+
+test('edición rechaza campos ajenos al contrato sin modificar el reporte', async () => {
+  await fixture(async ({ request, pool, owners, ids }) => {
+    const before = (await pool.query('SELECT title FROM reports WHERE id = $1', [ids[0]])).rows[0]
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', {
+      title: 'Título que no debe guardarse',
+      ownerId: owners[1],
+    })
+    assert.equal(response.status, 400)
+    assert.equal(
+      (await pool.query('SELECT title FROM reports WHERE id = $1', [ids[0]])).rows[0].title,
+      before.title,
+    )
+  })
+})
+
+test('edición devuelve error por campo para un título vacío y conserva el borrador persistido', async () => {
+  await fixture(async ({ request, pool, owners, ids }) => {
+    const before = (await pool.query('SELECT title FROM reports WHERE id = $1', [ids[0]])).rows[0]
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', { title: '  ' })
+    assert.equal(response.status, 400)
+    assert.equal((await response.json()).fieldErrors.title, 'required')
+    assert.equal(
+      (await pool.query('SELECT title FROM reports WHERE id = $1', [ids[0]])).rows[0].title,
+      before.title,
+    )
+  })
+})
+
+test('edición marca título mayor a 200 caracteres como error de campo y no lo persiste', async () => {
+  await fixture(async ({ request, pool, owners, ids }) => {
+    const before = (await pool.query('SELECT title FROM reports WHERE id = $1', [ids[0]])).rows[0]
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', {
+      title: 'x'.repeat(201),
+    })
+    assert.equal(response.status, 400)
+    assert.equal((await response.json()).fieldErrors.title, 'too_long')
+    assert.equal(
+      (await pool.query('SELECT title FROM reports WHERE id = $1', [ids[0]])).rows[0].title,
+      before.title,
+    )
+  })
+})
+
+test('edición actualiza y persiste la descripción sin volver a publicar', async () => {
+  await fixture(async ({ request, owners, ids }) => {
+    const description = 'La mochila tiene una cinta roja y se encontró cerca del mercado.'
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', { description })
+    assert.equal(response.status, 200)
+    assert.equal((await response.json()).description, description)
+    const detail = await request(`/reports/${ids[0]}`, owners[0])
+    assert.equal((await detail.json()).description, description)
+  })
+})
+
+test('edición actualiza y persiste la ciudad del reporte propio', async () => {
+  await fixture(async ({ request, owners, ids }) => {
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', { city: 'Cochabamba' })
+    assert.equal(response.status, 200)
+    assert.equal((await response.json()).city, 'Cochabamba')
+    const detail = await request(`/reports/${ids[0]}`, owners[0])
+    assert.equal((await detail.json()).city, 'Cochabamba')
+  })
+})
+
+test('edición actualiza y persiste la zona del reporte propio', async () => {
+  await fixture(async ({ request, owners, ids }) => {
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', { zone: 'Recoleta' })
+    assert.equal(response.status, 200)
+    assert.equal((await response.json()).zone, 'Recoleta')
+    const detail = await request(`/reports/${ids[0]}`, owners[0])
+    assert.equal((await detail.json()).zone, 'Recoleta')
+  })
+})
+
+test('edición actualiza y persiste el tipo del reporte propio', async () => {
+  await fixture(async ({ request, owners, ids }) => {
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', { type: 'lost' })
+    assert.equal(response.status, 200)
+    assert.equal((await response.json()).type, 'lost')
+    const detail = await request(`/reports/${ids[0]}`, owners[0])
+    assert.equal((await detail.json()).type, 'lost')
+  })
+})
+
+test('edición actualiza y persiste la categoría del reporte propio', async () => {
+  await fixture(async ({ request, owners, ids }) => {
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', {
+      category: 'document',
+    })
+    assert.equal(response.status, 200)
+    assert.equal((await response.json()).category, 'document')
+    const detail = await request(`/reports/${ids[0]}`, owners[0])
+    assert.equal((await detail.json()).category, 'document')
+  })
+})
+
+test('edición actualiza y persiste la fecha del reporte propio', async () => {
+  await fixture(async ({ request, owners, ids }) => {
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', {
+      incidentDate: '2026-11-01',
+    })
+    assert.equal(response.status, 200)
+    assert.equal((await response.json()).incidentDate, '2026-11-01')
+    const detail = await request(`/reports/${ids[0]}`, owners[0])
+    assert.equal((await detail.json()).incidentDate, '2026-11-01')
+  })
+})
+
+test('edición marca una fecha vacía como requerida y conserva la fecha persistida', async () => {
+  await fixture(async ({ request, pool, owners, ids }) => {
+    const before = (await pool.query('SELECT incident_date FROM reports WHERE id = $1', [ids[0]]))
+      .rows[0]
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', { incidentDate: '  ' })
+    assert.equal(response.status, 400)
+    assert.equal((await response.json()).fieldErrors.incidentDate, 'required')
+    assert.equal(
+      (
+        await pool.query('SELECT incident_date FROM reports WHERE id = $1', [ids[0]])
+      ).rows[0].incident_date.toISOString(),
+      before.incident_date.toISOString(),
+    )
+  })
+})
+
+test('edición cambia a categoría mascota y persiste la especie en el mismo PATCH', async () => {
+  await fixture(async ({ request, owners, ids }) => {
+    const response = await request(`/reports/${ids[0]}`, owners[0], 'PATCH', {
+      category: 'pet',
+      petSpecies: 'Perro',
+    })
+    assert.equal(response.status, 200)
+    const updated = await response.json()
+    assert.equal(updated.category, 'pet')
+    assert.equal(updated.petSpecies, 'Perro')
+    const detail = await request(`/reports/${ids[0]}`, owners[0])
+    assert.equal((await detail.json()).petSpecies, 'Perro')
+  })
+})
+
 test('resolver HTTP verifica permisos, persiste tras reinicio y repetir no vuelve a escribir el cierre', async () => {
   await fixture(async ({ request, pool, owners, ids, restart }) => {
     const path = `/reports/${ids[0]}/resolve`

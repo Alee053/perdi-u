@@ -228,6 +228,7 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
         saved: this.dependencies.isSaved(state.id),
         canContact: this.canContact(),
         canResolve: this.canResolve(),
+        canEdit: this.canManage(),
       },
       contacting: state.contacting,
       ...(state.contactMessage && { contactMessage: state.contactMessage }),
@@ -250,6 +251,11 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
   }
 
   private canResolve() {
+    return this.canManage()
+  }
+
+  /** Ownership and active state are checked against both the public detail and private history. */
+  private canManage() {
     const { state } = this
     const session = this.dependencies.auth.getSnapshot()
     return (

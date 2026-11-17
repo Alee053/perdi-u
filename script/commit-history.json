@@ -1957,12 +1957,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "89bd8069e589d2f5cefde84a4c50b05080ff862b",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-11-17T13:21:55.000Z",
       "message": "chore(repo): integrar main y conservar ciclos TDD (#25)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/89bd8069e589d2f5cefde84a4c50b05080ff862b"
     },
     "stats": {
       "total": 864,
@@ -1972,6 +1972,462 @@
     },
     "coverage": 89.65,
     "test_count": 167,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "fca8bfd02ecbf6834c3077817f416147d46ec301",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T13:50:44.000Z",
+      "message": "feat(api): iniciar edición parcial de reporte propio (#27)",
+      "url": "https://github.com/Alee053/perdi-u/commit/fca8bfd02ecbf6834c3077817f416147d46ec301"
+    },
+    "stats": {
+      "total": 95,
+      "additions": 92,
+      "deletions": 3,
+      "date": "2026-11-17"
+    },
+    "coverage": 89.52,
+    "test_count": 167,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "bf5fedb896a07788e173f2dee03afae51bc13f50",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T13:53:22.000Z",
+      "message": "feat(api): rechazar PATCH vacío de reporte (#27)",
+      "url": "https://github.com/Alee053/perdi-u/commit/bf5fedb896a07788e173f2dee03afae51bc13f50"
+    },
+    "stats": {
+      "total": 39,
+      "additions": 37,
+      "deletions": 2,
+      "date": "2026-11-17"
+    },
+    "coverage": 89.32,
+    "test_count": 167,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "ed114998b2f757aa19120fca0039d50ac0029f83",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T13:55:05.000Z",
+      "message": "feat(catalog): rechazar campos ajenos al editar (#27)",
+      "url": "https://github.com/Alee053/perdi-u/commit/ed114998b2f757aa19120fca0039d50ac0029f83"
+    },
+    "stats": {
+      "total": 20,
+      "additions": 19,
+      "deletions": 1,
+      "date": "2026-11-17"
+    },
+    "coverage": 89.06,
+    "test_count": 167,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "26a06f106955646f6e9e049482fd9042b61f667c",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T13:56:40.000Z",
+      "message": "feat(catalog): validar título en edición (#27)",
+      "url": "https://github.com/Alee053/perdi-u/commit/26a06f106955646f6e9e049482fd9042b61f667c"
+    },
+    "stats": {
+      "total": 21,
+      "additions": 20,
+      "deletions": 1,
+      "date": "2026-11-17"
+    },
+    "coverage": 88.73,
+    "test_count": 167,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "465954e42fa35939c1360dfc3fc93186a9b6e94c",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T13:58:27.000Z",
+      "message": "feat(catalog): limitar título editado (#27)",
+      "url": "https://github.com/Alee053/perdi-u/commit/465954e42fa35939c1360dfc3fc93186a9b6e94c"
+    },
+    "stats": {
+      "total": 17,
+      "additions": 17,
+      "deletions": 0,
+      "date": "2026-11-17"
+    },
+    "coverage": 88.6,
+    "test_count": 167,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "9bff395179571e020cc7d2a64e08322459e72580",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:01:26.000Z",
+      "message": "feat(catalog): editar descripción de reporte propio (#27)",
+      "url": "https://github.com/Alee053/perdi-u/commit/9bff395179571e020cc7d2a64e08322459e72580"
+    },
+    "stats": {
+      "total": 27,
+      "additions": 24,
+      "deletions": 3,
+      "date": "2026-11-17"
+    },
+    "coverage": 88.03,
+    "test_count": 167,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "5ce19dc6f7666865d5a465cafd2fb1ee9773dcc9",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:03:05.000Z",
+      "message": "feat(catalog): permitir editar ciudad de reporte (#27)",
+      "url": "https://github.com/Alee053/perdi-u/commit/5ce19dc6f7666865d5a465cafd2fb1ee9773dcc9"
+    },
+    "stats": {
+      "total": 27,
+      "additions": 24,
+      "deletions": 3,
+      "date": "2026-11-17"
+    },
+    "coverage": 87.64,
+    "test_count": 167,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "05c77bb2ca76d342d1df57b29f7dc7f78d09a208",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:04:38.000Z",
+      "message": "feat(catalog): permitir editar zona de reporte (#27)",
+      "url": "https://github.com/Alee053/perdi-u/commit/05c77bb2ca76d342d1df57b29f7dc7f78d09a208"
+    },
+    "stats": {
+      "total": 33,
+      "additions": 30,
+      "deletions": 3,
+      "date": "2026-11-17"
+    },
+    "coverage": 87.27,
+    "test_count": 167,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "cfc82f4b05bc7a28057aac229b7f1e2c4c624afc",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:06:07.000Z",
+      "message": "feat(catalog): permitir editar tipo de reporte (#27)",
+      "url": "https://github.com/Alee053/perdi-u/commit/cfc82f4b05bc7a28057aac229b7f1e2c4c624afc"
+    },
+    "stats": {
+      "total": 22,
+      "additions": 20,
+      "deletions": 2,
+      "date": "2026-11-17"
+    },
+    "coverage": 87.14,
+    "test_count": 167,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "c1529368b10949f9ec94a3288afd4f6c226858cb",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:07:43.000Z",
+      "message": "feat(catalog): permitir editar categoría de reporte (#27)",
+      "url": "https://github.com/Alee053/perdi-u/commit/c1529368b10949f9ec94a3288afd4f6c226858cb"
+    },
+    "stats": {
+      "total": 28,
+      "additions": 26,
+      "deletions": 2,
+      "date": "2026-11-17"
+    },
+    "coverage": 87.02,
+    "test_count": 167,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "ad21cea4317e94fedf931a36e18141b1155661fa",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:09:39.000Z",
+      "message": "feat(catalog): permitir editar fecha del reporte (#27)",
+      "url": "https://github.com/Alee053/perdi-u/commit/ad21cea4317e94fedf931a36e18141b1155661fa"
+    },
+    "stats": {
+      "total": 26,
+      "additions": 25,
+      "deletions": 1,
+      "date": "2026-11-17"
+    },
+    "coverage": 86.65,
+    "test_count": 167,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "126a0b17c0ab3fa21c011904ee3d2de291aa96a0",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:11:18.000Z",
+      "message": "fix(catalog): marcar fecha vacía como requerida (#27)",
+      "url": "https://github.com/Alee053/perdi-u/commit/126a0b17c0ab3fa21c011904ee3d2de291aa96a0"
+    },
+    "stats": {
+      "total": 24,
+      "additions": 22,
+      "deletions": 2,
+      "date": "2026-11-17"
+    },
+    "coverage": 86.47,
+    "test_count": 167,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "736cf2c2ce9d96226a05e301c39511fc67c4c39d",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:12:47.000Z",
+      "message": "feat(catalog): editar especie de mascota en reporte (#27)",
+      "url": "https://github.com/Alee053/perdi-u/commit/736cf2c2ce9d96226a05e301c39511fc67c4c39d"
+    },
+    "stats": {
+      "total": 31,
+      "additions": 29,
+      "deletions": 2,
+      "date": "2026-11-17"
+    },
+    "coverage": 85.98,
+    "test_count": 167,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "958c241b3173e87947262d7aabca5b331010c2c1",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:15:34.000Z",
+      "message": "feat(web): enviar cambios de reportes propios",
+      "url": "https://github.com/Alee053/perdi-u/commit/958c241b3173e87947262d7aabca5b331010c2c1"
+    },
+    "stats": {
+      "total": 49,
+      "additions": 45,
+      "deletions": 4,
+      "date": "2026-11-17"
+    },
+    "coverage": 86,
+    "test_count": 168,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "ad21d689d882738a4c170e4f0b088927790a1c96",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:39:53.000Z",
+      "message": "feat(web): mostrar errores de validación al editar",
+      "url": "https://github.com/Alee053/perdi-u/commit/ad21d689d882738a4c170e4f0b088927790a1c96"
+    },
+    "stats": {
+      "total": 51,
+      "additions": 48,
+      "deletions": 3,
+      "date": "2026-11-17"
+    },
+    "coverage": 86.04,
+    "test_count": 169,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "a85fd63ce69fe618ca0356c1d1d5ea46071d649a",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:41:21.000Z",
+      "message": "feat(web): preparar borrador de edición propia",
+      "url": "https://github.com/Alee053/perdi-u/commit/a85fd63ce69fe618ca0356c1d1d5ea46071d649a"
+    },
+    "stats": {
+      "total": 75,
+      "additions": 75,
+      "deletions": 0,
+      "date": "2026-11-17"
+    },
+    "coverage": 85.91,
+    "test_count": 170,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "2783b49966e63874fff7811f13251eb8c8f06f52",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:45:06.000Z",
+      "message": "feat(web): guardar cambios del reporte propio",
+      "url": "https://github.com/Alee053/perdi-u/commit/2783b49966e63874fff7811f13251eb8c8f06f52"
+    },
+    "stats": {
+      "total": 93,
+      "additions": 90,
+      "deletions": 3,
+      "date": "2026-11-17"
+    },
+    "coverage": 85.6,
+    "test_count": 171,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "21b9be9b0196a6fc9495c469b9203a95b0aa1fb6",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:46:42.000Z",
+      "message": "feat(web): traducir errores de edición por campo",
+      "url": "https://github.com/Alee053/perdi-u/commit/21b9be9b0196a6fc9495c469b9203a95b0aa1fb6"
+    },
+    "stats": {
+      "total": 71,
+      "additions": 67,
+      "deletions": 4,
+      "date": "2026-11-17"
+    },
+    "coverage": 86.01,
+    "test_count": 172,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "9c22df53b730189f913118ead25fb01c2a1a512e",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:48:19.000Z",
+      "message": "feat(web): explicar conflictos al editar reportes",
+      "url": "https://github.com/Alee053/perdi-u/commit/9c22df53b730189f913118ead25fb01c2a1a512e"
+    },
+    "stats": {
+      "total": 38,
+      "additions": 34,
+      "deletions": 4,
+      "date": "2026-11-17"
+    },
+    "coverage": 86.03,
+    "test_count": 174,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "f981d82c81b579c214a38b226982fc2cd4e7a5b9",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T14:58:04.000Z",
+      "message": "feat(web): abrir edición desde mis reportes",
+      "url": "https://github.com/Alee053/perdi-u/commit/f981d82c81b579c214a38b226982fc2cd4e7a5b9"
+    },
+    "stats": {
+      "total": 103,
+      "additions": 99,
+      "deletions": 4,
+      "date": "2026-11-17"
+    },
+    "coverage": 86.03,
+    "test_count": 174,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "04e529543cfa67695eb41a5a4668e830a23fe126",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T15:03:35.000Z",
+      "message": "feat(web): editar todos los datos del reporte propio\n\nIssue #27",
+      "url": "https://github.com/Alee053/perdi-u/commit/04e529543cfa67695eb41a5a4668e830a23fe126"
+    },
+    "stats": {
+      "total": 105,
+      "additions": 93,
+      "deletions": 12,
+      "date": "2026-11-17"
+    },
+    "coverage": 86.03,
+    "test_count": 174,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "8cba29b2fe4e1f70458076836ec507e59d47d9dd",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T15:07:17.000Z",
+      "message": "feat(web): editar desde el detalle propio\n\nIssue #27",
+      "url": "https://github.com/Alee053/perdi-u/commit/8cba29b2fe4e1f70458076836ec507e59d47d9dd"
+    },
+    "stats": {
+      "total": 51,
+      "additions": 47,
+      "deletions": 4,
+      "date": "2026-11-17"
+    },
+    "coverage": 86.04,
+    "test_count": 174,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "6e0af52a78f91ff3daeb9726a23713d9d798435e",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T15:12:02.000Z",
+      "message": "docs: document editing own reports\n\nIssue #27",
+      "url": "https://github.com/Alee053/perdi-u/commit/6e0af52a78f91ff3daeb9726a23713d9d798435e"
+    },
+    "stats": {
+      "total": 69,
+      "additions": 37,
+      "deletions": 32,
+      "date": "2026-11-17"
+    },
+    "coverage": 86.04,
+    "test_count": 174,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-17T15:18:20.000Z",
+      "message": "test(api): verify edit ownership and privacy (#27)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 34,
+      "additions": 34,
+      "deletions": 0,
+      "date": "2026-11-17"
+    },
+    "coverage": 86.04,
+    "test_count": 174,
     "failed_tests": 0,
     "conclusion": "success"
   }

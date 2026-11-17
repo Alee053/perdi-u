@@ -1,3 +1,9 @@
+import type {
+  EditReportInput,
+  ReportCategory,
+  ReportType,
+  ReportValidationIssue,
+} from '@perdiu/contracts'
 import type { OwnReport } from '../../models/reports/report.js'
 import {
   OwnReportsFailure,
@@ -11,6 +17,23 @@ import { Store } from '../store.js'
 import { toReportCard } from './report-card.js'
 
 export type OwnFilter = 'Todos' | 'Activos' | 'Resueltos'
+interface EditDraft {
+  type: ReportType
+  category: ReportCategory
+  title: string
+  description: string
+  city: string
+  zone: string
+  incidentDate: string
+  petSpecies: string
+}
+interface EditForm {
+  id: string
+  draft: EditDraft
+  pending: boolean
+  errors: Partial<Record<keyof EditDraft, string>>
+  message: string
+}
 interface OwnReportsState {
   status: 'idle' | 'loading' | 'ready' | 'error'
   reports: OwnReport[]
@@ -19,10 +42,12 @@ interface OwnReportsState {
   confirmation: string | null
   pending: boolean
   resolveError: string | null
+  edit: EditForm | null
 }
 interface Dependencies {
   notices: Pick<NoticePresenter, 'show'>
   onResolved: (report: OwnReport) => void
+  onEdited: (report: OwnReport) => void
   onSessionRejected: () => void
   onOwnerChanged: () => void
 }
@@ -35,7 +60,41 @@ const initialState = (): OwnReportsState => ({
   confirmation: null,
   pending: false,
   resolveError: null,
+  edit: null,
 })
+
+const editIssueMessages: Record<keyof EditDraft, Partial<Record<ReportValidationIssue, string>>> = {
+  type: { invalid: 'Elige si el reporte es por una pérdida o un hallazgo.' },
+  category: { invalid: 'Elige una categoría válida.' },
+  title: {
+    required: 'Escribe un nombre para el reporte.',
+    too_long: 'Usa como máximo 200 caracteres.',
+  },
+  description: {
+    required: 'Describe lo que perdiste o encontraste.',
+    too_short: 'Usa al menos 20 caracteres para que puedan reconocerlo.',
+    too_long: 'Usa como máximo 5000 caracteres.',
+  },
+  city: { required: 'Indica una ciudad.', too_long: 'Usa como máximo 100 caracteres.' },
+  zone: { required: 'Indica la zona o el barrio.', too_long: 'Usa como máximo 200 caracteres.' },
+  incidentDate: { required: 'Indica una fecha válida.', invalid: 'Indica una fecha válida.' },
+  petSpecies: {
+    required: 'Indica la especie de la mascota.',
+    too_long: 'Usa como máximo 100 caracteres.',
+  },
+}
+
+function presentEditErrors(issues: OwnReportsFailure['fieldErrors']): EditForm['errors'] {
+  const errors: EditForm['errors'] = {}
+  for (const [field, issue] of Object.entries(issues) as [
+    keyof EditDraft,
+    ReportValidationIssue,
+  ][]) {
+    const message = editIssueMessages[field][issue]
+    if (message) errors[field] = message
+  }
+  return errors
+}
 
 export class OwnReportsPresenter extends Store<OwnReportsState> {
   private ownerId: string | null = null
@@ -43,6 +102,8 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
   private request = 0
   private controller?: AbortController
   private mutation?: AbortController
+  private editMutation?: AbortController
+  private editAttempt = 0
   constructor(
     private readonly repository: OwnReportsRepository,
     private readonly dependencies: Dependencies,
@@ -71,6 +132,8 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
     this.ownerVersion++
     this.cancelLoad()
     this.mutation?.abort()
+    this.editMutation?.abort()
+    this.editAttempt++
     this.ownerId = ownerId
     this.setState(initialState())
     this.dependencies.onOwnerChanged()
@@ -108,6 +171,98 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
     }
   }
   setFilter = (filter: OwnFilter) => this.update({ filter })
+  requestEdit = (id: string) => {
+    if (!this.ownerId) return this.dependencies.onSessionRejected()
+    const report = this.find(id)
+    if (!report || report.state !== 'active' || this.state.pending) return
+    this.update({
+      edit: {
+        id,
+        draft: {
+          type: report.type,
+          category: report.category,
+          title: report.title,
+          description: report.description,
+          city: report.city,
+          zone: report.zone,
+          incidentDate: report.incidentDate,
+          petSpecies: report.petSpecies ?? '',
+        },
+        pending: false,
+        errors: {},
+        message: '',
+      },
+    })
+  }
+  setEditField = <Field extends keyof EditDraft>(field: Field, value: EditDraft[Field]) => {
+    const edit = this.state.edit
+    if (!edit || edit.pending) return
+    const draft = { ...edit.draft, [field]: value }
+    if (field === 'category' && value !== 'pet') draft.petSpecies = ''
+    const errors = { ...edit.errors }
+    delete errors[field]
+    if (field === 'category' && value !== 'pet') delete errors.petSpecies
+    this.update({ edit: { ...edit, draft, errors, message: '' } })
+  }
+  cancelEdit = () => {
+    this.editAttempt++
+    this.editMutation?.abort()
+    this.update({ edit: null })
+  }
+  submitEdit = async () => {
+    const edit = this.state.edit
+    if (!edit || edit.pending || !this.find(edit.id)) return false
+    const version = this.ownerVersion
+    const attempt = ++this.editAttempt
+    const controller = new AbortController()
+    this.editMutation = controller
+    this.update({ edit: { ...edit, pending: true, errors: {}, message: '' } })
+    const patch: EditReportInput = {
+      type: edit.draft.type,
+      category: edit.draft.category,
+      title: edit.draft.title,
+      description: edit.draft.description,
+      city: edit.draft.city,
+      zone: edit.draft.zone,
+      incidentDate: edit.draft.incidentDate,
+      ...(edit.draft.category === 'pet' && { petSpecies: edit.draft.petSpecies }),
+    }
+    let saved
+    try {
+      saved = await this.repository.edit(edit.id, patch, controller.signal)
+    } catch (error) {
+      if (attempt !== this.editAttempt || version !== this.ownerVersion) return false
+      if (error instanceof SessionRejected) {
+        this.rejectSession()
+        return false
+      }
+      const errors =
+        error instanceof OwnReportsFailure && error.reason === 'validation'
+          ? presentEditErrors(error.fieldErrors)
+          : {}
+      const message =
+        error instanceof OwnReportsFailure && error.reason === 'forbidden'
+          ? 'Solo puedes editar tus propios reportes.'
+          : error instanceof OwnReportsFailure && error.reason === 'not_found'
+            ? 'El reporte ya no está disponible.'
+            : error instanceof OwnReportsFailure && error.reason === 'conflict'
+              ? 'Este reporte ya fue resuelto y no se puede editar.'
+              : Object.keys(errors).length
+                ? ''
+                : 'No se pudo guardar el reporte. Intenta nuevamente.'
+      this.update({ edit: { ...edit, pending: false, errors, message } })
+      return false
+    }
+    if (attempt !== this.editAttempt || version !== this.ownerVersion) return false
+    const updated: OwnReport = { ...saved, source: 'own' }
+    this.update({
+      reports: this.state.reports.map((report) => (report.id === updated.id ? updated : report)),
+      edit: null,
+    })
+    this.dependencies.onEdited(updated)
+    this.dependencies.notices.show('Cambios guardados.')
+    return true
+  }
   requestResolve = (id: string) => {
     if (!this.ownerId) return this.dependencies.onSessionRejected()
     if (this.state.pending || this.find(id)?.state !== 'active') return
@@ -183,6 +338,7 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
             error: resolveError,
           }
         : null,
+      edit: this.state.edit,
     }
   }
 }

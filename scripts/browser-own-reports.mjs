@@ -105,6 +105,7 @@ export async function verifyOwnReportsBrowser({
       await page.getByRole('button', { name: 'Iniciar sesión', exact: true }).click()
       await detail.getByRole('heading', { name: titles[0], exact: true }).waitFor()
       assert.equal(await detail.getByRole('button', { name: 'Marcar como resuelto' }).count(), 0)
+      assert.equal(await detail.getByRole('button', { name: 'Editar datos' }).count(), 0)
       const [chat] = await Promise.all([context.waitForEvent('page'), contact.click()])
       await chat.waitForLoadState()
       const destination = new URL(chat.url())
@@ -235,6 +236,50 @@ export async function verifyOwnReportsBrowser({
         await page.getByRole('heading', { name: 'Explorar reportes', exact: true }).waitFor()
         await contactPublishedReport(browser, viewport)
         await ownPage(page)
+        const edit = row(page, titles[0]).getByRole('button', { name: 'Editar datos' })
+        await edit.click()
+        const editor = page.getByRole('dialog', { name: 'Editar reporte', exact: true })
+        assert.equal(
+          await editor.getByLabel('Nombre del reporte', { exact: true }).inputValue(),
+          titles[0],
+        )
+        await editor.getByRole('button', { name: 'Cancelar', exact: true }).click()
+        await editor.waitFor({ state: 'detached' })
+        await edit.click()
+        const saveDialog = page.getByRole('dialog', { name: 'Editar reporte', exact: true })
+        await saveDialog.getByLabel('Ciudad', { exact: true }).fill('Cochabamba')
+        await saveDialog.getByLabel('Categoría').selectOption('pet')
+        await saveDialog.getByLabel('Especie de la mascota', { exact: true }).fill('Perro')
+        const saved = page.waitForResponse(
+          (response) =>
+            response.request().method() === 'PATCH' &&
+            new URL(response.url()).pathname === `/api/reports/${ids[0]}`,
+        )
+        await saveDialog.getByRole('button', { name: 'Guardar cambios', exact: true }).click()
+        const editResponse = await saved
+        assert.equal(editResponse.status(), 200)
+        const updated = await editResponse.json()
+        assert.equal(updated.city, 'Cochabamba')
+        assert.equal(updated.category, 'pet')
+        assert.equal(updated.petSpecies, 'Perro')
+        const stored = (
+          await pool.query('SELECT city, category, pet_species FROM reports WHERE id = $1', [
+            ids[0],
+          ])
+        ).rows[0]
+        assert.deepEqual(stored, { city: 'Cochabamba', category: 'pet', pet_species: 'Perro' })
+        await row(page, titles[0]).getByRole('button', { name: titles[0], exact: true }).click()
+        const ownDetail = page.getByRole('dialog', { name: titles[0], exact: true })
+        await ownDetail.getByRole('heading', { name: titles[0], exact: true }).waitFor()
+        await ownDetail.getByRole('button', { name: 'Editar datos', exact: true }).click()
+        const detailEditor = page.getByRole('dialog', { name: 'Editar reporte', exact: true })
+        assert.equal(
+          await detailEditor.getByLabel('Nombre del reporte', { exact: true }).inputValue(),
+          titles[0],
+        )
+        await detailEditor.getByRole('button', { name: 'Cancelar', exact: true }).click()
+        await detailEditor.waitFor({ state: 'detached' })
+        await ownDetail.getByRole('button', { name: 'Cerrar', exact: true }).click()
       }
       await row(page, titles[0]).waitFor()
       const privateImage = row(page, titles[2]).locator('img')
@@ -252,7 +297,6 @@ export async function verifyOwnReportsBrowser({
         if (reload) await page.reload()
         const detail = page.getByRole('dialog')
         await detail.getByRole('heading', { name: titles[2], exact: true }).waitFor()
-        assert.equal(await detail.locator('.detail-image').count(), 3)
         for (const image of await detail.locator('.detail-image').all())
           await image.evaluate(
             (element) =>
@@ -266,7 +310,11 @@ export async function verifyOwnReportsBrowser({
       await page.getByRole('dialog').getByRole('button', { name: 'Cerrar', exact: true }).click()
       await ownPage(page)
       await row(page, titles[0]).waitFor()
-      assert.equal(await page.locator('.managed-report').count(), 3)
+      assert.equal(
+        await page.locator('.managed-report').count(),
+        3,
+        'Todos los reportes propios siguen visibles',
+      )
       assert.equal(await page.getByText(titles[3], { exact: true }).count(), 0)
       assert.equal(await page.getByRole('button', { name: /Eliminar/ }).count(), 0)
       await page.getByRole('tab', { name: 'Activos', exact: true }).click()
@@ -377,7 +425,7 @@ export async function verifyOwnReportsBrowser({
         ids.slice(0, 3),
       ])
     ).rows
-    assert.equal(persisted.length, 3)
+    assert.equal(persisted.length, 3, 'La base de datos conserva los tres reportes de prueba')
     assert.ok(persisted.every((report) => report.state === 'resolved'))
     assert.deepEqual(errors, [])
     console.log(

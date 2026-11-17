@@ -2,6 +2,7 @@ import 'reflect-metadata'
 import {
   BadRequestException,
   Body,
+  ConflictException,
   Controller,
   ForbiddenException,
   Get,
@@ -20,17 +21,24 @@ import { NestFactory } from '@nestjs/core'
 import { openDatabase, type Database, type PostgresProfileRepository } from '@perdiu/database'
 import {
   CreateReport,
+  EditReport,
   GetReport,
   GetReportContact,
   ListOwnReports,
   ListReports,
   MediaAssociationError,
   ReportMediaService,
+  ReportEditValidationError,
   ReportValidationError,
   ResolveReport,
   type ReportMediaStorage,
 } from '@perdiu/catalog'
-import type { AccountIdentity, ReportContact, ReportSummary } from '@perdiu/contracts'
+import type {
+  AccountIdentity,
+  EditReportInput,
+  ReportContact,
+  ReportSummary,
+} from '@perdiu/contracts'
 import {
   withSessionRevocation,
   type AccessTokenVerifier,
@@ -50,7 +58,32 @@ class ReportsController {
     @Inject(GetReport) private readonly detail: GetReport,
     @Inject(GetReportContact) private readonly contacts: GetReportContact,
     @Inject(ResolveReport) private readonly resolver: ResolveReport,
+    @Inject(EditReport) private readonly editor: EditReport,
   ) {}
+
+  @Patch(':id')
+  @UseGuards(AuthGuard)
+  @Header('Cache-Control', 'no-store')
+  async edit(
+    @Param('id') input: string,
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() body: EditReportInput,
+  ): Promise<ReportSummary> {
+    const id = parseReportId(input)
+    const result = await orUnavailable(
+      () => this.editor.execute(id, user.id, body),
+      'No se pudo actualizar el reporte. Intenta nuevamente.',
+      (error) => {
+        if (error instanceof ReportEditValidationError)
+          throw new BadRequestException({ fieldErrors: error.errors })
+      },
+    )
+    if (result === 'forbidden') throw new ForbiddenException('Solo puedes editar tus reportes.')
+    if (result === 'not_found') throw new NotFoundException('Reporte no disponible.')
+    if (result === 'resolved')
+      throw new ConflictException('No se puede editar un reporte resuelto.')
+    return result
+  }
 
   @Patch(':id/resolve')
   @UseGuards(AuthGuard)
@@ -203,6 +236,7 @@ export async function createApplication(
           { provide: ListReports, useValue: new ListReports(database.reports) },
           { provide: ListOwnReports, useValue: new ListOwnReports(database.reports) },
           { provide: ResolveReport, useValue: new ResolveReport(database.reports) },
+          { provide: EditReport, useValue: new EditReport(database.reports) },
           { provide: CreateReport, useValue: new CreateReport(database.publisher) },
           { provide: GetReport, useValue: new GetReport(database.reports) },
           { provide: GetReportContact, useValue: new GetReportContact(database.reports) },

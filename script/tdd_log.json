@@ -2682,9 +2682,377 @@
     "testId": 64
   },
   {
-    "commitId": "HEAD",
+    "commitId": "89bd8069e589d2f5cefde84a4c50b05080ff862b",
     "commitName": "chore(repo): integrar main y conservar ciclos TDD (#25)",
     "commitTimestamp": 1794921715336,
     "testId": 64
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794922699971,
+    "success": true,
+    "testId": 65
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794923149742,
+    "success": true,
+    "testId": 65
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794923260872,
+    "success": true,
+    "testId": 65
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794923320112,
+    "success": true,
+    "testId": 65
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794923408257,
+    "success": true,
+    "testId": 65
+  },
+  {
+    "commitId": "fca8bfd02ecbf6834c3077817f416147d46ec301",
+    "commitName": "feat(api): iniciar edición parcial de reporte propio (#27)",
+    "commitTimestamp": 1794923444275,
+    "testId": 65
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794923576204,
+    "success": true,
+    "testId": 66
+  },
+  {
+    "commitId": "bf5fedb896a07788e173f2dee03afae51bc13f50",
+    "commitName": "feat(api): rechazar PATCH vacío de reporte (#27)",
+    "commitTimestamp": 1794923602244,
+    "testId": 66
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794923675222,
+    "success": true,
+    "testId": 67
+  },
+  {
+    "commitId": "ed114998b2f757aa19120fca0039d50ac0029f83",
+    "commitName": "feat(catalog): rechazar campos ajenos al editar (#27)",
+    "commitTimestamp": 1794923705864,
+    "testId": 67
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794923776531,
+    "success": true,
+    "testId": 68
+  },
+  {
+    "commitId": "26a06f106955646f6e9e049482fd9042b61f667c",
+    "commitName": "feat(catalog): validar título en edición (#27)",
+    "commitTimestamp": 1794923801036,
+    "testId": 68
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794923883346,
+    "success": true,
+    "testId": 69
+  },
+  {
+    "commitId": "465954e42fa35939c1360dfc3fc93186a9b6e94c",
+    "commitName": "feat(catalog): limitar título editado (#27)",
+    "commitTimestamp": 1794923907686,
+    "testId": 69
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794924009610,
+    "success": true,
+    "testId": 70
+  },
+  {
+    "commitId": "9bff395179571e020cc7d2a64e08322459e72580",
+    "commitName": "feat(catalog): editar descripción de reporte propio (#27)",
+    "commitTimestamp": 1794924086121,
+    "testId": 70
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794924161043,
+    "success": true,
+    "testId": 71
+  },
+  {
+    "commitId": "5ce19dc6f7666865d5a465cafd2fb1ee9773dcc9",
+    "commitName": "feat(catalog): permitir editar ciudad de reporte (#27)",
+    "commitTimestamp": 1794924185965,
+    "testId": 71
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794924256804,
+    "success": true,
+    "testId": 72
+  },
+  {
+    "commitId": "05c77bb2ca76d342d1df57b29f7dc7f78d09a208",
+    "commitName": "feat(catalog): permitir editar zona de reporte (#27)",
+    "commitTimestamp": 1794924279032,
+    "testId": 72
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794924352831,
+    "success": true,
+    "testId": 73
+  },
+  {
+    "commitId": "cfc82f4b05bc7a28057aac229b7f1e2c4c624afc",
+    "commitName": "feat(catalog): permitir editar tipo de reporte (#27)",
+    "commitTimestamp": 1794924367418,
+    "testId": 73
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794924444514,
+    "success": true,
+    "testId": 74
+  },
+  {
+    "commitId": "c1529368b10949f9ec94a3288afd4f6c226858cb",
+    "commitName": "feat(catalog): permitir editar categoría de reporte (#27)",
+    "commitTimestamp": 1794924463610,
+    "testId": 74
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794924566602,
+    "success": true,
+    "testId": 75
+  },
+  {
+    "commitId": "ad21cea4317e94fedf931a36e18141b1155661fa",
+    "commitName": "feat(catalog): permitir editar fecha del reporte (#27)",
+    "commitTimestamp": 1794924579515,
+    "testId": 75
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794924666057,
+    "success": true,
+    "testId": 76
+  },
+  {
+    "commitId": "126a0b17c0ab3fa21c011904ee3d2de291aa96a0",
+    "commitName": "fix(catalog): marcar fecha vacía como requerida (#27)",
+    "commitTimestamp": 1794924678710,
+    "testId": 76
+  },
+  {
+    "numPassedTests": 167,
+    "failedTests": 0,
+    "numTotalTests": 167,
+    "timestamp": 1794924752760,
+    "success": true,
+    "testId": 77
+  },
+  {
+    "commitId": "736cf2c2ce9d96226a05e301c39511fc67c4c39d",
+    "commitName": "feat(catalog): editar especie de mascota en reporte (#27)",
+    "commitTimestamp": 1794924767387,
+    "testId": 77
+  },
+  {
+    "numPassedTests": 168,
+    "failedTests": 0,
+    "numTotalTests": 168,
+    "timestamp": 1794924921348,
+    "success": true,
+    "testId": 78
+  },
+  {
+    "commitId": "958c241b3173e87947262d7aabca5b331010c2c1",
+    "commitName": "feat(web): enviar cambios de reportes propios",
+    "commitTimestamp": 1794924934793,
+    "testId": 78
+  },
+  {
+    "numPassedTests": 169,
+    "failedTests": 0,
+    "numTotalTests": 169,
+    "timestamp": 1794926380818,
+    "success": true,
+    "testId": 79
+  },
+  {
+    "commitId": "ad21d689d882738a4c170e4f0b088927790a1c96",
+    "commitName": "feat(web): mostrar errores de validación al editar",
+    "commitTimestamp": 1794926393312,
+    "testId": 79
+  },
+  {
+    "numPassedTests": 170,
+    "failedTests": 0,
+    "numTotalTests": 170,
+    "timestamp": 1794926469049,
+    "success": true,
+    "testId": 80
+  },
+  {
+    "commitId": "a85fd63ce69fe618ca0356c1d1d5ea46071d649a",
+    "commitName": "feat(web): preparar borrador de edición propia",
+    "commitTimestamp": 1794926481859,
+    "testId": 80
+  },
+  {
+    "numPassedTests": 171,
+    "failedTests": 0,
+    "numTotalTests": 171,
+    "timestamp": 1794926623555,
+    "success": true,
+    "testId": 81
+  },
+  {
+    "numPassedTests": 171,
+    "failedTests": 0,
+    "numTotalTests": 171,
+    "timestamp": 1794926682346,
+    "success": true,
+    "testId": 81
+  },
+  {
+    "commitId": "2783b49966e63874fff7811f13251eb8c8f06f52",
+    "commitName": "feat(web): guardar cambios del reporte propio",
+    "commitTimestamp": 1794926706948,
+    "testId": 81
+  },
+  {
+    "numPassedTests": 172,
+    "failedTests": 0,
+    "numTotalTests": 172,
+    "timestamp": 1794926788319,
+    "success": true,
+    "testId": 82
+  },
+  {
+    "commitId": "21b9be9b0196a6fc9495c469b9203a95b0aa1fb6",
+    "commitName": "feat(web): traducir errores de edición por campo",
+    "commitTimestamp": 1794926803069,
+    "testId": 82
+  },
+  {
+    "numPassedTests": 174,
+    "failedTests": 0,
+    "numTotalTests": 174,
+    "timestamp": 1794926883925,
+    "success": true,
+    "testId": 83
+  },
+  {
+    "commitId": "9c22df53b730189f913118ead25fb01c2a1a512e",
+    "commitName": "feat(web): explicar conflictos al editar reportes",
+    "commitTimestamp": 1794926900092,
+    "testId": 83
+  },
+  {
+    "numPassedTests": 174,
+    "failedTests": 0,
+    "numTotalTests": 174,
+    "timestamp": 1794927437152,
+    "success": true,
+    "testId": 84
+  },
+  {
+    "commitId": "f981d82c81b579c214a38b226982fc2cd4e7a5b9",
+    "commitName": "feat(web): abrir edición desde mis reportes",
+    "commitTimestamp": 1794927484177,
+    "testId": 84
+  },
+  {
+    "numPassedTests": 174,
+    "failedTests": 0,
+    "numTotalTests": 174,
+    "timestamp": 1794927799200,
+    "success": true,
+    "testId": 85
+  },
+  {
+    "commitId": "04e529543cfa67695eb41a5a4668e830a23fe126",
+    "commitName": "feat(web): editar todos los datos del reporte propio\n\nIssue #27",
+    "commitTimestamp": 1794927815206,
+    "testId": 85
+  },
+  {
+    "numPassedTests": 174,
+    "failedTests": 0,
+    "numTotalTests": 174,
+    "timestamp": 1794927976041,
+    "success": true,
+    "testId": 86
+  },
+  {
+    "commitId": "8cba29b2fe4e1f70458076836ec507e59d47d9dd",
+    "commitName": "feat(web): editar desde el detalle propio\n\nIssue #27",
+    "commitTimestamp": 1794928037515,
+    "testId": 86
+  },
+  {
+    "commitId": "6e0af52a78f91ff3daeb9726a23713d9d798435e",
+    "commitName": "docs: document editing own reports\n\nIssue #27",
+    "commitTimestamp": 1794928322838,
+    "testId": 87
+  },
+  {
+    "numPassedTests": 174,
+    "failedTests": 0,
+    "numTotalTests": 174,
+    "timestamp": 1794928656700,
+    "success": true,
+    "testId": 88
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(api): verify edit ownership and privacy (#27)",
+    "commitTimestamp": 1794928700527,
+    "testId": 88
   }
 ]

@@ -1,5 +1,6 @@
 import type {
   CreateReportInput,
+  EditReportInput,
   OwnReportQuery,
   PublicProfile,
   ReportData,
@@ -32,10 +33,14 @@ export interface ReportPublisher {
 }
 
 export type ResolveReportResult = 'resolved' | 'forbidden' | 'not_found'
+export type EditReportResult =
+  { kind: 'updated'; report: ReportRecord } | 'forbidden' | 'not_found' | 'resolved'
 
 /** Private history and atomic closure, always scoped to the verified subject. */
 export interface OwnReportsRepository {
   listOwned(ownerId: string, query?: OwnReportQuery): Promise<ReportRecord[]>
   /** Change only active state; authorized repeats succeed without another write. */
   resolveOwned(id: string, ownerId: string): Promise<ResolveReportResult>
+  /** Update allowlisted descriptive fields only while the verified owner still owns an active row. */
+  editOwned(id: string, ownerId: string, input: EditReportInput): Promise<EditReportResult>
 }

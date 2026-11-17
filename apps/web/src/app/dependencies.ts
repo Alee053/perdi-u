@@ -47,6 +47,11 @@ export function createPresenters(env = import.meta.env) {
         catalog.removeResolved(report.id)
         void catalog.load()
       },
+      onEdited: (report) => {
+        void own.load()
+        void catalog.load()
+        if (reportDetail.find(report.id)) void reportDetail.retry()
+      },
     },
   )
   const reports: ReportsPresenter = new ReportsPresenter(

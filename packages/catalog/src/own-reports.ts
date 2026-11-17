@@ -1,6 +1,107 @@
-import type { OwnReportQuery, ReportSummary } from '@perdiu/contracts'
+import type {
+  EditReportInput,
+  OwnReportQuery,
+  ReportSummary,
+  ReportValidationIssue,
+} from '@perdiu/contracts'
 import type { OwnReportsRepository, ResolveReportResult } from './model.js'
 import { compareReports, toPublicReport } from './catalog.js'
+
+const isDate = (value: unknown): value is string => {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false
+  const date = new Date(`${value}T00:00:00Z`)
+  return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value
+}
+
+export class ReportEditValidationError extends Error {
+  constructor(readonly errors: Partial<Record<keyof EditReportInput, ReportValidationIssue>> = {}) {
+    super('Los datos del reporte no son válidos.')
+  }
+}
+
+export class EditReport {
+  constructor(private readonly repository: Pick<OwnReportsRepository, 'editOwned'>) {}
+
+  async execute(
+    id: string,
+    ownerId: string,
+    input: EditReportInput,
+  ): Promise<ReportSummary | 'forbidden' | 'not_found' | 'resolved'> {
+    if (!input || typeof input !== 'object' || Array.isArray(input))
+      throw new ReportEditValidationError()
+    const fields = Object.keys(input)
+    if (
+      !fields.length ||
+      fields.some(
+        (field) =>
+          field !== 'title' &&
+          field !== 'description' &&
+          field !== 'city' &&
+          field !== 'zone' &&
+          field !== 'type' &&
+          field !== 'category' &&
+          field !== 'incidentDate' &&
+          field !== 'petSpecies',
+      )
+    )
+      throw new ReportEditValidationError()
+    const patch = { ...input }
+    if ('type' in patch && patch.type !== 'lost' && patch.type !== 'found')
+      throw new ReportEditValidationError({ type: 'invalid' })
+    if (
+      'category' in patch &&
+      patch.category !== 'pet' &&
+      patch.category !== 'object' &&
+      patch.category !== 'document'
+    )
+      throw new ReportEditValidationError({ category: 'invalid' })
+    if ('incidentDate' in patch) {
+      if (typeof patch.incidentDate !== 'string' || !patch.incidentDate.trim())
+        throw new ReportEditValidationError({ incidentDate: 'required' })
+      if (!isDate(patch.incidentDate))
+        throw new ReportEditValidationError({ incidentDate: 'invalid' })
+    }
+    if (patch.category === 'pet') {
+      if (typeof patch.petSpecies !== 'string' || !patch.petSpecies.trim())
+        throw new ReportEditValidationError({ petSpecies: 'required' })
+      if (patch.petSpecies.trim().length > 100)
+        throw new ReportEditValidationError({ petSpecies: 'too_long' })
+      patch.petSpecies = patch.petSpecies.trim()
+    } else if ('petSpecies' in patch) {
+      throw new ReportEditValidationError({ petSpecies: 'invalid' })
+    }
+    if ('title' in patch) {
+      if (typeof patch.title !== 'string' || !patch.title.trim())
+        throw new ReportEditValidationError({ title: 'required' })
+      if (patch.title.trim().length > 200)
+        throw new ReportEditValidationError({ title: 'too_long' })
+      patch.title = patch.title.trim()
+    }
+    if ('description' in patch) {
+      if (typeof patch.description !== 'string' || !patch.description.trim())
+        throw new ReportEditValidationError({ description: 'required' })
+      const description = patch.description.trim()
+      if (description.length < 20) throw new ReportEditValidationError({ description: 'too_short' })
+      if (description.length > 5000)
+        throw new ReportEditValidationError({ description: 'too_long' })
+      patch.description = description
+    }
+    if ('city' in patch) {
+      if (typeof patch.city !== 'string' || !patch.city.trim())
+        throw new ReportEditValidationError({ city: 'required' })
+      if (patch.city.trim().length > 100) throw new ReportEditValidationError({ city: 'too_long' })
+      patch.city = patch.city.trim()
+    }
+    if ('zone' in patch) {
+      if (typeof patch.zone !== 'string' || !patch.zone.trim())
+        throw new ReportEditValidationError({ zone: 'required' })
+      if (patch.zone.trim().length > 200) throw new ReportEditValidationError({ zone: 'too_long' })
+      patch.zone = patch.zone.trim()
+    }
+    const result = await this.repository.editOwned(id, ownerId, patch)
+    return typeof result === 'string' ? result : toPublicReport(result.report)
+  }
+}
 
 export class ListOwnReports {
   constructor(private readonly repository: Pick<OwnReportsRepository, 'listOwned'>) {}

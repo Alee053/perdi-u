@@ -2,11 +2,13 @@ import type { Pool } from 'pg'
 import {
   REPORT_RESULT_LIMIT,
   type CreateReportInput,
+  type EditReportInput,
   type OwnReportQuery,
   type ReportQuery,
 } from '@perdiu/contracts'
 import type {
   OwnReportsRepository,
+  EditReportResult,
   ReportDetailRepository,
   ReportPublisher,
   ReportRecord,
@@ -42,6 +44,41 @@ export class PostgresReportRepository
   implements ReportRepository, ReportDetailRepository, ReportPublisher, OwnReportsRepository
 {
   constructor(private readonly pool: Pool) {}
+
+  async editOwned(id: string, ownerId: string, input: EditReportInput): Promise<EditReportResult> {
+    const updated = await this.pool.query<ReportRecord>(
+      `WITH updated AS (
+         UPDATE reports SET title = COALESCE($3, title), description = COALESCE($4, description),
+           city = COALESCE($5, city), zone = COALESCE($6, zone), type = COALESCE($7, type),
+           category = COALESCE($8, category),
+           incident_date = COALESCE($9, incident_date),
+           pet_species = CASE WHEN COALESCE($8, category) = 'pet' THEN COALESCE($10, pet_species) ELSE NULL END
+         WHERE id = $1 AND owner_id = $2 AND state = 'active'
+         RETURNING id, owner_id, type, state, category, pet_species, title, description, city, zone, incident_date, created_at
+       )
+       SELECT ${reportColumns} FROM updated r JOIN profiles p ON p.id = r.owner_id`,
+      [
+        id,
+        ownerId,
+        input.title ?? null,
+        input.description ?? null,
+        input.city ?? null,
+        input.zone ?? null,
+        input.type ?? null,
+        input.category ?? null,
+        input.incidentDate ?? null,
+        input.petSpecies ?? null,
+      ],
+    )
+    if (updated.rowCount) return { kind: 'updated', report: updated.rows[0]! }
+    const existing = await this.pool.query<{ ownerId: string }>(
+      'SELECT owner_id AS "ownerId" FROM reports WHERE id = $1',
+      [id],
+    )
+    const report = existing.rows[0]
+    if (!report) return 'not_found'
+    return report.ownerId === ownerId ? 'resolved' : 'forbidden'
+  }
 
   async resolveOwned(id: string, ownerId: string): Promise<ResolveReportResult> {
     // Ownership and active state belong in the write, including concurrent retries.
