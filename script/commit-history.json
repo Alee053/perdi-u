@@ -2812,12 +2812,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "292c5310fa415bdc4cb88dad6717643f7c8e6c39",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-11-18T01:59:57.000Z",
       "message": "feat(web): refresh saved report details (#48)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/292c5310fa415bdc4cb88dad6717643f7c8e6c39"
     },
     "stats": {
       "total": 96,
@@ -2827,6 +2827,25 @@
     },
     "coverage": 85.89,
     "test_count": 200,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-18T02:01:50.000Z",
+      "message": "fix(web): retain saved selection after check errors (#48)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 73,
+      "additions": 68,
+      "deletions": 5,
+      "date": "2026-11-18"
+    },
+    "coverage": 85.96,
+    "test_count": 201,
     "failed_tests": 0,
     "conclusion": "success"
   }

@@ -13,6 +13,8 @@ export interface ReportsState {
   saved: string[]
   /** Saved catalog reports, kept so they stay visible after the search changes. */
   savedCatalog: CatalogReport[]
+  savedStatus: 'idle' | 'loading' | 'ready' | 'error'
+  savedMessage: string | null
   selected: Report | null
   selectedPhoto: number
 }
@@ -39,7 +41,15 @@ export class ReportsPresenter extends Store<ReportsState> {
     private readonly dependencies: Dependencies,
     saved: string[] = [],
   ) {
-    super({ reports, saved, savedCatalog: [], selected: null, selectedPhoto: 0 })
+    super({
+      reports,
+      saved,
+      savedCatalog: [],
+      savedStatus: 'idle',
+      savedMessage: null,
+      selected: null,
+      selectedPhoto: 0,
+    })
   }
 
   private update(patch: Partial<ReportsState>) {
@@ -107,9 +117,13 @@ export class ReportsPresenter extends Store<ReportsState> {
     const ids = this.state.saved.filter((id) =>
       this.state.savedCatalog.some((report) => report.id === id),
     )
-    if (!ids.length) return
+    if (!ids.length) {
+      this.update({ savedStatus: 'ready', savedMessage: null })
+      return
+    }
     const controller = new AbortController()
     this.savedController = controller
+    this.update({ savedStatus: 'loading', savedMessage: null })
     const results = await Promise.all(
       ids.map(async (id) => {
         try {
@@ -122,8 +136,13 @@ export class ReportsPresenter extends Store<ReportsState> {
     if (request !== this.savedRequest) return
     let saved = this.state.saved
     let savedCatalog = this.state.savedCatalog
+    let failed = false
     for (const result of results) {
-      if (!this.state.saved.includes(result.id) || 'failed' in result) continue
+      if (!this.state.saved.includes(result.id)) continue
+      if ('failed' in result) {
+        failed = true
+        continue
+      }
       if (!result.report || result.report.state !== 'active') {
         saved = saved.filter((id) => id !== result.id)
         savedCatalog = savedCatalog.filter((report) => report.id !== result.id)
@@ -134,7 +153,12 @@ export class ReportsPresenter extends Store<ReportsState> {
         ]
       }
     }
-    this.update({ saved, savedCatalog })
+    this.update({
+      saved,
+      savedCatalog,
+      savedStatus: failed ? 'error' : 'ready',
+      savedMessage: failed ? 'No se pudo verificar tus guardados. Intenta nuevamente.' : null,
+    })
   }
 
   contact = (id: string) => {
@@ -152,8 +176,16 @@ export class ReportsPresenter extends Store<ReportsState> {
   clearPrivateData = () => {
     this.savedRequest++
     this.savedController?.abort()
-    this.update({ saved: [], savedCatalog: [], selected: null })
+    this.update({
+      saved: [],
+      savedCatalog: [],
+      savedStatus: 'idle',
+      savedMessage: null,
+      selected: null,
+    })
   }
+
+  savedStatus = () => ({ status: this.state.savedStatus, message: this.state.savedMessage })
 
   isSaved = (id: string) => this.state.saved.includes(id)
 

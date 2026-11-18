@@ -157,6 +157,37 @@ test('revalidar guardados quita reportes no disponibles o resueltos y actualiza 
   assert.equal(presenter.isSaved(unavailable.id), false)
 })
 
+test('un fallo al verificar mantiene la selección y permite reintentar', async () => {
+  let unavailable = true
+  let requests = 0
+  const updated = { ...catalogReport, title: 'Mochila verificada' }
+  const { presenter } = setup([], [], undefined, async () => {
+    requests++
+    if (unavailable) throw new Error('servicio temporalmente no disponible')
+    return updated
+  })
+  presenter.toggleSaved(catalogReport.id)
+
+  await presenter.refreshSaved()
+
+  assert.deepEqual(
+    presenter.saved().map(({ id }) => id),
+    [catalogReport.id],
+  )
+  assert.deepEqual(presenter.counts(), { saved: 1 })
+  assert.deepEqual(presenter.savedStatus(), {
+    status: 'error',
+    message: 'No se pudo verificar tus guardados. Intenta nuevamente.',
+  })
+
+  unavailable = false
+  await presenter.refreshSaved()
+
+  assert.equal(requests, 2)
+  assert.equal(presenter.savedStatus().status, 'ready')
+  assert.equal(presenter.saved()[0]?.title, 'Mochila verificada')
+})
+
 test('un cierre confirmado retira el reporte persistido de guardados', () => {
   const { presenter } = setup()
   presenter.toggleSaved(catalogReport.id)
