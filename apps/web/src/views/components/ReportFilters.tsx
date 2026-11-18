@@ -104,6 +104,7 @@ export function ReportFilters({
           {selection.dateError}
         </p>
       )}
+      {selection.urlError && <p role="alert">{selection.urlError}</p>}
     </>
   )
 }

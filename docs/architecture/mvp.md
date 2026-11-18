@@ -34,7 +34,7 @@ flowchart LR
   end
   subgraph Model["Model (models/)"]
     Rules["Reglas y entidades<br/>filters, publication, contact, credentials"]
-    Ports["Puertos<br/>ReportsRepository, OwnReportsRepository, ReportDetailRepository, AuthGateway, AccountClient"]
+    Ports["Puertos<br/>ReportsRepository, OwnReportsRepository, ReportDetailRepository, SearchNavigation, AuthGateway, AccountClient"]
   end
   subgraph Infra["Infrastructure (infrastructure/)"]
     Http["HTTP: catalog-client, own-reports-client, publish-client, account-client"]
@@ -47,6 +47,7 @@ flowchart LR
   Core --> Ports
   Http -. implementa .-> Ports
   Auth -. implementa .-> Ports
+  Browser -. implementa SearchNavigation .-> Ports
   App --> Core
   App --> Infra
   Browser -. implementa Effects .-> Core
@@ -72,7 +73,7 @@ apps/web/src/
 │   ├── effects.ts            Efectos que el presenter pide (temporizador, dirección, WhatsApp, foto…)
 │   ├── app/                  shell (navegación), notice (avisos), useApp
 │   ├── auth/                 auth (sesión), auth-form (formulario), useAuthForm
-│   ├── catalog/              catalog (consulta), filters (selección)
+│   ├── catalog/              catalog (consulta), filters (selección), search (URL y ciclo de vida)
 │   └── reports/              reports (demo/guardados), own-reports, report-detail y report-route, publish, usePublishPage (limpieza de vistas previas), report-card
 ├── views/                    View
 │   ├── layouts/              AppShell, Sidebar, AppHeader
@@ -110,13 +111,19 @@ Las fotos de reportes resueltos se cargan mediante el puerto `ReportPhotoLoader`
 ## 6. Flujo de una funcionalidad real: buscar en el catálogo
 
 1. **View** — `views/components/ReportFilters.tsx`: la persona escribe «cámara» o selecciona fechas «Desde/Hasta»; los controles delegan `setSearch`, `setDateFrom` y `setDateTo`.
-2. **Presenter** — `presenters/catalog/filters.presenter.ts`: conserva los valores editables y la invalidez nativa aunque el control no tenga un valor serializable; presenta los errores del rango y avisa cada cambio real. Al limpiar, permite reiniciar segmentos parciales del control. `app/dependencies.ts` conectó ese aviso con `CatalogPresenter.load`.
-3. **Presenter** — `presenters/catalog/catalog.presenter.ts`: cancela la consulta anterior, no consulta si el rango es inválido (también al refrescar sin una selección nueva) y, para un rango válido, publica `loading` y pide al Model la consulta.
+2. **Presenter** — `presenters/catalog/filters.presenter.ts`: conserva los valores editables y la invalidez nativa aunque el control no tenga un valor serializable; presenta errores del rango/enlace, restaura etiquetas de los filtros y admite la ciudad del enlace como opción visible. `CatalogSearchPresenter` restaura los controles antes de la primera consulta, sigue sus cambios y pide reemplazar la búsqueda al puerto `SearchNavigation`. El arranque diferido descarta montajes abandonados de React antes de enviar una consulta.
+3. **Presenter** — `presenters/catalog/catalog.presenter.ts`: cancela la consulta anterior, no consulta si el rango o enlace es inválido (también al refrescar sin una selección nueva) y, para filtros válidos, publica `loading` y pide al Model la consulta.
 4. **Model** — `models/reports/filters.ts`: valida fechas calendario sin convertirlas por zona horaria, compara inclusivamente `incidentDate` en datos demo y construye `ReportQuery` omitiendo los criterios vacíos. El presenter usa el puerto `ReportsRepository`; su implementación (`infrastructure/http/catalog-client.ts`) serializa filtros a `GET /api/reports` y valida la respuesta.
 5. **Presenter**: si la respuesta sigue vigente, convierte cada reporte en `ReportCard` (`report-card.ts`: «Perdido», «Objeto», fecha `14 oct 2026`, iniciales) y publica `ready`; si falla, publica `error` con el mensaje.
 6. **View** — `useApp` re-renderiza mediante `useStore`, y `views/pages/ExplorePage.tsx` muestra la grilla, el estado vacío o el error con «Reintentar».
 
 La View nunca filtra ni formatea; el Model nunca sabe qué texto se mostrará.
+
+`models/reports/search-location.ts` valida los pares decodificados con la allowlist pública y el calendario existente. `infrastructure/browser/search-navigation.ts` representa esos datos con `URL`/`URLSearchParams` y adapta los efectos de ruta más búsqueda al puerto `SearchNavigation`. Un enlace inválido conserva su dirección y muestra un aviso; editar o limpiar produce una dirección nueva válida sin reenviar parámetros ajenos. `app/dependencies.ts` conecta el adapter y los presenters, y `useApp` mantiene sus suscripciones y limpieza.
+
+Las entradas que la aplicación añade al historial llevan solo una marca booleana. `ReportDetailPresenter` puede volver desde ellas aun tras Adelante o recarga; un enlace abierto directamente sin esa marca se cierra reemplazando la ruta raíz. Abrir un reporte conserva su dirección canónica sin filtros. Volver a una búsqueda que no cambió conserva sus resultados y foco; cambiar la entrada restaura la selección y cancela la consulta anterior.
+
+La limpieza de códigos/errores de Auth notifica una vez consumidos esos parámetros mediante el adapter del navegador. La búsqueda vuelve a leer la dirección limpia y no conserva un aviso obsoleto. Las escrituras propias de los controles no emiten ese evento, lo que evita bucles entre reemplazo y restauración.
 
 ## 7. Flujo de publicación y fotos privadas
 

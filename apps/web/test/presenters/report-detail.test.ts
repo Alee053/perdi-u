@@ -29,18 +29,22 @@ class Session extends Store<AuthState> {
 function fakeHistory(initial: string) {
   const entries = [initial]
   const changes: string[] = []
+  let returnable = false
   let listener: ((path: string) => void) | undefined
   return {
     changes,
     current: () => entries[entries.length - 1]!,
     /** The person presses «Atrás» or «Adelante» to a path. */
-    navigate: (path: string) => {
+    navigate: (path: string, appEntry = false) => {
+      returnable = appEntry
       entries.push(path)
       listener?.(path)
     },
     effects: {
       currentPath: () => entries[entries.length - 1]!,
+      hasAppReturn: () => returnable,
       showPath: (path: string, mode: 'push' | 'replace') => {
+        returnable = mode === 'push'
         changes.push(`${mode} ${path}`)
         if (mode === 'replace') entries.pop()
         entries.push(path)
@@ -52,6 +56,7 @@ function fakeHistory(initial: string) {
         }
       },
       back: () => {
+        returnable = false
         changes.push('back')
         entries.pop()
         listener?.(entries[entries.length - 1]!)
@@ -93,6 +98,45 @@ function setup(
 }
 
 const settle = () => new Promise((resolve) => setTimeout(resolve, 0))
+
+test('cerrar después de Atrás y Adelante recupera la dirección de búsqueda anterior', async () => {
+  const search = '/?q=gato&zone=Cala+Cala&dateFrom=2026-10-01'
+  const { presenter, history } = setup({ path: search })
+  const stop = presenter.start()
+  await presenter.open(report.id)
+  const path = '/reportes/' + report.id
+  assert.equal(history.current(), path, 'el enlace del reporte no arrastra filtros')
+  history.effects.back()
+  assert.equal(presenter.getSnapshot().status, 'closed')
+  history.navigate(path, true)
+  await settle()
+  presenter.close()
+  assert.equal(history.current(), search)
+  assert.equal(history.changes.at(-1), 'back')
+  stop()
+})
+
+test('una ruta de reporte con búsqueda conserva su ID y usa un enlace canónico al contactar', async () => {
+  const { presenter, api, opened } = setup({
+    path: '/reportes/' + report.id + '?q=private-sentinel&redirect=https%3A%2F%2Fexternal.test',
+    session: { status: 'authenticated', user: { id: 'viewer-1', email: 'persona@example.test' } },
+  })
+  const requested: string[] = []
+  api.find = async (id) => {
+    requested.push(id)
+    return report
+  }
+  api.contact = async () => ({ available: true, whatsapp: '59170000001' })
+  const stop = presenter.start()
+  await settle()
+  assert.equal(presenter.getSnapshot().status, 'ready')
+  assert.deepEqual(requested, [report.id])
+  await presenter.contact()
+  const message = new URL(opened[0]!).searchParams.get('text')!
+  assert.ok(message.includes('https://perdiu.test/reportes/' + report.id))
+  assert.ok(!message.includes('private-sentinel') && !message.includes('external.test'))
+  stop()
+})
 
 test('la galería permite elegir y recorrer fotos y reinicia la selección al abrir otro reporte', async () => {
   const { presenter, api } = setup()

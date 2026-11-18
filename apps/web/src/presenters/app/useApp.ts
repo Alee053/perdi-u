@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import type { AuthPresenter } from '../auth/auth.presenter.js'
 import type { CatalogPresenter } from '../catalog/catalog.presenter.js'
 import type { FiltersPresenter } from '../catalog/filters.presenter.js'
+import type { CatalogSearchPresenter } from '../catalog/search.presenter.js'
 import type { PublishPresenter } from '../reports/publish.presenter.js'
 import type { ReportDetailPresenter } from '../reports/report-detail.presenter.js'
 import type { ReportsPresenter } from '../reports/reports.presenter.js'
@@ -15,6 +16,7 @@ export interface AppPresenters {
   notices: NoticePresenter
   catalog: CatalogPresenter
   filters: FiltersPresenter
+  search: CatalogSearchPresenter
   reports: ReportsPresenter
   own: OwnReportsPresenter
   reportDetail: ReportDetailPresenter
@@ -27,7 +29,8 @@ export interface AppPresenters {
  * start/cleanup to the component lifecycle and hands the view ready-to-render data and actions.
  */
 export function useApp(presenters: AppPresenters) {
-  const { auth, notices, catalog, filters, reports, own, reportDetail, publish, shell } = presenters
+  const { auth, notices, catalog, filters, search, reports, own, reportDetail, publish, shell } =
+    presenters
   const shellState = useStore(shell)
   // Subscriptions only: their data is read below through shell.view() and the reports selectors.
   useStore(auth)
@@ -42,10 +45,7 @@ export function useApp(presenters: AppPresenters) {
   useEffect(() => shell.start(), [shell])
   useEffect(() => reportDetail.start(), [reportDetail])
   useEffect(() => own.start(auth), [own, auth])
-  useEffect(() => {
-    void catalog.load(filters.getSnapshot())
-    return () => catalog.cancel()
-  }, [catalog, filters])
+  useEffect(() => search.start(), [search])
 
   const counts = reports.counts()
   return {
@@ -58,6 +58,7 @@ export function useApp(presenters: AppPresenters) {
     },
     catalog: { ...catalogState, ...catalog.summary() },
     selection,
+    filterOptions: filters.options(),
     overview: reports.overview(),
     map: reports.mapView(selection),
     myReports: own.view(),

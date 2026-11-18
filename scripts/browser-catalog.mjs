@@ -9,6 +9,7 @@ import { chromium } from 'playwright'
 import { createPool } from '@perdiu/database'
 import { assertLocalDatabase } from '@perdiu/database/config'
 import { verifyReportGallery } from './browser-report-gallery.mjs'
+import { verifySearchNavigation } from './browser-search-navigation.mjs'
 
 async function freePort() {
   const server = createServer()
@@ -304,10 +305,15 @@ async function verifySearch(page, size) {
   await page.getByRole('button', { name: 'Limpiar filtros', exact: true }).click()
   // Native date editors keep impossible/partial segments while their string value is empty.
   const enterImpossibleDate = async (input) => {
-    await input.fill('2026-02-28')
-    for (let index = 0; index < 3; index++) await input.press('ArrowLeft')
-    await input.press('ArrowRight')
-    await page.keyboard.type('31')
+    // Start on a day valid in January, then edit the month to February. Native segment
+    // order follows the platform's region and may differ from the page's locale.
+    for (let segment = 0; segment < 3; segment++) {
+      await input.fill('2026-01-31')
+      for (let index = 0; index < 3; index++) await input.press('ArrowLeft')
+      for (let index = 0; index < segment; index++) await input.press('ArrowRight')
+      await page.keyboard.type('02')
+      if (await input.evaluate((element) => element.validity.badInput)) break
+    }
     assert.equal(await input.evaluate((element) => element.validity.badInput), true)
     await page.getByRole('alert').filter({ hasText: 'Indica fechas válidas' }).waitFor()
     await expectTitles(page, [])
@@ -800,6 +806,7 @@ try {
       .click()
     await page.locator('.report-card').first().waitFor()
     await verifySearch(page, size)
+    await verifySearchNavigation(browser, webUrl, size, viewport)
   }
 
   await pool.query(

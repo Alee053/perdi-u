@@ -1,7 +1,6 @@
 import type { Section } from '../../presenters/app/sections'
 import type { AppView } from '../../presenters/app/useApp'
 import {
-  filterOptions,
   type FilterSelection,
   type FiltersPresenter,
 } from '../../presenters/catalog/filters.presenter'
@@ -14,6 +13,7 @@ import { StatusTabs } from '../components/StatusTabs'
 type MapPageProps = {
   map: AppView['map']
   selection: FilterSelection
+  options: AppView['filterOptions']
   filters: Pick<
     FiltersPresenter,
     | 'setSearch'
@@ -29,7 +29,7 @@ type MapPageProps = {
   onNavigate: (section: Section) => void
 }
 
-export function MapPage({ map, selection, filters, onOpen, onNavigate }: MapPageProps) {
+export function MapPage({ map, selection, options, filters, onOpen, onNavigate }: MapPageProps) {
   return (
     <>
       <PageHeading
@@ -44,52 +44,54 @@ export function MapPage({ map, selection, filters, onOpen, onNavigate }: MapPage
       <div className="toolbar">
         <ReportFilters
           selection={selection}
-          options={filterOptions}
+          options={options}
           actions={filters}
           withSearch={false}
         />
         <StatusTabs
           label="Estado del reporte"
-          options={filterOptions.statuses}
+          options={options.statuses}
           value={selection.status}
           onChange={filters.setStatus}
         />
         <button className="secondary-button" onClick={filters.reset}>
           Limpiar filtros
         </button>
-        {!selection.dateError && (
+        {!selection.dateError && !selection.urlError && (
           <span className="result-count">
             <b>{map.count}</b> reportes visibles
           </span>
         )}
       </div>
-      <div className="map-layout">
-        <MapView pins={map.pins} onOpen={onOpen} />
-        <div className="map-list">
-          {map.list.map((report) => (
-            <button key={report.id} className="map-result" onClick={() => onOpen(report.id)}>
-              <img src={report.image} alt="" />
-              <span>
-                <small>
-                  {report.status} · {report.category}
-                </small>
-                <b>{report.title}</b>
-                <small>
-                  {report.zone}, {report.city}
-                </small>
-              </span>
-            </button>
-          ))}
-          {map.count === 0 && !selection.dateError && (
-            <EmptyState
-              title="No hay reportes en esta zona"
-              description="Cambia los filtros o crea un reporte nuevo."
-              action="Publicar reporte"
-              onAction={() => onNavigate('publish')}
-            />
-          )}
+      {!selection.urlError && (
+        <div className="map-layout">
+          <MapView pins={map.pins} onOpen={onOpen} />
+          <div className="map-list">
+            {map.list.map((report) => (
+              <button key={report.id} className="map-result" onClick={() => onOpen(report.id)}>
+                <img src={report.image} alt="" />
+                <span>
+                  <small>
+                    {report.status} · {report.category}
+                  </small>
+                  <b>{report.title}</b>
+                  <small>
+                    {report.zone}, {report.city}
+                  </small>
+                </span>
+              </button>
+            ))}
+            {map.count === 0 && !selection.dateError && (
+              <EmptyState
+                title="No hay reportes en esta zona"
+                description="Cambia los filtros o crea un reporte nuevo."
+                action="Publicar reporte"
+                onAction={() => onNavigate('publish')}
+              />
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </>
   )
 }

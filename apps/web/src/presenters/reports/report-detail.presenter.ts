@@ -57,6 +57,7 @@ interface Dependencies {
     | 'absoluteUrl'
     | 'copyText'
     | 'currentPath'
+    | 'hasAppReturn'
     | 'showPath'
     | 'onPathChange'
     | 'back'
@@ -126,7 +127,7 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
     this.setState({ status: 'closed' })
     const { effects } = this.dependencies
     // A direct link has nothing behind it in PerdiU: replace the address instead of leaving.
-    if (this.pushed) effects.back()
+    if (this.pushed || effects.hasAppReturn()) effects.back()
     else effects.showPath('/', 'replace')
     this.pushed = false
   }

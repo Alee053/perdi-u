@@ -16,11 +16,13 @@ export interface Effects {
   reload(): void
   /** Opens a chat link already built and validated by `models/reports/contact`. */
   openWhatsApp(url: string): void
-  /** Path of the address bar, for example `/reportes/<id>` after a direct link or a reload. */
+  /** Path and search of the address bar, including public search filters. */
   currentPath(): string
+  /** This entry was pushed by the app, so going back stays in its navigation. */
+  hasAppReturn(): boolean
   /** Changes the address without reloading; `push` adds a history entry that «Atrás» undoes. */
   showPath(path: string, mode: 'push' | 'replace'): void
-  /** «Atrás» or «Adelante» changed the address. */
+  /** History traversal or explicit URL cleanup changed the address. */
   onPathChange(listener: (path: string) => void): () => void
   back(): void
   /** Absolute address of an app path, to share it outside PerdiU. */

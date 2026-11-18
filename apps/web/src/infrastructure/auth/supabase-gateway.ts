@@ -1,5 +1,6 @@
 import { AuthClient, isAuthApiError, type AuthError } from '@supabase/auth-js'
 import { AuthGatewayError, type AuthFailure, type AuthGateway } from '../../models/auth/session.js'
+import { browserEffects } from '../browser/browser-effects.js'
 
 const reasons: Partial<Record<string, AuthFailure>> = {
   invalid_credentials: 'invalid_credentials',
@@ -50,6 +51,7 @@ export function createAuthGateway(
         for (const key of ['code', 'error', 'error_code', 'error_description']) params.delete(key)
         const search = params.size ? `?${params}` : ''
         window.history.replaceState(null, '', `${location.pathname}${search}${location.hash}`)
+        browserEffects.notifyPathChange()
       }
       const session = Boolean(await accessToken())
       if (!callback) return { session }

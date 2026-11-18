@@ -16,7 +16,7 @@ export class CatalogPresenter extends Store<CatalogState> {
   private request = 0
   private controller?: AbortController
   private query: ReportQuery = {}
-  private invalidRange = false
+  private invalidSelection = false
   private filtered = false
   private loaded: CatalogReport[] = []
   constructor(private readonly repository: ReportsRepository) {
@@ -28,18 +28,19 @@ export class CatalogPresenter extends Store<CatalogState> {
     this.controller?.abort()
   }
 
-  /** Without a selection it retries the last query, provided the current range is valid. */
+  /** Without a selection it retries the last query, provided the current filters are valid. */
   async load(selection?: FilterSelection) {
     if (selection) {
       const filters = toReportFilters(selection)
       this.filtered = hasActiveFilters(filters)
-      this.invalidRange = Boolean(
+      this.invalidSelection = Boolean(
+        selection.urlError ||
         validateDateRange(filters.dateFrom, filters.dateTo, filters.dateInputInvalid),
       )
-      if (!this.invalidRange) this.query = toReportQuery(filters)
+      if (!this.invalidSelection) this.query = toReportQuery(filters)
     }
     this.cancel()
-    if (this.invalidRange) {
+    if (this.invalidSelection) {
       this.loaded = []
       this.setState({ status: 'ready', reports: [] })
       return
