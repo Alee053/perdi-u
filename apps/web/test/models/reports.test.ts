@@ -2,8 +2,6 @@ import assert from 'node:assert/strict'
 import { test } from '@jest/globals'
 import {
   hasActiveFilters,
-  matchesFilters,
-  noFilters,
   toReportQuery,
   validateDateRange,
 } from '../../src/models/reports/filters.js'
@@ -30,7 +28,6 @@ const report = (overrides: Partial<DemoReport> = {}): DemoReport => ({
   imageUrls: [],
   author: { id: 'demo-mariana', displayName: 'Mariana Rojas' },
   phone: '59170000001',
-  position: { top: '30%', left: '28%' },
   ...overrides,
 })
 
@@ -46,7 +43,7 @@ const draft: ReportDraft = {
 }
 
 test('los filtros se traducen a la consulta pública sin texto vacío ni criterios ausentes', () => {
-  assert.deepEqual(toReportQuery(noFilters), {})
+  assert.deepEqual(toReportQuery({ text: '' }), {})
   assert.equal(hasActiveFilters({ text: '   ' }), false)
   assert.deepEqual(
     toReportQuery({ text: '  CÁMARA ', city: 'La Paz', category: 'object', type: 'lost' }),
@@ -55,22 +52,13 @@ test('los filtros se traducen a la consulta pública sin texto vacío ni criteri
   assert.equal(hasActiveFilters({ text: '', type: 'found' }), true)
 })
 
-test('la zona filtra frases sin distinguir mayúsculas ni tildes y se envía al catálogo', () => {
+test('la zona se envía al catálogo como un filtro de texto', () => {
   const filters = { text: '', zone: 'san jose' }
   assert.deepEqual(toReportQuery(filters), { zone: 'san jose' })
   assert.equal(hasActiveFilters(filters), true)
-  assert.equal(matchesFilters(report({ zone: 'San José' }), filters), true)
-  assert.equal(matchesFilters(report({ zone: 'Sopocachi' }), filters), false)
 })
 
-test('la búsqueda local ignora tildes y mayúsculas y excluye reportes resueltos', () => {
-  assert.equal(matchesFilters(report(), { text: 'SOPOCACHÍ' }), true)
-  assert.equal(matchesFilters(report(), { text: '', city: 'Cochabamba' }), false)
-  assert.equal(matchesFilters(report(), { text: '', category: 'pet', type: 'lost' }), true)
-  assert.equal(matchesFilters(report({ state: 'resolved' }), noFilters), false)
-})
-
-test('el filtro por fecha valida calendarios, permite límites abiertos y compara el día del hecho', () => {
+test('el filtro por fecha valida calendarios y permite límites abiertos', () => {
   assert.equal(validateDateRange('2024-02-29', '2024-02-29'), undefined)
   assert.equal(validateDateRange('2026-10-07', '2026-10-10'), undefined)
   assert.equal(validateDateRange('2026-10-07'), undefined)
@@ -78,11 +66,6 @@ test('el filtro por fecha valida calendarios, permite límites abiertos y compar
   assert.equal(validateDateRange('2026-02-29'), 'invalid_date')
   assert.equal(validateDateRange('2026-10-11', '2026-10-10'), 'range_order')
   assert.equal(hasActiveFilters({ text: '', dateFrom: '2026-10-10' }), true)
-  assert.equal(
-    matchesFilters(report(), { text: '', dateFrom: '2026-10-06', dateTo: '2026-10-06' }),
-    true,
-  )
-  assert.equal(matchesFilters(report(), { text: '', dateFrom: '2026-10-07' }), false)
   assert.deepEqual(toReportQuery({ text: '', dateFrom: '2026-10-06', dateTo: '2026-10-10' }), {
     dateFrom: '2026-10-06',
     dateTo: '2026-10-10',

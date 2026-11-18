@@ -60,7 +60,7 @@ export function createPresenters(env = import.meta.env) {
     demoReports,
     {
       // A report opened by its link can be saved even if the catalog never listed it.
-      catalog: { find: (id) => catalog.find(id) ?? reportDetail.find(id) },
+      catalog: { find: (id) => catalog.find(id) ?? reportDetail.find(id), view: catalog.view },
       notices,
       effects: browserEffects,
       links: { open: (id) => void reportDetail.open(id) },

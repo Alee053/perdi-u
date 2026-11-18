@@ -22,7 +22,6 @@ export const demoReports: DemoReport[] = [
     imageUrls: [photo('photo-1543466835-00a7907e9de1')],
     author: { id: 'demo-mariana', displayName: 'Mariana Rojas' },
     phone: '59170000001',
-    position: { top: '30%', left: '28%' },
   },
   {
     id: 'demo-2',
@@ -40,7 +39,6 @@ export const demoReports: DemoReport[] = [
     imageUrls: [photo('photo-1553062407-98eeb64c6a62')],
     author: { id: 'demo-diego', displayName: 'Diego Flores' },
     phone: '59170000002',
-    position: { top: '53%', left: '55%' },
   },
   {
     id: 'demo-3',
@@ -58,7 +56,6 @@ export const demoReports: DemoReport[] = [
     imageUrls: [photo('photo-1573865526739-10659fec78a5')],
     author: { id: 'demo-sofia', displayName: 'Sofía Paredes' },
     phone: '59170000003',
-    position: { top: '41%', left: '76%' },
   },
   {
     id: 'demo-4',
@@ -76,7 +73,6 @@ export const demoReports: DemoReport[] = [
     imageUrls: [photo('photo-1518895949257-7621c3c786d7')],
     author: { id: 'demo-andres', displayName: 'Andrés Molina' },
     phone: '59170000004',
-    position: { top: '68%', left: '34%' },
   },
   {
     id: 'demo-5',
@@ -94,7 +90,6 @@ export const demoReports: DemoReport[] = [
     imageUrls: [photo('photo-1551717743-49959800b1f6')],
     author: { id: 'demo-paola', displayName: 'Paola Suárez' },
     phone: '59170000005',
-    position: { top: '24%', left: '61%' },
   },
   {
     id: 'demo-6',
@@ -112,7 +107,6 @@ export const demoReports: DemoReport[] = [
     imageUrls: [photo('photo-1554224155-6726b3ff858f')],
     author: { id: 'demo-gabriela', displayName: 'Gabriela Lima' },
     phone: '59170000006',
-    position: { top: '73%', left: '77%' },
   },
   {
     id: 'demo-7',
@@ -130,7 +124,6 @@ export const demoReports: DemoReport[] = [
     imageUrls: [photo('photo-1514888286974-6c03e2ca1dba')],
     author: owner,
     phone: demoOwner.phone,
-    position: { top: '58%', left: '42%' },
   },
 ]
 

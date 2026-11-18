@@ -4,7 +4,7 @@ import {
   type FilterSelection,
   type FiltersPresenter,
 } from '../../presenters/catalog/filters.presenter'
-import { EmptyState } from '../components/EmptyState'
+import { CatalogResults } from '../components/CatalogResults'
 import { PageHeading } from '../components/PageHeading'
 import { ReportFilters } from '../components/ReportFilters'
 import { ReportGrid } from '../components/ReportGrid'
@@ -71,43 +71,17 @@ export function ExplorePage({
           </span>
         )}
       </div>
-      {catalog.limitReached && (
-        <p className="hint" role="status">
-          Se muestran hasta {catalog.limit} resultados. Ajusta los filtros para precisar la
-          búsqueda.
-        </p>
-      )}
-      {catalog.status === 'loading' && (
-        <div className="catalog-state" role="status" aria-live="polite">
-          Cargando reportes…
-        </div>
-      )}
-      {catalog.status === 'error' && (
-        <div className="catalog-state" role="alert">
-          <p>{catalog.message}</p>
-          <button className="secondary-button" onClick={onRetry}>
-            Reintentar
-          </button>
-        </div>
-      )}
-      {catalog.status === 'ready' &&
-        !selection.dateError &&
-        !selection.urlError &&
-        (catalog.count === 0 ? (
-          <EmptyState
-            title={catalog.empty.title}
-            description={catalog.empty.description}
-            action="Publicar reporte"
-            onAction={() => onNavigate('publish')}
-          />
-        ) : (
-          <>
-            <ReportGrid reports={catalog.reports} {...cards} />
-            <button className="text-button more-link" onClick={() => onNavigate('publish')}>
-              ¿No ves lo que buscas? Publica un reporte
-            </button>
-          </>
-        ))}
+      <CatalogResults
+        result={catalog}
+        blocked={Boolean(selection.dateError || selection.urlError)}
+        onRetry={onRetry}
+        onPublish={() => onNavigate('publish')}
+      >
+        <ReportGrid reports={catalog.reports} {...cards} />
+        <button className="text-button more-link" onClick={() => onNavigate('publish')}>
+          ¿No ves lo que buscas? Publica un reporte
+        </button>
+      </CatalogResults>
     </>
   )
 }

@@ -87,6 +87,7 @@ export function AppShell({ app }: { app: AppView }) {
               options={app.filterOptions}
               filters={actions.filters}
               onOpen={reports.open}
+              onRetry={actions.retryCatalog}
               onNavigate={actions.navigate}
             />
           )}

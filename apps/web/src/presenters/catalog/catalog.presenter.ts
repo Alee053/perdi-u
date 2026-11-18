@@ -93,4 +93,6 @@ export class CatalogPresenter extends Store<CatalogState> {
           },
     }
   }
+
+  view = () => ({ ...this.state, ...this.summary() })
 }

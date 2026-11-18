@@ -14,16 +14,9 @@ type ReportFiltersProps = {
   selection: FilterSelection
   options: { cities: readonly string[]; categories: readonly string[] }
   actions: FilterActions
-  /** Search text is specific to Explore; the other controls are shared with the map. */
-  withSearch?: boolean
 }
 
-export function ReportFilters({
-  selection,
-  options,
-  actions,
-  withSearch = true,
-}: ReportFiltersProps) {
+export function ReportFilters({ selection, options, actions }: ReportFiltersProps) {
   const readDateFrom = (event: SyntheticEvent<HTMLInputElement>) =>
     actions.setDateFrom(event.currentTarget.value, event.currentTarget.validity.badInput)
   const readDateTo = (event: SyntheticEvent<HTMLInputElement>) =>
@@ -31,16 +24,14 @@ export function ReportFilters({
 
   return (
     <>
-      {withSearch && (
-        <input
-          className="search-field"
-          value={selection.search}
-          onChange={(event) => actions.setSearch(event.target.value)}
-          placeholder="Buscar por nombre o descripción"
-          aria-label="Buscar reportes"
-          maxLength={200}
-        />
-      )}
+      <input
+        className="search-field"
+        value={selection.search}
+        onChange={(event) => actions.setSearch(event.target.value)}
+        placeholder="Buscar por nombre o descripción"
+        aria-label="Buscar reportes"
+        maxLength={200}
+      />
       <select
         className="select-field"
         value={selection.city}

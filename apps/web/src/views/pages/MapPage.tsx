@@ -4,8 +4,7 @@ import {
   type FilterSelection,
   type FiltersPresenter,
 } from '../../presenters/catalog/filters.presenter'
-import { EmptyState } from '../components/EmptyState'
-import { MapView } from '../components/MapView'
+import { CatalogResults } from '../components/CatalogResults'
 import { PageHeading } from '../components/PageHeading'
 import { ReportFilters } from '../components/ReportFilters'
 import { StatusTabs } from '../components/StatusTabs'
@@ -26,15 +25,24 @@ type MapPageProps = {
     | 'reset'
   >
   onOpen: (id: string) => void
+  onRetry: () => void
   onNavigate: (section: Section) => void
 }
 
-export function MapPage({ map, selection, options, filters, onOpen, onNavigate }: MapPageProps) {
+export function MapPage({
+  map,
+  selection,
+  options,
+  filters,
+  onOpen,
+  onRetry,
+  onNavigate,
+}: MapPageProps) {
   return (
     <>
       <PageHeading
         title="Mapa de reportes"
-        description="Ubica reportes cercanos y abre cada punto para ver sus detalles."
+        description="Consulta la ciudad y zona declaradas en cada reporte."
         action={
           <button className="primary-button" onClick={() => onNavigate('publish')}>
             Nuevo reporte
@@ -42,56 +50,46 @@ export function MapPage({ map, selection, options, filters, onOpen, onNavigate }
         }
       />
       <div className="toolbar">
-        <ReportFilters
-          selection={selection}
-          options={options}
-          actions={filters}
-          withSearch={false}
-        />
+        <ReportFilters selection={selection} options={options} actions={filters} />
+        <button className="secondary-button" onClick={filters.reset}>
+          Limpiar filtros
+        </button>
+      </div>
+      <div className="toolbar toolbar-row">
         <StatusTabs
           label="Estado del reporte"
           options={options.statuses}
           value={selection.status}
           onChange={filters.setStatus}
         />
-        <button className="secondary-button" onClick={filters.reset}>
-          Limpiar filtros
-        </button>
-        {!selection.dateError && !selection.urlError && (
+        {map.status === 'ready' && !selection.dateError && !selection.urlError && (
           <span className="result-count">
             <b>{map.count}</b> reportes visibles
           </span>
         )}
       </div>
-      {!selection.urlError && (
-        <div className="map-layout">
-          <MapView pins={map.pins} onOpen={onOpen} />
-          <div className="map-list">
-            {map.list.map((report) => (
-              <button key={report.id} className="map-result" onClick={() => onOpen(report.id)}>
-                <img src={report.image} alt="" />
+      <CatalogResults
+        result={map}
+        blocked={Boolean(selection.dateError || selection.urlError)}
+        onRetry={onRetry}
+        onPublish={() => onNavigate('publish')}
+      >
+        <ul className="map-list" aria-label="Ubicaciones reportadas">
+          {map.list.map((report) => (
+            <li key={report.id}>
+              <button className="map-result" onClick={() => onOpen(report.id)}>
+                <b>{report.title}</b>
+                <small>
+                  {report.status} · {report.category}
+                </small>
                 <span>
-                  <small>
-                    {report.status} · {report.category}
-                  </small>
-                  <b>{report.title}</b>
-                  <small>
-                    {report.zone}, {report.city}
-                  </small>
+                  {report.city} · {report.zone}
                 </span>
               </button>
-            ))}
-            {map.count === 0 && !selection.dateError && (
-              <EmptyState
-                title="No hay reportes en esta zona"
-                description="Cambia los filtros o crea un reporte nuevo."
-                action="Publicar reporte"
-                onAction={() => onNavigate('publish')}
-              />
-            )}
-          </div>
-        </div>
-      )}
+            </li>
+          ))}
+        </ul>
+      </CatalogResults>
     </>
   )
 }

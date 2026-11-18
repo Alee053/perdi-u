@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict'
 import { test } from '@jest/globals'
+import type { ReportQuery, ReportSummary } from '@perdiu/contracts'
 import { demoOwner, type CatalogReport, type DemoReport } from '../../src/models/reports/report.js'
+import { CatalogPresenter } from '../../src/presenters/catalog/catalog.presenter.js'
 import { defaultSelection } from '../../src/presenters/catalog/filters.presenter.js'
 import { NoticePresenter } from '../../src/presenters/app/notice.presenter.js'
 import { PublishPresenter } from '../../src/presenters/reports/publish.presenter.js'
@@ -27,7 +29,6 @@ const demo = (id: string, overrides: Partial<DemoReport> = {}): DemoReport => ({
   title: 'Reporte ' + id,
   author: { id: 'demo-mariana', displayName: 'Mariana Rojas' },
   phone: '59170000001',
-  position: { top: '30%', left: '28%' },
   ...overrides,
 })
 const own = (id: string, overrides: Partial<DemoReport> = {}) =>
@@ -48,11 +49,19 @@ test('el detalle conserva todas las fotos publicadas y un respaldo cuando no hay
   assert.deepEqual(toReportCard(catalogReport).images, ['/images/object.svg'])
 })
 
-function setup(reports: DemoReport[] = [], saved: string[] = []) {
+function setup(
+  reports: DemoReport[] = [],
+  saved: string[] = [],
+  catalogPresenter = new CatalogPresenter({ list: async () => [] }),
+) {
   const notices: { message: string; error: boolean }[] = []
   const opened: string[] = []
   const links: string[] = []
-  const catalog = { find: (id: string) => (id === catalogReport.id ? catalogReport : undefined) }
+  const catalog = {
+    find: (id: string) =>
+      catalogPresenter.find(id) ?? (id === catalogReport.id ? catalogReport : undefined),
+    view: catalogPresenter.view,
+  }
   const presenter = new ReportsPresenter(
     reports,
     {
@@ -131,28 +140,56 @@ test('el detalle demo ofrece contacto y deja el cierre a los reportes persistido
   assert.equal(presenter.detail(), null)
 })
 
-test('el mapa aplica la selección visible y numera los puntos', () => {
-  const { presenter } = setup([
-    demo('demo-1', { zone: 'Sopocachi' }),
-    demo('demo-2', { type: 'found', category: 'object', zone: 'Miraflores' }),
-  ])
-  const view = presenter.mapView({
-    ...defaultSelection,
-    search: 'MIRAFLÓRES',
-    category: 'Objeto',
-    status: 'Encontrado',
+test('Mapa muestra toda la respuesta filtrada del catálogo y descarta un resultado tardío', async () => {
+  const requests: {
+    query?: ReportQuery
+    signal?: AbortSignal
+    finish: (reports: ReportSummary[]) => void
+  }[] = []
+  const catalog = new CatalogPresenter({
+    list: (signal, query) => new Promise((finish) => requests.push({ signal, query, finish })),
   })
-  assert.equal(view.count, 1)
-  assert.deepEqual(view.pins, [
-    {
-      id: 'demo-2',
-      label: 'Ver Reporte demo-2',
-      tone: 'found',
-      top: '30%',
-      left: '28%',
-      number: 1,
-    },
-  ])
+  const { presenter } = setup([demo('demo-1')], [], catalog)
+  const first = catalog.load({ ...defaultSelection, search: 'gato' })
+  const selection = {
+    ...defaultSelection,
+    search: 'Mochila',
+    city: 'La Paz',
+    zone: 'Miraflores',
+    category: 'Objeto',
+    status: 'Encontrado' as const,
+    dateFrom: '2026-10-06',
+  }
+  const latest = catalog.load(selection)
+  assert.equal(requests[0]!.signal?.aborted, true)
+  assert.deepEqual(requests[1]!.query, {
+    q: 'Mochila',
+    city: 'La Paz',
+    zone: 'Miraflores',
+    category: 'object',
+    type: 'found',
+    dateFrom: '2026-10-06',
+  })
+  const results = Array.from({ length: 8 }, (_, index) => ({
+    ...catalogReport,
+    id: 'real-' + index,
+    zone: 'Miraflores',
+  }))
+  requests[1]!.finish(results)
+  await latest
+  const locations = presenter.mapView()
+  assert.deepEqual(
+    locations.list.map(({ id }) => id),
+    results.map(({ id }) => id),
+  )
+  assert.equal(locations.count, results.length)
+  assert.deepEqual(
+    locations.list.map(({ title, status, city, zone }) => ({ title, status, city, zone })),
+    results.map(({ title, city, zone }) => ({ title, status: 'Encontrado', city, zone })),
+  )
+  requests[0]!.finish([catalogReport])
+  await first
+  assert.deepEqual(presenter.mapView(), locations)
 })
 
 test('cerrar sesión borra los datos privados del dispositivo', () => {
