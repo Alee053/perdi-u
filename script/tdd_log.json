@@ -3422,9 +3422,15 @@
     "testId": 96
   },
   {
-    "commitId": "HEAD",
+    "commitId": "fceb61f9d9c8d70136661fedce9e753b1c54b7d3",
     "commitName": "feat(web): mostrar la foto pública del autor (#46)",
     "commitTimestamp": 1794963253975,
     "testId": 96
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "test(web): verificar el resumen y los autores en navegador (#46)",
+    "commitTimestamp": 1794963665267,
+    "testId": 97
   }
 ]

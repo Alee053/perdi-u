@@ -2603,17 +2603,36 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "fceb61f9d9c8d70136661fedce9e753b1c54b7d3",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-11-18T00:54:13.000Z",
       "message": "feat(web): mostrar la foto pública del autor (#46)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/fceb61f9d9c8d70136661fedce9e753b1c54b7d3"
     },
     "stats": {
       "total": 171,
       "additions": 146,
       "deletions": 25,
+      "date": "2026-11-18"
+    },
+    "coverage": 85.71,
+    "test_count": 193,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-18T01:01:05.000Z",
+      "message": "test(web): verificar el resumen y los autores en navegador (#46)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 199,
+      "additions": 191,
+      "deletions": 8,
       "date": "2026-11-18"
     },
     "coverage": 85.71,
