@@ -122,10 +122,10 @@ export class ReportsPresenter extends Store<ReportsState> {
   refreshSaved = async () => {
     this.savedController?.abort()
     const request = ++this.savedRequest
-    const ids = this.state.saved.filter((id) =>
-      this.state.savedCatalog.some((report) => report.id === id),
-    )
-    if (!ids.length) {
+    const entries = this.state.saved
+      .map((id) => this.state.savedCatalog.find((report) => report.id === id))
+      .filter((report) => report !== undefined)
+    if (!entries.length) {
       this.update({ savedStatus: 'ready', savedMessage: null })
       return
     }
@@ -133,11 +133,14 @@ export class ReportsPresenter extends Store<ReportsState> {
     this.savedController = controller
     this.update({ savedStatus: 'loading', savedMessage: null })
     const results = await Promise.all(
-      ids.map(async (id) => {
+      entries.map(async (entry) => {
         try {
-          return { id, report: await this.dependencies.savedReports.find(id, controller.signal) }
+          return {
+            entry,
+            report: await this.dependencies.savedReports.find(entry.id, controller.signal),
+          }
         } catch {
-          return { id, failed: true as const }
+          return { entry, failed: true as const }
         }
       }),
     )
@@ -146,17 +149,19 @@ export class ReportsPresenter extends Store<ReportsState> {
     let savedCatalog = this.state.savedCatalog
     let failed = false
     for (const result of results) {
-      if (!this.state.saved.includes(result.id)) continue
+      // Confirmed edits replace the entry, superseding checks for its previous version.
+      if (!this.state.savedCatalog.includes(result.entry)) continue
+      const { id } = result.entry
       if ('failed' in result) {
         failed = true
         continue
       }
       if (!result.report || result.report.state !== 'active') {
-        saved = saved.filter((id) => id !== result.id)
-        savedCatalog = savedCatalog.filter((report) => report.id !== result.id)
+        saved = saved.filter((savedId) => savedId !== id)
+        savedCatalog = savedCatalog.filter((report) => report.id !== id)
       } else {
         savedCatalog = [
-          ...savedCatalog.filter((report) => report.id !== result.id),
+          ...savedCatalog.filter((report) => report.id !== id),
           { ...result.report, source: 'catalog' },
         ]
       }

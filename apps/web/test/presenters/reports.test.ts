@@ -155,6 +155,32 @@ test('la respuesta confirmada de edición actualiza una tarjeta ya guardada', ()
   )
 })
 
+test('una comprobación pendiente conserva la edición confirmada y actualiza otras tarjetas', async () => {
+  const otherReport = { ...catalogReport, id: 'catalog-2', title: 'Llaves encontradas' }
+  const refreshedOther = { ...otherReport, title: 'Llaves en recepción' }
+  const catalogPresenter = new CatalogPresenter({ list: async () => [catalogReport, otherReport] })
+  await catalogPresenter.load(defaultSelection)
+  let finishFirstCheck!: (report: ReportSummary) => void
+  const firstResult = new Promise<ReportSummary>((resolve) => {
+    finishFirstCheck = resolve
+  })
+  const { presenter } = setup([], [], catalogPresenter, async (id) =>
+    id === catalogReport.id ? firstResult : refreshedOther,
+  )
+  presenter.toggleSaved(catalogReport.id)
+  presenter.toggleSaved(otherReport.id)
+  const checking = presenter.refreshSaved()
+
+  const edited: OwnReport = { ...catalogReport, source: 'own', title: 'Mochila actualizada' }
+  presenter.markEdited(edited)
+  finishFirstCheck(catalogReport)
+  await checking
+
+  const cards = presenter.saved()
+  assert.equal(cards.find(({ id }) => id === edited.id)?.title, edited.title)
+  assert.equal(cards.find(({ id }) => id === otherReport.id)?.title, refreshedOther.title)
+})
+
 test('revalidar guardados quita reportes no disponibles o resueltos y actualiza el conteo', async () => {
   const resolved = { ...catalogReport, id: 'resolved-1', state: 'resolved' as const }
   const unavailable = { ...catalogReport, id: 'unavailable-1' }
