@@ -143,6 +143,7 @@ export function AppShell({ app }: { app: AppView }) {
             reportLink.status === 'ready' && reports.toggleSaved(reportLink.detail.card.id)
           }
           onContact={actions.reportLink.contact}
+          onCopyLink={actions.reportLink.copyLink}
           onResolve={() =>
             reportLink.status === 'ready' && actions.own.requestResolve(reportLink.detail.card.id)
           }

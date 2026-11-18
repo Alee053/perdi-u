@@ -331,11 +331,10 @@ export async function verifyOwnReportsBrowser({
           .locator('.report-card')
           .getByRole('button', { name: target, exact: true })
           .click()
-        await page.getByRole('dialog').getByRole('button', { name: 'Guardar', exact: true }).click()
-        await page
-          .getByRole('dialog')
-          .getByRole('button', { name: 'Marcar como resuelto', exact: true })
-          .click()
+        const detail = page.getByRole('dialog')
+        await detail.getByRole('button', { name: 'Copiar enlace', exact: true }).waitFor()
+        await detail.getByRole('button', { name: 'Guardar', exact: true }).click()
+        await detail.getByRole('button', { name: 'Marcar como resuelto', exact: true }).click()
       } else await row(page, target).getByRole('button', { name: 'Marcar como resuelto' }).click()
       let patchCalls = 0
       let failOnce = size === 'desktop'
@@ -392,6 +391,7 @@ export async function verifyOwnReportsBrowser({
         const detail = page.getByRole('dialog')
         await detail.getByText('Resuelto', { exact: true }).waitFor()
         assert.equal(await detail.getByRole('button', { name: 'Marcar como resuelto' }).count(), 0)
+        assert.equal(await detail.getByRole('button', { name: 'Copiar enlace' }).count(), 0)
         await detail.getByRole('button', { name: 'Cerrar', exact: true }).click()
         await page.getByRole('heading', { name: 'No se encontraron coincidencias' }).waitFor()
         await restartApi()

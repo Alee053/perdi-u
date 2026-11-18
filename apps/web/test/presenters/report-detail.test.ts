@@ -60,7 +60,14 @@ function fakeHistory(initial: string) {
   }
 }
 
-function setup(options: { path?: string; session?: AuthState; allowResolve?: boolean } = {}) {
+function setup(
+  options: {
+    path?: string
+    session?: AuthState
+    allowResolve?: boolean
+    copyText?: (text: string) => Promise<void>
+  } = {},
+) {
   const session = new Session(options.session ?? { status: 'anonymous' })
   const api = {
     find: async (_id: string, _signal: AbortSignal): Promise<ReportSummary | undefined> => report,
@@ -76,6 +83,7 @@ function setup(options: { path?: string; session?: AuthState; allowResolve?: boo
       ...history.effects,
       openWhatsApp: (url) => opened.push(url),
       absoluteUrl: (path) => 'https://perdiu.test' + path,
+      copyText: options.copyText ?? (async () => {}),
     },
     onLoginRequired: () => logins.push('login'),
     isSaved: (id) => id === report.id,
@@ -271,8 +279,121 @@ test('un reporte inexistente o no disponible y un fallo de carga se distinguen, 
 })
 
 const link = 'https://perdiu.test/reportes/' + report.id
+const otherReportId = '20000000-0000-0000-0000-00000000000a'
 const message =
   'Hola, vi tu reporte "Gato "Michi" perdido" en PerdiU y quiero coordinar contigo: ' + link
+
+function shareView(presenter: ReportDetailPresenter) {
+  const view = presenter.view()
+  assert.ok(view?.status === 'ready')
+  return view.share
+}
+
+test('un visitante copia la URL pública y recibe confirmación solo cuando termina la escritura', async () => {
+  const copied: string[] = []
+  let finish!: () => void
+  const writing = new Promise<void>((resolve) => {
+    finish = resolve
+  })
+  const { presenter, history, opened, logins, api } = setup({
+    copyText: (text) => {
+      copied.push(text)
+      return writing
+    },
+  })
+  api.contact = async () => assert.fail('copiar no consulta el contacto')
+  await presenter.open(report.id)
+
+  assert.deepEqual(shareView(presenter), { pending: false })
+  const copy = presenter.copyLink()
+  assert.deepEqual(copied, [link])
+  assert.deepEqual(shareView(presenter), { pending: true })
+  const duplicate = presenter.copyLink()
+  assert.deepEqual(copied, [link], 'una escritura a la vez')
+
+  finish()
+  await Promise.all([copy, duplicate])
+  assert.deepEqual(shareView(presenter), { pending: false, message: 'Enlace copiado' })
+  assert.equal(history.current(), '/reportes/' + report.id)
+  assert.deepEqual(opened, [])
+  assert.deepEqual(logins, [])
+})
+
+test('si falla el portapapeles, el detalle ofrece la misma URL para copiarla manualmente', async () => {
+  const { presenter } = setup({
+    copyText: async () => {
+      throw new Error('Permiso denegado')
+    },
+  })
+  await presenter.open(report.id)
+
+  await presenter.copyLink()
+
+  assert.deepEqual(shareView(presenter), {
+    pending: false,
+    message: 'Selecciona el enlace y cópialo manualmente.',
+    manualUrl: link,
+  })
+})
+
+test('una copia tardía no cambia el resultado de la copia del reporte que se abrió después', async () => {
+  const finish = new Map<string, (error?: Error) => void>()
+  const { presenter, api } = setup({
+    copyText: (url) =>
+      new Promise((resolve, reject) => {
+        finish.set(url, (error) => (error ? reject(error) : resolve()))
+      }),
+  })
+  api.find = async (id) => ({ ...report, id })
+
+  await presenter.open(report.id)
+  const first = presenter.copyLink()
+  await presenter.open(otherReportId)
+  const second = presenter.copyLink()
+
+  finish.get(link)!(new Error('Permiso denegado'))
+  await first
+  assert.deepEqual(shareView(presenter), { pending: true })
+
+  finish.get('https://perdiu.test/reportes/' + otherReportId)!()
+  await second
+  assert.deepEqual(shareView(presenter), { pending: false, message: 'Enlace copiado' })
+})
+
+test('solo se puede copiar el enlace canónico del reporte activo solicitado', async () => {
+  const copied: string[] = []
+  const { presenter, api } = setup({
+    session: {
+      status: 'authenticated',
+      user: { id: report.author.id, email: 'autora@example.test' },
+    },
+    copyText: async (url) => {
+      copied.push(url)
+    },
+  })
+  const foreignUrl = 'https://externo.example/otro-enlace'
+  api.find = async () => ({ ...report, id: foreignUrl })
+  await presenter.open(otherReportId)
+  assert.equal(shareView(presenter), undefined)
+  await presenter.copyLink()
+
+  await presenter.open(foreignUrl)
+  assert.equal(shareView(presenter), undefined)
+  await presenter.copyLink()
+  assert.deepEqual(copied, [])
+
+  api.find = async () => ({ ...report, id: otherReportId })
+  await presenter.open(otherReportId.toUpperCase())
+  await presenter.copyLink()
+  const canonical = 'https://perdiu.test/reportes/' + otherReportId
+  assert.deepEqual(copied, [canonical])
+
+  await presenter.open(otherReportId)
+  presenter.markResolved(otherReportId)
+  assert.equal(shareView(presenter), undefined)
+  await presenter.copyLink()
+  assert.deepEqual(copied, [canonical])
+})
 
 test('sin sesión, contactar pide ingresar sin consultar el contacto; con sesión abre WhatsApp', async () => {
   const { presenter, api, session, opened, logins } = setup()
@@ -452,6 +573,7 @@ test('la vista del detalle indica qué acciones ofrecer y permite guardar el rep
         canEdit: false,
       },
       contacting: false,
+      share: { pending: false },
     },
   )
   assert.deepEqual(presenter.find(report.id), { ...report, source: 'catalog' })
