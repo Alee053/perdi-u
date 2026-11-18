@@ -2755,12 +2755,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "6b378a7525fddfe4d8243798173c4afa9365b889",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-11-18T01:52:40.000Z",
       "message": "fix(web): preserve concurrent report changes (#48)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/6b378a7525fddfe4d8243798173c4afa9365b889"
     },
     "stats": {
       "total": 71,
@@ -2770,6 +2770,25 @@
     },
     "coverage": 85.65,
     "test_count": 195,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-18T01:53:56.000Z",
+      "message": "fix(web): skip empty report edits (#48)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 25,
+      "additions": 24,
+      "deletions": 1,
+      "date": "2026-11-18"
+    },
+    "coverage": 85.67,
+    "test_count": 196,
     "failed_tests": 0,
     "conclusion": "success"
   }

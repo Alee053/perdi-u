@@ -231,12 +231,16 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
   submitEdit = async () => {
     const edit = this.state.edit
     if (!edit || edit.pending || !this.find(edit.id)) return false
+    const patch = createEditPatch(edit.original, edit.draft)
+    if (Object.keys(patch).length === 0) {
+      this.update({ edit: null })
+      return true
+    }
     const version = this.ownerVersion
     const attempt = ++this.editAttempt
     const controller = new AbortController()
     this.editMutation = controller
     this.update({ edit: { ...edit, pending: true, errors: {}, message: '' } })
-    const patch = createEditPatch(edit.original, edit.draft)
     let saved
     try {
       saved = await this.repository.edit(edit.id, patch, controller.signal)

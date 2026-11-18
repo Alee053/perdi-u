@@ -153,6 +153,25 @@ test('editar solo el título conserva los cambios recientes del reporte en otra 
   assert.equal(presenter.find('active')?.city, 'Sucre')
 })
 
+test('guardar una edición sin cambios efectivos no envía un PATCH vacío', async () => {
+  let calls = 0
+  const { presenter } = setup({
+    list: async () => [report('active')],
+    edit: async (id, patch) => {
+      calls++
+      return report(id, patch)
+    },
+  })
+  await presenter.setOwner('owner-1')
+  presenter.requestEdit('active')
+  presenter.setEditField('title', 'Mochila active')
+
+  assert.equal(await presenter.submitEdit(), true)
+  assert.equal(calls, 0)
+  assert.equal(presenter.view().edit, null)
+  assert.equal(presenter.find('active')?.title, 'Mochila active')
+})
+
 test('un rechazo de validación muestra el error junto al campo y conserva el borrador', async () => {
   const { presenter } = setup({
     list: async () => [report('active')],
