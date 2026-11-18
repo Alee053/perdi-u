@@ -3612,9 +3612,31 @@
     "testId": 102
   },
   {
-    "commitId": "HEAD",
+    "commitId": "ae9b7125c5569496f1116a5b35eddd55a534ace4",
     "commitName": "fix(web): skip empty report edits (#48)",
     "commitTimestamp": 1794966837089,
     "testId": 102
+  },
+  {
+    "numPassedTests": 197,
+    "failedTests": 1,
+    "numTotalTests": 198,
+    "timestamp": 1794966887227,
+    "success": false,
+    "testId": 103
+  },
+  {
+    "numPassedTests": 198,
+    "failedTests": 0,
+    "numTotalTests": 198,
+    "timestamp": 1794966906987,
+    "success": true,
+    "testId": 103
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "fix(web): keep pet edit fields valid (#48)",
+    "commitTimestamp": 1794966926918,
+    "testId": 103
   }
 ]

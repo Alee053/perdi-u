@@ -172,6 +172,42 @@ test('guardar una edición sin cambios efectivos no envía un PATCH vacío', asy
   assert.equal(presenter.find('active')?.title, 'Mochila active')
 })
 
+test('actualizar la especie envía también la categoría mascota requerida por el API', async () => {
+  let receivedPatch: EditReportInput | undefined
+  const { presenter } = setup({
+    list: async () => [report('pet', { category: 'pet', petSpecies: 'Gato' })],
+    edit: async (id, patch) => {
+      receivedPatch = patch
+      return report(id, { ...patch, category: 'pet', petSpecies: 'Perro' })
+    },
+  })
+  await presenter.setOwner('owner-1')
+  presenter.requestEdit('pet')
+  presenter.setEditField('petSpecies', 'Perro')
+
+  assert.equal(await presenter.submitEdit(), true)
+  assert.deepEqual(receivedPatch, { category: 'pet', petSpecies: 'Perro' })
+  assert.equal(presenter.find('pet')?.petSpecies, 'Perro')
+})
+
+test('cambiar una mascota a objeto omite y limpia la especie', async () => {
+  let receivedPatch: EditReportInput | undefined
+  const { presenter } = setup({
+    list: async () => [report('pet', { category: 'pet', petSpecies: 'Gato' })],
+    edit: async (id, patch) => {
+      receivedPatch = patch
+      return report(id, { ...patch, category: 'object', petSpecies: undefined })
+    },
+  })
+  await presenter.setOwner('owner-1')
+  presenter.requestEdit('pet')
+  presenter.setEditField('category', 'object')
+
+  assert.equal(await presenter.submitEdit(), true)
+  assert.deepEqual(receivedPatch, { category: 'object' })
+  assert.equal(presenter.find('pet')?.petSpecies, undefined)
+})
+
 test('un rechazo de validación muestra el error junto al campo y conserva el borrador', async () => {
   const { presenter } = setup({
     list: async () => [report('active')],

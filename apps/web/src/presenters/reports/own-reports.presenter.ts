@@ -98,18 +98,20 @@ function presentEditErrors(issues: OwnReportsFailure['fieldErrors']): EditForm['
 }
 
 function createEditPatch(original: EditDraft, draft: EditDraft): EditReportInput {
+  const petSpeciesChanged =
+    draft.category === 'pet' &&
+    (original.category !== 'pet' || draft.petSpecies !== original.petSpecies)
   return {
     ...(draft.type !== original.type && { type: draft.type }),
-    ...(draft.category !== original.category && { category: draft.category }),
+    ...((draft.category !== original.category || petSpeciesChanged) && {
+      category: draft.category,
+    }),
     ...(draft.title !== original.title && { title: draft.title }),
     ...(draft.description !== original.description && { description: draft.description }),
     ...(draft.city !== original.city && { city: draft.city }),
     ...(draft.zone !== original.zone && { zone: draft.zone }),
     ...(draft.incidentDate !== original.incidentDate && { incidentDate: draft.incidentDate }),
-    ...(draft.category === 'pet' &&
-      (original.category !== 'pet' || draft.petSpecies !== original.petSpecies) && {
-        petSpecies: draft.petSpecies,
-      }),
+    ...(petSpeciesChanged && { petSpecies: draft.petSpecies }),
   }
 }
 
