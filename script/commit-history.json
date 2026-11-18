@@ -2945,12 +2945,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "d5488124d6008c522b78c21f626f4d905f7b03da",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-11-18T02:20:37.000Z",
       "message": "docs(test): clarify S2-09 integration evidence (#48)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/d5488124d6008c522b78c21f626f4d905f7b03da"
     },
     "stats": {
       "total": 2,
@@ -2960,6 +2960,25 @@
     },
     "coverage": 86.07,
     "test_count": 203,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-18T17:14:37.000Z",
+      "message": "fix(web): conservar la edición confirmada en Guardados (#55)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 57,
+      "additions": 44,
+      "deletions": 13,
+      "date": "2026-11-18"
+    },
+    "coverage": 86.08,
+    "test_count": 204,
     "failed_tests": 0,
     "conclusion": "success"
   }
