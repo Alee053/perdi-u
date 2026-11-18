@@ -2,6 +2,7 @@ import { REPORT_RESULT_LIMIT, type ReportQuery } from '@perdiu/contracts'
 import { hasActiveFilters, toReportQuery, validateDateRange } from '../../models/reports/filters.js'
 import type { CatalogReport } from '../../models/reports/report.js'
 import type { ReportsRepository } from '../../models/reports/reports-repository.js'
+import { summarizeReports } from '../../models/reports/stats.js'
 import { toReportCard, type ReportCard } from '../reports/report-card.js'
 import { Store } from '../store.js'
 import { toReportFilters, type FilterSelection } from './filters.presenter.js'
@@ -26,6 +27,16 @@ export class CatalogPresenter extends Store<CatalogState> {
   cancel() {
     this.request++
     this.controller?.abort()
+  }
+
+  clearResult() {
+    this.cancel()
+    this.loaded = []
+    this.setState({ status: 'loading', reports: [] })
+  }
+
+  isGeneralQuery() {
+    return !this.filtered && !this.invalidSelection
   }
 
   /** Without a selection it retries the last query, provided the current filters are valid. */
@@ -73,6 +84,28 @@ export class CatalogPresenter extends Store<CatalogState> {
     this.cancel()
     this.loaded = this.loaded.filter((report) => report.id !== id)
     this.setState({ status: 'ready', reports: this.loaded.map(toReportCard) })
+  }
+
+  overview() {
+    const { status, reports } = this.state
+    if (status === 'loading') return { status } as const
+    if (status === 'error')
+      return { status, message: 'No se pudo cargar el resumen. Intenta nuevamente.' } as const
+    const stats = summarizeReports(this.loaded)
+    if (!stats.active) return { status: 'empty' } as const
+    return {
+      status,
+      metrics: [
+        { label: 'Reportes activos', value: stats.active },
+        { label: 'Perdidos', value: stats.lost },
+        { label: 'Encontrados', value: stats.found },
+      ],
+      cities: stats.byCity,
+      recent: reports.filter((report) => !report.resolved).slice(0, 3),
+      limitMessage: this.summary().limitReached
+        ? `El resumen abarca los ${REPORT_RESULT_LIMIT} reportes activos más recientes.`
+        : undefined,
+    }
   }
 
   /** Texts for the empty state and the result limit; they depend on the active filters. */

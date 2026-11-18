@@ -67,7 +67,12 @@ export function AppShell({ app }: { app: AppView }) {
             </p>
           )}
           {shell.section === 'overview' && (
-            <OverviewPage overview={app.overview} onNavigate={actions.navigate} {...cards} />
+            <OverviewPage
+              overview={app.overview}
+              onRetry={actions.retryOverview}
+              onNavigate={actions.navigate}
+              {...cards}
+            />
           )}
           {shell.section === 'explore' && (
             <ExplorePage

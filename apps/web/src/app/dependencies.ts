@@ -9,7 +9,10 @@ import {
 } from '../infrastructure/http/catalog-client.js'
 import { createReportPublisher } from '../infrastructure/http/publish-client.js'
 import { createReportMediaClient } from '../infrastructure/http/media-client.js'
-import { createReportPhotoLoader } from '../infrastructure/http/report-photo-loader.js'
+import {
+  createPublicPhotoLoader,
+  createReportPhotoLoader,
+} from '../infrastructure/http/report-photo-loader.js'
 import { createOwnReportsClient } from '../infrastructure/http/own-reports-client.js'
 import { NoticePresenter } from '../presenters/app/notice.presenter.js'
 import { ShellPresenter } from '../presenters/app/shell.presenter.js'
@@ -32,8 +35,15 @@ export function createPresenters(env = import.meta.env) {
 
   const auth = new AuthPresenter(gateway, createAccountClient(apiUrl, accessToken))
   const notices = new NoticePresenter(browserEffects)
-  const catalog = new CatalogPresenter(createReportsClient(apiUrl))
+  const publicReports = createReportsClient(apiUrl)
+  const catalog = new CatalogPresenter(publicReports)
+  const overviewCatalog = new CatalogPresenter(publicReports)
   const filters = new FiltersPresenter()
+  const refreshVisibleOverview = () => {
+    const { section, authView } = shell.getSnapshot()
+    if (section === 'overview' && !authView && !catalog.isGeneralQuery())
+      void overviewCatalog.load()
+  }
   const own: OwnReportsPresenter = new OwnReportsPresenter(
     createOwnReportsClient(apiUrl, accessToken),
     {
@@ -48,10 +58,12 @@ export function createPresenters(env = import.meta.env) {
         reportDetail.markResolved(report.id)
         catalog.removeResolved(report.id)
         void catalog.load()
+        refreshVisibleOverview()
       },
       onEdited: (report) => {
         void own.load()
         void catalog.load()
+        refreshVisibleOverview()
         if (reportDetail.find(report.id)) void reportDetail.retry()
       },
     },
@@ -59,8 +71,11 @@ export function createPresenters(env = import.meta.env) {
   const reports: ReportsPresenter = new ReportsPresenter(
     demoReports,
     {
-      // A report opened by its link can be saved even if the catalog never listed it.
-      catalog: { find: (id) => catalog.find(id) ?? reportDetail.find(id), view: catalog.view },
+      // A report can be saved from the search, the general overview, or its direct link.
+      catalog: {
+        find: (id) => catalog.find(id) ?? overviewCatalog.find(id) ?? reportDetail.find(id),
+        view: catalog.view,
+      },
       notices,
       effects: browserEffects,
       links: { open: (id) => void reportDetail.open(id) },
@@ -95,7 +110,10 @@ export function createPresenters(env = import.meta.env) {
       publish.reset()
     },
   })
-  const photos = createReportPhotoLoader(apiUrl, accessToken)
+  const photos = {
+    report: createReportPhotoLoader(apiUrl, accessToken),
+    avatar: createPublicPhotoLoader(),
+  }
   const search = new CatalogSearchPresenter({
     filters,
     catalog,
@@ -106,6 +124,7 @@ export function createPresenters(env = import.meta.env) {
     auth,
     notices,
     catalog,
+    overviewCatalog,
     filters,
     reports,
     own,

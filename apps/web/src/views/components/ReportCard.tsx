@@ -1,5 +1,6 @@
 import { Heart } from 'lucide-react'
 import type { ReportCard as ReportCardView } from '../../presenters/reports/report-card'
+import { ReportAuthor } from './ReportAuthor'
 import { ReportPhoto } from './ReportPhoto'
 
 type ReportCardProps = {
@@ -38,9 +39,12 @@ export function ReportCard({ report, saved, onSave, onOpen }: ReportCardProps) {
         </button>
         <p className="card-description">{report.description}</p>
         {report.petSpecies && <span className="card-meta">Especie: {report.petSpecies}</span>}
-        <span className="card-meta">
-          {report.zone}, {report.city} · {report.person}
-        </span>
+        <div className="card-meta card-footer">
+          <span>
+            {report.zone}, {report.city}
+          </span>
+          <ReportAuthor name={report.person} photoUrl={report.authorPhotoUrl} />
+        </div>
       </div>
     </article>
   )

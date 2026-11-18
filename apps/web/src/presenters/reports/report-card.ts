@@ -24,6 +24,7 @@ export interface ReportCard {
   images: string[]
   hasPhotos: boolean
   person: string
+  authorPhotoUrl?: string
 }
 
 export interface ReportGalleryView {
@@ -84,6 +85,7 @@ export function toReportCard(report: Report): ReportCard {
     images,
     hasPhotos: report.imageUrls.length > 0,
     person: report.author.displayName,
+    ...(report.author.photoUrl && { authorPhotoUrl: report.author.photoUrl }),
   }
 }
 

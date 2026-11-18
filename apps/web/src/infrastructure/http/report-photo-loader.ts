@@ -2,11 +2,35 @@ import type { ReportPhotoLoader } from '../../models/reports/photo.js'
 import { SessionRejected } from '../../models/auth/session.js'
 import { maxPhotoBytes, photoTypes } from '../../models/reports/publication.js'
 
+type ObjectUrls = Pick<typeof URL, 'createObjectURL' | 'revokeObjectURL'>
+
+function photoResource(image: Blob, urls: ObjectUrls) {
+  const source = urls.createObjectURL(image)
+  return { source, release: () => urls.revokeObjectURL(source) }
+}
+
+export function createPublicPhotoLoader(
+  fetcher: typeof fetch = fetch,
+  urls: ObjectUrls = URL,
+): ReportPhotoLoader {
+  return {
+    async load(source, signal) {
+      const response = await fetcher(source, {
+        signal,
+        credentials: 'omit',
+        referrerPolicy: 'no-referrer',
+      })
+      if (!response.ok) throw new Error('No se pudo cargar la foto pública.')
+      return photoResource(await response.blob(), urls)
+    },
+  }
+}
+
 export function createReportPhotoLoader(
   baseUrl: string,
   accessToken: () => Promise<string | undefined>,
   fetcher: typeof fetch = fetch,
-  urls: Pick<typeof URL, 'createObjectURL' | 'revokeObjectURL'> = URL,
+  urls: ObjectUrls = URL,
 ): ReportPhotoLoader {
   const prefix = `${baseUrl.replace(/\/$/, '')}/media/`
   return {
@@ -28,8 +52,7 @@ export function createReportPhotoLoader(
       const image = await response.blob()
       if (!photoTypes.includes(image.type) || !image.size || image.size > maxPhotoBytes)
         throw new Error('La foto recibida no es válida.')
-      const preview = urls.createObjectURL(image)
-      return { source: preview, release: () => urls.revokeObjectURL(preview) }
+      return photoResource(image, urls)
     },
   }
 }

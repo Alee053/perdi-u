@@ -18,7 +18,7 @@ export type Report = CatalogReport | DemoReport | OwnReport
 export const cities = ['La Paz', 'Cochabamba', 'Santa Cruz'] as const
 
 /**
- * Author of fictional reports in the overview. It grants no permission:
+ * Author used by the demonstration fixtures. It grants no permission:
  * ownership of persisted reports comes from the verified session, never from a display name.
  */
 export const demoOwner: PublicProfile & { phone: string } = {

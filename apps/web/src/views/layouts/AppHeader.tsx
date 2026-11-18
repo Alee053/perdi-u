@@ -44,7 +44,7 @@ export function AppHeader({
               aria-expanded={menuOpen}
               onClick={() => setMenuOpen((open) => !open)}
             >
-              <UserAvatar account={account} size="small" />
+              <UserAvatar photoUrl={account.photoUrl} size="small" />
               <span className="header-account-name">{account.name}</span>
             </button>
             {menuOpen && (

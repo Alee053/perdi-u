@@ -3312,6 +3312,128 @@
     "testId": 94
   },
   {
+    "numPassedTests": 187,
+    "failedTests": 1,
+    "numTotalTests": 188,
+    "timestamp": 1794962254650,
+    "success": false,
+    "testId": 95
+  },
+  {
+    "numPassedTests": 188,
+    "failedTests": 0,
+    "numTotalTests": 188,
+    "timestamp": 1794962315670,
+    "success": true,
+    "testId": 95
+  },
+  {
+    "numPassedTests": 188,
+    "failedTests": 1,
+    "numTotalTests": 189,
+    "timestamp": 1794962352189,
+    "success": false,
+    "testId": 95
+  },
+  {
+    "numPassedTests": 189,
+    "failedTests": 0,
+    "numTotalTests": 189,
+    "timestamp": 1794962385356,
+    "success": true,
+    "testId": 95
+  },
+  {
+    "numPassedTests": 189,
+    "failedTests": 0,
+    "numTotalTests": 189,
+    "timestamp": 1794962433286,
+    "success": true,
+    "testId": 95
+  },
+  {
+    "numPassedTests": 189,
+    "failedTests": 1,
+    "numTotalTests": 190,
+    "timestamp": 1794962458856,
+    "success": false,
+    "testId": 95
+  },
+  {
+    "numPassedTests": 190,
+    "failedTests": 0,
+    "numTotalTests": 190,
+    "timestamp": 1794962543167,
+    "success": true,
+    "testId": 95
+  },
+  {
+    "numPassedTests": 190,
+    "failedTests": 1,
+    "numTotalTests": 191,
+    "timestamp": 1794962584141,
+    "success": false,
+    "testId": 95
+  },
+  {
+    "numPassedTests": 191,
+    "failedTests": 0,
+    "numTotalTests": 191,
+    "timestamp": 1794962716536,
+    "success": true,
+    "testId": 95
+  },
+  {
+    "commitId": "563d8053a1d1e7a22a5a6c2504675aa81e8c0aeb",
+    "commitName": "feat(web): mostrar el resumen del catálogo real (#46)",
+    "commitTimestamp": 1794962865131,
+    "testId": 95
+  },
+  {
+    "numPassedTests": 191,
+    "failedTests": 1,
+    "numTotalTests": 192,
+    "timestamp": 1794962905100,
+    "success": false,
+    "testId": 96
+  },
+  {
+    "numPassedTests": 192,
+    "failedTests": 0,
+    "numTotalTests": 192,
+    "timestamp": 1794962939023,
+    "success": true,
+    "testId": 96
+  },
+  {
+    "numPassedTests": 192,
+    "failedTests": 1,
+    "numTotalTests": 193,
+    "timestamp": 1794962952586,
+    "success": false,
+    "testId": 96
+  },
+  {
+    "numPassedTests": 193,
+    "failedTests": 0,
+    "numTotalTests": 193,
+    "timestamp": 1794963008565,
+    "success": true,
+    "testId": 96
+  },
+  {
+    "commitId": "fceb61f9d9c8d70136661fedce9e753b1c54b7d3",
+    "commitName": "feat(web): mostrar la foto pública del autor (#46)",
+    "commitTimestamp": 1794963253975,
+    "testId": 96
+  },
+  {
+    "commitId": "698f689d8f0c8e66a973c7e5f4c7dbe7659780cc",
+    "commitName": "test(web): verificar el resumen y los autores en navegador (#46)",
+    "commitTimestamp": 1794963665267,
+    "testId": 97
+  },
+  {
     "numPassedTests": 185,
     "failedTests": 2,
     "numTotalTests": 187,
@@ -3416,9 +3538,23 @@
     "testId": 98
   },
   {
-    "commitId": "HEAD",
+    "commitId": "4368dc76018b60371b6bae8a869215f2e350a200",
     "commitName": "docs(web): registrar la aceptación de ciudad y zona (#47)",
     "commitTimestamp": 1794965062140,
     "testId": 99
+  },
+  {
+    "numPassedTests": 194,
+    "failedTests": 0,
+    "numTotalTests": 194,
+    "timestamp": 1794965324488,
+    "success": true,
+    "testId": 100
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "chore(repo): integrar main con el resumen actualizado (#47)",
+    "commitTimestamp": 1794965393965,
+    "testId": 100
   }
 ]

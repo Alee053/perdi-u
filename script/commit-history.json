@@ -2584,6 +2584,63 @@
     "conclusion": "success"
   },
   {
+    "sha": "563d8053a1d1e7a22a5a6c2504675aa81e8c0aeb",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-18T00:47:45.000Z",
+      "message": "feat(web): mostrar el resumen del catálogo real (#46)",
+      "url": "https://github.com/Alee053/perdi-u/commit/563d8053a1d1e7a22a5a6c2504675aa81e8c0aeb"
+    },
+    "stats": {
+      "total": 327,
+      "additions": 257,
+      "deletions": 70,
+      "date": "2026-11-18"
+    },
+    "coverage": 85.71,
+    "test_count": 191,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "fceb61f9d9c8d70136661fedce9e753b1c54b7d3",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-18T00:54:13.000Z",
+      "message": "feat(web): mostrar la foto pública del autor (#46)",
+      "url": "https://github.com/Alee053/perdi-u/commit/fceb61f9d9c8d70136661fedce9e753b1c54b7d3"
+    },
+    "stats": {
+      "total": 171,
+      "additions": 146,
+      "deletions": 25,
+      "date": "2026-11-18"
+    },
+    "coverage": 85.71,
+    "test_count": 193,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "698f689d8f0c8e66a973c7e5f4c7dbe7659780cc",
+    "author": "Alejandro Castro",
+    "commit": {
+      "date": "2026-11-18T01:01:05.000Z",
+      "message": "test(web): verificar el resumen y los autores en navegador (#46)",
+      "url": "https://github.com/Alee053/perdi-u/commit/698f689d8f0c8e66a973c7e5f4c7dbe7659780cc"
+    },
+    "stats": {
+      "total": 199,
+      "additions": 191,
+      "deletions": 8,
+      "date": "2026-11-18"
+    },
+    "coverage": 85.71,
+    "test_count": 193,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
     "sha": "93255a28b6d96868f679e5cc06bc6f3b518a2f6b",
     "author": "Santiamen23",
     "commit": {
@@ -2660,12 +2717,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "4368dc76018b60371b6bae8a869215f2e350a200",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-18T01:24:20.000Z",
       "message": "docs(web): registrar la aceptación de ciudad y zona (#47)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/4368dc76018b60371b6bae8a869215f2e350a200"
     },
     "stats": {
       "total": 67,
@@ -2675,6 +2732,25 @@
     },
     "coverage": 85.57,
     "test_count": 188,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-18T01:29:52.000Z",
+      "message": "chore(repo): integrar main con el resumen actualizado (#47)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 702,
+      "additions": 599,
+      "deletions": 103,
+      "date": "2026-11-18"
+    },
+    "coverage": 85.63,
+    "test_count": 194,
     "failed_tests": 0,
     "conclusion": "success"
   }

@@ -63,6 +63,8 @@ La aplicación web sigue Model–View–Presenter; la [guía MVP](docs/architect
 
 La [guía de arquitectura](docs/architecture.md) define responsabilidades y dependencias. `pnpm check:boundaries` comprueba imports entre workspaces y sus exports públicos. Los paquetes compartidos se recompilan en modo watch con `pnpm dev`.
 
+«Resumen» muestra hasta tres reportes activos recientes y los recuentos de activos, perdidos, encontrados y por ciudad del catálogo general. Avisa cuando las cifras abarcan los 50 activos más recientes. Si la consulta falla, puedes reintentar desde ahí. Al volver a «Explorar reportes» se conservan los filtros y su enlace. El resumen refleja las publicaciones, ediciones y cierres confirmados por la API.
+
 «Explorar reportes» y «Mapa» comparten la consulta `GET /reports` de PostgreSQL a través del proxy `/api` de Vite. El texto busca en título y descripción. Tanto ese texto como el filtro de zona ignoran mayúsculas y tildes. El servidor los combina con ciudad exacta, tipo, categoría y el rango inclusivo de fechas del hecho. Un rango inválido muestra cómo corregirlo y bloquea la consulta. Cada consulta devuelve hasta 50 reportes activos ordenados por publicación, con todos los filtros aplicados antes del límite. Ambas secciones muestran la carga, el conteo, el límite, el vacío o el error con reintento. «Limpiar filtros» restablece la consulta. Los cambios rápidos descartan las respuestas de consultas anteriores.
 
 En «Mapa» selecciona un resultado para abrir su detalle y volver a las ubicaciones declaradas. Cada fila muestra título, tipo, ciudad y zona. Escribe una ciudad en cualquiera de las dos secciones o usa las sugerencias La Paz, Cochabamba y Santa Cruz. Deja Ciudad vacía para buscar en todas. Si escribes literalmente «Todas las ciudades», el catálogo busca ese nombre exacto.
@@ -75,11 +77,13 @@ Cada reporte del catálogo tiene un enlace estable, `/reportes/<id>`, que funcio
 
 El detalle conserva los párrafos de la descripción y separa tipo, estado, categoría, especie, fecha del hecho y fecha de publicación. «Ubicación reportada» muestra ciudad y zona almacenadas. La galería amplía una foto a la vez y permite elegir, avanzar y retroceder cuando hay varias; sin fotos identifica la imagen de referencia de categoría. Una imagen rota se anuncia como «Foto no disponible» y permite seguir leyendo los datos o seleccionar otra. El diálogo se recorre con teclado, se cierra con Escape y devuelve el foco al control que lo abrió si sigue disponible. La fecha del hecho conserva el día registrado en cualquier zona horaria.
 
+La foto pública del autor aparece junto al nombre en las tarjetas y en «Publicado por», también para visitantes. La imagen se solicita sin credenciales de sesión. Si pertenece a otro origen, el servidor de imágenes debe permitir la lectura mediante CORS. Si falta la foto o no se puede cargar, el nombre permanece visible y la galería sigue disponible.
+
 Publicar exige una sesión y conserva el reporte en PostgreSQL. Escribe la ciudad del hecho o elige una sugerida. El formulario indica si falta la ciudad o supera el límite de 100 unidades UTF-16. Conserva privado el número de WhatsApp y admite hasta tres fotos JPG/PNG cuando R2 está configurado. Sin R2 puedes publicar sin fotos.
 
 «Mis reportes» consulta `GET /me/reports` para la cuenta verificada y muestra título, tipo y estado con filtros Todos/Activos/Resueltos. En un reporte activo propio se pueden editar parcialmente sus datos desde la lista o el detalle; la API valida cada campo y rechaza cambios de otros usuarios o reportes resueltos. «Marcar como resuelto» exige confirmación; al aceptar, `PATCH /reports/:id/resolve` persiste únicamente el estado. El reporte conserva si fue Perdido o Encontrado, sale del catálogo y permanece en el historial y desde «Mi perfil» tras recargar. Cancelar no escribe y un fallo conserva el estado para reintentar. Repetir un cierre autorizado no vuelve a modificar la fila. No se ofrece eliminación simulada.
 
-Resumen conserva datos de demostración y los guardados viven en memoria. Los reportes y teléfonos de demostración y los del seed son ficticios. El seed incluye un autor «Santiago Demo» para comprobar que su nombre no concede permisos. Las fotos de demostración usan Unsplash.
+Los guardados viven en memoria. Los reportes y teléfonos de demostración y los del seed son ficticios. El seed incluye un autor «Santiago Demo» para comprobar que su nombre no concede permisos. Las fotos de demostración usan Unsplash.
 
 ## Seguimiento TDD
 

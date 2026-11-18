@@ -8,9 +8,9 @@ export class ReportPhotoPresenter extends Store<{ source?: string; failed: boole
   constructor(private readonly loader: ReportPhotoLoader) {
     super({ failed: false })
   }
-  show = async (source: string, privatePhoto: boolean) => {
+  show = async (source: string, loadResource: boolean) => {
     this.stop()
-    if (!privatePhoto) return this.setState({ source, failed: false })
+    if (!loadResource) return this.setState({ source, failed: false })
     const generation = this.generation
     this.controller = new AbortController()
     try {

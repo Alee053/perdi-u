@@ -262,6 +262,11 @@ export async function verifyOwnReportsBrowser({
           .rows[0]
         assert.equal(storedCity.city, 'Sucre')
         await page.getByRole('heading', { name: 'Explorar reportes', exact: true }).waitFor()
+        await navigate(page, 'Resumen')
+        await page
+          .locator('.report-card')
+          .getByRole('button', { name: titles[0], exact: true })
+          .waitFor()
         await contactPublishedReport(browser, viewport)
         await ownPage(page)
         const edit = row(page, titles[0]).getByRole('button', { name: 'Editar datos' })
@@ -308,6 +313,13 @@ export async function verifyOwnReportsBrowser({
         await detailEditor.getByRole('button', { name: 'Cancelar', exact: true }).click()
         await detailEditor.waitFor({ state: 'detached' })
         await ownDetail.getByRole('button', { name: 'Cerrar', exact: true }).click()
+        await navigate(page, 'Resumen')
+        await page
+          .locator('.report-card')
+          .filter({ hasText: titles[0] })
+          .getByText(/Centro, Cochabamba/)
+          .waitFor()
+        await ownPage(page)
       } else {
         await navigate(page, 'Publicar reporte')
         await typeSucre(page.getByRole('combobox', { name: /^Ciudad/ }))
@@ -426,6 +438,15 @@ export async function verifyOwnReportsBrowser({
         assert.equal(await detail.getByRole('button', { name: 'Copiar enlace' }).count(), 0)
         await detail.getByRole('button', { name: 'Cerrar', exact: true }).click()
         await page.getByRole('heading', { name: 'No se encontraron coincidencias' }).waitFor()
+        await navigate(page, 'Resumen')
+        await page.getByRole('heading', { name: 'Reportes recientes', exact: true }).waitFor()
+        assert.equal(
+          await page
+            .locator('.report-card')
+            .getByRole('button', { name: target, exact: true })
+            .count(),
+          0,
+        )
         await restartApi()
       }
       await page.reload()
@@ -461,7 +482,7 @@ export async function verifyOwnReportsBrowser({
     assert.ok(persisted.every((report) => report.state === 'resolved'))
     assert.deepEqual(errors, [])
     console.log(
-      '✓ navegador privado: Auth real, nombres iguales, filtros, confirmación/cancelación, fallo/reintento, detalle, catálogo, recarga desde perfil, reinicio, cambio de cuenta, vacío y móvil/escritorio',
+      '✓ navegador privado: Auth real, nombres iguales, filtros, confirmación/cancelación, fallo/reintento, detalle, catálogo y resumen tras publicar, editar y cerrar, recarga desde perfil, reinicio, cambio de cuenta, vacío y móvil/escritorio',
     )
   } finally {
     await browser?.close()

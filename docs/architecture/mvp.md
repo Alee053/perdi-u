@@ -127,6 +127,12 @@ Las entradas que la aplicación añade al historial llevan solo una marca boolea
 
 La limpieza de códigos/errores de Auth notifica una vez consumidos esos parámetros mediante el adapter del navegador. La búsqueda vuelve a leer la dirección limpia y no conserva un aviso obsoleto. Las escrituras propias de los controles no emiten ese evento, lo que evita bucles entre reemplazo y restauración.
 
+### 6.1 Resumen del catálogo
+
+`useApp` reutiliza la consulta general de `CatalogPresenter` cuando Explorar está sin filtros. Si la búsqueda tiene filtros activos o entradas inválidas, Resumen usa otra instancia del mismo presenter con el mismo cliente HTTP. Esa instancia consulta solo cuando se abre Resumen y cancela su lectura al salir. Los resultados y la dirección de Explorar se conservan. Publicar restablece la búsqueda y actualiza el catálogo. Editar o resolver refresca la consulta actual y el resumen independiente si está visible.
+
+`models/reports/stats.ts` cuenta los reportes activos por tipo y ciudad. `CatalogPresenter` prepara los primeros tres según el orden de la API, el aviso de 50 activos y los estados de carga, vacío, éxito o error. `OverviewPage` renderiza el view model y delega el reintento a la fuente que está usando.
+
 ## 7. Flujo de publicación y fotos privadas
 
 1. **View** — `views/pages/PublishPage.tsx` entrega archivos y cambios al Presenter y muestra vistas previas y errores. `CityInput` comparte el campo editable y las sugerencias entre publicación, Explorar y Mapa. `usePublishPage` mantiene la suscripción y libera URLs `blob:` al desmontar.
@@ -140,7 +146,11 @@ La limpieza de códigos/errores de Auth notifica una vez consumidos esos paráme
 
 `requestResolve` abre la confirmación sin escribir. `confirmResolve` bloquea duplicados, espera el `204` y conserva estado/diálogo con un error seguro si falla. Al cambiar de cuenta se abortan solicitudes y se descartan tanto éxitos como fallos tardíos. Un `401` oculta datos privados y solicita ingresar nuevamente.
 
-`requestEdit` prepara el borrador sin escribir; `saveEdit` bloquea envíos duplicados, envía solo el contrato parcial y conserva borrador y errores del servidor para corregirlos. Al cancelar descarta el borrador. `ReportDetailPresenter` ofrece editar y resolver únicamente al autor de un reporte activo que también figura en su historial privado; la API y el SQL vuelven a comprobar identidad y estado. Tras una edición confirmada, `app/dependencies.ts` refresca historial, catálogo y detalle conservando los filtros. Tras el cierre confirmado, también sincroniza guardados. `ResolveConfirmation` y `EditReportDialog` usan diálogos nativos para foco y teclado. No existen controles de eliminación demo. Resumen sigue mostrando datos de demostración.
+`requestEdit` prepara el borrador sin escribir. `saveEdit` bloquea envíos duplicados, envía solo el contrato parcial y conserva borrador y errores del servidor para corregirlos. Al cancelar descarta el borrador. `ReportDetailPresenter` ofrece editar y resolver únicamente al autor de un reporte activo que también figura en su historial privado. La API y el SQL vuelven a comprobar identidad y estado. Tras una edición confirmada, `app/dependencies.ts` refresca historial, catálogo y detalle conservando los filtros. Tras el cierre confirmado, también sincroniza guardados. `ResolveConfirmation` y `EditReportDialog` usan diálogos nativos para foco y teclado. No existen controles de eliminación demo.
+
+### 7.2 Foto pública del autor
+
+`toReportCard` toma `author.photoUrl` de la proyección pública validada por `catalog-client.ts`. `ReportAuthor` comparte el avatar y conserva el nombre en las tarjetas y en «Publicado por». `useAuthorPhoto` usa el ciclo de vida de `ReportPhotoPresenter` con un cargador público separado del cargador de fotos privadas. El adapter HTTP pide la imagen con `credentials: 'omit'` y sin enviar el referente. Un fallo de descarga o de decodificación muestra el avatar genérico. El presenter cancela la solicitud y libera la URL temporal cuando cambia el origen o se desmonta la vista.
 
 ## 8. Papel de React y Vite
 

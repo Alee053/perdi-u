@@ -1,6 +1,5 @@
 import { whatsAppUrl } from '../../models/reports/contact.js'
 import type { CatalogReport, Report } from '../../models/reports/report.js'
-import { summarizeReports } from '../../models/reports/stats.js'
 import type { NoticePresenter } from '../app/notice.presenter.js'
 import type { CatalogPresenter } from '../catalog/catalog.presenter.js'
 import type { Effects } from '../effects.js'
@@ -28,7 +27,7 @@ interface Dependencies {
 const isActive = (report: Report) => report.state === 'active'
 
 /**
- * Report projections for the overview, locations, saved list and demo detail.
+ * Report projections for locations, the saved list and the demo detail.
  */
 export class ReportsPresenter extends Store<ReportsState> {
   constructor(
@@ -137,20 +136,6 @@ export class ReportsPresenter extends Store<ReportsState> {
       canContact: !canResolve && report.source === 'demo',
       canResolve,
       canEdit: false,
-    }
-  }
-
-  overview = () => {
-    const stats = summarizeReports(this.state.reports)
-    return {
-      metrics: [
-        { label: 'Reportes activos', value: stats.active },
-        { label: 'Perdidos', value: stats.lost },
-        { label: 'Encontrados', value: stats.found },
-        { label: 'Resueltos', value: stats.resolved },
-      ],
-      cities: [...stats.byCity, { city: 'Otras ciudades', count: stats.other }],
-      recent: this.state.reports.filter(isActive).slice(0, 3).map(toReportCard),
     }
   }
 

@@ -80,7 +80,7 @@ test('el filtro por fecha valida calendarios y permite límites abiertos', () =>
   })
 })
 
-test('el resumen cuenta activos por tipo y ciudad y aparte los resueltos', () => {
+test('el resumen cuenta los reportes activos por tipo y por su ciudad declarada', () => {
   const stats = summarizeReports([
     report(),
     report({ id: 'demo-2', type: 'found', city: 'Cochabamba' }),
@@ -91,13 +91,11 @@ test('el resumen cuenta activos por tipo y ciudad y aparte los resueltos', () =>
     active: 3,
     lost: 2,
     found: 1,
-    resolved: 1,
     byCity: [
       { city: 'La Paz', count: 1 },
       { city: 'Cochabamba', count: 1 },
-      { city: 'Santa Cruz', count: 0 },
+      { city: 'Tarija', count: 1 },
     ],
-    other: 1,
   })
 })
 
