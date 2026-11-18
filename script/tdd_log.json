@@ -3552,9 +3552,251 @@
     "testId": 100
   },
   {
-    "commitId": "HEAD",
+    "commitId": "d497be8c50bb6710205972f13ed6b47e1fe93075",
     "commitName": "chore(repo): integrar main con el resumen actualizado (#47)",
     "commitTimestamp": 1794965393965,
     "testId": 100
+  },
+  {
+    "numPassedTests": 194,
+    "failedTests": 0,
+    "numTotalTests": 194,
+    "timestamp": 1794966576784,
+    "success": true,
+    "testId": 101
+  },
+  {
+    "numPassedTests": 194,
+    "failedTests": 1,
+    "numTotalTests": 195,
+    "timestamp": 1794966669081,
+    "success": false,
+    "testId": 101
+  },
+  {
+    "numPassedTests": 195,
+    "failedTests": 0,
+    "numTotalTests": 195,
+    "timestamp": 1794966702629,
+    "success": true,
+    "testId": 101
+  },
+  {
+    "numPassedTests": 195,
+    "failedTests": 0,
+    "numTotalTests": 195,
+    "timestamp": 1794966738054,
+    "success": true,
+    "testId": 101
+  },
+  {
+    "commitId": "6b378a7525fddfe4d8243798173c4afa9365b889",
+    "commitName": "fix(web): preserve concurrent report changes (#48)",
+    "commitTimestamp": 1794966760885,
+    "testId": 101
+  },
+  {
+    "numPassedTests": 195,
+    "failedTests": 1,
+    "numTotalTests": 196,
+    "timestamp": 1794966796090,
+    "success": false,
+    "testId": 102
+  },
+  {
+    "numPassedTests": 196,
+    "failedTests": 0,
+    "numTotalTests": 196,
+    "timestamp": 1794966814793,
+    "success": true,
+    "testId": 102
+  },
+  {
+    "commitId": "ae9b7125c5569496f1116a5b35eddd55a534ace4",
+    "commitName": "fix(web): skip empty report edits (#48)",
+    "commitTimestamp": 1794966837089,
+    "testId": 102
+  },
+  {
+    "numPassedTests": 197,
+    "failedTests": 1,
+    "numTotalTests": 198,
+    "timestamp": 1794966887227,
+    "success": false,
+    "testId": 103
+  },
+  {
+    "numPassedTests": 198,
+    "failedTests": 0,
+    "numTotalTests": 198,
+    "timestamp": 1794966906987,
+    "success": true,
+    "testId": 103
+  },
+  {
+    "commitId": "8deb56d9e1de0dba3761637e283ad6401d73e4a9",
+    "commitName": "fix(web): keep pet edit fields valid (#48)",
+    "commitTimestamp": 1794966926918,
+    "testId": 103
+  },
+  {
+    "numPassedTests": 198,
+    "failedTests": 1,
+    "numTotalTests": 199,
+    "timestamp": 1794967035543,
+    "success": false,
+    "testId": 104
+  },
+  {
+    "numPassedTests": 198,
+    "failedTests": 2,
+    "numTotalTests": 200,
+    "timestamp": 1794967079990,
+    "success": false,
+    "testId": 104
+  },
+  {
+    "numPassedTests": 200,
+    "failedTests": 0,
+    "numTotalTests": 200,
+    "timestamp": 1794967111771,
+    "success": true,
+    "testId": 104
+  },
+  {
+    "numPassedTests": 200,
+    "failedTests": 0,
+    "numTotalTests": 200,
+    "timestamp": 1794967142910,
+    "success": true,
+    "testId": 104
+  },
+  {
+    "numPassedTests": 200,
+    "failedTests": 0,
+    "numTotalTests": 200,
+    "timestamp": 1794967173109,
+    "success": true,
+    "testId": 104
+  },
+  {
+    "commitId": "292c5310fa415bdc4cb88dad6717643f7c8e6c39",
+    "commitName": "feat(web): refresh saved report details (#48)",
+    "commitTimestamp": 1794967197718,
+    "testId": 104
+  },
+  {
+    "numPassedTests": 200,
+    "failedTests": 1,
+    "numTotalTests": 201,
+    "timestamp": 1794967240262,
+    "success": false,
+    "testId": 105
+  },
+  {
+    "numPassedTests": 201,
+    "failedTests": 0,
+    "numTotalTests": 201,
+    "timestamp": 1794967268573,
+    "success": true,
+    "testId": 105
+  },
+  {
+    "numPassedTests": 201,
+    "failedTests": 0,
+    "numTotalTests": 201,
+    "timestamp": 1794967294139,
+    "success": true,
+    "testId": 105
+  },
+  {
+    "commitId": "0a10d7eb66bddc866a99d17c76b2f97c3a521200",
+    "commitName": "fix(web): retain saved selection after check errors (#48)",
+    "commitTimestamp": 1794967310986,
+    "testId": 105
+  },
+  {
+    "numPassedTests": 201,
+    "failedTests": 0,
+    "numTotalTests": 201,
+    "timestamp": 1794967509664,
+    "success": true,
+    "testId": 106
+  },
+  {
+    "numPassedTests": 201,
+    "failedTests": 0,
+    "numTotalTests": 201,
+    "timestamp": 1794967598501,
+    "success": true,
+    "testId": 106
+  },
+  {
+    "commitId": "6edfc6ba8c28873538fc5745cbb0b3b3558c6db9",
+    "commitName": "fix(web): start saved list empty and allow retry (#48)",
+    "commitTimestamp": 1794967623735,
+    "testId": 106
+  },
+  {
+    "numPassedTests": 201,
+    "failedTests": 1,
+    "numTotalTests": 202,
+    "timestamp": 1794967714638,
+    "success": false,
+    "testId": 107
+  },
+  {
+    "numPassedTests": 202,
+    "failedTests": 0,
+    "numTotalTests": 202,
+    "timestamp": 1794967735150,
+    "success": true,
+    "testId": 107
+  },
+  {
+    "numPassedTests": 202,
+    "failedTests": 0,
+    "numTotalTests": 202,
+    "timestamp": 1794967758836,
+    "success": true,
+    "testId": 107
+  },
+  {
+    "commitId": "175f5b72f2ec89133fb84305cde9ecdd9856fa66",
+    "commitName": "fix(web): sync saved report after editing (#48)",
+    "commitTimestamp": 1794967776657,
+    "testId": 107
+  },
+  {
+    "numPassedTests": 203,
+    "failedTests": 0,
+    "numTotalTests": 203,
+    "timestamp": 1794967816694,
+    "success": true,
+    "testId": 108
+  },
+  {
+    "commitId": "c57ef3c29ada28ef1b16b6064dd31ca996b0cb52",
+    "commitName": "test(web): protect saved selection from stale checks (#48)",
+    "commitTimestamp": 1794967839507,
+    "testId": 108
+  },
+  {
+    "commitId": "486c3ffae75317db3860a7f844cb481bbb237343",
+    "commitName": "test(web): cover saved retry in browser (#48)",
+    "commitTimestamp": 1794968184979,
+    "testId": 109
+  },
+  {
+    "commitId": "a2e905395c91e0f15542dd04b8d8fa29ada0a10d",
+    "commitName": "docs(web): record S2-09 edit and saved flows (#48)",
+    "commitTimestamp": 1794968289612,
+    "testId": 110
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(test): clarify S2-09 integration evidence (#48)",
+    "commitTimestamp": 1794968437742,
+    "testId": 111
   }
 ]

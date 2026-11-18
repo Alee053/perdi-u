@@ -153,6 +153,22 @@ async function verifySearch(page, size) {
   const zone = page.getByRole('textbox', { name: 'Zona o barrio' })
   const city = page.getByLabel('Ciudad', { exact: true })
   const camera = ['Cámara de prueba perdida', 'Perrita de prueba encontrada']
+  if (size === 'mobile') await page.getByRole('button', { name: 'Abrir menú' }).click()
+  await page
+    .getByRole('navigation')
+    .getByRole('button', { name: /^Guardados/ })
+    .click()
+  await page.getByRole('heading', { name: 'Reportes guardados', exact: true }).waitFor()
+  assert.equal(
+    await page.locator('.report-card').count(),
+    0,
+    'una sesión nueva empieza sin guardados',
+  )
+  if (size === 'mobile') await page.getByRole('button', { name: 'Abrir menú' }).click()
+  await page
+    .getByRole('navigation')
+    .getByRole('button', { name: /^Explorar reportes/ })
+    .click()
   await zone.fill('san jose')
   await expectTitles(page, ['Cámara de prueba perdida', 'Carné de prueba encontrado'])
   await city.fill('Cochabamba')
@@ -375,6 +391,20 @@ async function verifySearch(page, size) {
   await search.fill('mochila')
   await expectTitles(page, ['Mochila azul encontrada'])
   await page.getByRole('button', { name: 'Guardar reporte', exact: true }).click()
+  let failSavedCheck = true
+  await page.route('**/api/reports/*', async (route) => {
+    if (failSavedCheck) {
+      failSavedCheck = false
+      await route.fulfill({ status: 503, contentType: 'application/json', body: '{}' })
+      return
+    }
+    const response = await route.fetch()
+    const report = await response.json()
+    await route.fulfill({
+      response,
+      json: { ...report, title: 'Mochila actualizada', city: 'Sucre' },
+    })
+  })
   await search.fill('camara')
   await expectTitles(page, camera)
   if (size === 'mobile') await page.getByRole('button', { name: 'Abrir menú' }).click()
@@ -384,8 +414,15 @@ async function verifySearch(page, size) {
     .click()
   const savedCard = page.locator('.report-card').filter({ hasText: 'Mochila azul encontrada' })
   await savedCard.waitFor()
-  await savedCard.getByRole('button', { name: 'Quitar de guardados', exact: true }).click()
-  await savedCard.waitFor({ state: 'detached' })
+  await page.getByRole('alert').filter({ hasText: 'No se pudo verificar tus guardados' }).waitFor()
+  assert.equal(await savedCard.count(), 1, 'el fallo temporal conserva la selección')
+  await page.getByRole('alert').getByRole('button', { name: 'Reintentar', exact: true }).click()
+  const updatedSavedCard = page.locator('.report-card').filter({ hasText: 'Mochila actualizada' })
+  await updatedSavedCard.waitFor()
+  await updatedSavedCard.getByText(/Miraflores, Sucre/).waitFor()
+  await updatedSavedCard.getByRole('button', { name: 'Quitar de guardados', exact: true }).click()
+  await updatedSavedCard.waitFor({ state: 'detached' })
+  await page.unroute('**/api/reports/*')
   await page.getByRole('button', { name: 'Cerrar aviso', exact: true }).click()
   if (size === 'mobile') await page.getByRole('button', { name: 'Abrir menú' }).click()
   await page

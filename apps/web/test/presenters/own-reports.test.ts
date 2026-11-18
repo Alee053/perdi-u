@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { test } from '@jest/globals'
-import type { ReportSummary } from '@perdiu/contracts'
+import type { EditReportInput, ReportSummary } from '@perdiu/contracts'
 import {
   OwnReportsFailure,
   type OwnReportsRepository,
@@ -132,6 +132,80 @@ test('guardar el borrador actualiza el historial y avisa a la composición', asy
   assert.equal(presenter.view().edit, null)
   assert.deepEqual(edited, ['Mochila azul'])
   assert.deepEqual(notices, ['Cambios guardados.'])
+})
+
+test('editar solo el título conserva los cambios recientes del reporte en otra sesión', async () => {
+  let receivedPatch: EditReportInput | undefined
+  const { presenter } = setup({
+    list: async () => [report('active')],
+    edit: async (id, patch) => {
+      receivedPatch = patch
+      return report(id, { ...patch, city: 'Sucre' })
+    },
+  })
+  await presenter.setOwner('owner-1')
+  presenter.requestEdit('active')
+  presenter.setEditField('title', 'Mochila actualizada')
+
+  assert.equal(await presenter.submitEdit(), true)
+  assert.deepEqual(receivedPatch, { title: 'Mochila actualizada' })
+  assert.equal(presenter.find('active')?.title, 'Mochila actualizada')
+  assert.equal(presenter.find('active')?.city, 'Sucre')
+})
+
+test('guardar una edición sin cambios efectivos no envía un PATCH vacío', async () => {
+  let calls = 0
+  const { presenter } = setup({
+    list: async () => [report('active')],
+    edit: async (id, patch) => {
+      calls++
+      return report(id, patch)
+    },
+  })
+  await presenter.setOwner('owner-1')
+  presenter.requestEdit('active')
+  presenter.setEditField('title', 'Mochila active')
+
+  assert.equal(await presenter.submitEdit(), true)
+  assert.equal(calls, 0)
+  assert.equal(presenter.view().edit, null)
+  assert.equal(presenter.find('active')?.title, 'Mochila active')
+})
+
+test('actualizar la especie envía también la categoría mascota requerida por el API', async () => {
+  let receivedPatch: EditReportInput | undefined
+  const { presenter } = setup({
+    list: async () => [report('pet', { category: 'pet', petSpecies: 'Gato' })],
+    edit: async (id, patch) => {
+      receivedPatch = patch
+      return report(id, { ...patch, category: 'pet', petSpecies: 'Perro' })
+    },
+  })
+  await presenter.setOwner('owner-1')
+  presenter.requestEdit('pet')
+  presenter.setEditField('petSpecies', 'Perro')
+
+  assert.equal(await presenter.submitEdit(), true)
+  assert.deepEqual(receivedPatch, { category: 'pet', petSpecies: 'Perro' })
+  assert.equal(presenter.find('pet')?.petSpecies, 'Perro')
+})
+
+test('cambiar una mascota a objeto omite y limpia la especie', async () => {
+  let receivedPatch: EditReportInput | undefined
+  const { presenter } = setup({
+    list: async () => [report('pet', { category: 'pet', petSpecies: 'Gato' })],
+    edit: async (id, patch) => {
+      receivedPatch = patch
+      return report(id, { ...patch, category: 'object', petSpecies: undefined })
+    },
+  })
+  await presenter.setOwner('owner-1')
+  presenter.requestEdit('pet')
+  presenter.setEditField('category', 'object')
+
+  assert.equal(await presenter.submitEdit(), true)
+  assert.deepEqual(receivedPatch, { category: 'object' })
+  assert.equal(presenter.find('pet')?.petSpecies, undefined)
 })
 
 test('un rechazo de validación muestra el error junto al campo y conserva el borrador', async () => {

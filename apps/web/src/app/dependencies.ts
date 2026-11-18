@@ -1,7 +1,7 @@
 import { createAuthGateway } from '../infrastructure/auth/supabase-gateway.js'
 import { browserEffects } from '../infrastructure/browser/browser-effects.js'
 import { createSearchNavigation } from '../infrastructure/browser/search-navigation.js'
-import { demoReports, demoSavedIds } from '../infrastructure/demo/demo-reports.js'
+import { demoReports } from '../infrastructure/demo/demo-reports.js'
 import { createAccountClient } from '../infrastructure/http/account-client.js'
 import {
   createReportDetailClient,
@@ -36,6 +36,7 @@ export function createPresenters(env = import.meta.env) {
   const auth = new AuthPresenter(gateway, createAccountClient(apiUrl, accessToken))
   const notices = new NoticePresenter(browserEffects)
   const publicReports = createReportsClient(apiUrl)
+  const reportDetails = createReportDetailClient(apiUrl, accessToken)
   const catalog = new CatalogPresenter(publicReports)
   const overviewCatalog = new CatalogPresenter(publicReports)
   const filters = new FiltersPresenter()
@@ -61,6 +62,7 @@ export function createPresenters(env = import.meta.env) {
         refreshVisibleOverview()
       },
       onEdited: (report) => {
+        reports.markEdited(report)
         void own.load()
         void catalog.load()
         refreshVisibleOverview()
@@ -68,22 +70,19 @@ export function createPresenters(env = import.meta.env) {
       },
     },
   )
-  const reports: ReportsPresenter = new ReportsPresenter(
-    demoReports,
-    {
-      // A report can be saved from the search, the general overview, or its direct link.
-      catalog: {
-        find: (id) => catalog.find(id) ?? overviewCatalog.find(id) ?? reportDetail.find(id),
-        view: catalog.view,
-      },
-      notices,
-      effects: browserEffects,
-      links: { open: (id) => void reportDetail.open(id) },
+  const reports: ReportsPresenter = new ReportsPresenter(demoReports, {
+    // A report can be saved from the search, the general overview, or its direct link.
+    catalog: {
+      find: (id) => catalog.find(id) ?? overviewCatalog.find(id) ?? reportDetail.find(id),
+      view: catalog.view,
     },
-    demoSavedIds,
-  )
+    savedReports: reportDetails,
+    notices,
+    effects: browserEffects,
+    links: { open: (id) => void reportDetail.open(id) },
+  })
   const reportDetail = new ReportDetailPresenter({
-    repository: createReportDetailClient(apiUrl, accessToken),
+    repository: reportDetails,
     auth,
     effects: browserEffects,
     onLoginRequired: () => shell.openAuth('login'),

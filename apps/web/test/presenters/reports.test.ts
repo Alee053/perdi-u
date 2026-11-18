@@ -1,7 +1,12 @@
 import assert from 'node:assert/strict'
 import { test } from '@jest/globals'
 import type { ReportQuery, ReportSummary } from '@perdiu/contracts'
-import { demoOwner, type CatalogReport, type DemoReport } from '../../src/models/reports/report.js'
+import {
+  demoOwner,
+  type CatalogReport,
+  type DemoReport,
+  type OwnReport,
+} from '../../src/models/reports/report.js'
 import { CatalogPresenter } from '../../src/presenters/catalog/catalog.presenter.js'
 import { defaultSelection } from '../../src/presenters/catalog/filters.presenter.js'
 import { NoticePresenter } from '../../src/presenters/app/notice.presenter.js'
@@ -65,6 +70,8 @@ function setup(
   reports: DemoReport[] = [],
   saved: string[] = [],
   catalogPresenter = new CatalogPresenter({ list: async () => [] }),
+  findSaved: (id: string, signal: AbortSignal) => Promise<ReportSummary | undefined> = async () =>
+    undefined,
 ) {
   const notices: { message: string; error: boolean }[] = []
   const opened: string[] = []
@@ -78,6 +85,7 @@ function setup(
     reports,
     {
       catalog,
+      savedReports: { find: findSaved },
       notices: { show: (message: string, error = false) => notices.push({ message, error }) },
       effects: { openWhatsApp: (url: string) => opened.push(url) },
       links: { open: (id: string) => void links.push(id) },
@@ -109,6 +117,124 @@ test('guardar un reporte del catálogo lo conserva aunque cambien los resultados
       'Quitaste este reporte de tus guardados.',
     ],
   )
+})
+
+test('al revalidar Guardados la tarjeta toma los datos públicos actuales del reporte', async () => {
+  const updated = { ...catalogReport, title: 'Mochila roja', city: 'Sucre' }
+  let requests = 0
+  const { presenter } = setup([], [], undefined, async (id) => {
+    requests++
+    return id === catalogReport.id ? updated : undefined
+  })
+  presenter.toggleSaved(catalogReport.id)
+
+  await presenter.refreshSaved()
+
+  assert.equal(requests, 1)
+  assert.deepEqual(
+    presenter.saved().map(({ id, title, city }) => ({ id, title, city })),
+    [{ id: catalogReport.id, title: 'Mochila roja', city: 'Sucre' }],
+  )
+})
+
+test('la respuesta confirmada de edición actualiza una tarjeta ya guardada', () => {
+  const { presenter } = setup()
+  presenter.toggleSaved(catalogReport.id)
+  const edited: OwnReport = {
+    ...catalogReport,
+    source: 'own',
+    title: 'Mochila actualizada',
+    city: 'Sucre',
+  }
+
+  presenter.markEdited(edited)
+
+  assert.deepEqual(
+    presenter.saved().map(({ id, title, city }) => ({ id, title, city })),
+    [{ id: catalogReport.id, title: 'Mochila actualizada', city: 'Sucre' }],
+  )
+})
+
+test('revalidar guardados quita reportes no disponibles o resueltos y actualiza el conteo', async () => {
+  const resolved = { ...catalogReport, id: 'resolved-1', state: 'resolved' as const }
+  const unavailable = { ...catalogReport, id: 'unavailable-1' }
+  const catalogPresenter = new CatalogPresenter({
+    list: async () => [catalogReport, resolved, unavailable],
+  })
+  await catalogPresenter.load(defaultSelection)
+  const { presenter } = setup([], [], catalogPresenter, async (id) =>
+    id === catalogReport.id ? catalogReport : id === resolved.id ? resolved : undefined,
+  )
+  presenter.toggleSaved(catalogReport.id)
+  presenter.toggleSaved(resolved.id)
+  presenter.toggleSaved(unavailable.id)
+
+  await presenter.refreshSaved()
+
+  assert.deepEqual(
+    presenter.saved().map(({ id }) => id),
+    [catalogReport.id],
+  )
+  assert.deepEqual(presenter.counts(), { saved: 1 })
+  assert.equal(presenter.isSaved(resolved.id), false)
+  assert.equal(presenter.isSaved(unavailable.id), false)
+})
+
+test('un fallo al verificar mantiene la selección y permite reintentar', async () => {
+  let unavailable = true
+  let requests = 0
+  const updated = { ...catalogReport, title: 'Mochila verificada' }
+  const { presenter } = setup([], [], undefined, async () => {
+    requests++
+    if (unavailable) throw new Error('servicio temporalmente no disponible')
+    return updated
+  })
+  presenter.toggleSaved(catalogReport.id)
+
+  await presenter.refreshSaved()
+
+  assert.deepEqual(
+    presenter.saved().map(({ id }) => id),
+    [catalogReport.id],
+  )
+  assert.deepEqual(presenter.counts(), { saved: 1 })
+  assert.deepEqual(presenter.savedStatus(), {
+    status: 'error',
+    message: 'No se pudo verificar tus guardados. Intenta nuevamente.',
+  })
+
+  unavailable = false
+  await presenter.refreshSaved()
+
+  assert.equal(requests, 2)
+  assert.equal(presenter.savedStatus().status, 'ready')
+  assert.equal(presenter.saved()[0]?.title, 'Mochila verificada')
+})
+
+test('respuestas tardías no restauran guardados al desmarcar o limpiar la sesión', async () => {
+  let finishCheck!: (report: ReportSummary | undefined) => void
+  const first = setup([], [], undefined, () => new Promise((resolve) => (finishCheck = resolve)))
+  first.presenter.toggleSaved(catalogReport.id)
+  const firstCheck = first.presenter.refreshSaved()
+  first.presenter.toggleSaved(catalogReport.id)
+  finishCheck(catalogReport)
+  await firstCheck
+  assert.deepEqual(first.presenter.counts(), { saved: 0 })
+
+  let finishSessionCheck!: (report: ReportSummary | undefined) => void
+  const second = setup(
+    [],
+    [],
+    undefined,
+    () => new Promise((resolve) => (finishSessionCheck = resolve)),
+  )
+  second.presenter.toggleSaved(catalogReport.id)
+  const secondCheck = second.presenter.refreshSaved()
+  second.presenter.clearPrivateData()
+  finishSessionCheck(catalogReport)
+  await secondCheck
+  assert.deepEqual(second.presenter.counts(), { saved: 0 })
+  assert.equal(second.presenter.saved().length, 0)
 })
 
 test('un cierre confirmado retira el reporte persistido de guardados', () => {

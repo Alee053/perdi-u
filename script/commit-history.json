@@ -2736,12 +2736,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "d497be8c50bb6710205972f13ed6b47e1fe93075",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-18T01:29:52.000Z",
       "message": "chore(repo): integrar main con el resumen actualizado (#47)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/d497be8c50bb6710205972f13ed6b47e1fe93075"
     },
     "stats": {
       "total": 702,
@@ -2751,6 +2751,215 @@
     },
     "coverage": 85.63,
     "test_count": 194,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "6b378a7525fddfe4d8243798173c4afa9365b889",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-18T01:52:40.000Z",
+      "message": "fix(web): preserve concurrent report changes (#48)",
+      "url": "https://github.com/Alee053/perdi-u/commit/6b378a7525fddfe4d8243798173c4afa9365b889"
+    },
+    "stats": {
+      "total": 71,
+      "additions": 50,
+      "deletions": 21,
+      "date": "2026-11-18"
+    },
+    "coverage": 85.65,
+    "test_count": 195,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "ae9b7125c5569496f1116a5b35eddd55a534ace4",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-18T01:53:56.000Z",
+      "message": "fix(web): skip empty report edits (#48)",
+      "url": "https://github.com/Alee053/perdi-u/commit/ae9b7125c5569496f1116a5b35eddd55a534ace4"
+    },
+    "stats": {
+      "total": 25,
+      "additions": 24,
+      "deletions": 1,
+      "date": "2026-11-18"
+    },
+    "coverage": 85.67,
+    "test_count": 196,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "8deb56d9e1de0dba3761637e283ad6401d73e4a9",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-18T01:55:26.000Z",
+      "message": "fix(web): keep pet edit fields valid (#48)",
+      "url": "https://github.com/Alee053/perdi-u/commit/8deb56d9e1de0dba3761637e283ad6401d73e4a9"
+    },
+    "stats": {
+      "total": 48,
+      "additions": 43,
+      "deletions": 5,
+      "date": "2026-11-18"
+    },
+    "coverage": 85.8,
+    "test_count": 198,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "292c5310fa415bdc4cb88dad6717643f7c8e6c39",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-18T01:59:57.000Z",
+      "message": "feat(web): refresh saved report details (#48)",
+      "url": "https://github.com/Alee053/perdi-u/commit/292c5310fa415bdc4cb88dad6717643f7c8e6c39"
+    },
+    "stats": {
+      "total": 96,
+      "additions": 94,
+      "deletions": 2,
+      "date": "2026-11-18"
+    },
+    "coverage": 85.89,
+    "test_count": 200,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "0a10d7eb66bddc866a99d17c76b2f97c3a521200",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-18T02:01:50.000Z",
+      "message": "fix(web): retain saved selection after check errors (#48)",
+      "url": "https://github.com/Alee053/perdi-u/commit/0a10d7eb66bddc866a99d17c76b2f97c3a521200"
+    },
+    "stats": {
+      "total": 73,
+      "additions": 68,
+      "deletions": 5,
+      "date": "2026-11-18"
+    },
+    "coverage": 85.96,
+    "test_count": 201,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "6edfc6ba8c28873538fc5745cbb0b3b3558c6db9",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-18T02:07:03.000Z",
+      "message": "fix(web): start saved list empty and allow retry (#48)",
+      "url": "https://github.com/Alee053/perdi-u/commit/6edfc6ba8c28873538fc5745cbb0b3b3558c6db9"
+    },
+    "stats": {
+      "total": 88,
+      "additions": 66,
+      "deletions": 22,
+      "date": "2026-11-18"
+    },
+    "coverage": 85.96,
+    "test_count": 201,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "175f5b72f2ec89133fb84305cde9ecdd9856fa66",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-18T02:09:36.000Z",
+      "message": "fix(web): sync saved report after editing (#48)",
+      "url": "https://github.com/Alee053/perdi-u/commit/175f5b72f2ec89133fb84305cde9ecdd9856fa66"
+    },
+    "stats": {
+      "total": 36,
+      "additions": 34,
+      "deletions": 2,
+      "date": "2026-11-18"
+    },
+    "coverage": 85.95,
+    "test_count": 202,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "c57ef3c29ada28ef1b16b6064dd31ca996b0cb52",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-18T02:10:39.000Z",
+      "message": "test(web): protect saved selection from stale checks (#48)",
+      "url": "https://github.com/Alee053/perdi-u/commit/c57ef3c29ada28ef1b16b6064dd31ca996b0cb52"
+    },
+    "stats": {
+      "total": 26,
+      "additions": 26,
+      "deletions": 0,
+      "date": "2026-11-18"
+    },
+    "coverage": 86.07,
+    "test_count": 203,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "486c3ffae75317db3860a7f844cb481bbb237343",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-18T02:16:24.000Z",
+      "message": "test(web): cover saved retry in browser (#48)",
+      "url": "https://github.com/Alee053/perdi-u/commit/486c3ffae75317db3860a7f844cb481bbb237343"
+    },
+    "stats": {
+      "total": 25,
+      "additions": 23,
+      "deletions": 2,
+      "date": "2026-11-18"
+    },
+    "coverage": 86.07,
+    "test_count": 203,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "a2e905395c91e0f15542dd04b8d8fa29ada0a10d",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-18T02:18:09.000Z",
+      "message": "docs(web): record S2-09 edit and saved flows (#48)",
+      "url": "https://github.com/Alee053/perdi-u/commit/a2e905395c91e0f15542dd04b8d8fa29ada0a10d"
+    },
+    "stats": {
+      "total": 34,
+      "additions": 33,
+      "deletions": 1,
+      "date": "2026-11-18"
+    },
+    "coverage": 86.07,
+    "test_count": 203,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-18T02:20:37.000Z",
+      "message": "docs(test): clarify S2-09 integration evidence (#48)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 2,
+      "additions": 1,
+      "deletions": 1,
+      "date": "2026-11-18"
+    },
+    "coverage": 86.07,
+    "test_count": 203,
     "failed_tests": 0,
     "conclusion": "success"
   }
