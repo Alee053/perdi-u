@@ -75,6 +75,22 @@ export async function verifySearchNavigation(browser, webUrl, size, viewport) {
     assert.equal(new URL(page.url()).pathname + new URL(page.url()).search, searchPath)
     assert.equal(queries.length, 2, 'volver a la misma búsqueda conserva sus resultados')
     assert.ok(await opener.evaluate((node) => node === document.activeElement))
+
+    if (size === 'mobile') await page.getByRole('button', { name: 'Abrir menú' }).click()
+    const navigation = page.getByRole('navigation')
+    await navigation.getByRole('button', { name: 'Resumen', exact: true }).click()
+    await page
+      .getByRole('region', { name: 'Resumen de reportes' })
+      .getByText('6', { exact: true })
+      .waitFor({ timeout: 5000 })
+    assert.equal(await page.locator('.report-card').count(), 3)
+    assert.deepEqual(queries, [query, query, {}], 'Resumen lee la consulta general por separado')
+    assert.equal(new URL(page.url()).search, new URL(searchPath, webUrl).search)
+    if (size === 'mobile') await page.getByRole('button', { name: 'Abrir menú' }).click()
+    await navigation.getByRole('button', { name: /^Explorar reportes/ }).click()
+    await expectSearch(page)
+    assert.deepEqual(queries, [query, query, {}], 'volver a Explorar conserva la búsqueda')
+
     await page.goForward()
     await dialog.getByRole('heading', { name: title, exact: true }).waitFor()
     await dialog.getByRole('button', { name: 'Cerrar', exact: true }).click()

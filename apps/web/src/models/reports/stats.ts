@@ -1,27 +1,26 @@
-import { cities, type Report } from './report.js'
+import type { Report } from './report.js'
 
 export interface ReportStats {
   active: number
   lost: number
   found: number
-  resolved: number
-  /** Active reports per known city, plus the rest under `other`. */
   byCity: { city: string; count: number }[]
-  other: number
 }
 
-export function summarizeReports(reports: Report[]): ReportStats {
-  const active = reports.filter((report) => report.state === 'active')
-  const byCity = cities.map((city) => ({
-    city,
-    count: active.filter((report) => report.city === city).length,
-  }))
+export function summarizeReports(reports: readonly Report[]): ReportStats {
+  let lost = 0
+  let found = 0
+  const cities = new Map<string, number>()
+  for (const report of reports) {
+    if (report.state !== 'active') continue
+    if (report.type === 'lost') lost++
+    else found++
+    cities.set(report.city, (cities.get(report.city) ?? 0) + 1)
+  }
   return {
-    active: active.length,
-    lost: active.filter((report) => report.type === 'lost').length,
-    found: active.filter((report) => report.type === 'found').length,
-    resolved: reports.length - active.length,
-    byCity,
-    other: active.length - byCity.reduce((total, { count }) => total + count, 0),
+    active: lost + found,
+    lost,
+    found,
+    byCity: Array.from(cities, ([city, count]) => ({ city, count })),
   }
 }

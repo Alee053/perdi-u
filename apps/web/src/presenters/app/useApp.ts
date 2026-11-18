@@ -15,6 +15,7 @@ export interface AppPresenters {
   auth: AuthPresenter
   notices: NoticePresenter
   catalog: CatalogPresenter
+  overviewCatalog: CatalogPresenter
   filters: FiltersPresenter
   search: CatalogSearchPresenter
   reports: ReportsPresenter
@@ -29,23 +30,43 @@ export interface AppPresenters {
  * start/cleanup to the component lifecycle and hands the view ready-to-render data and actions.
  */
 export function useApp(presenters: AppPresenters) {
-  const { auth, notices, catalog, filters, search, reports, own, reportDetail, publish, shell } =
-    presenters
+  const {
+    auth,
+    notices,
+    catalog,
+    overviewCatalog,
+    filters,
+    search,
+    reports,
+    own,
+    reportDetail,
+    publish,
+    shell,
+  } = presenters
   const shellState = useStore(shell)
   // Subscriptions only: their data is read below through shell.view() and the reports selectors.
   useStore(auth)
   useStore(reports)
   useStore(own)
   useStore(reportDetail)
+  useStore(overviewCatalog)
   const notice = useStore(notices)
   const catalogState = useStore(catalog)
   const selection = useStore(filters)
   const publishState = useStore(publish)
+  const overviewSource = catalog.isGeneralQuery() ? catalog : overviewCatalog
+  const separateOverview =
+    overviewSource === overviewCatalog && shellState.section === 'overview' && !shellState.authView
 
   useEffect(() => shell.start(), [shell])
   useEffect(() => reportDetail.start(), [reportDetail])
   useEffect(() => own.start(auth), [own, auth])
   useEffect(() => search.start(), [search])
+  useEffect(() => {
+    if (!separateOverview) return
+    void overviewCatalog.load()
+    return () => overviewCatalog.clearResult()
+  }, [overviewCatalog, separateOverview])
 
   const counts = reports.counts()
   return {
@@ -59,7 +80,7 @@ export function useApp(presenters: AppPresenters) {
     catalog: { ...catalogState, ...catalog.summary() },
     selection,
     filterOptions: filters.options(),
-    overview: reports.overview(),
+    overview: overviewSource.overview(),
     map: reports.mapView(selection),
     myReports: own.view(),
     saved: reports.saved(),
@@ -78,6 +99,7 @@ export function useApp(presenters: AppPresenters) {
       signOut: shell.signOut,
       dismissNotice: notices.dismiss,
       retryCatalog: () => void catalog.load(),
+      retryOverview: () => void overviewSource.load(),
       filters,
       reports,
       own,
