@@ -3366,9 +3366,31 @@
     "testId": 96
   },
   {
-    "commitId": "HEAD",
+    "commitId": "eecc9bae400b4f648b8b8dbe0575cb5796e3e3be",
     "commitName": "fix(web): conservar la sección al volver del detalle (#47)",
     "commitTimestamp": 1794964161987,
     "testId": 96
+  },
+  {
+    "numPassedTests": 186,
+    "failedTests": 1,
+    "numTotalTests": 187,
+    "timestamp": 1794964216747,
+    "success": false,
+    "testId": 97
+  },
+  {
+    "numPassedTests": 187,
+    "failedTests": 0,
+    "numTotalTests": 187,
+    "timestamp": 1794964313211,
+    "success": true,
+    "testId": 97
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): buscar por una ciudad escrita (#47)",
+    "commitTimestamp": 1794964350240,
+    "testId": 97
   }
 ]

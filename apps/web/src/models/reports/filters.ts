@@ -43,7 +43,7 @@ export function validateDateRange(
 export const hasActiveFilters = (filters: ReportFilters) =>
   Boolean(
     filters.text.trim() ||
-    filters.city ||
+    filters.city?.trim() ||
     filters.zone?.trim() ||
     filters.category ||
     filters.type ||
@@ -55,10 +55,11 @@ export const hasActiveFilters = (filters: ReportFilters) =>
 /** Query for the public catalog: trimmed text and only the selected criteria. */
 export function toReportQuery(filters: ReportFilters): ReportQuery {
   const text = filters.text.trim()
+  const city = filters.city?.trim()
   const zone = filters.zone?.trim()
   return {
     ...(text ? { q: text } : {}),
-    ...(filters.city ? { city: filters.city } : {}),
+    ...(city ? { city } : {}),
     ...(zone ? { zone } : {}),
     ...(filters.category ? { category: filters.category } : {}),
     ...(filters.type ? { type: filters.type } : {}),

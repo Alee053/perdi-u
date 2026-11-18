@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import type { AuthPresenter } from '../auth/auth.presenter.js'
 import type { CatalogPresenter } from '../catalog/catalog.presenter.js'
-import type { FiltersPresenter } from '../catalog/filters.presenter.js'
+import { filterOptions, type FiltersPresenter } from '../catalog/filters.presenter.js'
 import type { CatalogSearchPresenter } from '../catalog/search.presenter.js'
 import type { PublishPresenter } from '../reports/publish.presenter.js'
 import type { ReportDetailPresenter } from '../reports/report-detail.presenter.js'
@@ -58,7 +58,7 @@ export function useApp(presenters: AppPresenters) {
     },
     catalog: catalog.view(),
     selection,
-    filterOptions: filters.options(),
+    filterOptions,
     overview: reports.overview(),
     map: reports.mapView(),
     myReports: own.view(),

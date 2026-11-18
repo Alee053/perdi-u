@@ -11,6 +11,7 @@ import { assertLocalDatabase } from '@perdiu/database/config'
 import { verifyReportGallery } from './browser-report-gallery.mjs'
 import { verifySearchNavigation } from './browser-search-navigation.mjs'
 import { openMap, verifyMapCatalog } from './browser-map-catalog.mjs'
+import { verifyCitySearch } from './browser-city-search.mjs'
 
 async function freePort() {
   const server = createServer()
@@ -149,21 +150,21 @@ async function expectTitles(page, titles) {
 async function verifySearch(page, size) {
   const search = page.getByRole('textbox', { name: 'Buscar reportes' })
   const zone = page.getByRole('textbox', { name: 'Zona o barrio' })
-  const city = page.getByRole('combobox', { name: 'Ciudad', exact: true })
+  const city = page.getByLabel('Ciudad', { exact: true })
   const camera = ['Cámara de prueba perdida', 'Perrita de prueba encontrada']
   await zone.fill('san jose')
   await expectTitles(page, ['Cámara de prueba perdida', 'Carné de prueba encontrado'])
-  await city.selectOption('Cochabamba')
+  await city.fill('Cochabamba')
   await page
     .getByRole('heading', { name: 'No se encontraron coincidencias', exact: true })
     .waitFor()
-  await city.selectOption('La Paz')
+  await city.fill('La Paz')
   await expectTitles(page, ['Cámara de prueba perdida', 'Carné de prueba encontrado'])
   await zone.fill('SOPOCACHÍ')
-  await city.selectOption('Todas las ciudades')
+  await city.fill('')
   await expectTitles(page, ['Perrita de prueba encontrada'])
   await zone.fill('')
-  await city.selectOption('Todas las ciudades')
+  await city.fill('')
   await expectTitles(page, [
     'Cámara de prueba perdida',
     'Perrita de prueba encontrada',
@@ -183,9 +184,9 @@ async function verifySearch(page, size) {
   await expectTitles(page, camera)
   await page.getByRole('tab', { name: 'Perdidos', exact: true }).click()
   await page.getByRole('combobox', { name: 'Categoría', exact: true }).selectOption('Objeto')
-  await city.selectOption('La Paz')
+  await city.fill('La Paz')
   await expectTitles(page, ['Cámara de prueba perdida'])
-  await city.selectOption('Cochabamba')
+  await city.fill('Cochabamba')
   await page
     .getByRole('heading', { name: 'No se encontraron coincidencias', exact: true })
     .waitFor()
@@ -222,7 +223,7 @@ async function verifySearch(page, size) {
     'Gato de prueba perdido',
   ])
   assert.equal(await search.inputValue(), '')
-  assert.equal(await city.inputValue(), 'Todas las ciudades')
+  assert.equal(await city.inputValue(), '')
   assert.equal(await zone.inputValue(), '')
   assert.equal(
     await page.getByRole('combobox', { name: 'Categoría', exact: true }).inputValue(),
@@ -267,7 +268,7 @@ async function verifySearch(page, size) {
     'Carné de prueba encontrado',
     'Mochila azul encontrada',
   ])
-  await page.getByRole('combobox', { name: 'Ciudad', exact: true }).selectOption('La Paz')
+  await page.getByLabel('Ciudad', { exact: true }).fill('La Paz')
   await expectTitles(page, [
     'Cámara de prueba perdida',
     'Carné de prueba encontrado',
@@ -394,7 +395,7 @@ async function verifySearch(page, size) {
   await expectTitles(page, ['Mochila azul encontrada'])
 
   // A failed filtered search must retain its controls and retry the same query.
-  await city.selectOption('La Paz')
+  await city.fill('La Paz')
   await page.getByRole('combobox', { name: 'Categoría', exact: true }).selectOption('Objeto')
   await page.getByRole('tab', { name: 'Perdidos', exact: true }).click()
   await zone.fill('san jose')
@@ -833,6 +834,15 @@ try {
   await page.getByRole('status').filter({ hasText: 'Se muestran hasta 50 resultados' }).waitFor()
   assert.deepEqual(await page.locator('.map-result b').allTextContents(), catalogTitles)
   assert.equal(await page.locator('.map-result').count(), 50)
+
+  await pool.query(
+    await readFile(
+      new URL('../packages/database/test/fixtures/cities.sql', import.meta.url),
+      'utf8',
+    ),
+  )
+  await verifyCitySearch(browser, webUrl, 'desktop', { width: 1440, height: 1000 })
+  await verifyCitySearch(browser, webUrl, 'mobile', { width: 390, height: 844 })
 
   await pool.query('UPDATE reports SET state = $1', ['resolved'])
   await page.goto(sharedUrl)

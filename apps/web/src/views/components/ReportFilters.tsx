@@ -1,5 +1,6 @@
 import type { SyntheticEvent } from 'react'
 import type { FilterSelection } from '../../presenters/catalog/filters.presenter'
+import { CityInput } from './CityInput'
 
 type FilterActions = {
   setSearch: (value: string) => void
@@ -32,16 +33,15 @@ export function ReportFilters({ selection, options, actions }: ReportFiltersProp
         aria-label="Buscar reportes"
         maxLength={200}
       />
-      <select
-        className="select-field"
+      <CityInput
+        className="search-field"
+        suggestions={options.cities}
         value={selection.city}
         onChange={(event) => actions.setCity(event.target.value)}
         aria-label="Ciudad"
-      >
-        {options.cities.map((city) => (
-          <option key={city}>{city}</option>
-        ))}
-      </select>
+        placeholder="Todas las ciudades"
+        maxLength={100}
+      />
       <input
         className="search-field"
         value={selection.zone}

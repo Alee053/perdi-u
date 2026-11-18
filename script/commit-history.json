@@ -2603,12 +2603,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "eecc9bae400b4f648b8b8dbe0575cb5796e3e3be",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-18T01:09:21.000Z",
       "message": "fix(web): conservar la sección al volver del detalle (#47)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/eecc9bae400b4f648b8b8dbe0575cb5796e3e3be"
     },
     "stats": {
       "total": 135,
@@ -2618,6 +2618,25 @@
     },
     "coverage": 85.56,
     "test_count": 186,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-18T01:12:29.000Z",
+      "message": "feat(web): buscar por una ciudad escrita (#47)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 232,
+      "additions": 172,
+      "deletions": 60,
+      "date": "2026-11-18"
+    },
+    "coverage": 85.51,
+    "test_count": 187,
     "failed_tests": 0,
     "conclusion": "success"
   }
