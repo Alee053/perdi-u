@@ -116,8 +116,8 @@ test('un enlace inválido bloquea las consultas y conserva el aviso hasta correg
   stop()
 })
 
-test('volver del detalle conserva los resultados de la misma búsqueda y restaura otra entrada solo una vez', async () => {
-  const { search, filters, queries, replaced, navigate } = setup({
+test('volver del detalle conserva la sección y resultados de la misma búsqueda', async () => {
+  const { search, filters, queries, replaced, navigate, opened } = setup({
     query: { q: 'gato' },
     invalid: false,
   })
@@ -128,6 +128,7 @@ test('volver del detalle conserva los resultados de la misma búsqueda y restaur
   assert.equal(replaced.length, writes, 'el detalle conserva su enlace canónico')
   navigate({ query: { q: 'gato' }, invalid: false })
   await settle()
+  assert.equal(opened(), 1, 'volver a la misma consulta no cambia de Mapa a Explorar')
   assert.deepEqual(
     queries,
     [{ q: 'gato' }],
@@ -138,6 +139,7 @@ test('volver del detalle conserva los resultados de la misma búsqueda y restaur
   assert.equal(filters.getSnapshot().search, 'mochila')
   assert.deepEqual(queries.at(-1), { q: 'mochila', dateTo: '2026-10-12' })
   assert.equal(queries.length, 2)
+  assert.equal(opened(), 2, 'otra entrada sí restaura la búsqueda')
   stop()
 })
 

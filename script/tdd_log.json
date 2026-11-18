@@ -3344,9 +3344,31 @@
     "testId": 95
   },
   {
-    "commitId": "HEAD",
+    "commitId": "93255a28b6d96868f679e5cc06bc6f3b518a2f6b",
     "commitName": "feat(web): mostrar ubicaciones del catálogo en Mapa (#47)",
     "commitTimestamp": 1794963979394,
     "testId": 95
+  },
+  {
+    "numPassedTests": 185,
+    "failedTests": 1,
+    "numTotalTests": 186,
+    "timestamp": 1794964034966,
+    "success": false,
+    "testId": 96
+  },
+  {
+    "numPassedTests": 186,
+    "failedTests": 0,
+    "numTotalTests": 186,
+    "timestamp": 1794964110030,
+    "success": true,
+    "testId": 96
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "fix(web): conservar la sección al volver del detalle (#47)",
+    "commitTimestamp": 1794964161987,
+    "testId": 96
   }
 ]

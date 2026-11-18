@@ -2584,12 +2584,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "93255a28b6d96868f679e5cc06bc6f3b518a2f6b",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-18T01:06:17.000Z",
       "message": "feat(web): mostrar ubicaciones del catálogo en Mapa (#47)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/93255a28b6d96868f679e5cc06bc6f3b518a2f6b"
     },
     "stats": {
       "total": 520,
@@ -2598,6 +2598,25 @@
       "date": "2026-11-18"
     },
     "coverage": 85.58,
+    "test_count": 186,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-18T01:09:21.000Z",
+      "message": "fix(web): conservar la sección al volver del detalle (#47)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 135,
+      "additions": 129,
+      "deletions": 6,
+      "date": "2026-11-18"
+    },
+    "coverage": 85.56,
     "test_count": 186,
     "failed_tests": 0,
     "conclusion": "success"

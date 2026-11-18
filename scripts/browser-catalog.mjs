@@ -10,6 +10,7 @@ import { createPool } from '@perdiu/database'
 import { assertLocalDatabase } from '@perdiu/database/config'
 import { verifyReportGallery } from './browser-report-gallery.mjs'
 import { verifySearchNavigation } from './browser-search-navigation.mjs'
+import { openMap, verifyMapCatalog } from './browser-map-catalog.mjs'
 
 async function freePort() {
   const server = createServer()
@@ -807,6 +808,7 @@ try {
     await page.locator('.report-card').first().waitFor()
     await verifySearch(page, size)
     await verifySearchNavigation(browser, webUrl, size, viewport)
+    await verifyMapCatalog(browser, webUrl, size, viewport)
   }
 
   await pool.query(
@@ -817,6 +819,7 @@ try {
   )
   await page.getByRole('button', { name: 'Limpiar filtros', exact: true }).click()
   await page.getByRole('status').filter({ hasText: 'Se muestran hasta 50 resultados' }).waitFor()
+
   assert.equal(await page.locator('.report-card').count(), 50)
   await page.getByRole('textbox', { name: 'Buscar reportes' }).fill('sin-coincidencias-de-prueba')
   await page
@@ -824,6 +827,12 @@ try {
     .waitFor()
   await page.getByRole('button', { name: 'Limpiar filtros', exact: true }).click()
   await page.getByRole('status').filter({ hasText: 'Se muestran hasta 50 resultados' }).waitFor()
+
+  const catalogTitles = await page.locator('.card-title').allTextContents()
+  await openMap(page)
+  await page.getByRole('status').filter({ hasText: 'Se muestran hasta 50 resultados' }).waitFor()
+  assert.deepEqual(await page.locator('.map-result b').allTextContents(), catalogTitles)
+  assert.equal(await page.locator('.map-result').count(), 50)
 
   await pool.query('UPDATE reports SET state = $1', ['resolved'])
   await page.goto(sharedUrl)
@@ -838,6 +847,9 @@ try {
     .click()
   await page.getByRole('heading', { name: 'Todavía no hay reportes' }).waitFor()
   assert.equal(await page.locator('.report-card').count(), 0)
+  await openMap(page)
+  await page.getByRole('heading', { name: 'Todavía no hay reportes' }).waitFor()
+  assert.equal(await page.locator('.map-result').count(), 0)
   assert.deepEqual(pageErrors, [])
   console.log(
     'Navegador: catálogo real, enlace directo/recarga/Atrás del detalle, copia pública y alternativa manual, ingreso y retorno, WhatsApp sin envío, privacidad, búsqueda sin tildes, filtros combinados, limpieza, publicación desde vacío, cambios rápidos, error/reintento con filtros, límite de 50, reinicio y móvil/escritorio verificados.',
