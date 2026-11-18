@@ -5,6 +5,7 @@ import {
   type PublishPresenter,
   type PublishState,
 } from '../../presenters/reports/publish.presenter'
+import { CityInput } from '../components/CityInput'
 import { PageHeading } from '../components/PageHeading'
 
 export function PublishPage({ presenter }: { presenter: PublishPresenter }) {
@@ -104,15 +105,16 @@ export function PublishPage({ presenter }: { presenter: PublishPresenter }) {
             </label>
           )}
           <label className="form-field">
-            <span>Ciudad</span>
-            <select
+            <span id="publish-city-label">Ciudad</span>
+            <CityInput
+              suggestions={publishOptions.cities}
               value={draft.city}
               onChange={(event) => actions.setField('city', event.target.value)}
-            >
-              {publishOptions.cities.map((city) => (
-                <option key={city}>{city}</option>
-              ))}
-            </select>
+              aria-labelledby="publish-city-label"
+              aria-invalid={Boolean(errors.city)}
+              aria-describedby={errors.city ? 'city-error' : undefined}
+            />
+            {error('city')}
           </label>
           <label className="form-field">
             <span>Zona o barrio</span>

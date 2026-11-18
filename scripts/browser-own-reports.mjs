@@ -64,6 +64,15 @@ export async function verifyOwnReportsBrowser({
     await page.locator('main').getByRole('button', { name: 'Mis reportes' }).click()
     await page.getByRole('heading', { name: 'Mis reportes', exact: true }).waitFor()
   }
+  const typeSucre = async (city) => {
+    await city.fill('', { timeout: 5000 })
+    await city.pressSequentially('Sucre')
+    assert.equal(await city.inputValue(), 'Sucre')
+    assert.deepEqual(
+      await city.evaluate((input) => Array.from(input.list.options, ({ value }) => value)),
+      ['La Paz', 'Cochabamba', 'Santa Cruz'],
+    )
+  }
   const login = async (page, account) => {
     const failures = []
     const recordFailure = (response) => {
@@ -97,6 +106,9 @@ export async function verifyOwnReportsBrowser({
       await page.goto(`${webUrl}/reportes/${ids[0]}`)
       const detail = page.getByRole('dialog')
       await detail.getByRole('heading', { name: titles[0], exact: true }).waitFor()
+      const location = detail.getByRole('region', { name: 'Ubicación reportada' })
+      await location.getByText('Sucre', { exact: true }).waitFor()
+      await location.getByText('Centro', { exact: true }).waitFor()
       const contact = detail.getByRole('button', { name: 'Contactar por WhatsApp' })
       await contact.click()
       await page.getByRole('heading', { name: 'Iniciar sesión', exact: true }).waitFor()
@@ -177,6 +189,8 @@ export async function verifyOwnReportsBrowser({
       ['mobile', { width: 390, height: 844 }],
     ]) {
       const context = await browser.newContext({ viewport })
+      // Demo images are unrelated to this Auth/API flow and can delay navigation.
+      await context.route('https://images.unsplash.com/**', (route) => route.abort())
       const page = await context.newPage()
       page.on('pageerror', (error) => errors.push(error.message))
       // The provider image is doubled; Auth, the DTO and its ownership remain real.
@@ -194,7 +208,7 @@ export async function verifyOwnReportsBrowser({
             ),
           })
         })
-      await page.goto(webUrl)
+      await page.goto(webUrl, { waitUntil: 'domcontentloaded' })
       let listFails = size === 'desktop'
       await page.route('**/api/me/reports', async (route) => {
         if (listFails) {
@@ -221,18 +235,32 @@ export async function verifyOwnReportsBrowser({
         await page.getByLabel('Zona o barrio', { exact: true }).fill('Centro')
         await page.getByLabel('Fecha aproximada', { exact: true }).fill('2026-10-20')
         await page.getByRole('textbox', { name: /^Número de WhatsApp/ }).fill('+591 70000000')
+        const city = page.getByRole('combobox', { name: /^Ciudad/ })
+        const submit = page
+          .locator('form')
+          .getByRole('button', { name: 'Publicar reporte', exact: true })
+        await city.fill('', { timeout: 5000 })
+        await submit.click()
+        await page.getByText('Indica una ciudad.', { exact: true }).waitFor()
+        await city.fill('🏙'.repeat(50) + 'x')
+        await submit.click()
+        await page.getByText('Usa como máximo 100 caracteres.', { exact: true }).waitFor()
+        assert.equal(await city.getAttribute('aria-invalid'), 'true')
+        await typeSucre(city)
         const published = page.waitForResponse(
           (response) =>
             response.request().method() === 'POST' &&
             new URL(response.url()).pathname === '/api/reports',
         )
-        await page
-          .locator('form')
-          .getByRole('button', { name: 'Publicar reporte', exact: true })
-          .click()
+        await submit.click()
         const response = await published
         assert.equal(response.status(), 201)
-        ids[0] = (await response.json()).id
+        const report = await response.json()
+        assert.equal(report.city, 'Sucre')
+        ids[0] = report.id
+        const storedCity = (await pool.query('SELECT city FROM reports WHERE id = $1', [report.id]))
+          .rows[0]
+        assert.equal(storedCity.city, 'Sucre')
         await page.getByRole('heading', { name: 'Explorar reportes', exact: true }).waitFor()
         await contactPublishedReport(browser, viewport)
         await ownPage(page)
@@ -280,6 +308,10 @@ export async function verifyOwnReportsBrowser({
         await detailEditor.getByRole('button', { name: 'Cancelar', exact: true }).click()
         await detailEditor.waitFor({ state: 'detached' })
         await ownDetail.getByRole('button', { name: 'Cerrar', exact: true }).click()
+      } else {
+        await navigate(page, 'Publicar reporte')
+        await typeSucre(page.getByRole('combobox', { name: /^Ciudad/ }))
+        await ownPage(page)
       }
       await row(page, titles[0]).waitFor()
       const privateImage = row(page, titles[2]).locator('img')

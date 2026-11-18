@@ -42,6 +42,14 @@ const draft: ReportDraft = {
   phone: '+591 70000000',
 }
 
+test('la ciudad del borrador es obligatoria y admite hasta 100 unidades UTF-16', () => {
+  const atLimit = '🏙'.repeat(50)
+  assert.deepEqual(validateDraft({ ...draft, city: 'Sucre' }), {})
+  assert.deepEqual(validateDraft({ ...draft, city: atLimit }), {})
+  assert.deepEqual(validateDraft({ ...draft, city: `${atLimit}x` }), { city: 'too_long' })
+  assert.deepEqual(validateDraft({ ...draft, city: '   ' }), { city: 'required' })
+})
+
 test('los filtros se traducen a la consulta pública sin texto vacío ni criterios ausentes', () => {
   assert.deepEqual(toReportQuery({ text: '' }), {})
   assert.equal(hasActiveFilters({ text: '   ' }), false)

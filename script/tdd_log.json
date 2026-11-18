@@ -3388,9 +3388,31 @@
     "testId": 97
   },
   {
-    "commitId": "HEAD",
+    "commitId": "6c5ecbeeaaa591008479114768645a7691c91ff4",
     "commitName": "feat(web): buscar por una ciudad escrita (#47)",
     "commitTimestamp": 1794964350240,
     "testId": 97
+  },
+  {
+    "numPassedTests": 124,
+    "failedTests": 0,
+    "numTotalTests": 124,
+    "timestamp": 1794964802185,
+    "success": false,
+    "testId": 98
+  },
+  {
+    "numPassedTests": 188,
+    "failedTests": 0,
+    "numTotalTests": 188,
+    "timestamp": 1794964865351,
+    "success": true,
+    "testId": 98
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): publicar reportes con una ciudad escrita (#47)",
+    "commitTimestamp": 1794964889316,
+    "testId": 98
   }
 ]

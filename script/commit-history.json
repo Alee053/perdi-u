@@ -2622,12 +2622,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "6c5ecbeeaaa591008479114768645a7691c91ff4",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-18T01:12:29.000Z",
       "message": "feat(web): buscar por una ciudad escrita (#47)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/6c5ecbeeaaa591008479114768645a7691c91ff4"
     },
     "stats": {
       "total": 232,
@@ -2637,6 +2637,25 @@
     },
     "coverage": 85.51,
     "test_count": 187,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-18T01:21:28.000Z",
+      "message": "feat(web): publicar reportes con una ciudad escrita (#47)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 68,
+      "additions": 55,
+      "deletions": 13,
+      "date": "2026-11-18"
+    },
+    "coverage": 85.57,
+    "test_count": 188,
     "failed_tests": 0,
     "conclusion": "success"
   }
