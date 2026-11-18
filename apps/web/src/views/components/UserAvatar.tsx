@@ -1,24 +1,24 @@
 import { useState } from 'react'
 import { UserRound } from 'lucide-react'
-import type { AccountView } from '../../presenters/app/shell.presenter'
 
 type UserAvatarProps = {
-  account: AccountView
+  photoUrl?: string
   size?: 'small' | 'large'
+  onImageError?: () => void
 }
 
-export function UserAvatar({ account, size }: UserAvatarProps) {
+export function UserAvatar({ photoUrl, size, onImageError }: UserAvatarProps) {
   // Visual fallback only: a missing or broken photo shows the generic avatar.
   const [failed, setFailed] = useState<string>()
   const className = 'user-avatar' + (size ? ` user-avatar-${size}` : '')
-  if (account.photoUrl && failed !== account.photoUrl)
+  if (photoUrl && failed !== photoUrl)
     return (
       <img
         className={className}
-        src={account.photoUrl}
+        src={photoUrl}
         alt=""
         referrerPolicy="no-referrer"
-        onError={() => setFailed(account.photoUrl)}
+        onError={onImageError ?? (() => setFailed(photoUrl))}
       />
     )
   return (

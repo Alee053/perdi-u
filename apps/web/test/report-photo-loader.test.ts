@@ -1,6 +1,32 @@
 import assert from 'node:assert/strict'
 import { test } from '@jest/globals'
-import { createReportPhotoLoader } from '../src/infrastructure/http/report-photo-loader.js'
+import {
+  createPublicPhotoLoader,
+  createReportPhotoLoader,
+} from '../src/infrastructure/http/report-photo-loader.js'
+
+test('la foto pública carga sin credenciales y su vista previa se puede liberar', async () => {
+  const source = '/authors/profile.png'
+  const signal = new AbortController().signal
+  const requests: { url: string; init?: RequestInit }[] = []
+  const released: string[] = []
+  const loader = createPublicPhotoLoader(
+    async (url, init) => {
+      requests.push({ url: String(url), init })
+      return new Response(new Blob(['foto de prueba'], { type: 'image/png' }))
+    },
+    { createObjectURL: () => 'blob:public-photo', revokeObjectURL: (url) => released.push(url) },
+  )
+
+  const resource = await loader.load(source, signal)
+
+  assert.deepEqual(requests, [
+    { url: source, init: { signal, credentials: 'omit', referrerPolicy: 'no-referrer' } },
+  ])
+  assert.equal(resource.source, 'blob:public-photo')
+  resource.release()
+  assert.deepEqual(released, ['blob:public-photo'])
+})
 
 test('las fotos privadas se leen con bearer y sus recursos se liberan sin enviar tokens a otros destinos', async () => {
   const calls: { url: string; init?: RequestInit }[] = []

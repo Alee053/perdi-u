@@ -1,6 +1,7 @@
 import { LoaderCircle, X } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import type { ReportLinkView } from '../../presenters/reports/report-detail.presenter'
+import { ReportAuthor } from './ReportAuthor'
 import { ReportPhoto } from './ReportPhoto'
 
 type ReportDetailProps = {
@@ -190,7 +191,9 @@ function ReadyDetail({
           </div>
           <div>
             <dt>Publicado por</dt>
-            <dd>{report.person}</dd>
+            <dd>
+              <ReportAuthor name={report.person} photoUrl={report.authorPhotoUrl} />
+            </dd>
           </div>
         </dl>
         <section aria-labelledby="detail-description-title">

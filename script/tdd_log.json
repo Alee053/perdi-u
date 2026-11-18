@@ -3384,9 +3384,47 @@
     "testId": 95
   },
   {
-    "commitId": "HEAD",
+    "commitId": "563d8053a1d1e7a22a5a6c2504675aa81e8c0aeb",
     "commitName": "feat(web): mostrar el resumen del catálogo real (#46)",
     "commitTimestamp": 1794962865131,
     "testId": 95
+  },
+  {
+    "numPassedTests": 191,
+    "failedTests": 1,
+    "numTotalTests": 192,
+    "timestamp": 1794962905100,
+    "success": false,
+    "testId": 96
+  },
+  {
+    "numPassedTests": 192,
+    "failedTests": 0,
+    "numTotalTests": 192,
+    "timestamp": 1794962939023,
+    "success": true,
+    "testId": 96
+  },
+  {
+    "numPassedTests": 192,
+    "failedTests": 1,
+    "numTotalTests": 193,
+    "timestamp": 1794962952586,
+    "success": false,
+    "testId": 96
+  },
+  {
+    "numPassedTests": 193,
+    "failedTests": 0,
+    "numTotalTests": 193,
+    "timestamp": 1794963008565,
+    "success": true,
+    "testId": 96
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "feat(web): mostrar la foto pública del autor (#46)",
+    "commitTimestamp": 1794963253975,
+    "testId": 96
   }
 ]

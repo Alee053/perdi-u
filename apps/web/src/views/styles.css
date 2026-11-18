@@ -454,6 +454,17 @@ nav {
   color: var(--muted);
   font-size: 13px;
 }
+.report-author {
+  display: inline-flex;
+  max-width: 100%;
+  align-items: center;
+  gap: var(--space-1);
+  overflow-wrap: anywhere;
+}
+.report-author .user-avatar {
+  width: 24px;
+  height: 24px;
+}
 .status-text {
   font-weight: 700;
 }
@@ -507,6 +518,9 @@ nav {
 }
 
 /* Overview */
+.summary > .hint {
+  margin-bottom: var(--space-3);
+}
 .metrics {
   display: flex;
   flex-wrap: wrap;

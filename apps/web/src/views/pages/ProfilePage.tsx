@@ -15,7 +15,7 @@ export function ProfilePage({ account, signingOut, onNavigate, onSignOut }: Prof
     <>
       <PageHeading title="Mi perfil" description="Los datos con los que usas PerdiU." />
       <section className="panel profile-card" aria-label="Datos de tu cuenta">
-        <UserAvatar account={account} size="large" />
+        <UserAvatar photoUrl={account.photoUrl} size="large" />
         <div>
           <h2>{account.name}</h2>
           <p>{account.email}</p>
