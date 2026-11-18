@@ -1,5 +1,5 @@
 import { whatsAppUrl } from '../../models/reports/contact.js'
-import type { CatalogReport, Report } from '../../models/reports/report.js'
+import type { CatalogReport, OwnReport, Report } from '../../models/reports/report.js'
 import type { ReportDetailRepository } from '../../models/reports/reports-repository.js'
 import type { NoticePresenter } from '../app/notice.presenter.js'
 import type { CatalogPresenter } from '../catalog/catalog.presenter.js'
@@ -110,6 +110,14 @@ export class ReportsPresenter extends Store<ReportsState> {
       saved: this.state.saved.filter((saved) => saved !== id),
       savedCatalog: this.state.savedCatalog.filter((report) => report.id !== id),
     })
+
+  markEdited = (report: OwnReport) => {
+    if (!this.state.saved.includes(report.id)) return
+    const updated: CatalogReport = { ...report, source: 'catalog' }
+    this.update({
+      savedCatalog: [...this.state.savedCatalog.filter((item) => item.id !== report.id), updated],
+    })
+  }
 
   refreshSaved = async () => {
     this.savedController?.abort()

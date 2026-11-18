@@ -62,6 +62,7 @@ export function createPresenters(env = import.meta.env) {
         refreshVisibleOverview()
       },
       onEdited: (report) => {
+        reports.markEdited(report)
         void own.load()
         void catalog.load()
         refreshVisibleOverview()

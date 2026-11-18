@@ -1,7 +1,12 @@
 import assert from 'node:assert/strict'
 import { test } from '@jest/globals'
 import type { ReportQuery, ReportSummary } from '@perdiu/contracts'
-import { demoOwner, type CatalogReport, type DemoReport } from '../../src/models/reports/report.js'
+import {
+  demoOwner,
+  type CatalogReport,
+  type DemoReport,
+  type OwnReport,
+} from '../../src/models/reports/report.js'
 import { CatalogPresenter } from '../../src/presenters/catalog/catalog.presenter.js'
 import { defaultSelection } from '../../src/presenters/catalog/filters.presenter.js'
 import { NoticePresenter } from '../../src/presenters/app/notice.presenter.js'
@@ -129,6 +134,24 @@ test('al revalidar Guardados la tarjeta toma los datos públicos actuales del re
   assert.deepEqual(
     presenter.saved().map(({ id, title, city }) => ({ id, title, city })),
     [{ id: catalogReport.id, title: 'Mochila roja', city: 'Sucre' }],
+  )
+})
+
+test('la respuesta confirmada de edición actualiza una tarjeta ya guardada', () => {
+  const { presenter } = setup()
+  presenter.toggleSaved(catalogReport.id)
+  const edited: OwnReport = {
+    ...catalogReport,
+    source: 'own',
+    title: 'Mochila actualizada',
+    city: 'Sucre',
+  }
+
+  presenter.markEdited(edited)
+
+  assert.deepEqual(
+    presenter.saved().map(({ id, title, city }) => ({ id, title, city })),
+    [{ id: catalogReport.id, title: 'Mochila actualizada', city: 'Sucre' }],
   )
 })
 
