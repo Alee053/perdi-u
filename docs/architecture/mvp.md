@@ -78,7 +78,7 @@ apps/web/src/
 ├── views/                    View
 │   ├── layouts/              AppShell, Sidebar, AppHeader
 │   ├── pages/                Una página por sección
-│   ├── components/           Tarjetas, filtros, detalle, mapa, estados vacíos
+│   ├── components/           Tarjetas, filtros, detalle y estados del catálogo
 │   └── styles.css
 └── infrastructure/           Adapters
     ├── http/                 Clientes de catálogo, publicación, fotos y cuenta con validación del DTO
@@ -111,11 +111,13 @@ Las fotos de reportes resueltos se cargan mediante el puerto `ReportPhotoLoader`
 ## 6. Flujo de una funcionalidad real: buscar en el catálogo
 
 1. **View** — `views/components/ReportFilters.tsx`: la persona escribe «cámara» o selecciona fechas «Desde/Hasta»; los controles delegan `setSearch`, `setDateFrom` y `setDateTo`.
-2. **Presenter** — `presenters/catalog/filters.presenter.ts`: conserva los valores editables y la invalidez nativa aunque el control no tenga un valor serializable; presenta errores del rango/enlace, restaura etiquetas de los filtros y admite la ciudad del enlace como opción visible. `CatalogSearchPresenter` restaura los controles antes de la primera consulta, sigue sus cambios y pide reemplazar la búsqueda al puerto `SearchNavigation`. El arranque diferido descarta montajes abandonados de React antes de enviar una consulta.
+2. **Presenter** — `presenters/catalog/filters.presenter.ts`: conserva los valores editables y la invalidez nativa aunque el control no tenga un valor serializable. Presenta errores del rango y enlace. La ciudad es texto editable, con vacío para la consulta general. `CatalogSearchPresenter` restaura los controles antes de la primera consulta, sigue sus cambios y pide reemplazar la búsqueda al puerto `SearchNavigation`. El arranque diferido descarta montajes abandonados de React antes de enviar una consulta.
 3. **Presenter** — `presenters/catalog/catalog.presenter.ts`: cancela la consulta anterior, no consulta si el rango o enlace es inválido (también al refrescar sin una selección nueva) y, para filtros válidos, publica `loading` y pide al Model la consulta.
-4. **Model** — `models/reports/filters.ts`: valida fechas calendario sin convertirlas por zona horaria, compara inclusivamente `incidentDate` en datos demo y construye `ReportQuery` omitiendo los criterios vacíos. El presenter usa el puerto `ReportsRepository`; su implementación (`infrastructure/http/catalog-client.ts`) serializa filtros a `GET /api/reports` y valida la respuesta.
+4. **Model** — `models/reports/filters.ts`: valida fechas calendario sin convertirlas por zona horaria y construye `ReportQuery` con los criterios presentes. El adapter de `ReportsRepository` (`infrastructure/http/catalog-client.ts`) envía la consulta a `GET /api/reports` y valida la respuesta. El servidor aplica coincidencia exacta de ciudad y rango inclusivo antes del límite.
 5. **Presenter**: si la respuesta sigue vigente, convierte cada reporte en `ReportCard` (`report-card.ts`: «Perdido», «Objeto», fecha `14 oct 2026`, iniciales) y publica `ready`; si falla, publica `error` con el mensaje.
-6. **View** — `useApp` re-renderiza mediante `useStore`, y `views/pages/ExplorePage.tsx` muestra la grilla, el estado vacío o el error con «Reintentar».
+6. **View** — `useApp` se suscribe mediante `useStore`. Explorar muestra tarjetas y Mapa muestra las ubicaciones declaradas. Ambas vistas usan `ReportFilters` y `CatalogResults` para los mismos controles y estados.
+
+`ReportsPresenter.mapView()` prepara las filas de Mapa usando la vista de `CatalogPresenter`. Conserva el orden, conteo y límite de la respuesta, y presenta título, tipo, categoría, ciudad y zona. El detalle usa la misma ruta pública que en Explorar. Al volver a la misma búsqueda se conservan la sección, los filtros y el foco. Una URL de búsqueda abierta por separado restaura los filtros en Explorar.
 
 La View nunca filtra ni formatea; el Model nunca sabe qué texto se mostrará.
 
@@ -127,7 +129,7 @@ La limpieza de códigos/errores de Auth notifica una vez consumidos esos paráme
 
 ## 7. Flujo de publicación y fotos privadas
 
-1. **View** — `views/pages/PublishPage.tsx` entrega archivos y cambios al Presenter y muestra sus vistas previas; no valida contenido ni accede a la red. `usePublishPage` mantiene la suscripción y libera URLs `blob:` al desmontar.
+1. **View** — `views/pages/PublishPage.tsx` entrega archivos y cambios al Presenter y muestra vistas previas y errores. `CityInput` comparte el campo editable y las sugerencias entre publicación, Explorar y Mapa. `usePublishPage` mantiene la suscripción y libera URLs `blob:` al desmontar.
 2. **Presenter** — `presenters/reports/publish.presenter.ts` valida el borrador y fotos, bloquea envíos concurrentes, conserva el estado al fallar y coordina el aviso y la vuelta al catálogo.
 3. **Model** — `models/reports/publication.ts` define las reglas y los puertos `ReportPublisher` y `ReportMediaClient`; los adapters HTTP envían formulario y archivos con el token de sesión.
 4. **API y persistencia** — `POST /media` comprueba las firmas de archivo y entrega el contenido al caso de uso. `POST /reports` valida los IDs del dueño y asocia todas las fotos en la transacción del reporte. El API responde solo con URLs de medios ya asociados; `/media/:id` sirve bytes desde el bucket privado.
@@ -138,7 +140,7 @@ La limpieza de códigos/errores de Auth notifica una vez consumidos esos paráme
 
 `requestResolve` abre la confirmación sin escribir. `confirmResolve` bloquea duplicados, espera el `204` y conserva estado/diálogo con un error seguro si falla. Al cambiar de cuenta se abortan solicitudes y se descartan tanto éxitos como fallos tardíos. Un `401` oculta datos privados y solicita ingresar nuevamente.
 
-`requestEdit` prepara el borrador sin escribir; `saveEdit` bloquea envíos duplicados, envía solo el contrato parcial y conserva borrador y errores del servidor para corregirlos. Al cancelar descarta el borrador. `ReportDetailPresenter` ofrece editar y resolver únicamente al autor de un reporte activo que también figura en su historial privado; la API y el SQL vuelven a comprobar identidad y estado. Tras una edición confirmada, `app/dependencies.ts` refresca historial, catálogo y detalle conservando los filtros. Tras el cierre confirmado, también sincroniza guardados. `ResolveConfirmation` y `EditReportDialog` usan diálogos nativos para foco y teclado. No existen controles de eliminación demo. Resumen y mapa siguen siendo ilustrativos.
+`requestEdit` prepara el borrador sin escribir; `saveEdit` bloquea envíos duplicados, envía solo el contrato parcial y conserva borrador y errores del servidor para corregirlos. Al cancelar descarta el borrador. `ReportDetailPresenter` ofrece editar y resolver únicamente al autor de un reporte activo que también figura en su historial privado; la API y el SQL vuelven a comprobar identidad y estado. Tras una edición confirmada, `app/dependencies.ts` refresca historial, catálogo y detalle conservando los filtros. Tras el cierre confirmado, también sincroniza guardados. `ResolveConfirmation` y `EditReportDialog` usan diálogos nativos para foco y teclado. No existen controles de eliminación demo. Resumen sigue mostrando datos de demostración.
 
 ## 8. Papel de React y Vite
 

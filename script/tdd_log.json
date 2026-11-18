@@ -3410,9 +3410,15 @@
     "testId": 98
   },
   {
-    "commitId": "HEAD",
+    "commitId": "98568cacb2caaf371734387e49ba1026b7899040",
     "commitName": "feat(web): publicar reportes con una ciudad escrita (#47)",
     "commitTimestamp": 1794964889316,
     "testId": 98
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "docs(web): registrar la aceptación de ciudad y zona (#47)",
+    "commitTimestamp": 1794965062140,
+    "testId": 99
   }
 ]
