@@ -211,6 +211,32 @@ test('un fallo al verificar mantiene la selección y permite reintentar', async 
   assert.equal(presenter.saved()[0]?.title, 'Mochila verificada')
 })
 
+test('respuestas tardías no restauran guardados al desmarcar o limpiar la sesión', async () => {
+  let finishCheck!: (report: ReportSummary | undefined) => void
+  const first = setup([], [], undefined, () => new Promise((resolve) => (finishCheck = resolve)))
+  first.presenter.toggleSaved(catalogReport.id)
+  const firstCheck = first.presenter.refreshSaved()
+  first.presenter.toggleSaved(catalogReport.id)
+  finishCheck(catalogReport)
+  await firstCheck
+  assert.deepEqual(first.presenter.counts(), { saved: 0 })
+
+  let finishSessionCheck!: (report: ReportSummary | undefined) => void
+  const second = setup(
+    [],
+    [],
+    undefined,
+    () => new Promise((resolve) => (finishSessionCheck = resolve)),
+  )
+  second.presenter.toggleSaved(catalogReport.id)
+  const secondCheck = second.presenter.refreshSaved()
+  second.presenter.clearPrivateData()
+  finishSessionCheck(catalogReport)
+  await secondCheck
+  assert.deepEqual(second.presenter.counts(), { saved: 0 })
+  assert.equal(second.presenter.saved().length, 0)
+})
+
 test('un cierre confirmado retira el reporte persistido de guardados', () => {
   const { presenter } = setup()
   presenter.toggleSaved(catalogReport.id)
