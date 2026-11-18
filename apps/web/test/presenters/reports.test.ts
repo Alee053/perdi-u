@@ -48,6 +48,18 @@ test('el detalle conserva todas las fotos publicadas y un respaldo cuando no hay
   assert.deepEqual(toReportCard(catalogReport).images, ['/images/object.svg'])
 })
 
+test('la tarjeta y el detalle conservan el nombre y la foto pública opcional del autor', () => {
+  const photoUrl = '/authors/profile.png'
+  const card = toReportCard({
+    ...catalogReport,
+    author: { ...catalogReport.author, photoUrl },
+  })
+
+  assert.equal(card.person, 'Santiago Demo')
+  assert.equal(card.authorPhotoUrl, photoUrl)
+  assert.equal(toReportCard(catalogReport).authorPhotoUrl, undefined)
+})
+
 function setup(reports: DemoReport[] = [], saved: string[] = []) {
   const notices: { message: string; error: boolean }[] = []
   const opened: string[] = []

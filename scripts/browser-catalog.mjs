@@ -8,6 +8,7 @@ import { createServer } from 'node:net'
 import { chromium } from 'playwright'
 import { createPool } from '@perdiu/database'
 import { assertLocalDatabase } from '@perdiu/database/config'
+import { overviewAuthorPhotos, verifyOverview } from './browser-overview.mjs'
 import { verifyReportGallery } from './browser-report-gallery.mjs'
 import { verifySearchNavigation } from './browser-search-navigation.mjs'
 
@@ -779,6 +780,21 @@ try {
   )
   await page.screenshot({ path: 'test-results/catalog-mobile.png', fullPage: true })
 
+  for (const [reportId, photoUrl] of [
+    [bag, overviewAuthorPhotos.available],
+    [cat, overviewAuthorPhotos.missing],
+  ]) {
+    await pool.query(
+      'UPDATE profiles SET photo_url = $2 WHERE id = (SELECT owner_id FROM reports WHERE id = $1)',
+      [reportId, photoUrl],
+    )
+  }
+  await verifyOverview(browser, webUrl, 'desktop', { width: 1440, height: 1000 }, { bag, cat })
+  await verifyOverview(browser, webUrl, 'mobile', { width: 390, height: 844 }, { bag, cat })
+  await pool.query('UPDATE profiles SET photo_url = NULL WHERE photo_url = ANY($1::text[])', [
+    Object.values(overviewAuthorPhotos),
+  ])
+
   const sharedUrl = await verifyReportLink('desktop', { width: 1440, height: 1000 })
   await verifyReportLink('mobile', { width: 390, height: 844 })
   await verifyReportGallery(browser, webUrl, 'desktop', { width: 1440, height: 1000 })
@@ -818,6 +834,17 @@ try {
   await page.getByRole('button', { name: 'Limpiar filtros', exact: true }).click()
   await page.getByRole('status').filter({ hasText: 'Se muestran hasta 50 resultados' }).waitFor()
   assert.equal(await page.locator('.report-card').count(), 50)
+  await page.getByRole('button', { name: 'Abrir menú' }).click()
+  await page.getByRole('navigation').getByRole('button', { name: 'Resumen', exact: true }).click()
+  await page
+    .getByRole('status')
+    .filter({ hasText: 'El resumen abarca los 50 reportes activos más recientes.' })
+    .waitFor()
+  assert.equal(await page.locator('.report-card').count(), 3)
+  await page
+    .getByRole('main')
+    .getByRole('button', { name: 'Explorar reportes', exact: true })
+    .click()
   await page.getByRole('textbox', { name: 'Buscar reportes' }).fill('sin-coincidencias-de-prueba')
   await page
     .getByRole('heading', { name: 'No se encontraron coincidencias', exact: true })
@@ -831,6 +858,8 @@ try {
   await unavailable.getByRole('heading', { name: 'Reporte no disponible.' }).waitFor()
   assert.equal(await unavailable.getByRole('button', { name: 'Copiar enlace' }).count(), 0)
   await page.goto(webUrl)
+  await page.getByRole('heading', { name: 'Todavía no hay reportes' }).waitFor()
+  assert.equal(await page.locator('.report-card').count(), 0)
   await page.getByRole('button', { name: 'Abrir menú' }).click()
   await page
     .getByRole('navigation')
@@ -840,7 +869,7 @@ try {
   assert.equal(await page.locator('.report-card').count(), 0)
   assert.deepEqual(pageErrors, [])
   console.log(
-    'Navegador: catálogo real, enlace directo/recarga/Atrás del detalle, copia pública y alternativa manual, ingreso y retorno, WhatsApp sin envío, privacidad, búsqueda sin tildes, filtros combinados, limpieza, publicación desde vacío, cambios rápidos, error/reintento con filtros, límite de 50, reinicio y móvil/escritorio verificados.',
+    'Navegador: catálogo y resumen reales, fotos del autor, enlace directo/recarga/Atrás del detalle, copia pública y alternativa manual, ingreso y retorno, WhatsApp sin envío, privacidad, búsqueda sin tildes, filtros combinados, limpieza, publicación desde vacío, cambios rápidos, error/reintento, límite de 50, reinicio y móvil/escritorio verificados.',
   )
 } finally {
   await browser?.close()

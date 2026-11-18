@@ -45,6 +45,91 @@ const summary: ReportSummary = {
   imageUrls: [],
 }
 
+test('el resumen muestra hasta tres reportes activos en el orden del catálogo', async () => {
+  const presenter = new CatalogPresenter({
+    list: async () => [
+      { ...summary, id: 'resolved', state: 'resolved' },
+      { ...summary, id: 'recent' },
+      { ...summary, id: 'next' },
+      { ...summary, id: 'third' },
+      { ...summary, id: 'oldest' },
+    ],
+  })
+
+  await presenter.load()
+  const overview = presenter.overview()
+  assert.ok(overview.status === 'ready')
+
+  assert.deepEqual(
+    overview.recent.map(({ id, source }) => ({ id, source })),
+    [
+      { id: 'recent', source: 'catalog' },
+      { id: 'next', source: 'catalog' },
+      { id: 'third', source: 'catalog' },
+    ],
+  )
+})
+
+test('el resumen cuenta las ciudades reales y explica el límite del catálogo', async () => {
+  const presenter = new CatalogPresenter({
+    list: async () =>
+      Array.from({ length: 50 }, (_, i): ReportSummary => ({
+        ...summary,
+        id: String(i),
+        city: i < 30 ? 'La Paz' : 'Sucre',
+        type: i < 30 ? 'lost' : 'found',
+      })),
+  })
+
+  await presenter.load()
+  const overview = presenter.overview()
+  assert.ok(overview.status === 'ready')
+
+  assert.deepEqual(overview.metrics, [
+    { label: 'Reportes activos', value: 50 },
+    { label: 'Perdidos', value: 30 },
+    { label: 'Encontrados', value: 20 },
+  ])
+  assert.deepEqual(overview.cities, [
+    { city: 'La Paz', count: 30 },
+    { city: 'Sucre', count: 20 },
+  ])
+  assert.equal(overview.limitMessage, 'El resumen abarca los 50 reportes activos más recientes.')
+})
+
+test('el resumen distingue carga, error y un catálogo vacío al reintentar', async () => {
+  let unavailable = true
+  const presenter = new CatalogPresenter({
+    list: async () => {
+      if (unavailable) throw new Error('network')
+      return []
+    },
+  })
+  const loading = presenter.load()
+  assert.deepEqual(presenter.overview(), { status: 'loading' })
+  await loading
+  assert.deepEqual(presenter.overview(), {
+    status: 'error',
+    message: 'No se pudo cargar el resumen. Intenta nuevamente.',
+  })
+
+  unavailable = false
+  await presenter.load()
+  assert.deepEqual(presenter.overview(), { status: 'empty' })
+})
+
+test('solo una consulta general puede alimentar el resumen', async () => {
+  const presenter = new CatalogPresenter({ list: async () => [summary] })
+
+  await presenter.load({ ...defaultSelection, search: 'Mochila' })
+  assert.equal(presenter.isGeneralQuery(), false)
+  await presenter.load({ ...defaultSelection, urlError: 'El enlace contiene filtros inválidos.' })
+  assert.equal(presenter.isGeneralQuery(), false)
+
+  await presenter.load(defaultSelection)
+  assert.equal(presenter.isGeneralQuery(), true)
+})
+
 test('el catálogo pasa de carga a datos públicos y conserva el identificador persistido', async () => {
   let resolve!: (reports: ReportSummary[]) => void
   const response = new Promise<ReportSummary[]>((done) => {

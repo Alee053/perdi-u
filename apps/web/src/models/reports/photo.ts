@@ -1,4 +1,4 @@
-/** An authenticated image resource; its owner releases it when the view stops using it. */
+/** An image resource released when the view stops using it. */
 export interface ReportPhotoResource {
   source: string
   release(): void
