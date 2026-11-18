@@ -29,6 +29,7 @@ interface EditDraft {
 }
 interface EditForm {
   id: string
+  original: EditDraft
   draft: EditDraft
   pending: boolean
   errors: Partial<Record<keyof EditDraft, string>>
@@ -94,6 +95,22 @@ function presentEditErrors(issues: OwnReportsFailure['fieldErrors']): EditForm['
     if (message) errors[field] = message
   }
   return errors
+}
+
+function createEditPatch(original: EditDraft, draft: EditDraft): EditReportInput {
+  return {
+    ...(draft.type !== original.type && { type: draft.type }),
+    ...(draft.category !== original.category && { category: draft.category }),
+    ...(draft.title !== original.title && { title: draft.title }),
+    ...(draft.description !== original.description && { description: draft.description }),
+    ...(draft.city !== original.city && { city: draft.city }),
+    ...(draft.zone !== original.zone && { zone: draft.zone }),
+    ...(draft.incidentDate !== original.incidentDate && { incidentDate: draft.incidentDate }),
+    ...(draft.category === 'pet' &&
+      (original.category !== 'pet' || draft.petSpecies !== original.petSpecies) && {
+        petSpecies: draft.petSpecies,
+      }),
+  }
 }
 
 export class OwnReportsPresenter extends Store<OwnReportsState> {
@@ -175,19 +192,21 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
     if (!this.ownerId) return this.dependencies.onSessionRejected()
     const report = this.find(id)
     if (!report || report.state !== 'active' || this.state.pending) return
+    const draft: EditDraft = {
+      type: report.type,
+      category: report.category,
+      title: report.title,
+      description: report.description,
+      city: report.city,
+      zone: report.zone,
+      incidentDate: report.incidentDate,
+      petSpecies: report.petSpecies ?? '',
+    }
     this.update({
       edit: {
         id,
-        draft: {
-          type: report.type,
-          category: report.category,
-          title: report.title,
-          description: report.description,
-          city: report.city,
-          zone: report.zone,
-          incidentDate: report.incidentDate,
-          petSpecies: report.petSpecies ?? '',
-        },
+        original: draft,
+        draft,
         pending: false,
         errors: {},
         message: '',
@@ -217,16 +236,7 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
     const controller = new AbortController()
     this.editMutation = controller
     this.update({ edit: { ...edit, pending: true, errors: {}, message: '' } })
-    const patch: EditReportInput = {
-      type: edit.draft.type,
-      category: edit.draft.category,
-      title: edit.draft.title,
-      description: edit.draft.description,
-      city: edit.draft.city,
-      zone: edit.draft.zone,
-      incidentDate: edit.draft.incidentDate,
-      ...(edit.draft.category === 'pet' && { petSpecies: edit.draft.petSpecies }),
-    }
+    const patch = createEditPatch(edit.original, edit.draft)
     let saved
     try {
       saved = await this.repository.edit(edit.id, patch, controller.signal)

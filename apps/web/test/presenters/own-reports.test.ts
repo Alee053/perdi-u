@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { test } from '@jest/globals'
-import type { ReportSummary } from '@perdiu/contracts'
+import type { EditReportInput, ReportSummary } from '@perdiu/contracts'
 import {
   OwnReportsFailure,
   type OwnReportsRepository,
@@ -132,6 +132,25 @@ test('guardar el borrador actualiza el historial y avisa a la composición', asy
   assert.equal(presenter.view().edit, null)
   assert.deepEqual(edited, ['Mochila azul'])
   assert.deepEqual(notices, ['Cambios guardados.'])
+})
+
+test('editar solo el título conserva los cambios recientes del reporte en otra sesión', async () => {
+  let receivedPatch: EditReportInput | undefined
+  const { presenter } = setup({
+    list: async () => [report('active')],
+    edit: async (id, patch) => {
+      receivedPatch = patch
+      return report(id, { ...patch, city: 'Sucre' })
+    },
+  })
+  await presenter.setOwner('owner-1')
+  presenter.requestEdit('active')
+  presenter.setEditField('title', 'Mochila actualizada')
+
+  assert.equal(await presenter.submitEdit(), true)
+  assert.deepEqual(receivedPatch, { title: 'Mochila actualizada' })
+  assert.equal(presenter.find('active')?.title, 'Mochila actualizada')
+  assert.equal(presenter.find('active')?.city, 'Sucre')
 })
 
 test('un rechazo de validación muestra el error junto al campo y conserva el borrador', async () => {

@@ -2736,12 +2736,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "d497be8c50bb6710205972f13ed6b47e1fe93075",
     "author": "Santiamen23",
     "commit": {
       "date": "2026-11-18T01:29:52.000Z",
       "message": "chore(repo): integrar main con el resumen actualizado (#47)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/d497be8c50bb6710205972f13ed6b47e1fe93075"
     },
     "stats": {
       "total": 702,
@@ -2751,6 +2751,25 @@
     },
     "coverage": 85.63,
     "test_count": 194,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-18T01:52:40.000Z",
+      "message": "fix(web): preserve concurrent report changes (#48)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 71,
+      "additions": 50,
+      "deletions": 21,
+      "date": "2026-11-18"
+    },
+    "coverage": 85.65,
+    "test_count": 195,
     "failed_tests": 0,
     "conclusion": "success"
   }

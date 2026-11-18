@@ -3552,9 +3552,47 @@
     "testId": 100
   },
   {
-    "commitId": "HEAD",
+    "commitId": "d497be8c50bb6710205972f13ed6b47e1fe93075",
     "commitName": "chore(repo): integrar main con el resumen actualizado (#47)",
     "commitTimestamp": 1794965393965,
     "testId": 100
+  },
+  {
+    "numPassedTests": 194,
+    "failedTests": 0,
+    "numTotalTests": 194,
+    "timestamp": 1794966576784,
+    "success": true,
+    "testId": 101
+  },
+  {
+    "numPassedTests": 194,
+    "failedTests": 1,
+    "numTotalTests": 195,
+    "timestamp": 1794966669081,
+    "success": false,
+    "testId": 101
+  },
+  {
+    "numPassedTests": 195,
+    "failedTests": 0,
+    "numTotalTests": 195,
+    "timestamp": 1794966702629,
+    "success": true,
+    "testId": 101
+  },
+  {
+    "numPassedTests": 195,
+    "failedTests": 0,
+    "numTotalTests": 195,
+    "timestamp": 1794966738054,
+    "success": true,
+    "testId": 101
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "fix(web): preserve concurrent report changes (#48)",
+    "commitTimestamp": 1794966760885,
+    "testId": 101
   }
 ]
