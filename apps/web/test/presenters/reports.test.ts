@@ -65,6 +65,8 @@ function setup(
   reports: DemoReport[] = [],
   saved: string[] = [],
   catalogPresenter = new CatalogPresenter({ list: async () => [] }),
+  findSaved: (id: string, signal: AbortSignal) => Promise<ReportSummary | undefined> = async () =>
+    undefined,
 ) {
   const notices: { message: string; error: boolean }[] = []
   const opened: string[] = []
@@ -78,6 +80,7 @@ function setup(
     reports,
     {
       catalog,
+      savedReports: { find: findSaved },
       notices: { show: (message: string, error = false) => notices.push({ message, error }) },
       effects: { openWhatsApp: (url: string) => opened.push(url) },
       links: { open: (id: string) => void links.push(id) },
@@ -109,6 +112,49 @@ test('guardar un reporte del catálogo lo conserva aunque cambien los resultados
       'Quitaste este reporte de tus guardados.',
     ],
   )
+})
+
+test('al revalidar Guardados la tarjeta toma los datos públicos actuales del reporte', async () => {
+  const updated = { ...catalogReport, title: 'Mochila roja', city: 'Sucre' }
+  let requests = 0
+  const { presenter } = setup([], [], undefined, async (id) => {
+    requests++
+    return id === catalogReport.id ? updated : undefined
+  })
+  presenter.toggleSaved(catalogReport.id)
+
+  await presenter.refreshSaved()
+
+  assert.equal(requests, 1)
+  assert.deepEqual(
+    presenter.saved().map(({ id, title, city }) => ({ id, title, city })),
+    [{ id: catalogReport.id, title: 'Mochila roja', city: 'Sucre' }],
+  )
+})
+
+test('revalidar guardados quita reportes no disponibles o resueltos y actualiza el conteo', async () => {
+  const resolved = { ...catalogReport, id: 'resolved-1', state: 'resolved' as const }
+  const unavailable = { ...catalogReport, id: 'unavailable-1' }
+  const catalogPresenter = new CatalogPresenter({
+    list: async () => [catalogReport, resolved, unavailable],
+  })
+  await catalogPresenter.load(defaultSelection)
+  const { presenter } = setup([], [], catalogPresenter, async (id) =>
+    id === catalogReport.id ? catalogReport : id === resolved.id ? resolved : undefined,
+  )
+  presenter.toggleSaved(catalogReport.id)
+  presenter.toggleSaved(resolved.id)
+  presenter.toggleSaved(unavailable.id)
+
+  await presenter.refreshSaved()
+
+  assert.deepEqual(
+    presenter.saved().map(({ id }) => id),
+    [catalogReport.id],
+  )
+  assert.deepEqual(presenter.counts(), { saved: 1 })
+  assert.equal(presenter.isSaved(resolved.id), false)
+  assert.equal(presenter.isSaved(unavailable.id), false)
 })
 
 test('un cierre confirmado retira el reporte persistido de guardados', () => {

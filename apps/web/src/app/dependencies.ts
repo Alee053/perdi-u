@@ -36,6 +36,7 @@ export function createPresenters(env = import.meta.env) {
   const auth = new AuthPresenter(gateway, createAccountClient(apiUrl, accessToken))
   const notices = new NoticePresenter(browserEffects)
   const publicReports = createReportsClient(apiUrl)
+  const reportDetails = createReportDetailClient(apiUrl, accessToken)
   const catalog = new CatalogPresenter(publicReports)
   const overviewCatalog = new CatalogPresenter(publicReports)
   const filters = new FiltersPresenter()
@@ -76,6 +77,7 @@ export function createPresenters(env = import.meta.env) {
         find: (id) => catalog.find(id) ?? overviewCatalog.find(id) ?? reportDetail.find(id),
         view: catalog.view,
       },
+      savedReports: reportDetails,
       notices,
       effects: browserEffects,
       links: { open: (id) => void reportDetail.open(id) },
@@ -83,7 +85,7 @@ export function createPresenters(env = import.meta.env) {
     demoSavedIds,
   )
   const reportDetail = new ReportDetailPresenter({
-    repository: createReportDetailClient(apiUrl, accessToken),
+    repository: reportDetails,
     auth,
     effects: browserEffects,
     onLoginRequired: () => shell.openAuth('login'),

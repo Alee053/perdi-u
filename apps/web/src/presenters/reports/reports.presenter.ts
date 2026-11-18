@@ -1,5 +1,6 @@
 import { whatsAppUrl } from '../../models/reports/contact.js'
 import type { CatalogReport, Report } from '../../models/reports/report.js'
+import type { ReportDetailRepository } from '../../models/reports/reports-repository.js'
 import type { NoticePresenter } from '../app/notice.presenter.js'
 import type { CatalogPresenter } from '../catalog/catalog.presenter.js'
 import type { Effects } from '../effects.js'
@@ -18,6 +19,7 @@ export interface ReportsState {
 
 interface Dependencies {
   catalog: Pick<CatalogPresenter, 'find' | 'view'>
+  savedReports: Pick<ReportDetailRepository, 'find'>
   notices: Pick<NoticePresenter, 'show'>
   effects: Pick<Effects, 'openWhatsApp'>
   /** Opens a catalog report through its stable link. */
@@ -30,6 +32,8 @@ const isActive = (report: Report) => report.state === 'active'
  * Report projections for locations, the saved list and the demo detail.
  */
 export class ReportsPresenter extends Store<ReportsState> {
+  private savedRequest = 0
+  private savedController?: AbortController
   constructor(
     reports: Report[],
     private readonly dependencies: Dependencies,
@@ -97,6 +101,42 @@ export class ReportsPresenter extends Store<ReportsState> {
       savedCatalog: this.state.savedCatalog.filter((report) => report.id !== id),
     })
 
+  refreshSaved = async () => {
+    this.savedController?.abort()
+    const request = ++this.savedRequest
+    const ids = this.state.saved.filter((id) =>
+      this.state.savedCatalog.some((report) => report.id === id),
+    )
+    if (!ids.length) return
+    const controller = new AbortController()
+    this.savedController = controller
+    const results = await Promise.all(
+      ids.map(async (id) => {
+        try {
+          return { id, report: await this.dependencies.savedReports.find(id, controller.signal) }
+        } catch {
+          return { id, failed: true as const }
+        }
+      }),
+    )
+    if (request !== this.savedRequest) return
+    let saved = this.state.saved
+    let savedCatalog = this.state.savedCatalog
+    for (const result of results) {
+      if (!this.state.saved.includes(result.id) || 'failed' in result) continue
+      if (!result.report || result.report.state !== 'active') {
+        saved = saved.filter((id) => id !== result.id)
+        savedCatalog = savedCatalog.filter((report) => report.id !== result.id)
+      } else {
+        savedCatalog = [
+          ...savedCatalog.filter((report) => report.id !== result.id),
+          { ...result.report, source: 'catalog' },
+        ]
+      }
+    }
+    this.update({ saved, savedCatalog })
+  }
+
   contact = (id: string) => {
     const report = this.find(id)
     if (report?.source !== 'demo') return
@@ -109,7 +149,11 @@ export class ReportsPresenter extends Store<ReportsState> {
 
   add = (report: Report) => this.update({ reports: [report, ...this.state.reports] })
   /** Private, per-account state must not survive the session. */
-  clearPrivateData = () => this.update({ saved: [], savedCatalog: [], selected: null })
+  clearPrivateData = () => {
+    this.savedRequest++
+    this.savedController?.abort()
+    this.update({ saved: [], savedCatalog: [], selected: null })
+  }
 
   isSaved = (id: string) => this.state.saved.includes(id)
 

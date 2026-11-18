@@ -2793,12 +2793,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "8deb56d9e1de0dba3761637e283ad6401d73e4a9",
     "author": "Sebastian_Arce_Antezana",
     "commit": {
       "date": "2026-11-18T01:55:26.000Z",
       "message": "fix(web): keep pet edit fields valid (#48)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/8deb56d9e1de0dba3761637e283ad6401d73e4a9"
     },
     "stats": {
       "total": 48,
@@ -2808,6 +2808,25 @@
     },
     "coverage": 85.8,
     "test_count": 198,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Sebastian_Arce_Antezana",
+    "commit": {
+      "date": "2026-11-18T01:59:57.000Z",
+      "message": "feat(web): refresh saved report details (#48)",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 96,
+      "additions": 94,
+      "deletions": 2,
+      "date": "2026-11-18"
+    },
+    "coverage": 85.89,
+    "test_count": 200,
     "failed_tests": 0,
     "conclusion": "success"
   }
