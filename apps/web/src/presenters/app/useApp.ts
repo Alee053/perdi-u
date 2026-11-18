@@ -85,6 +85,7 @@ export function useApp(presenters: AppPresenters) {
         close: reportDetail.close,
         retry: () => void reportDetail.retry(),
         contact: () => void reportDetail.contact(),
+        copyLink: () => void reportDetail.copyLink(),
         selectPhoto: reportDetail.selectPhoto,
         nextPhoto: reportDetail.nextPhoto,
         previousPhoto: reportDetail.previousPhoto,

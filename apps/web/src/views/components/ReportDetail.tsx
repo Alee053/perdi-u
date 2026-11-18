@@ -7,6 +7,7 @@ type ReportDetailProps = {
   view: ReportLinkView
   onSave: () => void
   onContact: () => void
+  onCopyLink?: () => void
   onResolve: () => void
   onEdit: () => void
   onRetry?: () => void
@@ -20,6 +21,7 @@ export function ReportDetail({
   view,
   onSave,
   onContact,
+  onCopyLink,
   onResolve,
   onEdit,
   onRetry,
@@ -88,6 +90,7 @@ export function ReportDetail({
       {view.status === 'ready' && (
         <ReadyDetail
           view={view}
+          onCopyLink={onCopyLink}
           {...{ onSave, onContact, onResolve, onEdit, onSelectPhoto, onNextPhoto, onPreviousPhoto }}
         />
       )}
@@ -99,6 +102,7 @@ function ReadyDetail({
   view,
   onSave,
   onContact,
+  onCopyLink,
   onResolve,
   onEdit,
   onSelectPhoto,
@@ -108,6 +112,7 @@ function ReadyDetail({
   view: Extract<ReportLinkView, { status: 'ready' }>
   onSave: () => void
   onContact: () => void
+  onCopyLink?: () => void
   onResolve: () => void
   onEdit: () => void
   onSelectPhoto: (index: number) => void
@@ -222,10 +227,38 @@ function ReadyDetail({
               Contactar por WhatsApp
             </button>
           )}
+          {view.share && onCopyLink && (
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={onCopyLink}
+              aria-disabled={view.share.pending}
+            >
+              {view.share.pending && <LoaderCircle size={15} className="spin" aria-hidden="true" />}
+              Copiar enlace
+            </button>
+          )}
           <button className="secondary-button" onClick={onSave} aria-pressed={saved}>
             {saved ? 'Guardado' : 'Guardar'}
           </button>
         </div>
+        {view.share && (
+          <p id="report-share-status" role="status">
+            {view.share.message}
+          </p>
+        )}
+        {view.share?.manualUrl && (
+          <label className="form-field">
+            Enlace del reporte
+            <input
+              type="text"
+              readOnly
+              value={view.share.manualUrl}
+              aria-describedby="report-share-status"
+              onFocus={(event) => event.currentTarget.select()}
+            />
+          </label>
+        )}
         {view.contactMessage && (
           <p className="detail-notice" role="status">
             {view.contactMessage}

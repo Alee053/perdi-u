@@ -465,13 +465,69 @@ function fakeSession() {
   }
 }
 
+async function verifyReportSharing(page, size) {
+  const context = page.context()
+  const dialog = page.getByRole('dialog')
+  const copy = dialog.getByRole('button', { name: 'Copiar enlace', exact: true })
+  const copied = dialog.getByRole('status').filter({ hasText: /^Enlace copiado$/ })
+  const address = page.url()
+  await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: webUrl })
+  let contactRequests = 0
+  const watchContact = (request) => {
+    if (new URL(request.url()).pathname === `/api/reports/${bag}/contact`) contactRequests++
+  }
+  page.on('request', watchContact)
+  if (size === 'desktop') {
+    await dialog.getByRole('button', { name: 'Contactar por WhatsApp', exact: true }).focus()
+    await page.keyboard.press('Tab')
+    assert.ok(await copy.evaluate((button) => button === document.activeElement))
+    await page.keyboard.press('Enter')
+  } else {
+    await copy.tap()
+  }
+  await copied.waitFor()
+  const sharedUrl = await page.evaluate(() => navigator.clipboard.readText())
+  assert.equal(sharedUrl, `${webUrl}/reportes/${bag}`)
+  assert.equal(page.url(), address)
+  assert.equal(contactRequests, 0)
+  assert.equal(context.pages().length, 1)
+  page.off('request', watchContact)
+  await page.screenshot({ path: `test-results/report-share-copied-${size}.png`, fullPage: true })
+
+  const recipient = await browser.newPage({ viewport: page.viewportSize() })
+  try {
+    await recipient.goto(sharedUrl)
+    await recipient.getByRole('heading', { name: 'Mochila azul encontrada', exact: true }).waitFor()
+  } finally {
+    await recipient.close()
+  }
+
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, 'clipboard', { value: undefined })
+  })
+  await copy.click()
+  await dialog.getByRole('status').filter({ hasText: 'cópialo manualmente' }).waitFor()
+  assert.equal(await copied.count(), 0)
+  const manual = dialog.getByRole('textbox', { name: 'Enlace del reporte', exact: true })
+  assert.equal(await manual.inputValue(), sharedUrl)
+  assert.equal(await manual.evaluate((input) => input.readOnly), true)
+  await manual.focus()
+  assert.equal(
+    await manual.evaluate((input) => input.value.slice(input.selectionStart, input.selectionEnd)),
+    sharedUrl,
+  )
+  assert.ok(await dialog.evaluate((element) => element.scrollWidth <= element.clientWidth + 1))
+  await page.screenshot({ path: `test-results/report-share-manual-${size}.png`, fullPage: true })
+  return sharedUrl
+}
+
 /**
- * Stable report link: direct access, reload, «Atrás», unavailable/error, login return and the
+ * Stable report link: direct access, copy, reload, «Atrás», unavailable/error, login return and the
  * WhatsApp chat. Auth and the private contact are doubled here because this browser run has no
  * Auth service; the HTTP integration verifies the real guard and the private phone.
  */
 async function verifyReportLink(size, viewport) {
-  const context = await browser.newContext({ viewport })
+  const context = await browser.newContext({ viewport, hasTouch: size === 'mobile' })
   const page = await context.newPage()
   page.on('pageerror', (error) => pageErrors.push(error.message))
   const bodies = []
@@ -483,12 +539,13 @@ async function verifyReportLink(size, viewport) {
   const dialog = page.getByRole('dialog')
   const contact = dialog.getByRole('button', { name: 'Contactar por WhatsApp', exact: true })
   try {
-    await page.goto(`${webUrl}/reportes/${bag}`)
+    await page.goto(`${webUrl}/reportes/${bag}?q=mochila#detalle`)
     await dialog.getByRole('heading', { name: 'Mochila azul encontrada', exact: true }).waitFor()
     const text = await dialog.textContent()
     for (const field of ['Encontrado', 'Objeto', 'Miraflores', 'La Paz', 'Santiago Demo'])
       assert.match(text, new RegExp(field), field)
     assert.equal(await dialog.getByRole('img').getAttribute('src'), '/images/object.svg')
+    const sharedUrl = await verifyReportSharing(page, size)
     await page.reload()
     await dialog.getByRole('heading', { name: 'Mochila azul encontrada', exact: true }).waitFor()
     assert.ok(!privateData.test(await page.content()), 'el HTML no contiene datos privados')
@@ -500,6 +557,7 @@ async function verifyReportLink(size, viewport) {
       await page.goto(`${webUrl}/reportes/${id}`)
       await dialog.getByText('Reporte no disponible.', { exact: true }).waitFor()
       assert.equal(await contact.count(), 0, id)
+      assert.equal(await dialog.getByRole('button', { name: 'Copiar enlace' }).count(), 0, id)
     }
 
     let failOnce = true
@@ -603,6 +661,7 @@ async function verifyReportLink(size, viewport) {
       await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1),
     )
     await page.screenshot({ path: `test-results/report-link-${size}.png`, fullPage: true })
+    return sharedUrl
   } finally {
     await context.close()
   }
@@ -720,7 +779,7 @@ try {
   )
   await page.screenshot({ path: 'test-results/catalog-mobile.png', fullPage: true })
 
-  await verifyReportLink('desktop', { width: 1440, height: 1000 })
+  const sharedUrl = await verifyReportLink('desktop', { width: 1440, height: 1000 })
   await verifyReportLink('mobile', { width: 390, height: 844 })
   await verifyReportGallery(browser, webUrl, 'desktop', { width: 1440, height: 1000 })
   await verifyReportGallery(browser, webUrl, 'mobile', { width: 390, height: 844 })
@@ -767,7 +826,11 @@ try {
   await page.getByRole('status').filter({ hasText: 'Se muestran hasta 50 resultados' }).waitFor()
 
   await pool.query('UPDATE reports SET state = $1', ['resolved'])
-  await page.reload()
+  await page.goto(sharedUrl)
+  const unavailable = page.getByRole('dialog')
+  await unavailable.getByRole('heading', { name: 'Reporte no disponible.' }).waitFor()
+  assert.equal(await unavailable.getByRole('button', { name: 'Copiar enlace' }).count(), 0)
+  await page.goto(webUrl)
   await page.getByRole('button', { name: 'Abrir menú' }).click()
   await page
     .getByRole('navigation')
@@ -777,7 +840,7 @@ try {
   assert.equal(await page.locator('.report-card').count(), 0)
   assert.deepEqual(pageErrors, [])
   console.log(
-    'Navegador: catálogo real, enlace directo/recarga/Atrás del detalle, ingreso y retorno, WhatsApp sin envío, privacidad, búsqueda sin tildes, filtros combinados, limpieza, publicación desde vacío, cambios rápidos, error/reintento con filtros, límite de 50, reinicio y móvil/escritorio verificados.',
+    'Navegador: catálogo real, enlace directo/recarga/Atrás del detalle, copia pública y alternativa manual, ingreso y retorno, WhatsApp sin envío, privacidad, búsqueda sin tildes, filtros combinados, limpieza, publicación desde vacío, cambios rápidos, error/reintento con filtros, límite de 50, reinicio y móvil/escritorio verificados.',
   )
 } finally {
   await browser?.close()

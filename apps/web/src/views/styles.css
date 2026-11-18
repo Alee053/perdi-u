@@ -99,7 +99,8 @@ p {
   border-color: var(--green);
 }
 .primary-button:disabled,
-.secondary-button:disabled {
+.secondary-button:disabled,
+.secondary-button[aria-disabled='true'] {
   cursor: progress;
   opacity: 0.7;
 }

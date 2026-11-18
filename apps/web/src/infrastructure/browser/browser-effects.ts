@@ -61,6 +61,11 @@ export const browserEffects = {
   absoluteUrl(path: string) {
     return new URL(path, window.location.origin).href
   },
+  async copyText(text: string) {
+    const clipboard = window.navigator.clipboard
+    if (!clipboard) throw new Error('Portapapeles no disponible.')
+    await clipboard.writeText(text)
+  },
   /** The presenter receives a `File` from the input; it is a `Blob` for the browser. */
   createPreview(file: { type: string; size: number }) {
     return URL.createObjectURL(file as Blob)

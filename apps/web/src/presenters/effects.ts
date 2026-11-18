@@ -27,6 +27,8 @@ export interface Effects {
   back(): void
   /** Absolute address of an app path, to share it outside PerdiU. */
   absoluteUrl(path: string): string
+  /** Fulfills after writing to the clipboard, or rejects if it cannot write. */
+  copyText(text: string): Promise<void>
   createPreview(file: PhotoFile): string
   revokePreview(url: string): void
   now(): Date

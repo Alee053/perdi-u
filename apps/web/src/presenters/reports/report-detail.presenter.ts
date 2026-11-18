@@ -13,6 +13,12 @@ import {
 } from './report-card.js'
 import { parseReportPath, reportPath } from './report-route.js'
 
+interface ShareLinkView {
+  pending: boolean
+  message?: string
+  manualUrl?: string
+}
+
 export type ReportDetailState =
   | { status: 'closed' }
   | { status: 'loading'; id: string }
@@ -26,6 +32,7 @@ export type ReportDetailState =
       contacting: boolean
       /** Why the chat could not open; the phone itself never enters the state. */
       contactMessage?: string
+      share?: ShareLinkView
     }
   | { status: 'unavailable' | 'error'; id: string; message: string }
 
@@ -33,7 +40,13 @@ export type ReportDetailState =
 export type ReportLinkView =
   | { status: 'loading' }
   | { status: 'unavailable' | 'error'; message: string; canRetry: boolean }
-  | { status: 'ready'; detail: ReportDetailView; contacting: boolean; contactMessage?: string }
+  | {
+      status: 'ready'
+      detail: ReportDetailView
+      contacting: boolean
+      contactMessage?: string
+      share?: ShareLinkView
+    }
 
 interface Dependencies {
   repository: ReportDetailRepository
@@ -42,6 +55,7 @@ interface Dependencies {
     Effects,
     | 'openWhatsApp'
     | 'absoluteUrl'
+    | 'copyText'
     | 'currentPath'
     | 'hasAppReturn'
     | 'showPath'
@@ -59,6 +73,7 @@ const unavailable = 'Reporte no disponible.'
 const loadFailed = 'No se pudo cargar el reporte. Intenta nuevamente.'
 const noContact = 'La persona que publicó este reporte no tiene un WhatsApp disponible.'
 const contactFailed = 'No se pudo obtener el contacto. Intenta nuevamente.'
+const canonicalReportId = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/
 
 /** Report reached by its link: loading, unavailable, error/retry and contact with the author. */
 export class ReportDetailPresenter extends Store<ReportDetailState> {
@@ -153,6 +168,8 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
       this.setState({ status: 'unavailable', id, message: unavailable })
       return
     }
+    const active = report.state === 'active'
+    const canShare = active && report.id === id.toLowerCase() && canonicalReportId.test(report.id)
     this.loaded = { ...report, source: 'catalog' }
     this.setState({
       status: 'ready',
@@ -160,8 +177,9 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
       card: toReportCard(this.loaded),
       selectedPhoto: 0,
       authorId: report.author.id,
-      active: report.state === 'active',
+      active,
       contacting: false,
+      ...(canShare && { share: { pending: false } }),
     })
   }
 
@@ -183,6 +201,28 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
       this.selectPhoto(
         (state.selectedPhoto + state.card.images.length - 1) % state.card.images.length,
       )
+  }
+
+  copyLink = async () => {
+    const { state } = this
+    if (state.status !== 'ready' || !state.share || state.share.pending) return
+    const { effects } = this.dependencies
+    const url = effects.absoluteUrl(reportPath(state.card.id))
+    const request = this.request
+    this.setState({ ...state, share: { pending: true } })
+    let share: ShareLinkView
+    try {
+      await effects.copyText(url)
+      share = { pending: false, message: 'Enlace copiado' }
+    } catch {
+      share = {
+        pending: false,
+        message: 'Selecciona el enlace y cópialo manualmente.',
+        manualUrl: url,
+      }
+    }
+    if (request === this.request && this.state.status === 'ready')
+      this.setState({ ...this.state, share })
   }
 
   /** WhatsApp with the author: a visitor is asked to sign in first. */
@@ -238,6 +278,7 @@ export class ReportDetailPresenter extends Store<ReportDetailState> {
       },
       contacting: state.contacting,
       ...(state.contactMessage && { contactMessage: state.contactMessage }),
+      ...(state.share && { share: state.share }),
     }
   }
 

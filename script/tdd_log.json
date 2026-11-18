@@ -3059,6 +3059,82 @@
     "numPassedTests": 174,
     "failedTests": 1,
     "numTotalTests": 175,
+    "timestamp": 1794958101208,
+    "success": false,
+    "testId": 89
+  },
+  {
+    "numPassedTests": 175,
+    "failedTests": 0,
+    "numTotalTests": 175,
+    "timestamp": 1794958160458,
+    "success": true,
+    "testId": 89
+  },
+  {
+    "numPassedTests": 175,
+    "failedTests": 1,
+    "numTotalTests": 176,
+    "timestamp": 1794958181036,
+    "success": false,
+    "testId": 89
+  },
+  {
+    "numPassedTests": 176,
+    "failedTests": 0,
+    "numTotalTests": 176,
+    "timestamp": 1794958240827,
+    "success": true,
+    "testId": 89
+  },
+  {
+    "numPassedTests": 176,
+    "failedTests": 1,
+    "numTotalTests": 177,
+    "timestamp": 1794958270635,
+    "success": false,
+    "testId": 89
+  },
+  {
+    "numPassedTests": 177,
+    "failedTests": 0,
+    "numTotalTests": 177,
+    "timestamp": 1794958325466,
+    "success": true,
+    "testId": 89
+  },
+  {
+    "numPassedTests": 177,
+    "failedTests": 1,
+    "numTotalTests": 178,
+    "timestamp": 1794958395809,
+    "success": false,
+    "testId": 89
+  },
+  {
+    "numPassedTests": 178,
+    "failedTests": 0,
+    "numTotalTests": 178,
+    "timestamp": 1794958417472,
+    "success": true,
+    "testId": 89
+  },
+  {
+    "commitId": "584a88e5354abddca10712a7555d4120a8b02523",
+    "commitName": "feat(web): copiar el enlace público del reporte (#28)",
+    "commitTimestamp": 1794958699695,
+    "testId": 89
+  },
+  {
+    "commitId": "88556617d9eb59b4ab1c31b655b38d3fafdab330",
+    "commitName": "test(web): verificar la copia pública en navegador (#28)",
+    "commitTimestamp": 1794958751005,
+    "testId": 90
+  },
+  {
+    "numPassedTests": 174,
+    "failedTests": 1,
+    "numTotalTests": 175,
     "timestamp": 1794935981545,
     "success": false,
     "testId": 89
@@ -3224,9 +3300,15 @@
     "testId": 92
   },
   {
-    "commitId": "HEAD",
+    "commitId": "3b80f5a0a3a25f1d6e5f338d4810a438e3491479",
     "commitName": "docs(web): registrar la aceptación de filtros persistidos (#29)",
     "commitTimestamp": 1794939716242,
     "testId": 93
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "Merge remote-tracking branch 'origin/main' into feat/s2-06-restaurar-filtros\n\n# Conflicts:\n#\tapps/web/src/presenters/reports/report-detail.presenter.ts\n#\tdocs/testing.md\n#\tscript/commit-history.json\n#\tscript/tdd_log.json",
+    "commitTimestamp": 1794960478949,
+    "testId": 94
   }
 ]
