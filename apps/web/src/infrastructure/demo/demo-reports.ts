@@ -126,6 +126,3 @@ export const demoReports: DemoReport[] = [
     phone: demoOwner.phone,
   },
 ]
-
-/** Reports saved on this device when the demo starts. */
-export const demoSavedIds = ['demo-3']

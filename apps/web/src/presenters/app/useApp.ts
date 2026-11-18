@@ -67,6 +67,9 @@ export function useApp(presenters: AppPresenters) {
     void overviewCatalog.load()
     return () => overviewCatalog.clearResult()
   }, [overviewCatalog, separateOverview])
+  useEffect(() => {
+    if (shellState.section === 'saved' && !shellState.authView) void reports.refreshSaved()
+  }, [reports, shellState.authView, shellState.section])
 
   const counts = reports.counts()
   return {
@@ -84,6 +87,7 @@ export function useApp(presenters: AppPresenters) {
     map: reports.mapView(),
     myReports: own.view(),
     saved: reports.saved(),
+    savedStatus: reports.savedStatus(),
     detail: reports.detail(),
     reportLink: reportDetail.view(),
     publish: publishState,
@@ -100,6 +104,7 @@ export function useApp(presenters: AppPresenters) {
       dismissNotice: notices.dismiss,
       retryCatalog: () => void catalog.load(),
       retryOverview: () => void overviewSource.load(),
+      retrySaved: () => void reports.refreshSaved(),
       filters,
       reports,
       own,

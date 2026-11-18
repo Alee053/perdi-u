@@ -153,6 +153,22 @@ async function verifySearch(page, size) {
   const zone = page.getByRole('textbox', { name: 'Zona o barrio' })
   const city = page.getByLabel('Ciudad', { exact: true })
   const camera = ['Cámara de prueba perdida', 'Perrita de prueba encontrada']
+  if (size === 'mobile') await page.getByRole('button', { name: 'Abrir menú' }).click()
+  await page
+    .getByRole('navigation')
+    .getByRole('button', { name: /^Guardados/ })
+    .click()
+  await page.getByRole('heading', { name: 'Reportes guardados', exact: true }).waitFor()
+  assert.equal(
+    await page.locator('.report-card').count(),
+    0,
+    'una sesión nueva empieza sin guardados',
+  )
+  if (size === 'mobile') await page.getByRole('button', { name: 'Abrir menú' }).click()
+  await page
+    .getByRole('navigation')
+    .getByRole('button', { name: /^Explorar reportes/ })
+    .click()
   await zone.fill('san jose')
   await expectTitles(page, ['Cámara de prueba perdida', 'Carné de prueba encontrado'])
   await city.fill('Cochabamba')

@@ -1,7 +1,7 @@
 import { createAuthGateway } from '../infrastructure/auth/supabase-gateway.js'
 import { browserEffects } from '../infrastructure/browser/browser-effects.js'
 import { createSearchNavigation } from '../infrastructure/browser/search-navigation.js'
-import { demoReports, demoSavedIds } from '../infrastructure/demo/demo-reports.js'
+import { demoReports } from '../infrastructure/demo/demo-reports.js'
 import { createAccountClient } from '../infrastructure/http/account-client.js'
 import {
   createReportDetailClient,
@@ -69,21 +69,17 @@ export function createPresenters(env = import.meta.env) {
       },
     },
   )
-  const reports: ReportsPresenter = new ReportsPresenter(
-    demoReports,
-    {
-      // A report can be saved from the search, the general overview, or its direct link.
-      catalog: {
-        find: (id) => catalog.find(id) ?? overviewCatalog.find(id) ?? reportDetail.find(id),
-        view: catalog.view,
-      },
-      savedReports: reportDetails,
-      notices,
-      effects: browserEffects,
-      links: { open: (id) => void reportDetail.open(id) },
+  const reports: ReportsPresenter = new ReportsPresenter(demoReports, {
+    // A report can be saved from the search, the general overview, or its direct link.
+    catalog: {
+      find: (id) => catalog.find(id) ?? overviewCatalog.find(id) ?? reportDetail.find(id),
+      view: catalog.view,
     },
-    demoSavedIds,
-  )
+    savedReports: reportDetails,
+    notices,
+    effects: browserEffects,
+    links: { open: (id) => void reportDetail.open(id) },
+  })
   const reportDetail = new ReportDetailPresenter({
     repository: reportDetails,
     auth,

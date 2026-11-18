@@ -111,7 +111,14 @@ export function AppShell({ app }: { app: AppView }) {
             />
           )}
           {shell.section === 'saved' && (
-            <SavedPage reports={app.saved} onNavigate={actions.navigate} {...cards} />
+            <SavedPage
+              reports={app.saved}
+              status={app.savedStatus.status}
+              message={app.savedStatus.message}
+              onNavigate={actions.navigate}
+              onRetry={actions.retrySaved}
+              {...cards}
+            />
           )}
           {shell.section === 'safety' && <SafetyPage />}
           {shell.section === 'profile' && shell.access === 'allow' && shell.account && (
