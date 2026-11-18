@@ -264,7 +264,7 @@ test('la búsqueda del presenter combina selecciones, reintenta la misma consult
   assert.equal(presenter.getSnapshot().status, 'ready')
   await presenter.load({
     search: '',
-    city: 'Todas las ciudades',
+    city: '',
     zone: '',
     category: 'Todas las categorías',
     status: 'Todos',
@@ -431,7 +431,7 @@ test('cambiar el rango cancela la consulta anterior y descarta tanto su resultad
     })
     const previous = presenter.load({
       search: 'camara',
-      city: 'Todas las ciudades',
+      city: '',
       zone: '',
       category: 'Todas las categorías',
       status: 'Todos',

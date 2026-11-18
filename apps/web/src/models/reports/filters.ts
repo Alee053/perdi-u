@@ -1,5 +1,4 @@
 import type { ReportCategory, ReportQuery, ReportType } from '@perdiu/contracts'
-import type { Report } from './report.js'
 
 /** Search criteria; an absent field means "any". */
 export interface ReportFilters {
@@ -13,8 +12,6 @@ export interface ReportFilters {
   /** An incomplete or impossible date may have no string value at the input boundary. */
   dateInputInvalid?: boolean
 }
-
-export const noFilters: ReportFilters = { text: '' }
 
 export type DateRangeError = 'invalid_date' | 'range_order'
 
@@ -43,16 +40,10 @@ export function validateDateRange(
   return undefined
 }
 
-export const normalizeText = (value: string) =>
-  value
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLocaleLowerCase('es')
-
 export const hasActiveFilters = (filters: ReportFilters) =>
   Boolean(
     filters.text.trim() ||
-    filters.city ||
+    filters.city?.trim() ||
     filters.zone?.trim() ||
     filters.category ||
     filters.type ||
@@ -64,33 +55,15 @@ export const hasActiveFilters = (filters: ReportFilters) =>
 /** Query for the public catalog: trimmed text and only the selected criteria. */
 export function toReportQuery(filters: ReportFilters): ReportQuery {
   const text = filters.text.trim()
+  const city = filters.city?.trim()
   const zone = filters.zone?.trim()
   return {
     ...(text ? { q: text } : {}),
-    ...(filters.city ? { city: filters.city } : {}),
+    ...(city ? { city } : {}),
     ...(zone ? { zone } : {}),
     ...(filters.category ? { category: filters.category } : {}),
     ...(filters.type ? { type: filters.type } : {}),
     ...(filters.dateFrom ? { dateFrom: filters.dateFrom } : {}),
     ...(filters.dateTo ? { dateTo: filters.dateTo } : {}),
   }
-}
-
-/** Local search over demo reports: active only, text without accents or case, exact selections. */
-export function matchesFilters(report: Report, filters: ReportFilters) {
-  if (
-    validateDateRange(filters.dateFrom, filters.dateTo, filters.dateInputInvalid) ||
-    (filters.dateFrom && report.incidentDate < filters.dateFrom) ||
-    (filters.dateTo && report.incidentDate > filters.dateTo)
-  )
-    return false
-  const text = normalizeText([report.title, report.description, report.zone, report.city].join(' '))
-  return (
-    report.state === 'active' &&
-    (!filters.text || text.includes(normalizeText(filters.text))) &&
-    (!filters.city || report.city === filters.city) &&
-    (!filters.zone?.trim() || normalizeText(report.zone).includes(normalizeText(filters.zone))) &&
-    (!filters.category || report.category === filters.category) &&
-    (!filters.type || report.type === filters.type)
-  )
 }

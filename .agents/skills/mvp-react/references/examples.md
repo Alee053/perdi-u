@@ -5,12 +5,12 @@ Rutas relativas a `apps/web/src`.
 ## 1. Buscar en el catálogo (View → Presenter → Model → Presenter → View)
 
 1. `views/components/ReportFilters.tsx`: los controles llaman `setSearch`, `setDateFrom` y `setDateTo`. No calculan nada.
-2. `presenters/catalog/filters.presenter.ts`: guarda la selección visible (`'Todas las ciudades'`, `'Objeto'`, «Desde/Hasta»…) y la invalidez nativa de fechas sin valor serializable; presenta errores sin perder la edición y permite limpiar los segmentos parciales.
+2. `presenters/catalog/filters.presenter.ts` guarda la ciudad escrita, etiquetas como «Objeto» y la invalidez nativa de fechas sin valor serializable. Un campo de ciudad vacío omite ese filtro. El Presenter muestra errores sin perder la edición y permite limpiar los segmentos parciales.
 3. `presenters/catalog/search.presenter.ts`: restaura los controles desde el puerto `SearchNavigation` antes de cargar y sigue los cambios de selección. La composición conecta su adapter `infrastructure/browser/search-navigation.ts`; el Model valida los parámetros en `models/reports/search-location.ts`. El arranque descarta montajes abandonados para no duplicar la consulta inicial.
 4. `presenters/catalog/catalog.presenter.ts`: traduce la selección con `toReportFilters`, no consulta rangos ni enlaces inválidos, pide al Model `toReportQuery` y llama al puerto `ReportsRepository`; cancela la consulta anterior y publica `loading`.
-5. `models/reports/filters.ts` + `models/reports/reports-repository.ts`: valida fechas calendario, compara `incidentDate` inclusivamente en la demo y define el contrato de consulta. La implementación HTTP es `infrastructure/http/catalog-client.ts`.
+5. `models/reports/filters.ts` valida el rango y construye la consulta con los criterios presentes. `models/reports/reports-repository.ts` declara el puerto y `infrastructure/http/catalog-client.ts` lo implementa para HTTP.
 6. El presenter convierte cada `ReportSummary` en `ReportCard` (`presenters/reports/report-card.ts`: etiquetas, fechas, iniciales) y publica `ready` o `error`.
-7. `presenters/app/useApp.ts` re-renderiza mediante `useStore`; `views/pages/ExplorePage.tsx` muestra carga, error con «Reintentar», vacío o la grilla.
+7. `presenters/app/useApp.ts` se suscribe mediante `useStore`. Explorar muestra las tarjetas y `ReportsPresenter.mapView()` proyecta las filas de Mapa desde el mismo catálogo. `CatalogResults` representa carga, error con «Reintentar», vacío y límite en ambas vistas.
 
 ## 2. Formulario de ingreso
 
@@ -23,7 +23,7 @@ Rutas relativas a `apps/web/src`.
 
 ## 3. Publicar un reporte persistente
 
-- View `views/pages/PublishPage.tsx` llama `actions.setField` y `actions.submit()`.
+- View `views/pages/PublishPage.tsx` usa `CityInput` para la ciudad editable con sugerencias y llama `actions.setField` y `actions.submit()`.
 - Presenter `presenters/reports/publish.presenter.ts` valida con `validateDraft`, muestra mensajes por campo y llama al puerto `ReportPublisher`. Tras la respuesta coordina catálogo, actualización del historial, navegación y aviso.
 - Model `models/reports/publication.ts`: reglas del borrador y puerto. Infrastructure `infrastructure/http/publish-client.ts` envía el borrador autenticado; la API guarda reporte/contacto en una transacción. El formulario nunca envía la identidad: la API la toma del token.
 

@@ -3,7 +3,7 @@ import { test } from '@jest/globals'
 import type { ReportQuery } from '@perdiu/contracts'
 import type { SearchLocation, SearchNavigation } from '../../src/models/reports/search-location.js'
 import { CatalogPresenter } from '../../src/presenters/catalog/catalog.presenter.js'
-import { allCities, FiltersPresenter } from '../../src/presenters/catalog/filters.presenter.js'
+import { FiltersPresenter } from '../../src/presenters/catalog/filters.presenter.js'
 import { CatalogSearchPresenter } from '../../src/presenters/catalog/search.presenter.js'
 
 const settle = () => new Promise((resolve) => setTimeout(resolve, 0))
@@ -77,10 +77,6 @@ test('restaura los controles antes de una única consulta y reemplaza la búsque
   const stop = search.start()
   await settle()
   assert.deepEqual(queries, [query], 'el montaje repetido no duplica la carga inicial')
-  assert.ok(
-    filters.options().cities.includes('Tarija'),
-    'la ciudad del enlace tiene un control visible',
-  )
   filters.setZone('Miraflores')
   await settle()
   assert.deepEqual(queries.at(-1), { ...query, zone: 'Miraflores' })
@@ -116,8 +112,8 @@ test('un enlace inválido bloquea las consultas y conserva el aviso hasta correg
   stop()
 })
 
-test('volver del detalle conserva los resultados de la misma búsqueda y restaura otra entrada solo una vez', async () => {
-  const { search, filters, queries, replaced, navigate } = setup({
+test('volver del detalle conserva la sección y resultados de la misma búsqueda', async () => {
+  const { search, filters, queries, replaced, navigate, opened } = setup({
     query: { q: 'gato' },
     invalid: false,
   })
@@ -128,6 +124,7 @@ test('volver del detalle conserva los resultados de la misma búsqueda y restaur
   assert.equal(replaced.length, writes, 'el detalle conserva su enlace canónico')
   navigate({ query: { q: 'gato' }, invalid: false })
   await settle()
+  assert.equal(opened(), 1, 'volver a la misma consulta no cambia de Mapa a Explorar')
   assert.deepEqual(
     queries,
     [{ q: 'gato' }],
@@ -138,29 +135,47 @@ test('volver del detalle conserva los resultados de la misma búsqueda y restaur
   assert.equal(filters.getSnapshot().search, 'mochila')
   assert.deepEqual(queries.at(-1), { q: 'mochila', dateTo: '2026-10-12' })
   assert.equal(queries.length, 2)
+  assert.equal(opened(), 2, 'otra entrada sí restaura la búsqueda')
   stop()
 })
 
 test('una ciudad del enlace que coincide con la opción general sigue siendo un filtro', async () => {
+  const literalCity = 'Todas las ciudades'
   const { search, filters, queries, replaced } = setup({
-    query: { city: allCities },
+    query: { city: literalCity },
     invalid: false,
   })
   const stop = search.start()
   await settle()
-  assert.deepEqual(queries, [{ city: allCities }])
-  assert.notEqual(
-    filters.getSnapshot().city,
-    allCities,
-    'el control distingue ciudad y opción general',
-  )
-  assert.ok(filters.options().cities.includes(filters.getSnapshot().city))
+  assert.deepEqual(queries, [{ city: literalCity }])
+  assert.equal(filters.getSnapshot().city, literalCity, 'el control muestra la ciudad del enlace')
   filters.setSearch('mochila')
   await settle()
-  assert.deepEqual(replaced.at(-1), { q: 'mochila', city: allCities })
-  filters.setCity(allCities)
+  assert.deepEqual(replaced.at(-1), { q: 'mochila', city: literalCity })
+  filters.setCity('')
   await settle()
   assert.deepEqual(queries.at(-1), { q: 'mochila' })
   assert.deepEqual(replaced.at(-1), { q: 'mochila' })
+  stop()
+})
+
+test('las ciudades escritas, incluidas las que no son sugerencias, conservan su nombre en consulta y URL', async () => {
+  const { search, filters, queries, replaced } = setup({
+    query: { zone: 'Centro' },
+    invalid: false,
+  })
+  const stop = search.start()
+  await settle()
+  filters.setCity('  Sucre  ')
+  filters.setCity('Todas las ciudades')
+  filters.setCity('   ')
+  const expected = [
+    { zone: 'Centro' },
+    { zone: 'Centro', city: 'Sucre' },
+    { zone: 'Centro', city: 'Todas las ciudades' },
+    { zone: 'Centro' },
+  ]
+  assert.deepEqual(queries, expected)
+  assert.deepEqual(replaced, expected)
   stop()
 })

@@ -1,8 +1,7 @@
 import { whatsAppUrl } from '../../models/reports/contact.js'
-import { matchesFilters } from '../../models/reports/filters.js'
 import type { CatalogReport, Report } from '../../models/reports/report.js'
 import type { NoticePresenter } from '../app/notice.presenter.js'
-import { toReportFilters, type FilterSelection } from '../catalog/filters.presenter.js'
+import type { CatalogPresenter } from '../catalog/catalog.presenter.js'
 import type { Effects } from '../effects.js'
 import { Store } from '../store.js'
 import { toReportCard, toReportGallery, type ReportDetailView } from './report-card.js'
@@ -17,17 +16,8 @@ export interface ReportsState {
   selectedPhoto: number
 }
 
-export interface MapPin {
-  id: string
-  label: string
-  tone: Report['type']
-  top: string
-  left: string
-  number: number
-}
-
 interface Dependencies {
-  catalog: { find(id: string): CatalogReport | undefined }
+  catalog: Pick<CatalogPresenter, 'find' | 'view'>
   notices: Pick<NoticePresenter, 'show'>
   effects: Pick<Effects, 'openWhatsApp'>
   /** Opens a catalog report through its stable link. */
@@ -37,8 +27,7 @@ interface Dependencies {
 const isActive = (report: Report) => report.state === 'active'
 
 /**
- * Community reports outside the public catalog (map and saved list) and the
- * report detail. The rules come from the model; this class decides what each screen shows.
+ * Report projections for locations, the saved list and the demo detail.
  */
 export class ReportsPresenter extends Store<ReportsState> {
   constructor(
@@ -150,20 +139,18 @@ export class ReportsPresenter extends Store<ReportsState> {
     }
   }
 
-  mapView = (selection: FilterSelection) => {
-    const filters = toReportFilters(selection)
-    const visible = this.state.reports.filter((report) => matchesFilters(report, filters))
-    const pins: MapPin[] = visible
-      .filter((report) => report.source === 'demo')
-      .slice(0, 8)
-      .map((report, index) => ({
-        id: report.id,
-        label: 'Ver ' + report.title,
-        tone: report.type,
-        top: report.position.top,
-        left: report.position.left,
-        number: index + 1,
-      }))
-    return { count: visible.length, pins, list: visible.slice(0, 7).map(toReportCard) }
+  mapView = () => {
+    const { reports, ...result } = this.dependencies.catalog.view()
+    return {
+      ...result,
+      list: reports.map(({ id, title, status, category, city, zone }) => ({
+        id,
+        title,
+        status,
+        category,
+        city,
+        zone,
+      })),
+    }
   }
 }

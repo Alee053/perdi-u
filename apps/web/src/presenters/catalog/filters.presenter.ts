@@ -9,9 +9,8 @@ import { Store } from '../store.js'
 export interface FilterSelection {
   urlError?: string
   search: string
+  /** Editable city. An empty field represents all cities. */
   city: string
-  /** Keeps an imported city distinct from the label for the general catalog. */
-  cityValue?: string
   zone: string
   category: string
   status: 'Todos' | 'Perdido' | 'Encontrado'
@@ -26,11 +25,10 @@ export interface FilterSelection {
     | 'Indica fechas válidas para el periodo.'
 }
 
-export const allCities = 'Todas las ciudades'
 export const allCategories = 'Todas las categorías'
 export const defaultSelection: FilterSelection = {
   search: '',
-  city: allCities,
+  city: '',
   zone: '',
   category: allCategories,
   status: 'Todos',
@@ -41,7 +39,7 @@ export const defaultSelection: FilterSelection = {
   dateInputRevision: 0,
 }
 export const filterOptions = {
-  cities: [allCities, ...cities],
+  cities,
   categories: [allCategories, ...Object.values(categoryLabels)],
   statuses: [
     { value: 'Todos', label: 'Todos' },
@@ -62,10 +60,9 @@ const dateRangeMessages: Record<DateRangeError, NonNullable<FilterSelection['dat
 /** Translates the visible selection into the model's search criteria. */
 export function toReportFilters(selection: FilterSelection): ReportFilters {
   const category = categoryValues[selection.category]
-  const city = selection.cityValue ?? (selection.city !== allCities ? selection.city : undefined)
   return {
     text: selection.search,
-    ...(city ? { city } : {}),
+    ...(selection.city ? { city: selection.city } : {}),
     ...(selection.zone?.trim() ? { zone: selection.zone } : {}),
     ...(category ? { category } : {}),
     ...(selection.status !== 'Todos'
@@ -90,7 +87,6 @@ export class FiltersPresenter extends Store<FilterSelection> {
 
   private update(patch: Partial<FilterSelection>) {
     const next = { ...this.state, ...patch }
-    if (patch.city !== undefined && patch.city !== this.state.city) delete next.cityValue
     delete next.urlError
     this.setSelection(next)
     this.onChange(this.state)
@@ -111,9 +107,7 @@ export class FiltersPresenter extends Store<FilterSelection> {
     this.setSelection({
       ...defaultSelection,
       search: query.q ?? '',
-      city:
-        query.city === allCities ? `${allCities} (ciudad del enlace)` : (query.city ?? allCities),
-      ...(query.city === allCities ? { cityValue: query.city } : {}),
+      city: query.city ?? '',
       zone: query.zone ?? '',
       category: query.category ? categoryLabels[query.category] : allCategories,
       status: query.type === 'lost' ? 'Perdido' : query.type === 'found' ? 'Encontrado' : 'Todos',
@@ -127,13 +121,6 @@ export class FiltersPresenter extends Store<FilterSelection> {
           }
         : {}),
     })
-
-  options = () => ({
-    ...filterOptions,
-    cities: filterOptions.cities.includes(this.state.city)
-      ? filterOptions.cities
-      : [...filterOptions.cities, this.state.city],
-  })
 
   setSearch = (search: string) => this.update({ search })
   setCity = (city: string) => this.update({ city })

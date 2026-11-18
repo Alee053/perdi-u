@@ -6,13 +6,11 @@ export type CatalogReport = ReportSummary & { source: 'catalog' }
 export type OwnReport = ReportSummary & { source: 'own' }
 
 /**
- * Local demonstration report. Besides the public fields it keeps a contact phone and a position on
- * the illustrative map; both stay inside the demo flows and never reach the catalog.
+ * Local demonstration report. Its contact phone stays inside the demo flows.
  */
 export type DemoReport = ReportSummary & {
   source: 'demo'
   phone: string
-  position: { top: string; left: string }
 }
 
 export type Report = CatalogReport | DemoReport | OwnReport
@@ -20,7 +18,7 @@ export type Report = CatalogReport | DemoReport | OwnReport
 export const cities = ['La Paz', 'Cochabamba', 'Santa Cruz'] as const
 
 /**
- * Author of the fictional demo reports shown in the overview and map. It grants no permission:
+ * Author used by the demonstration fixtures. It grants no permission:
  * ownership of persisted reports comes from the verified session, never from a display name.
  */
 export const demoOwner: PublicProfile & { phone: string } = {

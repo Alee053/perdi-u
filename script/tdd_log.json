@@ -3428,9 +3428,133 @@
     "testId": 96
   },
   {
-    "commitId": "HEAD",
+    "commitId": "698f689d8f0c8e66a973c7e5f4c7dbe7659780cc",
     "commitName": "test(web): verificar el resumen y los autores en navegador (#46)",
     "commitTimestamp": 1794963665267,
     "testId": 97
+  },
+  {
+    "numPassedTests": 185,
+    "failedTests": 2,
+    "numTotalTests": 187,
+    "timestamp": 1794962426628,
+    "success": false,
+    "testId": 95
+  },
+  {
+    "numPassedTests": 186,
+    "failedTests": 1,
+    "numTotalTests": 187,
+    "timestamp": 1794962590313,
+    "success": false,
+    "testId": 95
+  },
+  {
+    "numPassedTests": 187,
+    "failedTests": 0,
+    "numTotalTests": 187,
+    "timestamp": 1794962777706,
+    "success": true,
+    "testId": 95
+  },
+  {
+    "numPassedTests": 186,
+    "failedTests": 0,
+    "numTotalTests": 186,
+    "timestamp": 1794963914047,
+    "success": true,
+    "testId": 95
+  },
+  {
+    "commitId": "93255a28b6d96868f679e5cc06bc6f3b518a2f6b",
+    "commitName": "feat(web): mostrar ubicaciones del catálogo en Mapa (#47)",
+    "commitTimestamp": 1794963979394,
+    "testId": 95
+  },
+  {
+    "numPassedTests": 185,
+    "failedTests": 1,
+    "numTotalTests": 186,
+    "timestamp": 1794964034966,
+    "success": false,
+    "testId": 96
+  },
+  {
+    "numPassedTests": 186,
+    "failedTests": 0,
+    "numTotalTests": 186,
+    "timestamp": 1794964110030,
+    "success": true,
+    "testId": 96
+  },
+  {
+    "commitId": "eecc9bae400b4f648b8b8dbe0575cb5796e3e3be",
+    "commitName": "fix(web): conservar la sección al volver del detalle (#47)",
+    "commitTimestamp": 1794964161987,
+    "testId": 96
+  },
+  {
+    "numPassedTests": 186,
+    "failedTests": 1,
+    "numTotalTests": 187,
+    "timestamp": 1794964216747,
+    "success": false,
+    "testId": 97
+  },
+  {
+    "numPassedTests": 187,
+    "failedTests": 0,
+    "numTotalTests": 187,
+    "timestamp": 1794964313211,
+    "success": true,
+    "testId": 97
+  },
+  {
+    "commitId": "6c5ecbeeaaa591008479114768645a7691c91ff4",
+    "commitName": "feat(web): buscar por una ciudad escrita (#47)",
+    "commitTimestamp": 1794964350240,
+    "testId": 97
+  },
+  {
+    "numPassedTests": 124,
+    "failedTests": 0,
+    "numTotalTests": 124,
+    "timestamp": 1794964802185,
+    "success": false,
+    "testId": 98
+  },
+  {
+    "numPassedTests": 188,
+    "failedTests": 0,
+    "numTotalTests": 188,
+    "timestamp": 1794964865351,
+    "success": true,
+    "testId": 98
+  },
+  {
+    "commitId": "98568cacb2caaf371734387e49ba1026b7899040",
+    "commitName": "feat(web): publicar reportes con una ciudad escrita (#47)",
+    "commitTimestamp": 1794964889316,
+    "testId": 98
+  },
+  {
+    "commitId": "4368dc76018b60371b6bae8a869215f2e350a200",
+    "commitName": "docs(web): registrar la aceptación de ciudad y zona (#47)",
+    "commitTimestamp": 1794965062140,
+    "testId": 99
+  },
+  {
+    "numPassedTests": 194,
+    "failedTests": 0,
+    "numTotalTests": 194,
+    "timestamp": 1794965324488,
+    "success": true,
+    "testId": 100
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "chore(repo): integrar main con el resumen actualizado (#47)",
+    "commitTimestamp": 1794965393965,
+    "testId": 100
   }
 ]

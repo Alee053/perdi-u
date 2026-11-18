@@ -18,10 +18,7 @@ async function expectSearch(page, text = query.q) {
   await page.locator('.catalog-state').waitFor({ state: 'detached' })
   assert.equal(await page.locator('.report-card').count(), 1)
   assert.equal(await page.getByRole('textbox', { name: 'Buscar reportes' }).inputValue(), text)
-  assert.equal(
-    await page.getByRole('combobox', { name: 'Ciudad', exact: true }).inputValue(),
-    query.city,
-  )
+  assert.equal(await page.getByLabel('Ciudad', { exact: true }).inputValue(), query.city)
   assert.equal(await page.getByRole('textbox', { name: 'Zona o barrio' }).inputValue(), query.zone)
   assert.equal(
     await page.getByRole('combobox', { name: 'Categoría', exact: true }).inputValue(),

@@ -74,6 +74,7 @@ export function createPresenters(env = import.meta.env) {
       // A report can be saved from the search, the general overview, or its direct link.
       catalog: {
         find: (id) => catalog.find(id) ?? overviewCatalog.find(id) ?? reportDetail.find(id),
+        view: catalog.view,
       },
       notices,
       effects: browserEffects,

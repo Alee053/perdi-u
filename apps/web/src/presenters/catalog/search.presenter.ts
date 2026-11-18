@@ -64,10 +64,8 @@ export class CatalogSearchPresenter {
       !selection.dateToInvalidInput &&
       location.invalid === Boolean(selection.urlError) &&
       searchKeys.every((key) => query[key] === location.query[key])
-    ) {
-      if (Object.keys(location.query).length || location.invalid) this.dependencies.onSearch()
-      return
-    }
+    )
+      return // The current section and its results stay in place on return from a detail.
     this.restore(location)
     this.load()
   }
