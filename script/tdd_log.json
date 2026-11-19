@@ -3816,9 +3816,31 @@
     "testId": 112
   },
   {
-    "commitId": "HEAD",
+    "commitId": "04ebe29d9950fce8ebf8bc5d8045de3aaf3d6d20",
     "commitName": "fix(web): conservar la edición confirmada en Guardados (#55)",
     "commitTimestamp": 1795022077560,
     "testId": 112
+  },
+  {
+    "numPassedTests": 204,
+    "failedTests": 1,
+    "numTotalTests": 205,
+    "timestamp": 1795057303561,
+    "success": false,
+    "testId": 113
+  },
+  {
+    "numPassedTests": 205,
+    "failedTests": 0,
+    "numTotalTests": 205,
+    "timestamp": 1795057445614,
+    "success": true,
+    "testId": 113
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "fix(web): mejorar el modal de edición de reportes\n\nAgrupa los campos y conserva las acciones visibles al desplazar el formulario. Muestra la validación junto al campo y protege el borrador mientras se guarda.\n\nTDDLab testId 113. El cierre durante el guardado falló en 1795057303561 y pasó en 1795057445614 con 205 pruebas aprobadas. La aceptación en escritorio y móvil pasó con pnpm test:auth --with-browser y pnpm test:e2e.",
+    "commitTimestamp": 1795057744846,
+    "testId": 113
   }
 ]

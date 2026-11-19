@@ -134,6 +134,40 @@ test('guardar el borrador actualiza el historial y avisa a la composición', asy
   assert.deepEqual(notices, ['Cambios guardados.'])
 })
 
+test('el editor espera la respuesta del guardado antes de permitir que se cierre', async () => {
+  let complete!: () => void
+  let saveSignal: AbortSignal | undefined
+  const { presenter, notices } = setup({
+    list: async () => [report('active'), report('other')],
+    edit: (id, patch, signal) =>
+      new Promise((resolve) => {
+        saveSignal = signal
+        complete = () => resolve(report(id, patch))
+      }),
+  })
+  await presenter.setOwner('owner-1')
+  presenter.requestEdit('active')
+  const initial = presenter.view().edit
+  presenter.setEditField('title', 'Mochila azul')
+  const changed = presenter.view().edit
+  const saving = presenter.submitEdit()
+
+  presenter.cancelEdit()
+  assert.equal(presenter.view().edit?.pending, true)
+  assert.equal(saveSignal?.aborted, false)
+  presenter.requestEdit('other')
+  assert.equal(presenter.view().edit?.id, 'active')
+  assert.equal(await presenter.submitEdit(), false)
+
+  complete()
+  assert.equal(await saving, true)
+  assert.equal(initial?.hasChanges, false)
+  assert.equal(changed?.hasChanges, true)
+  assert.equal(presenter.view().edit, null)
+  assert.equal(presenter.find('active')?.title, 'Mochila azul')
+  assert.deepEqual(notices, ['Cambios guardados.'])
+})
+
 test('editar solo el título conserva los cambios recientes del reporte en otra sesión', async () => {
   let receivedPatch: EditReportInput | undefined
   const { presenter } = setup({

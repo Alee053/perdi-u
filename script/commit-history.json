@@ -2964,12 +2964,12 @@
     "conclusion": "success"
   },
   {
-    "sha": "HEAD",
+    "sha": "04ebe29d9950fce8ebf8bc5d8045de3aaf3d6d20",
     "author": "Alejandro Castro",
     "commit": {
       "date": "2026-11-18T17:14:37.000Z",
       "message": "fix(web): conservar la edición confirmada en Guardados (#55)",
-      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+      "url": "https://github.com/Alee053/perdi-u/commit/04ebe29d9950fce8ebf8bc5d8045de3aaf3d6d20"
     },
     "stats": {
       "total": 57,
@@ -2979,6 +2979,25 @@
     },
     "coverage": 86.08,
     "test_count": 204,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "Santiamen23",
+    "commit": {
+      "date": "2026-11-19T03:09:03.000Z",
+      "message": "fix(web): mejorar el modal de edición de reportes\n\nAgrupa los campos y conserva las acciones visibles al desplazar el formulario. Muestra la validación junto al campo y protege el borrador mientras se guarda.\n\nTDDLab testId 113. El cierre durante el guardado falló en 1795057303561 y pasó en 1795057445614 con 205 pruebas aprobadas. La aceptación en escritorio y móvil pasó con pnpm test:auth --with-browser y pnpm test:e2e.",
+      "url": "https://github.com/Alee053/perdi-u/commit/HEAD"
+    },
+    "stats": {
+      "total": 457,
+      "additions": 353,
+      "deletions": 104,
+      "date": "2026-11-19"
+    },
+    "coverage": 86.11,
+    "test_count": 205,
     "failed_tests": 0,
     "conclusion": "success"
   }
