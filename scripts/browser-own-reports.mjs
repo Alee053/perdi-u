@@ -276,20 +276,49 @@ export async function verifyOwnReportsBrowser({
           await editor.getByLabel('Nombre del reporte', { exact: true }).inputValue(),
           titles[0],
         )
-        await editor.getByRole('button', { name: 'Cancelar', exact: true }).click()
+        const save = editor.getByRole('button', { name: 'Guardar cambios', exact: true })
+        assert.equal(await save.isDisabled(), true)
+        await page.screenshot({ path: 'test-results/edit-report-desktop.png' })
+        await page.keyboard.press('Escape')
         await editor.waitFor({ state: 'detached' })
+        assert.equal(await edit.evaluate((button) => button.matches(':focus')), true)
+
         await edit.click()
-        const saveDialog = page.getByRole('dialog', { name: 'Editar reporte', exact: true })
-        await saveDialog.getByLabel('Ciudad', { exact: true }).fill('Cochabamba')
-        await saveDialog.getByLabel('Categoría').selectOption('pet')
-        await saveDialog.getByLabel('Especie de la mascota', { exact: true }).fill('Perro')
+        const description = editor.getByLabel('Descripción', { exact: true })
+        const originalDescription = await description.inputValue()
+        await description.fill('Breve')
+        await save.click()
+        await editor.getByText('Usa al menos 20 caracteres', { exact: false }).waitFor()
+        assert.equal(await description.getAttribute('aria-invalid'), 'true')
+        await editor.locator('textarea:focus').waitFor()
+        await description.fill(originalDescription)
+        await editor.getByLabel('Ciudad', { exact: true }).fill('Cochabamba')
+        await editor.getByLabel('Categoría').selectOption('pet')
+        await editor.getByLabel('Especie de la mascota', { exact: true }).fill('Perro')
+
+        const editPath = `**/api/reports/${ids[0]}`
+        const releaseSave = Promise.withResolvers()
+        await page.route(editPath, async (route) => {
+          if (route.request().method() === 'PATCH') await releaseSave.promise
+          await route.continue()
+        })
         const saved = page.waitForResponse(
           (response) =>
             response.request().method() === 'PATCH' &&
             new URL(response.url()).pathname === `/api/reports/${ids[0]}`,
         )
-        await saveDialog.getByRole('button', { name: 'Guardar cambios', exact: true }).click()
+        try {
+          await save.click()
+          await editor.getByRole('button', { name: 'Guardando…', exact: true }).waitFor()
+          assert.equal(await editor.getByRole('button', { name: 'Cancelar' }).isDisabled(), true)
+          assert.equal(await description.isDisabled(), true)
+          await page.keyboard.press('Escape')
+          assert.equal(await editor.isVisible(), true)
+        } finally {
+          releaseSave.resolve()
+        }
         const editResponse = await saved
+        await page.unroute(editPath)
         assert.equal(editResponse.status(), 200)
         const updated = await editResponse.json()
         assert.equal(updated.city, 'Cochabamba')
@@ -304,7 +333,8 @@ export async function verifyOwnReportsBrowser({
         await row(page, titles[0]).getByRole('button', { name: titles[0], exact: true }).click()
         const ownDetail = page.getByRole('dialog', { name: titles[0], exact: true })
         await ownDetail.getByRole('heading', { name: titles[0], exact: true }).waitFor()
-        await ownDetail.getByRole('button', { name: 'Editar datos', exact: true }).click()
+        const detailEdit = ownDetail.getByRole('button', { name: 'Editar datos', exact: true })
+        await detailEdit.click()
         const detailEditor = page.getByRole('dialog', { name: 'Editar reporte', exact: true })
         assert.equal(
           await detailEditor.getByLabel('Nombre del reporte', { exact: true }).inputValue(),
@@ -312,6 +342,7 @@ export async function verifyOwnReportsBrowser({
         )
         await detailEditor.getByRole('button', { name: 'Cancelar', exact: true }).click()
         await detailEditor.waitFor({ state: 'detached' })
+        assert.equal(await detailEdit.evaluate((button) => button.matches(':focus')), true)
         await ownDetail.getByRole('button', { name: 'Cerrar', exact: true }).click()
         await navigate(page, 'Resumen')
         await page
@@ -324,6 +355,19 @@ export async function verifyOwnReportsBrowser({
         await navigate(page, 'Publicar reporte')
         await typeSucre(page.getByRole('combobox', { name: /^Ciudad/ }))
         await ownPage(page)
+        await row(page, titles[1]).getByRole('button', { name: 'Editar datos' }).click()
+        const editor = page.getByRole('dialog', { name: 'Editar reporte', exact: true })
+        const save = editor.getByRole('button', { name: 'Guardar cambios', exact: true })
+        const actionsBeforeScroll = await save.boundingBox()
+        assert.ok(
+          actionsBeforeScroll &&
+            actionsBeforeScroll.y + actionsBeforeScroll.height <= viewport.height,
+        )
+        await page.screenshot({ path: 'test-results/edit-report-mobile.png' })
+        await editor.getByLabel('Fecha del hecho', { exact: true }).scrollIntoViewIfNeeded()
+        assert.deepEqual(await save.boundingBox(), actionsBeforeScroll)
+        await editor.getByRole('button', { name: 'Cerrar edición', exact: true }).click()
+        await editor.waitFor({ state: 'detached' })
       }
       await row(page, titles[0]).waitFor()
       const privateImage = row(page, titles[2]).locator('img')

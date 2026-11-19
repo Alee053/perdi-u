@@ -122,7 +122,6 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
   private controller?: AbortController
   private mutation?: AbortController
   private editMutation?: AbortController
-  private editAttempt = 0
   constructor(
     private readonly repository: OwnReportsRepository,
     private readonly dependencies: Dependencies,
@@ -152,7 +151,6 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
     this.cancelLoad()
     this.mutation?.abort()
     this.editMutation?.abort()
-    this.editAttempt++
     this.ownerId = ownerId
     this.setState(initialState())
     this.dependencies.onOwnerChanged()
@@ -193,7 +191,8 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
   requestEdit = (id: string) => {
     if (!this.ownerId) return this.dependencies.onSessionRejected()
     const report = this.find(id)
-    if (!report || report.state !== 'active' || this.state.pending) return
+    if (!report || report.state !== 'active' || this.state.pending || this.state.edit?.pending)
+      return
     const draft: EditDraft = {
       type: report.type,
       category: report.category,
@@ -226,9 +225,7 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
     this.update({ edit: { ...edit, draft, errors, message: '' } })
   }
   cancelEdit = () => {
-    this.editAttempt++
-    this.editMutation?.abort()
-    this.update({ edit: null })
+    if (this.state.edit && !this.state.edit.pending) this.update({ edit: null })
   }
   submitEdit = async () => {
     const edit = this.state.edit
@@ -239,7 +236,6 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
       return true
     }
     const version = this.ownerVersion
-    const attempt = ++this.editAttempt
     const controller = new AbortController()
     this.editMutation = controller
     this.update({ edit: { ...edit, pending: true, errors: {}, message: '' } })
@@ -247,7 +243,7 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
     try {
       saved = await this.repository.edit(edit.id, patch, controller.signal)
     } catch (error) {
-      if (attempt !== this.editAttempt || version !== this.ownerVersion) return false
+      if (version !== this.ownerVersion) return false
       if (error instanceof SessionRejected) {
         this.rejectSession()
         return false
@@ -269,7 +265,7 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
       this.update({ edit: { ...edit, pending: false, errors, message } })
       return false
     }
-    if (attempt !== this.editAttempt || version !== this.ownerVersion) return false
+    if (version !== this.ownerVersion) return false
     const updated: OwnReport = { ...saved, source: 'own' }
     this.update({
       reports: this.state.reports.map((report) => (report.id === updated.id ? updated : report)),
@@ -326,7 +322,7 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
   find = (id: string) => this.state.reports.find((report) => report.id === id)
 
   view = () => {
-    const { filter, status, message, confirmation, pending, resolveError } = this.state
+    const { filter, status, message, confirmation, pending, resolveError, edit } = this.state
     const own = selectOwnReports(this.state.reports, this.ownerId)
     const state = filter === 'Todos' ? undefined : filter === 'Activos' ? 'active' : 'resolved'
     return {
@@ -354,7 +350,17 @@ export class OwnReportsPresenter extends Store<OwnReportsState> {
             error: resolveError,
           }
         : null,
-      edit: this.state.edit,
+      edit: edit
+        ? {
+            id: edit.id,
+            title: edit.original.title,
+            draft: edit.draft,
+            errors: edit.errors,
+            pending: edit.pending,
+            message: edit.message,
+            hasChanges: Object.keys(createEditPatch(edit.original, edit.draft)).length > 0,
+          }
+        : null,
     }
   }
 }
